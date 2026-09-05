@@ -40,3 +40,29 @@ jobs:
               --notes "index.json is rebuilt on every push to main. Phantom reads it from this release's stable download URL."
           fi
           gh release upload index dist/index.json --clobber
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/phantom-mdx/package-lock.json
+      - run: npm ci
+        working-directory: packages/phantom-mdx
+      - run: npm run build
+        working-directory: packages/phantom-mdx
+      - name: Publish the viewer
+        run: |
+          set -euo pipefail
+          V=$(node -p "require('./packages/phantom-mdx/package.json').version")
+          ASSET="phantom-mdx-viewer-$V.zip"
+          zip -j "dist/$ASSET" packages/phantom-mdx/dist/viewer/* packages/phantom-mdx/LICENSE
+          if ! gh release view viewer >/dev/null 2>&1; then
+            gh release create viewer --title "Extension viewer" --latest=false \
+              --notes "The page Phantom embeds to show an extension's document. One zip per phantom-mdx version, never replaced."
+          fi
+          if gh release view viewer --json assets --jq '.assets[].name' | grep -qx "$ASSET"; then
+            echo "exists   $ASSET"
+          else
+            gh release upload viewer "dist/$ASSET"
+            echo "uploaded $ASSET"
+          fi
+          shasum -a 256 "dist/$ASSET"
