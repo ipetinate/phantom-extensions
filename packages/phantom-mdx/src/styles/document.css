@@ -43,9 +43,8 @@
 }
 
 .ph-document h2 {
-  font-size: 1.45em;
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--ph-border);
+  font-size: 1.35em;
+  margin-top: 2em;
 }
 
 .ph-document h3 {
@@ -79,11 +78,11 @@
 .ph-document a {
   color: var(--ph-accent);
   text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--ph-accent) 40%, transparent);
 }
 
 .ph-document a:hover {
-  border-bottom-color: var(--ph-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 .ph-document strong {
@@ -119,7 +118,7 @@
   padding: 0.85em 1em;
   overflow-x: auto;
   border-radius: 8px;
-  border: 1px solid var(--ph-border);
+  border: 1px solid color-mix(in srgb, var(--ph-fg) 7%, transparent);
   background: var(--ph-code-bg);
   line-height: 1.5;
 }
@@ -171,9 +170,8 @@
 .ph-callout {
   margin: 0 0 1em;
   padding: 0.8em 1em;
-  border-radius: 8px;
-  border: 1px solid var(--ph-border);
-  border-left-width: 4px;
+  border-radius: 6px;
+  border-left: 3px solid var(--ph-border);
   background: color-mix(in srgb, var(--ph-fg) 4%, transparent);
 }
 
@@ -245,10 +243,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-weight: 600;
-  color: var(--ph-bg);
-  background: var(--ph-accent);
+  color: var(--ph-accent);
+  background: color-mix(in srgb, var(--ph-accent) 16%, transparent);
 }
 
 .ph-step:not(:last-child)::after {
@@ -257,7 +255,7 @@
   left: 0.85em;
   top: 1.9em;
   bottom: 0.2em;
-  border-left: 2px solid var(--ph-border);
+  border-left: 1px solid color-mix(in srgb, var(--ph-fg) 10%, transparent);
 }
 
 .ph-step-title {
@@ -275,8 +273,7 @@
   padding: 0.05em 0.45em;
   text-align: center;
   border-radius: 5px;
-  border: 1px solid var(--ph-border);
-  border-bottom-width: 2px;
+  border: 1px solid color-mix(in srgb, var(--ph-fg) 14%, transparent);
   background: var(--ph-code-bg);
   font-size: 0.85em;
   line-height: 1.5;
@@ -304,10 +301,9 @@
 }
 
 .ph-feature {
-  padding: 0.9em 1em;
-  border-radius: 8px;
-  border: 1px solid var(--ph-border);
-  background: color-mix(in srgb, var(--ph-fg) 3%, transparent);
+  padding: 1em 1.1em;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ph-fg) 4%, transparent);
 }
 
 .ph-feature .ph-glyph {
@@ -387,7 +383,6 @@
   display: inline-block;
   padding: 0.1em 0.6em;
   border-radius: 999px;
-  border: 1px solid var(--ph-border);
   font-size: 0.8em;
   font-weight: 600;
   line-height: 1.6;
@@ -416,9 +411,9 @@
 
 .ph-requirement {
   margin: 0 0 1em;
-  padding: 0.8em 1em;
-  border-radius: 8px;
-  border: 1px solid var(--ph-border);
+  padding: 0.9em 1.1em;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ph-fg) 3%, transparent);
 }
 
 .ph-requirement-head {
@@ -431,12 +426,17 @@
 
 .ph-requirement-command {
   font-weight: 600;
-  color: var(--ph-accent);
+  color: var(--ph-fg);
 }
 
 .ph-requirement-link {
-  font-size: 0.9em;
+  font-size: 0.85em;
   white-space: nowrap;
+  color: var(--ph-muted);
+}
+
+.ph-requirement-link:hover {
+  color: var(--ph-accent);
 }
 
 .ph-requirement-install {
@@ -511,9 +511,9 @@
   align-items: center;
   gap: 0.35em;
   padding: 0.25em 0.6em;
-  border: 1px solid var(--ph-border);
+  border: 0;
   border-radius: 6px;
-  background: var(--ph-bg);
+  background: transparent;
   color: var(--ph-muted);
   font: inherit;
   font-size: 0.8em;
@@ -526,11 +526,10 @@
 .ph-document .ph-copy:hover {
   opacity: 1;
   color: var(--ph-fg);
-  border-color: var(--ph-accent);
+  background: color-mix(in srgb, var(--ph-fg) 8%, transparent);
 }
 
 .ph-document .ph-copy.is-copied {
   color: var(--ph-success);
-  border-color: var(--ph-success);
   opacity: 1;
 }
