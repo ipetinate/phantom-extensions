@@ -1,6 +1,6 @@
 ---
 title: Lua
-tagline: Highlighting, lua-language-server and StyLua for .lua files.
+tagline: Lua language support for Phantom — highlighting, diagnostics, completion and formatting.
 version: 1.0.1
 author:
   name: Isac Petinate
@@ -14,48 +14,126 @@ screenshots:
   - media/editor.png
 ---
 
-Lua support for Phantom: highlighting for `.lua` files and `.luacheckrc`, diagnostics and completion through lua-language-server, and formatting with StyLua.
+<Badge label="Language" tone="accent" /> <Badge label="Language server" /> <Badge label="Formatter" /> <Badge label="macOS" />
 
-<Callout kind="note" title="What the zip holds">
-The extension carries the language definition, the icon and the wiring for the two programs below. The programs are installed with Homebrew, and Phantom asks before it runs either of them for the first time.
-</Callout>
+Lua support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, comments and long strings — and connects two tools that are already standard in the Lua ecosystem: **lua-language-server** for diagnostics, hover, completion and navigation, and **StyLua** for formatting. Both are optional: highlighting works the moment the extension is installed.
 
-## What you get
+## Highlights
 
 <Features columns="3">
-  <Feature title="Highlighting" icon="brush">
-    Keywords, strings including `[[long strings]]`, numbers, calls and `::labels::`.
+  <Feature title="Syntax highlighting" icon="brush">
+    Keywords, strings including `[[long strings]]` with any `=` level, numbers, function calls and `::labels::`. Comments with `--` and `--[[ ]]`.
   </Feature>
-  <Feature title="Diagnostics and completion" icon="bug">
-    lua-language-server reports errors as you type and completes the standard library.
+  <Feature title="Language intelligence" icon="search">
+    Diagnostics as you type, hover documentation, completion for the standard library and your own modules, go to definition and find references.
   </Feature>
-  <Feature title="Format on save" icon="sparkles">
-    StyLua reads the buffer from stdin, so unsaved edits are formatted too.
+  <Feature title="Formatting" icon="sparkles">
+    StyLua formats on demand or on save. The buffer is passed on stdin with `--stdin-filepath`, so the project's `stylua.toml` is honoured.
   </Feature>
 </Features>
 
+<Screenshot src="media/editor.png" alt="A Lua file open in Phantom with highlighted keywords, a long string and one diagnostic from lua-language-server" caption="Highlighting, hover and a diagnostic in the Phantom editor" width="wide" />
+
 ## Requirements
 
+Phantom does not bundle the tools. Install the ones you want; the extension detects them on your `PATH`.
+
 <Requirement command="lua-language-server" install="brew install lua-language-server" url="https://luals.github.io/">
-Needed for diagnostics, hover and completion. Without it the highlighter still works.
+Powers diagnostics, hover, completion and navigation. Without it the highlighter still works.
 </Requirement>
 
 <Requirement command="stylua" install="brew install stylua" url="https://github.com/JohnnyMorganz/StyLua">
-Needed for formatting. Phantom passes `--stdin-filepath`, so StyLua finds the project's `stylua.toml`.
+Powers formatting. Without it the Format command and Format on Save do nothing for Lua files.
 </Requirement>
 
-## Set up
+## Getting started
 
 <Steps>
-  <Step title="Install the programs">
-    Run the two Homebrew commands above.
-  </Step>
   <Step title="Install the extension">
-    Open Settings, then Extensions, and press Install next to Lua.
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Lua.
+  </Step>
+  <Step title="Install the tools">
+    Run the two Homebrew commands above. Phantom picks them up without a restart.
   </Step>
   <Step title="Open a Lua file">
-    Phantom asks once before it starts lua-language-server. Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the file, or turn on Format on Save under Settings, then Files.
+    The first time a project needs lua-language-server, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
   </Step>
 </Steps>
 
-<Screenshot src="media/editor.png" alt="A Lua file open in Phantom, with highlighted keywords and strings and one diagnostic from lua-language-server" caption="Highlighting and a diagnostic from lua-language-server" />
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.lua`, `.luacheckrc` |
+| Language server | `lua-language-server` (stdio) |
+| Formatter | `stylua --stdin-filepath <file> -` |
+| Editor | Keywords, comment markers, long-string and label patterns |
+| Icon | Lua file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Language server: .luarc.json">
+
+Place a `.luarc.json` at the root of your project to set the runtime and the libraries the server should know about.
+
+```json
+{
+  "runtime.version": "Lua 5.4",
+  "workspace.library": ["lib", "vendor"],
+  "diagnostics.globals": ["vim", "describe", "it"]
+}
+```
+
+The server reads the file on its own; Phantom passes the project root as the workspace.
+
+</Details>
+
+<Details summary="Formatter: stylua.toml">
+
+StyLua looks for `stylua.toml` (or `.stylua.toml`) from the file's directory upward.
+
+```toml
+column_width = 100
+indent_type = "Spaces"
+indent_width = 2
+quote_style = "AutoPreferDouble"
+```
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says lua-language-server or stylua is not installed">
+
+The bar above the file shows the install command. After installing with Homebrew, press **Check Again**; the tool must be on the `PATH` of your login shell.
+
+</Details>
+
+<Details summary="No diagnostics or completion in a file">
+
+Phantom starts the server for the project containing the file. A file that lives outside any repository is opened without a workspace, which keeps the server from scanning your home folder; diagnostics still work for that file, but cross-file navigation does not.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Formatting requires `stylua` on the `PATH`. If the file is inside a project with a `stylua.toml` that excludes it, StyLua returns the buffer unchanged.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.1** — Adds this document, the cover, the screenshot and the icon; no change to the language definition.
+
+**1.0.0** — Initial release: language definition for `.lua` and `.luacheckrc`, lua-language-server and StyLua wiring.
+
+## License and credits
+
+The extension is released under the MIT License. [lua-language-server](https://github.com/LuaLS/lua-language-server) is © LuaLS contributors (MIT). [StyLua](https://github.com/JohnnyMorganz/StyLua) is © Johnny Morganz (MPL-2.0). Lua is © PUC-Rio; this extension is not affiliated with the Lua project.
