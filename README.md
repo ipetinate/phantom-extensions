@@ -14,12 +14,17 @@ One directory per extension, whatever it contributes. A language, its formatter,
 extensions/
   lua/
     extension.json      the manifest
+    extension.mdx       the document Phantom shows in the store, optional
     icons/lua.svg       assets, referenced from the manifest by relative path
+    media/              images and videos the document uses
 schema/
   extension.schema.json
 scripts/
-  build_index.py        validates every manifest, zips every extension, writes index.json
+  build_index.py        validates every manifest and document, zips every extension, writes index.json
+  check_releases.py     refuses a version whose published zip differs from the one just built
 ```
+
+A directory holds `extension.json`, `extension.mdx`, `LICENSE*`, `README*`, the paths the manifest references and `media/`. Any other file fails the build.
 
 Directory names are for humans. Identity is `id` in the manifest, and the zip is `<id>-<version>.zip`.
 
@@ -42,6 +47,7 @@ Directory names are for humans. Identity is `id` in the manifest, and the zip is
 | `contributes.formatters[]` | planned, 0.16.0 |
 | `contributes.themes[]`, `contributes.iconThemes[]` | planned, 0.16.0 |
 | `contributes.agents[]` | planned, 0.16.0 |
+| `extension.mdx` and the `card` it produces in the index | planned, 0.16.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
 
@@ -59,6 +65,28 @@ An agent entry teaches Phantom a coding agent it did not ship with: what to laun
 `directory` values are candidate lists: `["$CODEX_HOME", "~/.codex"]` uses the variable when it is set, otherwise the home path. Phantom writes into these files only when the user presses Install in Settings → Agents or Settings → MCP, exactly as for the agents it ships with. An `agentId` equal to a built-in agent's is ignored. Session discovery for resume is not part of the format; an extension agent resumes with `resume.withoutSession` when the tab has no recorded id.
 
 The schema carries the full shape. `extensions/lua` has no agent; the parser's fixture describes Codex in this format and matches Phantom's own descriptor field for field.
+
+## The document
+
+`extension.mdx` beside the manifest is the page Phantom shows for the extension. It is optional, at most 256 KiB, and made of a front matter block followed by MDX restricted to Markdown and the components the `phantom-mdx` kit knows; `packages/phantom-mdx/README.md` describes the body. `build_index.py` reads the front matter into the `card` of the index entry, so Phantom can list the extension without downloading anything.
+
+The front matter is a subset of YAML that the builder parses itself: `key: value` with plain or quoted scalars, one nested mapping indented by two spaces, flow mappings `{ name: X, url: Y }`, flow sequences `[a, b]`, block sequences of `- item`, `#` comments and blank lines. Anchors, multi-line scalars, deeper nesting, tabs and unknown keys fail with a line number.
+
+| Key | Rule |
+|---|---|
+| `title` | required, at most 80 characters |
+| `tagline` | required, at most 160 characters |
+| `version` | required, equal to `version` in `extension.json` |
+| `author` | required; `name` at most 80 characters, `url` optional and https only |
+| `license` | required, at most 64 characters |
+| `created` | required, `YYYY-MM-DD` |
+| `updated` | optional, a date or an ISO 8601 timestamp with an offset; the index carries it as UTC. When absent, the date of the last commit that touched the directory, or `created` outside git |
+| `icon` | optional, `media/….svg` or `.png` |
+| `cover` | optional, `media/….png`, `.jpg`, `.jpeg` or `.webp` |
+| `tags` | at most 8, each matching `[a-z0-9][a-z0-9-]{0,23}`, no duplicates |
+| `screenshots` | at most 8 image paths under `media/` |
+
+Media lives under `media/`, up to 32 files and 24 MiB in total. Images (`png`, `jpg`, `jpeg`, `webp`) may take 2 MiB each, a `gif` 5 MiB, a video (`mp4`, `webm`) 12 MiB, and an `svg` counts as an image. Any other suffix under `media/` fails the build, and so does a zip above 32 MiB. The card lists every media file with its size, so Phantom knows what a download costs before it starts.
 
 ## Trust
 
