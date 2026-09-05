@@ -13,8 +13,9 @@ EXTENSIONS = ROOT / "extensions"
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+$")
 LANGUAGE_ID_PATTERN = re.compile(r"^[a-z0-9_+-]+$")
+AGENT_ID_PATTERN = re.compile(r"^[a-z0-9_+-]+$")
 CATEGORIES = {"script", "compiled", "markup", "frontendFramework", "styles", "data", "infrastructure"}
-CONTRIBUTION_KINDS = ("languages", "formatters", "themes", "iconThemes")
+CONTRIBUTION_KINDS = ("languages", "formatters", "themes", "iconThemes", "agents")
 MAX_MANIFEST_BYTES = 512 * 1024
 ZIP_EPOCH = (1980, 1, 1, 0, 0, 0)
 
@@ -23,8 +24,15 @@ class ManifestError(Exception):
     pass
 
 
+def describe(directory):
+    try:
+        return str(directory.relative_to(ROOT))
+    except ValueError:
+        return str(directory)
+
+
 def fail(directory, message):
-    raise ManifestError(f"{directory.relative_to(ROOT)}: {message}")
+    raise ManifestError(f"{describe(directory)}: {message}")
 
 
 def require_string(directory, obj, key, pattern=None):
@@ -95,6 +103,16 @@ def validate_formatter(directory, formatter):
         fail(directory, f"formatter {formatter.get('id')!r} needs at least one file extension")
 
 
+def validate_agent(directory, agent):
+    if not isinstance(agent, dict):
+        fail(directory, "each agent must be an object")
+    require_string(directory, agent, "agentId", AGENT_ID_PATTERN)
+    require_string(directory, agent, "name")
+    require_string(directory, agent, "command")
+    if "icon" in agent:
+        require_asset(directory, agent["icon"])
+
+
 def validate_pathed(directory, kind, entry):
     if not isinstance(entry, dict):
         fail(directory, f"each entry in {kind} must be an object")
@@ -132,17 +150,19 @@ def load_manifest(directory):
     for kind in ("themes", "iconThemes"):
         for entry in contributes.get(kind, []):
             validate_pathed(directory, kind, entry)
+    for agent in contributes.get("agents", []):
+        validate_agent(directory, agent)
     return manifest
 
 
-def collect():
+def collect(extensions=EXTENSIONS):
     manifests = []
     seen = {}
-    for directory in sorted(p for p in EXTENSIONS.iterdir() if p.is_dir()):
+    for directory in sorted(p for p in extensions.iterdir() if p.is_dir()):
         manifest = load_manifest(directory)
         if manifest["id"] in seen:
             fail(directory, f"id {manifest['id']!r} is already used by {seen[manifest['id']]}")
-        seen[manifest["id"]] = directory.relative_to(ROOT)
+        seen[manifest["id"]] = describe(directory)
         manifests.append((directory, manifest))
     if not manifests:
         raise ManifestError("no extensions found")
