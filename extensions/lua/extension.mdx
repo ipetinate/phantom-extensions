@@ -1,0 +1,61 @@
+---
+title: Lua
+tagline: Highlighting, lua-language-server and StyLua for .lua files.
+version: 1.0.1
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-05
+icon: media/icon.svg
+cover: media/cover.png
+tags: [lua, language, lsp, formatter]
+screenshots:
+  - media/editor.png
+---
+
+Lua support for Phantom: highlighting for `.lua` files and `.luacheckrc`, diagnostics and completion through lua-language-server, and formatting with StyLua.
+
+<Callout kind="note" title="What the zip holds">
+The extension carries the language definition, the icon and the wiring for the two programs below. The programs are installed with Homebrew, and Phantom asks before it runs either of them for the first time.
+</Callout>
+
+## What you get
+
+<Features columns="3">
+  <Feature title="Highlighting" icon="brush">
+    Keywords, strings including `[[long strings]]`, numbers, calls and `::labels::`.
+  </Feature>
+  <Feature title="Diagnostics and completion" icon="bug">
+    lua-language-server reports errors as you type and completes the standard library.
+  </Feature>
+  <Feature title="Format on save" icon="sparkles">
+    StyLua reads the buffer from stdin, so unsaved edits are formatted too.
+  </Feature>
+</Features>
+
+## Requirements
+
+<Requirement command="lua-language-server" install="brew install lua-language-server" url="https://luals.github.io/">
+Needed for diagnostics, hover and completion. Without it the highlighter still works.
+</Requirement>
+
+<Requirement command="stylua" install="brew install stylua" url="https://github.com/JohnnyMorganz/StyLua">
+Needed for formatting. Phantom passes `--stdin-filepath`, so StyLua finds the project's `stylua.toml`.
+</Requirement>
+
+## Set up
+
+<Steps>
+  <Step title="Install the programs">
+    Run the two Homebrew commands above.
+  </Step>
+  <Step title="Install the extension">
+    Open Settings, then Extensions, and press Install next to Lua.
+  </Step>
+  <Step title="Open a Lua file">
+    Phantom asks once before it starts lua-language-server. Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the file, or turn on Format on Save under Settings, then Files.
+  </Step>
+</Steps>
+
+<Screenshot src="media/editor.png" alt="A Lua file open in Phantom, with highlighted keywords and strings and one diagnostic from lua-language-server" caption="Highlighting and a diagnostic from lua-language-server" />
