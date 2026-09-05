@@ -26,7 +26,7 @@ MAX_VIDEO_BYTES = 12 * 1024 * 1024
 MAX_MEDIA_BYTES = 24 * 1024 * 1024
 MAX_MEDIA_FILES = 32
 MAX_ZIP_BYTES = 32 * 1024 * 1024
-DOCUMENT_NAME = "extension.mdx"
+DOCUMENT_NAMES = ("extension.mdx", "extension.md")
 MEDIA_DIRECTORY = "media"
 IMAGE_SUFFIXES = {"png", "jpg", "jpeg", "webp", "gif"}
 VIDEO_SUFFIXES = {"mp4", "webm"}
@@ -389,7 +389,16 @@ def validate_pathed(directory, kind, entry):
 
 
 def document_fail(directory, message):
-    fail(directory, f"{DOCUMENT_NAME}: {message}")
+    fail(directory, f"{document_name(directory)}: {message}")
+
+
+def document_name(directory):
+    present = [name for name in DOCUMENT_NAMES if (directory / name).is_file()]
+    if not present:
+        fail(directory, f"needs a document: {' or '.join(DOCUMENT_NAMES)}")
+    if len(present) > 1:
+        fail(directory, f"holds both {' and '.join(present)}; keep one")
+    return present[0]
 
 
 def require_text(directory, data, key, limit, required=True):
@@ -527,9 +536,8 @@ def validate_front_matter(directory, manifest, data):
 
 
 def load_document(directory, manifest):
-    path = directory / DOCUMENT_NAME
-    if not path.is_file():
-        return None
+    name = document_name(directory)
+    path = directory / name
     size = path.stat().st_size
     if size > MAX_DOCUMENT_BYTES:
         document_fail(directory, f"larger than {MAX_DOCUMENT_BYTES} bytes")
@@ -540,11 +548,23 @@ def load_document(directory, manifest):
     try:
         data, _ = parse_front_matter(text, FRONT_MATTER_KEYS)
     except FrontMatterError as error:
-        fail(directory, f"{DOCUMENT_NAME}:{error.line}: {error.message}")
+        fail(directory, f"{name}:{error.line}: {error.message}")
     card = validate_front_matter(directory, manifest, data)
-    card["document"] = DOCUMENT_NAME
+    card["document"] = name
     card["documentBytes"] = size
     return card
+
+
+def manifest_icons(manifest):
+    contributes = manifest.get("contributes", {})
+    entries = list(contributes.get("languages", [])) + list(contributes.get("agents", []))
+    return [entry["icon"] for entry in entries if isinstance(entry, dict) and isinstance(entry.get("icon"), str)]
+
+
+def check_icon(directory, manifest, card):
+    if card.get("icon") or manifest_icons(manifest):
+        return
+    fail(directory, "needs an icon: 'icon' in the document's front matter, or 'icon' on a language or agent in extension.json")
 
 
 def extension_files(directory):
@@ -604,7 +624,7 @@ def check_layout(directory, manifest):
     referenced = referenced_paths(manifest)
     for file in extension_files(directory):
         relative = file.relative_to(directory).as_posix()
-        if relative in ("extension.json", DOCUMENT_NAME) or relative.startswith(MEDIA_DIRECTORY + "/"):
+        if relative == "extension.json" or relative in DOCUMENT_NAMES or relative.startswith(MEDIA_DIRECTORY + "/"):
             continue
         if "/" not in relative and relative.startswith(("LICENSE", "README")):
             continue
@@ -660,9 +680,9 @@ def collect(extensions=None):
         check_layout(directory, manifest)
         media, media_bytes = check_media(directory)
         card = load_document(directory, manifest)
-        if card is not None:
-            card["media"] = media
-            card["mediaBytes"] = media_bytes
+        check_icon(directory, manifest, card)
+        card["media"] = media
+        card["mediaBytes"] = media_bytes
         collected.append((directory, manifest, card))
     if not collected:
         raise ManifestError("no extensions found")
@@ -707,9 +727,8 @@ def build(out, repo):
                 "sha256": hashlib.sha256(data).hexdigest(),
                 "bytes": len(data),
             },
+            "card": card,
         }
-        if card is not None:
-            entry["card"] = card
         entries.append(entry)
         releases.append((tag, str(archive), f"{manifest['name']} {manifest['version']}"))
     index = {
@@ -733,8 +752,7 @@ def main():
         if args.check:
             for directory, manifest, card in collect():
                 media, media_bytes = check_media(directory)
-                document = "yes" if card else "no"
-                print(f"ok  {manifest['id']} {manifest['version']}  doc:{document}  media:{len(media)} files, {media_bytes / (1024 * 1024):.2f} MiB")
+                print(f"ok  {manifest['id']} {manifest['version']}  doc:{card['document']}  media:{len(media)} files, {media_bytes / (1024 * 1024):.2f} MiB")
             return 0
         for entry in build(args.out, args.repo):
             print(f"{entry['id']} {entry['version']}  {entry['download']['bytes']} bytes  {entry['download']['sha256'][:12]}")

@@ -1,15 +1,11 @@
-import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { parseDocument, toParseError } from "./parse.ts";
-import { collectMedia, validateTree, type Violation } from "./validate.ts";
-
-const DOCUMENT_NAME = "extension.mdx";
+import { checkFile, findDocument } from "./check.ts";
 
 function usage(): number {
   process.stderr.write(
     [
       "usage:",
-      "  phantom-mdx check <dir>...    validate <dir>/extension.mdx; exit 1 on any violation",
+      "  phantom-mdx check <dir>...    validate <dir>/extension.mdx or extension.md; exit 1 on any violation",
       "  phantom-mdx preview <dir>     open the document in the viewer with live reload",
       "",
     ].join("\n"),
@@ -17,42 +13,24 @@ function usage(): number {
   return 2;
 }
 
-export function checkDirectory(directory: string): Violation[] {
-  const file = path.join(directory, DOCUMENT_NAME);
-  const source = readFileSync(file, "utf8");
-  let tree;
-  try {
-    tree = parseDocument(source).tree;
-  } catch (error) {
-    const parseError = toParseError(error);
-    return [{ code: "syntax", message: parseError.message, line: parseError.line, column: parseError.column }];
-  }
-  const violations = validateTree(tree);
-  for (const reference of collectMedia(tree)) {
-    if (!existsSync(path.join(directory, reference.path))) {
-      violations.push({ code: "media-missing", message: `${reference.path} does not exist`, line: reference.line, column: reference.column });
-    }
-  }
-  return violations.sort((a, b) => a.line - b.line || a.column - b.column);
-}
-
 function check(directories: string[]): number {
   if (directories.length === 0) return usage();
   let failed = false;
   for (const directory of directories) {
-    const file = path.join(directory, DOCUMENT_NAME);
-    if (!existsSync(file)) {
-      process.stdout.write(`${directory}: no ${DOCUMENT_NAME}\n`);
+    const lookup = findDocument(directory);
+    if (lookup.file === null) {
+      process.stdout.write(`${directory}: ${lookup.reason}\n`);
+      failed = true;
       continue;
     }
-    const violations = checkDirectory(directory);
+    const violations = checkFile(lookup.file);
     for (const violation of violations) {
-      process.stdout.write(`${file}:${violation.line}:${violation.column} ${violation.message}\n`);
+      process.stdout.write(`${lookup.file}:${violation.line}:${violation.column} ${violation.message}\n`);
     }
     if (violations.length > 0) {
       failed = true;
     } else {
-      process.stdout.write(`${file}: ok\n`);
+      process.stdout.write(`${lookup.file}: ok\n`);
     }
   }
   return failed ? 1 : 0;
@@ -61,8 +39,9 @@ function check(directories: string[]): number {
 async function preview(directories: string[]): Promise<number> {
   const directory = directories[0];
   if (!directory || directories.length !== 1) return usage();
-  if (!existsSync(path.join(directory, DOCUMENT_NAME))) {
-    process.stderr.write(`${directory}: no ${DOCUMENT_NAME}\n`);
+  const lookup = findDocument(directory);
+  if (lookup.file === null) {
+    process.stderr.write(`${directory}: ${lookup.reason}\n`);
     return 1;
   }
   const { startPreview } = await import("./preview/server.ts");

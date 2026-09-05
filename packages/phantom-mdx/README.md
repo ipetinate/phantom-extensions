@@ -1,6 +1,6 @@
 # phantom-mdx
 
-The document kit for Phantom extensions. An extension may ship `extension.mdx` beside its `extension.json`; Phantom shows that page in its extension store. This package holds the rules for that page, the renderer that draws it, the viewer Phantom embeds, and the tools an author runs before opening a pull request.
+The document kit for Phantom extensions. Every extension ships `extension.mdx` (components allowed) or `extension.md` (plain Markdown) beside its `extension.json`; Phantom shows that page in its extension store. Both names go through the same parser, so a `.md` file follows the MDX rules below as well: `<` opens a tag and `{` opens an expression. This package holds the rules for that page, the renderer that draws it, the viewer Phantom embeds, and the tools an author runs before opening a pull request.
 
 The document is never executed. It is parsed to a syntax tree, checked against the component list below, converted to HTML and rendered with React. Imports, exports, expressions and raw HTML are rejected before anything is drawn.
 
@@ -69,7 +69,7 @@ Glyphs for `Feature icon`: `bolt`, `book`, `brush`, `bug`, `check`, `code`, `gea
 npm ci
 npm test
 npm run build
-node dist/cli.js check extensions/lua          # prints <dir>/extension.mdx:<line>:<col> <message>; exit 1 on any violation
+node dist/cli.js check extensions/lua          # prints <dir>/extension.mdx:<line>:<col> <message>; exit 1 on any violation or a missing document
 node dist/cli.js preview extensions/lua        # opens the document in the viewer and reloads it as you edit
 ```
 
@@ -79,7 +79,7 @@ The registry's pull request workflow runs `check` on every extension directory.
 
 `src/index.ts` exports the pieces a host or a tool needs:
 
-- `validate(source)` returns `Violation[]` (`code`, `message`, `line`, `column`); `validateTree` and `collectMedia` work on a parsed tree; `parseDocument` parses and strips the front matter.
+- `validate(source)` returns `Violation[]` (`code`, `message`, `line`, `column`); `validateTree` and `collectMedia` work on a parsed tree; `parseDocument` parses and strips the front matter. `findDocument(dir)` picks the one document in a directory and `checkFile(file)` validates it and its media on disk.
 - `Document` is the React component: `<Document source baseURL theme? onLink? cover? onRendered? onFailed? />`. Media resolves against `baseURL` and any path that escapes it is dropped with a warning.
 - `applyTheme(root, theme)`, `normalizeTheme(payload)`, `defaultTheme`, `defaultLightTheme`. A theme is `{ scheme, colors: { bg, fg, accent, muted, border, codeBg, danger, warning, success }, fonts: { ui, mono }, baseSize }` and lands as `--ph-*` CSS variables plus `color-scheme`.
 - `components` is the whitelist with its prop specs; `componentMap` the React implementations.

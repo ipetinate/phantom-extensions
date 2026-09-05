@@ -14,7 +14,7 @@ One directory per extension, whatever it contributes. A language, its formatter,
 extensions/
   lua/
     extension.json      the manifest
-    extension.mdx       the document Phantom shows in the store, optional
+    extension.mdx       the document Phantom shows in the store (or extension.md)
     icons/lua.svg       assets, referenced from the manifest by relative path
     media/              images and videos the document uses
 schema/
@@ -24,16 +24,18 @@ scripts/
   check_releases.py     refuses a version whose published zip differs from the one just built
 ```
 
-A directory holds `extension.json`, `extension.mdx`, `LICENSE*`, `README*`, the paths the manifest references and `media/`. Any other file fails the build.
+A directory holds `extension.json`, the document, `LICENSE*`, `README*`, the paths the manifest references and `media/`. Any other file fails the build.
 
 Directory names are for humans. Identity is `id` in the manifest, and the zip is `<id>-<version>.zip`.
 
 ## Publishing an extension
 
 1. Add `extensions/<name>/extension.json` and its assets. `id` is `<publisher>.<name>`, lowercase, using `[a-z0-9._-]`.
-2. Run `python3 scripts/build_index.py --check`. Pull requests run the same command.
-3. Open a pull request. On merge, the publish workflow creates a release `<id>-v<version>` with the zip, then rebuilds `index.json` and uploads it to the `index` release.
-4. To ship a change, raise `version`. A version that already has a release is never rebuilt. Any change under an extension directory needs a version bump, and CI refuses a build whose zip differs from the bytes already released under that version.
+2. Add the document: exactly one of `extension.mdx` or `extension.md` beside the manifest, with the front matter described under "The document". An extension without a document does not build.
+3. Give the extension an icon: `icon` in the document's front matter, or `icon` on a language or agent in the manifest. An extension without an icon does not build. Screenshots, GIFs and videos are optional.
+4. Run `python3 scripts/build_index.py --check` and `node packages/phantom-mdx/dist/cli.js check extensions/<name>`. Pull requests run both.
+5. Open a pull request. On merge, the publish workflow creates a release `<id>-v<version>` with the zip, then rebuilds `index.json` and uploads it to the `index` release.
+6. To ship a change, raise `version`. A version that already has a release is never rebuilt. Any change under an extension directory needs a version bump, and CI refuses a build whose zip differs from the bytes already released under that version.
 
 ## The manifest
 
@@ -47,7 +49,7 @@ Directory names are for humans. Identity is `id` in the manifest, and the zip is
 | `contributes.formatters[]` | planned, 0.16.0 |
 | `contributes.themes[]`, `contributes.iconThemes[]` | planned, 0.16.0 |
 | `contributes.agents[]` | planned, 0.16.0 |
-| `extension.mdx` and the `card` it produces in the index | planned, 0.16.0 |
+| `extension.mdx` or `extension.md`, and the `card` it produces in the index | planned, 0.16.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
 
@@ -68,7 +70,7 @@ The schema carries the full shape. `extensions/lua` has no agent; the parser's f
 
 ## The document
 
-`extension.mdx` beside the manifest is the page Phantom shows for the extension. It is optional, at most 256 KiB, and made of a front matter block followed by MDX restricted to Markdown and the components the `phantom-mdx` kit knows; `packages/phantom-mdx/README.md` describes the body. `build_index.py` reads the front matter into the `card` of the index entry, so Phantom can list the extension without downloading anything.
+The document beside the manifest is the page Phantom shows for the extension. Every extension has one: `extension.mdx` when it uses the kit's components, `extension.md` for plain Markdown, never both. It is at most 256 KiB and made of a front matter block followed by a body restricted to Markdown and the components the `phantom-mdx` kit knows; `packages/phantom-mdx/README.md` describes the body, and both names go through the same parser and checker. `build_index.py` reads the front matter into the `card` of the index entry, with `card.document` naming the file, so Phantom can list the extension without downloading anything.
 
 The front matter is a subset of YAML that the builder parses itself: `key: value` with plain or quoted scalars, one nested mapping indented by two spaces, flow mappings `{ name: X, url: Y }`, flow sequences `[a, b]`, block sequences of `- item`, `#` comments and blank lines. Anchors, multi-line scalars, deeper nesting, tabs and unknown keys fail with a line number.
 
@@ -81,7 +83,7 @@ The front matter is a subset of YAML that the builder parses itself: `key: value
 | `license` | required, at most 64 characters |
 | `created` | required, `YYYY-MM-DD` |
 | `updated` | optional, a date or an ISO 8601 timestamp with an offset; the index carries it as UTC. When absent, the date of the last commit that touched the directory, or `created` outside git |
-| `icon` | optional, `media/….svg` or `.png` |
+| `icon` | `media/….svg` or `.png`; required unless a language or agent in the manifest has an `icon` |
 | `cover` | optional, `media/….png`, `.jpg`, `.jpeg` or `.webp` |
 | `tags` | at most 8, each matching `[a-z0-9][a-z0-9-]{0,23}`, no duplicates |
 | `screenshots` | at most 8 image paths under `media/` |

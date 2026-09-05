@@ -68,12 +68,14 @@ BODY = "\n## Sample\n\nSome text.\n"
 
 
 class ExtensionFixture:
-    def __init__(self, root, name, manifest):
+    def __init__(self, root, name, manifest, document=True):
         self.directory = Path(root) / name
         self.directory.mkdir(parents=True)
         for asset in build_index.referenced_paths(manifest):
             self.write(asset, "<svg xmlns='http://www.w3.org/2000/svg'/>")
         self.write_manifest(manifest)
+        if document:
+            self.write_document()
 
     def write_manifest(self, manifest):
         (self.directory / "extension.json").write_text(json.dumps(manifest), encoding="utf-8")
@@ -94,12 +96,12 @@ class ExtensionFixture:
             handle.truncate(size)
         return path
 
-    def write_document(self, front_matter=FRONT_MATTER, body=BODY, media=True):
+    def write_document(self, front_matter=FRONT_MATTER, body=BODY, media=True, name="extension.mdx"):
         if media:
             self.write("media/icon.svg", "<svg xmlns='http://www.w3.org/2000/svg'/>")
             self.write("media/cover.png", MINIMAL_PNG)
             self.write("media/shot.png", MINIMAL_PNG)
-        return self.write(build_index.DOCUMENT_NAME, front_matter + body)
+        return self.write(name, front_matter + body)
 
 
 class FixtureTestCase(unittest.TestCase):
@@ -156,11 +158,30 @@ class ManifestTests(FixtureTestCase):
 
     def test_collect_returns_directory_manifest_and_card(self):
         ExtensionFixture(self.root, "one", language_manifest())
-        ExtensionFixture(self.root, "two", agents_manifest()).write_document()
+        ExtensionFixture(self.root, "two", agents_manifest())
         collected = build_index.collect(self.root)
         self.assertEqual([manifest["id"] for _, manifest, _ in collected], ["tests.sample", "tests.agent"])
-        self.assertIsNone(collected[0][2])
-        self.assertEqual(collected[1][2]["title"], "Sample")
+        self.assertEqual([card["title"] for _, _, card in collected], ["Sample", "Sample"])
+        self.assertEqual(collected[0][2]["media"][0]["path"], "media/cover.png")
+
+    def test_collect_requires_a_document(self):
+        ExtensionFixture(self.root, "one", language_manifest(), document=False)
+        self.assertFails("needs a document: extension.mdx or extension.md", build_index.collect, self.root)
+
+    def test_collect_requires_an_icon(self):
+        manifest = language_manifest()
+        del manifest["contributes"]["languages"][0]["icon"]
+        fixture = ExtensionFixture(self.root, "one", manifest, document=False)
+        fixture.write_document(FRONT_MATTER.replace("icon: media/icon.svg\n", ""))
+        self.assertFails("needs an icon", build_index.collect, self.root)
+
+    def test_manifest_icon_satisfies_the_icon_rule(self):
+        fixture = ExtensionFixture(self.root, "one", language_manifest(), document=False)
+        fixture.write_document(FRONT_MATTER.replace("icon: media/icon.svg\n", ""))
+        agent = ExtensionFixture(self.root, "two", agents_manifest(), document=False)
+        agent.write_document(FRONT_MATTER.replace("icon: media/icon.svg\n", ""))
+        cards = [card for _, _, card in build_index.collect(self.root)]
+        self.assertEqual([card["icon"] for card in cards], [None, None])
 
 
 class RequireAssetTests(FixtureTestCase):
@@ -282,7 +303,7 @@ class FrontMatterParserTests(unittest.TestCase):
 class DocumentTests(FixtureTestCase):
     def setUp(self):
         super().setUp()
-        self.fixture = ExtensionFixture(self.root, "sample", language_manifest())
+        self.fixture = ExtensionFixture(self.root, "sample", language_manifest(), document=False)
         self.manifest = build_index.load_manifest(self.fixture.directory)
 
     def load(self):
@@ -304,8 +325,23 @@ class DocumentTests(FixtureTestCase):
                 data[key] = value
         return "---\n" + "\n".join(data.values()) + "\n---\n"
 
-    def test_no_document_gives_no_card(self):
-        self.assertIsNone(self.load())
+    def test_missing_document_fails(self):
+        self.assertFails("needs a document: extension.mdx or extension.md", self.load)
+
+    def test_both_documents_fail(self):
+        self.fixture.write_document()
+        self.fixture.write_document(name="extension.md")
+        self.assertFails("holds both extension.mdx and extension.md; keep one", self.load)
+
+    def test_markdown_document_is_accepted(self):
+        self.fixture.write_document(name="extension.md")
+        card = self.load()
+        self.assertEqual(card["document"], "extension.md")
+        self.assertEqual(card["title"], "Sample")
+
+    def test_markdown_document_errors_name_the_file(self):
+        self.fixture.write_document("---\ntitle: Sample\nbogus: 1\n---\n", name="extension.md")
+        self.assertFails(r"extension\.md:3: unknown key 'bogus'", self.load)
 
     def test_card_shape(self):
         self.fixture.write_document()
@@ -455,7 +491,7 @@ class DocumentTests(FixtureTestCase):
 class MediaTests(FixtureTestCase):
     def setUp(self):
         super().setUp()
-        self.fixture = ExtensionFixture(self.root, "sample", language_manifest())
+        self.fixture = ExtensionFixture(self.root, "sample", language_manifest(), document=False)
 
     def check(self):
         return build_index.check_media(self.fixture.directory)
@@ -514,7 +550,7 @@ class MediaTests(FixtureTestCase):
 class LayoutTests(FixtureTestCase):
     def setUp(self):
         super().setUp()
-        self.fixture = ExtensionFixture(self.root, "sample", language_manifest())
+        self.fixture = ExtensionFixture(self.root, "sample", language_manifest(), document=False)
         self.manifest = build_index.load_manifest(self.fixture.directory)
 
     def check(self):
@@ -524,7 +560,8 @@ class LayoutTests(FixtureTestCase):
         self.fixture.write("LICENSE", "x")
         self.fixture.write("LICENSE.txt", "x")
         self.fixture.write("README.md", "x")
-        self.fixture.write(build_index.DOCUMENT_NAME, "x")
+        self.fixture.write("extension.mdx", "x")
+        self.fixture.write("extension.md", "x")
         self.fixture.write("media/a.png", b"x")
         self.check()
 
@@ -539,7 +576,7 @@ class LayoutTests(FixtureTestCase):
     def test_allows_files_under_a_referenced_directory(self):
         manifest = language_manifest()
         manifest["contributes"]["iconThemes"] = [{"name": "Icons", "path": "icons-theme"}]
-        fixture = ExtensionFixture(self.root, "themed", manifest)
+        fixture = ExtensionFixture(self.root, "themed", manifest, document=False)
         (fixture.directory / "icons-theme").unlink()
         fixture.write("icons-theme/icon-theme.json", "{}")
         fixture.write("icons-theme/svg/a.svg", "<svg/>")
@@ -550,14 +587,13 @@ class LayoutTests(FixtureTestCase):
         manifest["contributes"]["agents"][0]["hooks"] = {
             "kind": "file", "directory": "~/.agent", "fileName": "plugin.lua", "template": "hooks/plugin.lua"
         }
-        fixture = ExtensionFixture(self.root, "agent", manifest)
+        fixture = ExtensionFixture(self.root, "agent", manifest, document=False)
         build_index.check_layout(fixture.directory, build_index.load_manifest(fixture.directory))
 
 
 class BuildTests(FixtureTestCase):
     def test_index_entry_carries_the_card(self):
-        fixture = ExtensionFixture(self.root / "extensions", "sample", language_manifest())
-        fixture.write_document()
+        ExtensionFixture(self.root / "extensions", "sample", language_manifest())
         with patch.object(build_index, "EXTENSIONS", self.root / "extensions"):
             entries = build_index.build(self.root / "dist", "tests/registry")
         card = entries[0]["card"]
@@ -571,11 +607,10 @@ class BuildTests(FixtureTestCase):
         index = json.loads((self.root / "dist" / "index.json").read_text(encoding="utf-8"))
         self.assertEqual(index["extensions"][0]["card"]["title"], "Sample")
 
-    def test_index_entry_without_document_has_no_card(self):
-        ExtensionFixture(self.root / "extensions", "sample", language_manifest())
+    def test_build_refuses_an_extension_without_a_document(self):
+        ExtensionFixture(self.root / "extensions", "sample", language_manifest(), document=False)
         with patch.object(build_index, "EXTENSIONS", self.root / "extensions"):
-            entries = build_index.build(self.root / "dist", "tests/registry")
-        self.assertNotIn("card", entries[0])
+            self.assertFails("needs a document", build_index.build, self.root / "dist", "tests/registry")
 
     def test_zip_size_limit(self):
         ExtensionFixture(self.root / "extensions", "sample", language_manifest())

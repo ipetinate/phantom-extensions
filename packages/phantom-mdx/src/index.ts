@@ -1,6 +1,8 @@
 export { Document, compile, renderTree } from "./render.tsx";
 export type { DocumentProps, RenderFailure } from "./render.tsx";
 export { validate, validateTree, collectMedia } from "./validate.ts";
+export { checkFile, findDocument, DOCUMENT_NAMES } from "./check.ts";
+export type { DocumentLookup } from "./check.ts";
 export type { Violation, MediaReference } from "./validate.ts";
 export { parseDocument, ParseError, toParseError } from "./parse.ts";
 export type { ParsedDocument } from "./parse.ts";
