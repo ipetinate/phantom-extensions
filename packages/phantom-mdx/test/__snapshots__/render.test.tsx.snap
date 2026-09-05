@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Document > renders Badge 1`] = `
+"<span class="ph-badge ph-badge-warning">Beta</span>
+<span class="ph-badge ph-badge-neutral">Plain</span>"
+`;
+
+exports[`Document > renders Callout 1`] = `"<aside class="ph-callout ph-callout-warning" role="note"><p class="ph-callout-title">Careful</p><div class="ph-callout-body"><p>Mind the <em>gap</em>.</p></div></aside>"`;
+
+exports[`Document > renders Callout default 1`] = `"<aside class="ph-callout ph-callout-note" role="note"><p class="ph-callout-title">Note</p><div class="ph-callout-body"><p>Text</p></div></aside>"`;
+
+exports[`Document > renders Details 1`] = `"<details class="ph-details"><summary>More</summary><div class="ph-details-body"><p>Hidden text.</p></div></details>"`;
+
+exports[`Document > renders Features 1`] = `"<div class="ph-features ph-features-3"><section class="ph-feature"><svg class="ph-glyph" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg><p class="ph-feature-title">Fast</p><div class="ph-feature-body"><p>Quick.</p></div></section><section class="ph-feature"><p class="ph-feature-title">Plain</p><div class="ph-feature-body"><p>No icon.</p></div></section></div>"`;
+
+exports[`Document > renders Gallery 1`] = `"<div class="ph-gallery"><figure class="ph-screenshot ph-width-full"><img alt="A" loading="lazy" decoding="async" src="file:///ext/sample/media/a.png"></figure><figure class="ph-screenshot ph-width-full"><img alt="B" loading="lazy" decoding="async" src="file:///ext/sample/media/b.webp"></figure></div>"`;
+
+exports[`Document > renders Kbd 1`] = `"<p>Press <kbd class="ph-kbd">⌘</kbd> <kbd class="ph-kbd">K</kbd>.</p>"`;
+
+exports[`Document > renders Markdown 1`] = `
+"<h2>Heading</h2>
+<p>A <a href="https://example.com" target="_blank" rel="noreferrer noopener">link</a> and <code>code</code>.</p>
+<div class="ph-table"><table><thead><tr><th>A</th><th>B</th></tr></thead><tbody><tr><td>1</td><td>2</td></tr></tbody></table></div>
+<pre><code class="language-lua">print(1)
+</code></pre>"
+`;
+
+exports[`Document > renders Requirement 1`] = `"<section class="ph-requirement"><div class="ph-requirement-head"><code class="ph-requirement-command">lua-language-server</code><a class="ph-requirement-link" href="https://luals.github.io/" target="_blank" rel="noreferrer noopener">Documentation</a></div><pre class="ph-requirement-install"><code>brew install lua-language-server</code></pre><div class="ph-requirement-body"><p>Needed for diagnostics.</p></div></section>"`;
+
+exports[`Document > renders Screenshot 1`] = `"<figure class="ph-screenshot ph-width-narrow"><img alt="A screen" loading="lazy" decoding="async" src="file:///ext/sample/media/a.png"><figcaption>Caption</figcaption></figure>"`;
+
+exports[`Document > renders Steps 1`] = `"<ol class="ph-steps"><li class="ph-step"><p class="ph-step-title">One</p><div class="ph-step-body"><p>First.</p></div></li><li class="ph-step"><p class="ph-step-title">Two</p><div class="ph-step-body"><p>Second.</p></div></li></ol>"`;
+
+exports[`Document > renders Video 1`] = `"<figure class="ph-video"><video src="file:///ext/sample/media/a.mp4" poster="file:///ext/sample/media/a.png" controls="" playsinline="" preload="metadata" loop=""></video><figcaption>Tour</figcaption></figure>"`;

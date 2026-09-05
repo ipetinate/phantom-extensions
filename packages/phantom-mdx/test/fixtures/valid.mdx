@@ -1,0 +1,78 @@
+---
+title: Sample
+tagline: Every component the kit knows, in one document.
+version: 1.0.0
+author:
+  name: Tests
+license: MIT
+created: 2026-09-01
+---
+
+## Overview
+
+Plain **Markdown** with a [link](https://example.com), an email [address](mailto:someone@example.com), `inline code` and a keyboard hint: press <Kbd>⌘</Kbd> <Kbd>K</Kbd>. <Badge label="Stable" tone="success" /> <Badge label="0.16.0" />
+
+<Callout kind="tip" title="Try it">
+Open a `.smp` file and the language activates on its own.
+</Callout>
+
+<Callout>
+A note without a title uses the default label.
+</Callout>
+
+<Features columns="3">
+  <Feature title="Highlighting" icon="brush">
+    Strings, numbers and calls in colour.
+  </Feature>
+  <Feature title="Diagnostics" icon="bug">
+    Errors from the language server as you type.
+  </Feature>
+  <Feature title="Formatting" icon="sparkles">
+    Format on save with the bundled formatter.
+  </Feature>
+</Features>
+
+## Install
+
+<Steps>
+  <Step title="Install the server">
+    Run the install command below and restart Phantom.
+  </Step>
+  <Step title="Open a file">
+    Diagnostics appear after the first save.
+  </Step>
+</Steps>
+
+<Requirement command="sample-language-server" install="brew install sample-language-server" url="https://example.com/server">
+Needed for completion, hover and diagnostics.
+</Requirement>
+
+<Requirement command="samplefmt">
+Optional. Without it, Format on Save is a no-op for this language.
+</Requirement>
+
+## Screens
+
+<Screenshot src="media/editor.png" alt="The editor with a sample file open" caption="Highlighting and diagnostics" width="wide" />
+
+<Gallery>
+  <Screenshot src="media/one.png" alt="First screen" />
+  <Screenshot src="media/two.jpg" alt="Second screen" caption="Formatting" />
+</Gallery>
+
+<Video src="media/tour.mp4" poster="media/editor.png" caption="A short tour" loop="true" muted="true" />
+
+<Details summary="Configuration keys">
+| Key | Meaning |
+|---|---|
+| `sample.enable` | Turns the extension on |
+| `sample.format` | Formats on save |
+</Details>
+
+- [x] a finished task
+- [ ] an open task
+
+```lua
+local greeting = "hello"
+print(greeting)
+```

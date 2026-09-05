@@ -1,0 +1,54 @@
+{
+  "name": "phantom-mdx",
+  "version": "0.1.0",
+  "description": "The document kit for Phantom extensions: validator, renderer, viewer and author preview for extension.mdx.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Isac Petinate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipetinate/phantom-extensions.git",
+    "directory": "packages/phantom-mdx"
+  },
+  "bin": {
+    "phantom-mdx": "dist/cli.js"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "build": "vite build --mode cli",
+    "check": "node dist/cli.js check",
+    "preview": "node dist/cli.js preview"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "hast-util-to-jsx-runtime": "^2.3.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx": "^3.1.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/hast": "^3.0.5",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "jsdom": "^30.0.1",
+    "mdast-util-mdx-jsx": "^3.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
+  }
+}
