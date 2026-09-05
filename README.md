@@ -28,7 +28,7 @@ Directory names are for humans. Identity is `id` in the manifest, and the zip is
 1. Add `extensions/<name>/extension.json` and its assets. `id` is `<publisher>.<name>`, lowercase, using `[a-z0-9._-]`.
 2. Run `python3 scripts/build_index.py --check`. Pull requests run the same command.
 3. Open a pull request. On merge, the publish workflow creates a release `<id>-v<version>` with the zip, then rebuilds `index.json` and uploads it to the `index` release.
-4. To ship a change, raise `version`. A version that already has a release is never rebuilt.
+4. To ship a change, raise `version`. A version that already has a release is never rebuilt. Any change under an extension directory needs a version bump, and CI refuses a build whose zip differs from the bytes already released under that version.
 
 ## The manifest
 
