@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ipetinate/phantom-extensions/schema/extension.schema.json",
+  "title": "Phantom extension manifest",
+  "type": "object",
+  "required": ["schemaVersion", "id", "name", "version", "publisher", "contributes"],
+  "additionalProperties": true,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "publisher": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "homepage": { "type": "string", "format": "uri" },
+    "phantom": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$", "description": "Lowest Phantom version that reads every key in this manifest." },
+    "contributes": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "languages": { "type": "array", "items": { "$ref": "#/$defs/language" } },
+        "formatters": { "type": "array", "items": { "$ref": "#/$defs/formatter" } },
+        "themes": { "type": "array", "items": { "$ref": "#/$defs/theme" } },
+        "iconThemes": { "type": "array", "items": { "$ref": "#/$defs/iconTheme" } }
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": { "type": "string", "pattern": "^(?!/)(?!.*\\.\\.)[^\\\\]+$" },
+    "language": {
+      "type": "object",
+      "required": ["languageId", "name", "extensions"],
+      "properties": {
+        "languageId": { "type": "string", "pattern": "^[a-z0-9_+-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "extensions": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9_+-]+$" }, "minItems": 1 },
+        "fileNames": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "category": { "enum": ["script", "compiled", "markup", "frontendFramework", "styles", "data", "infrastructure"] },
+        "icon": { "$ref": "#/$defs/relativePath" },
+        "keywords": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "lineComment": { "type": "string", "minLength": 1 },
+        "blockComment": {
+          "type": "object",
+          "required": ["open", "close"],
+          "properties": { "open": { "type": "string", "minLength": 1 }, "close": { "type": "string", "minLength": 1 } }
+        },
+        "syntax": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "string": { "type": "string" },
+            "number": { "type": "string" },
+            "type": { "type": "string" },
+            "function": { "type": "string" },
+            "attribute": { "type": "string" }
+          }
+        },
+        "server": {
+          "type": "object",
+          "required": ["command"],
+          "properties": {
+            "command": { "type": "string", "minLength": 1 },
+            "args": { "type": "array", "items": { "type": "string" } },
+            "initializationOptions": { "type": "object" },
+            "installHint": { "type": "string" },
+            "documentationURL": { "type": "string", "format": "uri" }
+          }
+        }
+      }
+    },
+    "formatter": {
+      "type": "object",
+      "required": ["id", "name", "command", "extensions"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 },
+        "args": { "type": "array", "items": { "type": "string" }, "description": "$FILE stands for the path of the file being formatted." },
+        "extensions": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9_+-]+$" }, "minItems": 1 },
+        "installHint": { "type": "string" },
+        "documentationURL": { "type": "string", "format": "uri" }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "required": ["name", "path"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "path": { "$ref": "#/$defs/relativePath", "description": "A Ghostty theme file." },
+        "appearance": { "enum": ["dark", "light"] }
+      }
+    },
+    "iconTheme": {
+      "type": "object",
+      "required": ["name", "path"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "path": { "$ref": "#/$defs/relativePath", "description": "Directory holding a VS Code style *icon-theme.json and its SVGs." }
+      }
+    }
+  }
+}

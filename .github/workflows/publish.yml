@@ -1,0 +1,39 @@
+name: Publish
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: python3 scripts/build_index.py --out dist --repo "${GH_REPO}"
+      - name: Release new extension versions
+        run: |
+          set -euo pipefail
+          while IFS=$'\t' read -r tag zip title; do
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "exists  $tag"
+              continue
+            fi
+            gh release create "$tag" "$zip" --title "$title" --latest=false \
+              --notes "Install from Phantom > Settings > Extensions, or unzip into ~/.config/phantom/extensions/."
+            echo "created $tag"
+          done < dist/releases.tsv
+      - name: Publish the index
+        run: |
+          set -euo pipefail
+          if ! gh release view index >/dev/null 2>&1; then
+            gh release create index --title "Extension index" --latest=false \
+              --notes "index.json is rebuilt on every push to main. Phantom reads it from this release's stable download URL."
+          fi
+          gh release upload index dist/index.json --clobber

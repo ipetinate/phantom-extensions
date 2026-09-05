@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.lua",
+  "name": "Lua",
+  "version": "1.0.0",
+  "publisher": "ipetinate",
+  "description": "Lua: highlighting, lua-language-server and StyLua.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/lua",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "lua",
+        "name": "Lua",
+        "extensions": ["lua"],
+        "fileNames": [".luacheckrc"],
+        "category": "script",
+        "icon": "icons/lua.svg",
+        "lineComment": "--",
+        "blockComment": { "open": "--[[", "close": "]]" },
+        "keywords": [
+          "and", "break", "do", "else", "elseif", "end", "false", "for", "function",
+          "goto", "if", "in", "local", "nil", "not", "or", "repeat", "return", "then",
+          "true", "until", "while"
+        ],
+        "syntax": {
+          "string": "\\[=*\\[[\\s\\S]*?\\]=*\\]|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParen",
+          "attribute": "::[A-Za-z_][A-Za-z0-9_]*::"
+        },
+        "server": {
+          "command": "lua-language-server",
+          "installHint": "brew install lua-language-server",
+          "documentationURL": "https://luals.github.io/"
+        }
+      }
+    ],
+    "formatters": [
+      {
+        "id": "stylua",
+        "name": "StyLua",
+        "command": "stylua",
+        "args": ["--stdin-filepath", "$FILE", "-"],
+        "extensions": ["lua"],
+        "installHint": "brew install stylua",
+        "documentationURL": "https://github.com/JohnnyMorganz/StyLua"
+      }
+    ]
+  }
+}
