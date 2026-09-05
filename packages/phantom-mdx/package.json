@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "tsc --noEmit && vitest run",
-    "build": "vite build --mode cli",
+    "build": "vite build && vite build --mode cli && node scripts/verify-viewer.mjs",
     "check": "node dist/cli.js check",
     "preview": "node dist/cli.js preview"
   },

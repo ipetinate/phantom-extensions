@@ -10,6 +10,7 @@ function usage(): number {
     [
       "usage:",
       "  phantom-mdx check <dir>...    validate <dir>/extension.mdx; exit 1 on any violation",
+      "  phantom-mdx preview <dir>     open the document in the viewer with live reload",
       "",
     ].join("\n"),
   );
@@ -57,11 +58,25 @@ function check(directories: string[]): number {
   return failed ? 1 : 0;
 }
 
+async function preview(directories: string[]): Promise<number> {
+  const directory = directories[0];
+  if (!directory || directories.length !== 1) return usage();
+  if (!existsSync(path.join(directory, DOCUMENT_NAME))) {
+    process.stderr.write(`${directory}: no ${DOCUMENT_NAME}\n`);
+    return 1;
+  }
+  const { startPreview } = await import("./preview/server.ts");
+  await startPreview(path.resolve(directory));
+  return -1;
+}
+
 async function main(argv: string[]): Promise<number> {
   const [command, ...rest] = argv;
   switch (command) {
     case "check":
       return check(rest);
+    case "preview":
+      return preview(rest);
     default:
       return usage();
   }
@@ -69,7 +84,7 @@ async function main(argv: string[]): Promise<number> {
 
 main(process.argv.slice(2)).then(
   (code) => {
-    if (code !== 0) process.exitCode = code;
+    if (code > 0) process.exitCode = code;
   },
   (error: unknown) => {
     process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);

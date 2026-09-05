@@ -1,0 +1,46 @@
+.ph-preview-bar {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--ph-border);
+  background: color-mix(in srgb, var(--ph-bg) 85%, var(--ph-fg));
+  font: 12px var(--ph-font-ui);
+  color: var(--ph-fg);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ph-preview-bar button {
+  font: inherit;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--ph-border);
+  background: var(--ph-code-bg);
+  color: var(--ph-fg);
+  cursor: pointer;
+}
+
+.ph-preview-bar button:hover {
+  border-color: var(--ph-accent);
+}
+
+.ph-preview-status {
+  max-width: 28rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ph-muted);
+}
+
+.ph-preview-status[data-state="failed"] {
+  color: var(--ph-danger);
+}
+
+.ph-preview-status[data-state="warning"] {
+  color: var(--ph-warning);
+}
