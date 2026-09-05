@@ -16,7 +16,9 @@ screenshots:
 
 <Badge label="Language" tone="accent" /> <Badge label="Language server" /> <Badge label="Formatter" /> <Badge label="macOS" />
 
-Lua support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, comments and long strings — and connects two tools that are already standard in the Lua ecosystem: **lua-language-server** for diagnostics, hover, completion and navigation, and **StyLua** for formatting. Both are optional: highlighting works the moment the extension is installed.
+Lua support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, comments and long strings — and connects the two tools the Lua ecosystem has settled on: **lua-language-server** ([LuaLS](https://luals.github.io/)) for diagnostics, hover, completion and navigation, and **StyLua** for deterministic formatting. Both are optional: highlighting works the moment the extension is installed.
+
+Supports Lua 5.1, 5.2, 5.3, 5.4, 5.5 and LuaJIT through the language server; StyLua additionally formats Luau.
 
 ## Highlights
 
@@ -25,10 +27,10 @@ Lua support for the Phantom editor. The extension teaches Phantom the language �
     Keywords, strings including `[[long strings]]` with any `=` level, numbers, function calls and `::labels::`. Comments with `--` and `--[[ ]]`.
   </Feature>
   <Feature title="Language intelligence" icon="search">
-    Diagnostics as you type, hover documentation, completion for the standard library and your own modules, go to definition and find references.
+    Diagnostics and syntax checking as you type, dynamic type checking, hover documentation, autocompletion for the standard library and your modules, go to definition and find references. Over 20 annotations (`---@param`, `---@return`, `---@class`, `---@type`) document your code and drive the checker.
   </Feature>
   <Feature title="Formatting" icon="sparkles">
-    StyLua formats on demand or on save. The buffer is passed on stdin with `--stdin-filepath`, so the project's `stylua.toml` is honoured.
+    StyLua parses the file and prints it back from scratch, so the style is consistent and independent of the input. Format on demand or on save; the buffer goes in on stdin with `--stdin-filepath`, so the project's `stylua.toml` and `.styluaignore` apply.
   </Feature>
 </Features>
 
@@ -38,12 +40,12 @@ Lua support for the Phantom editor. The extension teaches Phantom the language �
 
 Phantom does not bundle the tools. Install the ones you want; the extension detects them on your `PATH`.
 
-<Requirement command="lua-language-server" install="brew install lua-language-server" url="https://luals.github.io/">
-Powers diagnostics, hover, completion and navigation. Without it the highlighter still works.
+<Requirement command="lua-language-server" install="brew install lua-language-server" url="https://luals.github.io/wiki/">
+The LuaLS server: diagnostics, type checking, hover, completion, definitions, references and rename. Without it the highlighter still works. Telemetry was removed from the server in v3.6.5.
 </Requirement>
 
 <Requirement command="stylua" install="brew install stylua" url="https://github.com/JohnnyMorganz/StyLua">
-Powers formatting. Without it the Format command and Format on Save do nothing for Lua files.
+The formatter. Without it the Format command and Format on Save do nothing for Lua files.
 </Requirement>
 
 ## Getting started
@@ -77,30 +79,55 @@ Powers formatting. Without it the Format command and Format on Save do nothing f
 
 <Details summary="Language server: .luarc.json">
 
-Place a `.luarc.json` at the root of your project to set the runtime and the libraries the server should know about.
+Place a `.luarc.json` at the root of your project. The server reads it on its own; Phantom passes the project root as the workspace.
 
 ```json
 {
   "runtime.version": "Lua 5.4",
   "workspace.library": ["lib", "vendor"],
-  "diagnostics.globals": ["vim", "describe", "it"]
+  "workspace.checkThirdParty": false,
+  "diagnostics.globals": ["vim", "describe", "it"],
+  "hint.enable": true
 }
 ```
 
-The server reads the file on its own; Phantom passes the project root as the workspace.
+| Setting | What it does |
+|---|---|
+| `runtime.version` | `Lua 5.1` … `Lua 5.5`, `LuaJIT`; drives the standard library and the checker |
+| `workspace.library` | Extra directories whose files are loaded for completion and types |
+| `diagnostics.globals` | Names the checker must not report as undefined |
+| `diagnostics.disable` | Diagnostic codes to silence project-wide |
+| `workspace.checkThirdParty` | Turns the third-party library prompt off |
+
+The full list is in the [LuaLS settings reference](https://luals.github.io/wiki/settings/).
 
 </Details>
 
 <Details summary="Formatter: stylua.toml">
 
-StyLua looks for `stylua.toml` (or `.stylua.toml`) from the file's directory upward.
+StyLua looks for `stylua.toml` or `.stylua.toml` from the file's directory upward, and falls back to `.editorconfig`.
 
 ```toml
 column_width = 100
+line_endings = "Unix"
 indent_type = "Spaces"
 indent_width = 2
 quote_style = "AutoPreferDouble"
+call_parentheses = "Always"
+collapse_simple_statement = "Never"
 ```
+
+| Option | Default | Values |
+|---|---|---|
+| `syntax` | `All` | `All`, `Lua51`…`Lua54`, `LuaJIT`, `Luau` |
+| `column_width` | `120` | integer |
+| `indent_type` | `Tabs` | `Tabs`, `Spaces` |
+| `indent_width` | `4` | integer |
+| `quote_style` | `AutoPreferDouble` | `AutoPreferDouble`, `AutoPreferSingle`, `ForceDouble`, `ForceSingle` |
+| `call_parentheses` | `Always` | `Always`, `NoSingleString`, `NoSingleTable`, `None`, `Input` |
+| `collapse_simple_statement` | `Never` | `Never`, `FunctionOnly`, `ConditionalOnly`, `Always` |
+
+Files matched by `.styluaignore` are left as they are.
 
 </Details>
 
@@ -136,4 +163,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [lua-language-server](https://github.com/LuaLS/lua-language-server) is © LuaLS contributors (MIT). [StyLua](https://github.com/JohnnyMorganz/StyLua) is © Johnny Morganz (MPL-2.0). Lua is © PUC-Rio; this extension is not affiliated with the Lua project.
+The extension is released under the MIT License. [lua-language-server](https://github.com/LuaLS/lua-language-server) is © LuaLS contributors (MIT). [StyLua](https://github.com/JohnnyMorganz/StyLua) is © Johnny Morganz (MPL-2.0), built on full-moon. Lua is © PUC-Rio; this extension is not affiliated with the Lua project.
