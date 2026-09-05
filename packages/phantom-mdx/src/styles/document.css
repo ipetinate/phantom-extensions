@@ -15,8 +15,6 @@
 
 .ph-document {
   box-sizing: border-box;
-  max-width: 46em;
-  margin: 0 auto;
   padding: 1.5em 1.75em 3em;
   font-family: var(--ph-font-ui);
   font-size: var(--ph-base-size);
