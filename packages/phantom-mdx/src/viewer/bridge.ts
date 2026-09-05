@@ -11,7 +11,8 @@ export type ViewerMessage =
   | { type: "ready"; version: string }
   | { type: "rendered"; warnings: string[] }
   | { type: "failed"; message: string; line?: number; column?: number }
-  | { type: "open"; href: string };
+  | { type: "open"; href: string }
+  | { type: "copy"; text: string };
 
 export interface PhantomViewer {
   render(request: RenderRequest): void;

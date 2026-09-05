@@ -4,6 +4,7 @@ import { resolveMedia } from "./media.ts";
 export interface DocumentContextValue {
   baseURL: string;
   onLink?: (href: string) => void;
+  onCopy?: (text: string) => void;
   warn: (message: string) => void;
 }
 

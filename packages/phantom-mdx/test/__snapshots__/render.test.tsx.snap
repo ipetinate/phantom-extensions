@@ -21,11 +21,11 @@ exports[`Document > renders Markdown 1`] = `
 "<h2>Heading</h2>
 <p>A <a href="https://example.com" target="_blank" rel="noreferrer noopener">link</a> and <code>code</code>.</p>
 <div class="ph-table"><table><thead><tr><th>A</th><th>B</th></tr></thead><tbody><tr><td>1</td><td>2</td></tr></tbody></table></div>
-<pre><code class="language-lua">print(1)
-</code></pre>"
+<div class="ph-codeblock"><pre><code class="language-lua">print(1)
+</code></pre><button type="button" class="ph-copy" aria-label="Copy" title="Copy"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="4" width="8" height="10" rx="1.5"></rect><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"></path></svg><span class="ph-copy-label">Copy</span></button></div>"
 `;
 
-exports[`Document > renders Requirement 1`] = `"<section class="ph-requirement"><div class="ph-requirement-head"><code class="ph-requirement-command">lua-language-server</code><a class="ph-requirement-link" href="https://luals.github.io/" target="_blank" rel="noreferrer noopener">Documentation</a></div><pre class="ph-requirement-install"><code>brew install lua-language-server</code></pre><div class="ph-requirement-body"><p>Needed for diagnostics.</p></div></section>"`;
+exports[`Document > renders Requirement 1`] = `"<section class="ph-requirement"><div class="ph-requirement-head"><code class="ph-requirement-command">lua-language-server</code><a class="ph-requirement-link" href="https://luals.github.io/" target="_blank" rel="noreferrer noopener">Documentation</a></div><div class="ph-codeblock"><pre class="ph-requirement-install"><code>brew install lua-language-server</code></pre><button type="button" class="ph-copy" aria-label="Copy" title="Copy"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="4" width="8" height="10" rx="1.5"></rect><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"></path></svg><span class="ph-copy-label">Copy</span></button></div><div class="ph-requirement-body"><p>Needed for diagnostics.</p></div></section>"`;
 
 exports[`Document > renders Screenshot 1`] = `"<figure class="ph-screenshot ph-width-narrow"><img alt="A screen" loading="lazy" decoding="async" src="file:///ext/sample/media/a.png"><figcaption>Caption</figcaption></figure>"`;
 

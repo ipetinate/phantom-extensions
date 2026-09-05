@@ -30,3 +30,5 @@ export const componentMap: Readonly<Record<string, ComponentType<any>>> = {
   a: Link,
   table: Table,
 };
+export { CopyButton } from "./CopyButton.tsx";
+export { CodeBlock, textOf } from "./CodeBlock.tsx";

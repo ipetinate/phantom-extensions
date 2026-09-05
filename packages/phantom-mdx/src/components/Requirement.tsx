@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "./Link.tsx";
+import { CopyButton } from "./CopyButton.tsx";
 
 export interface RequirementProps {
   command: string;
@@ -20,9 +21,12 @@ export function Requirement({ command, install, url, children }: RequirementProp
         ) : null}
       </div>
       {install ? (
-        <pre className="ph-requirement-install">
-          <code>{install}</code>
-        </pre>
+        <div className="ph-codeblock">
+          <pre className="ph-requirement-install">
+            <code>{install}</code>
+          </pre>
+          <CopyButton text={install} />
+        </div>
       ) : null}
       <div className="ph-requirement-body">{children}</div>
     </section>

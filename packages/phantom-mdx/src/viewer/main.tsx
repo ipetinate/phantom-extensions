@@ -16,6 +16,10 @@ function openLink(href: string): void {
   post({ type: "open", href });
 }
 
+function copyText(text: string): void {
+  post({ type: "copy", text });
+}
+
 function rendered(warnings: string[]): void {
   post({ type: "rendered", warnings });
 }
@@ -32,6 +36,7 @@ function paint(): void {
       baseURL={current.baseURL}
       cover={current.cover}
       onLink={bridgeHandler() ? openLink : undefined}
+      onCopy={bridgeHandler() ? copyText : undefined}
       onRendered={rendered}
       onFailed={failed}
     />,

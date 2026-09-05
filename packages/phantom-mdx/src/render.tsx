@@ -6,6 +6,9 @@ import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import { componentMap } from "./components/index.ts";
+import { CodeBlock } from "./components/CodeBlock.tsx";
+
+const renderComponents = { ...componentMap, pre: CodeBlock };
 import { DocumentContext, useMedia, type DocumentContextValue } from "./context.ts";
 import { parseDocument, toParseError } from "./parse.ts";
 import { IMAGE_SUFFIXES } from "./schema.ts";
@@ -23,6 +26,7 @@ export interface DocumentProps {
   baseURL: string;
   theme?: Theme;
   onLink?: (href: string) => void;
+  onCopy?: (text: string) => void;
   cover?: string;
   onRendered?: (warnings: string[]) => void;
   onFailed?: (failure: RenderFailure) => void;
@@ -63,7 +67,7 @@ export function renderTree(tree: Root): ReactNode {
     Fragment,
     jsx: jsx as Jsx,
     jsxs: jsxs as Jsx,
-    components: componentMap as unknown as Partial<Components>,
+    components: renderComponents as unknown as Partial<Components>,
     createEvaluater: componentEvaluater,
     elementAttributeNameCase: "react",
     stylePropertyNameCase: "dom",
@@ -136,14 +140,14 @@ function Cover({ path }: { path: string }) {
   return <img className="ph-cover" src={resolved} alt="" decoding="async" />;
 }
 
-export function Document({ source, baseURL, theme, onLink, cover, onRendered, onFailed }: DocumentProps) {
+export function Document({ source, baseURL, theme, onLink, onCopy, cover, onRendered, onFailed }: DocumentProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const caught = useRef<RenderFailure | null>(null);
   const compiled = useMemo(() => compile(source), [source]);
   const warnings = useMemo(() => new Set<string>(), [source, baseURL, cover]);
   const context = useMemo<DocumentContextValue>(
-    () => ({ baseURL, onLink, warn: (message) => warnings.add(message) }),
-    [baseURL, onLink, warnings],
+    () => ({ baseURL, onLink, onCopy, warn: (message) => warnings.add(message) }),
+    [baseURL, onLink, onCopy, warnings],
   );
 
   useLayoutEffect(() => {
