@@ -52,6 +52,7 @@ export const CALLOUT_KINDS = ["note", "tip", "warning", "danger"] as const;
 export const FEATURE_COLUMNS = ["2", "3"] as const;
 export const SCREENSHOT_WIDTHS = ["full", "wide", "narrow"] as const;
 export const BADGE_TONES = ["neutral", "accent", "success", "warning"] as const;
+export const SHOWCASE_MEDIA = ["start", "end"] as const;
 
 const markdown: ChildrenRule = { kind: "markdown" };
 const none: ChildrenRule = { kind: "none" };
@@ -98,6 +99,11 @@ export const components: Readonly<Record<string, ComponentSpec>> = {
     children: none,
   },
   Gallery: { name: "Gallery", props: [], children: { kind: "only", names: ["Screenshot"] } },
+  Showcase: {
+    name: "Showcase",
+    props: [{ name: "media", kind: "text", values: SHOWCASE_MEDIA, defaultValue: "end" }],
+    children: { kind: "only", names: ["Features", "Screenshot", "Video"] },
+  },
   Video: {
     name: "Video",
     props: [

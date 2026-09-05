@@ -48,6 +48,7 @@ Props take quoted strings only. A block component starts on its own line; its co
 | `Feature` | `title` required; `icon` one of the glyphs below | Markdown |
 | `Screenshot` | `src` image required; `alt` required; `caption`; `width` full, wide or narrow | none |
 | `Gallery` | | `Screenshot` only |
+| `Showcase` | `media` start or end (default end) | `Features`, `Screenshot`, `Video` |
 | `Video` | `src` mp4 or webm required; `poster` image; `caption`; `loop` "true"; `muted` "true" | none |
 | `Badge` | `label` required; `tone` neutral, accent, success or warning | none |
 | `Requirement` | `command` required; `install`; `url` https | Markdown |

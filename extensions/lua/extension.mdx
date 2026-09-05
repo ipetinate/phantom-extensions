@@ -22,19 +22,20 @@ Supports Lua 5.1, 5.2, 5.3, 5.4, 5.5 and LuaJIT through the language server; Sty
 
 ## Highlights
 
-<Features columns="3">
-  <Feature title="Syntax highlighting" icon="brush">
-    Keywords, strings including `[[long strings]]` with any `=` level, numbers, function calls and `::labels::`. Comments with `--` and `--[[ ]]`.
-  </Feature>
-  <Feature title="Language intelligence" icon="search">
-    Diagnostics and syntax checking as you type, dynamic type checking, hover documentation, autocompletion for the standard library and your modules, go to definition and find references. Over 20 annotations (`---@param`, `---@return`, `---@class`, `---@type`) document your code and drive the checker.
-  </Feature>
-  <Feature title="Formatting" icon="sparkles">
-    StyLua parses the file and prints it back from scratch, so the style is consistent and independent of the input. Format on demand or on save; the buffer goes in on stdin with `--stdin-filepath`, so the project's `stylua.toml` and `.styluaignore` apply.
-  </Feature>
-</Features>
-
-<Screenshot src="media/editor.png" alt="A Lua file open in Phantom with highlighted keywords, a long string and one diagnostic from lua-language-server" caption="Highlighting, hover and a diagnostic in the Phantom editor" width="wide" />
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords, strings including `[[long strings]]` with any `=` level, numbers, function calls and `::labels::`. Comments with `--` and `--[[ ]]`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics and syntax checking as you type, dynamic type checking, hover documentation, autocompletion for the standard library and your modules, go to definition and find references. Over 20 annotations (`---@param`, `---@return`, `---@class`) document your code and drive the checker.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      StyLua parses the file and prints it back from scratch, so the style is consistent and independent of the input. Format on demand or on save; the buffer goes in on stdin with `--stdin-filepath`, so the project's `stylua.toml` and `.styluaignore` apply.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Lua file open in Phantom with highlighted keywords, a long string and one diagnostic from lua-language-server" caption="Highlighting, hover and a diagnostic in the Phantom editor" />
+</Showcase>
 
 ## Requirements
 
