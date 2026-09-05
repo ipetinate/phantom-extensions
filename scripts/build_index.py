@@ -752,7 +752,7 @@ def main():
         if args.check:
             for directory, manifest, card in collect():
                 media, media_bytes = check_media(directory)
-                print(f"ok  {manifest['id']} {manifest['version']}  doc:{card['document']}  media:{len(media)} files, {media_bytes / (1024 * 1024):.2f} MiB")
+                print(f"ok  {manifest['id']} {manifest['version']}  doc:yes  media:{len(media)} files, {media_bytes / (1024 * 1024):.2f} MiB")
             return 0
         for entry in build(args.out, args.repo):
             print(f"{entry['id']} {entry['version']}  {entry['download']['bytes']} bytes  {entry['download']['sha256'][:12]}")
