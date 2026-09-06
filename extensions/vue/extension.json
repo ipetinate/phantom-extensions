@@ -2,11 +2,20 @@
   "schemaVersion": 1,
   "id": "phantom.vue",
   "name": "Vue",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Vue single-file components: the Vue Language Server and its TypeScript plugin.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/vue",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.css",
+    "phantom.html",
+    "phantom.json",
+    "phantom.markdown",
+    "phantom.toml",
+    "phantom.typescript",
+    "phantom.yaml"
+  ],
   "contributes": {
     "languages": [
       {
@@ -17,7 +26,6 @@
         ],
         "category": "frontendFramework",
         "icon": "icons/vue.png",
-        "keywords": [],
         "lineComment": null,
         "blockComment": {
           "open": "<!--",
@@ -46,6 +54,84 @@
             "documentationURL": "https://github.com/vuejs/language-tools"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "text.html.vue",
+        "path": "syntaxes/vue.tmLanguage.json",
+        "languageId": "vue",
+        "license": "MIT",
+        "grammarSource": "https://github.com/vuejs/language-tools/blob/88e8500c1e5f1b29d80f42c8ca065cc9cbd56899/extensions/vscode/syntaxes/vue.tmLanguage.json",
+        "embeddedLanguages": {
+          "text.html.vue": "vue",
+          "text.html.derivative": "html",
+          "text.html.markdown": "markdown",
+          "text.pug": "jade",
+          "source.css": "css",
+          "source.css.scss": "scss",
+          "source.css.less": "less",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.postcss": "postcss",
+          "source.js": "javascript",
+          "source.ts": "typescript",
+          "source.js.jsx": "javascriptreact",
+          "source.tsx": "typescriptreact",
+          "source.coffee": "coffeescript",
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "source.json": "json",
+          "source.json.comments": "jsonc",
+          "source.json5": "json5",
+          "source.yaml": "yaml",
+          "source.toml": "toml",
+          "source.graphql": "graphql"
+        }
+      },
+      {
+        "scopeName": "vue.directives",
+        "path": "syntaxes/vue-directives.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/vuejs/language-tools/blob/88e8500c1e5f1b29d80f42c8ca065cc9cbd56899/extensions/vscode/syntaxes/vue-directives.json",
+        "injectTo": [
+          "text.html.vue",
+          "text.html.markdown",
+          "text.html.derivative",
+          "text.pug"
+        ]
+      },
+      {
+        "scopeName": "vue.interpolations",
+        "path": "syntaxes/vue-interpolations.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/vuejs/language-tools/blob/88e8500c1e5f1b29d80f42c8ca065cc9cbd56899/extensions/vscode/syntaxes/vue-interpolations.json",
+        "injectTo": [
+          "text.html.vue",
+          "text.html.markdown",
+          "text.html.derivative",
+          "text.pug"
+        ]
+      },
+      {
+        "scopeName": "vue.sfc.script.leading-operator-fix",
+        "path": "syntaxes/vue-sfc-script-leading-operator-fix.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/vuejs/language-tools/blob/88e8500c1e5f1b29d80f42c8ca065cc9cbd56899/extensions/vscode/syntaxes/vue-sfc-script-leading-operator-fix.json",
+        "injectTo": [
+          "text.html.vue"
+        ]
+      },
+      {
+        "scopeName": "vue.sfc.style.variable.injection",
+        "path": "syntaxes/vue-sfc-style-variable-injection.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/vuejs/language-tools/blob/88e8500c1e5f1b29d80f42c8ca065cc9cbd56899/extensions/vscode/syntaxes/vue-sfc-style-variable-injection.json",
+        "injectTo": [
+          "text.html.vue"
+        ]
       }
     ]
   }

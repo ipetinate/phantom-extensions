@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 tagline: TypeScript and JavaScript for Phantom — highlighting, diagnostics, completion and navigation.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -71,7 +71,7 @@ The formatter. Phantom runs the project's own `node_modules/.bin/prettier` when 
 | File types | `.ts`, `.mts`, `.cts`, `.tsx`, `.js`, `.mjs`, `.cjs`, `.jsx` |
 | Language ids | `typescript`, `typescriptreact`, `javascript`, `javascriptreact` |
 | Language server | `typescript-language-server --stdio` |
-| Editor | Keywords, `//` and `/* */` markers, string, number, type, call and decorator patterns |
+| Editor | TextMate grammars `source.ts`, `source.tsx`, `source.js` and `source.js.jsx` (TypeScript-TmLanguage), `//` and `/* */` comment markers |
 | Icon | TypeScript file icon in the sidebar and tabs |
 
 Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. The extension is what makes the pieces installable, removable and readable in one place, and Settings → Language Servers can promote it over the built-in definition when you want the manifest to be the one in force.
@@ -196,6 +196,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammars `source.ts`, `source.tsx`, `source.js` and `source.js.jsx`, one per language id, in place of the manifest's token patterns and keyword lists. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -210,4 +212,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) is licensed under the Apache License 2.0, with the parts copied from [Visual Studio Code](https://github.com/microsoft/vscode) under the MIT License. [Prettier](https://github.com/prettier/prettier) is © James Long and contributors (MIT). TypeScript is © Microsoft (Apache-2.0); this extension is not affiliated with Microsoft.
+The extension is released under the MIT License. [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) is licensed under the Apache License 2.0, with the parts copied from [Visual Studio Code](https://github.com/microsoft/vscode) under the MIT License. [Prettier](https://github.com/prettier/prettier) is © James Long and contributors (MIT). TypeScript is © Microsoft (Apache-2.0); this extension is not affiliated with Microsoft. The grammars are [TypeScript-TmLanguage](https://github.com/microsoft/TypeScript-TmLanguage) by Microsoft (MIT), in the JSON form Visual Studio Code ships.

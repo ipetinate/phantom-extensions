@@ -1,7 +1,7 @@
 ---
 title: Terraform
 tagline: Terraform support for Phantom — highlighting, and terraform-ls for completion, validation and navigation.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -69,7 +69,7 @@ Completion, hover, navigation, symbols, code actions, formatting and validation.
 | File types | `.tf`, `.tfvars` |
 | Language server | `terraform-ls serve` (stdio) |
 | Formatter | none. terraform-ls formats through the server itself |
-| Editor | Block keywords, `#`, `//` and `/* */` comments, HCL strings and heredocs, type constraints, calls, arguments, interpolations |
+| Editor | TextMate grammar `source.hcl.terraform` (hashicorp/syntax), `#`, `//` and `/* */` comment markers |
 | Icon | Terraform file icon in the sidebar and tabs |
 
 ## Configuration
@@ -140,6 +140,8 @@ terraform-ls runs as your user, with access to your files and network, the same 
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.hcl.terraform` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -154,4 +156,4 @@ terraform-ls runs as your user, with access to your files and network, the same 
 
 ## License and credits
 
-The extension is released under the MIT License. [terraform-ls](https://github.com/hashicorp/terraform-ls) is © HashiCorp (MPL-2.0). Terraform is a registered trademark of HashiCorp; this extension is not affiliated with or endorsed by HashiCorp.
+The extension is released under the MIT License. [terraform-ls](https://github.com/hashicorp/terraform-ls) is © HashiCorp (MPL-2.0). Terraform is a registered trademark of HashiCorp; this extension is not affiliated with or endorsed by HashiCorp. The grammar is [hashicorp/syntax](https://github.com/hashicorp/syntax), © HashiCorp, Inc. (MPL-2.0), shipped unmodified.

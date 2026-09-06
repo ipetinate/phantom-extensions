@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.toml",
   "name": "TOML",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "TOML: highlighting and the Taplo language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/toml",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -21,18 +21,6 @@
         "category": "data",
         "icon": "icons/toml.png",
         "lineComment": "#",
-        "keywords": [
-          "true",
-          "false",
-          "inf",
-          "nan"
-        ],
-        "syntax": {
-          "string": "\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''|\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*'",
-          "number": "preset:number",
-          "type": "^\\s*\\[\\[?[^\\]\\n]+\\]\\]?",
-          "attribute": "^\\s*(?:[A-Za-z0-9_-]+|\"[^\"\\n]*\")(?:\\s*\\.\\s*(?:[A-Za-z0-9_-]+|\"[^\"\\n]*\"))*(?=\\s*=)"
-        },
         "server": {
           "command": "taplo",
           "args": [
@@ -57,6 +45,36 @@
             "documentationURL": "https://taplo.tamasfe.dev/cli/installation/cargo.html"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.toml",
+        "path": "syntaxes/toml.tmLanguage.json",
+        "languageId": "toml",
+        "license": "MIT",
+        "grammarSource": "https://github.com/tamasfe/taplo/blob/08f343be02ce1b20296470396a42f0fa47820449/editors/vscode/toml.tmLanguage.json"
+      },
+      {
+        "scopeName": "markdown.toml.frontmatter.codeblock",
+        "path": "syntaxes/toml-frontmatter.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/tamasfe/taplo/blob/08f343be02ce1b20296470396a42f0fa47820449/editors/vscode/toml.frontmatter.tmLanguage.json",
+        "injectTo": [
+          "text.html.markdown"
+        ]
+      },
+      {
+        "scopeName": "markdown.toml.codeblock",
+        "path": "syntaxes/toml-markdown.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/tamasfe/taplo/blob/08f343be02ce1b20296470396a42f0fa47820449/editors/vscode/toml.markdown.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.toml": "toml"
+        },
+        "injectTo": [
+          "text.html.markdown"
+        ]
       }
     ]
   }

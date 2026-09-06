@@ -1,7 +1,7 @@
 ---
 title: TOML
 tagline: TOML support for Phantom — highlighting, Taplo's schema validation and its formatter.
-version: 1.0.4
+version: 1.0.5
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -67,7 +67,7 @@ Validation, completion, hover, symbols and formatting, started as `taplo lsp std
 | File names | `Cargo.lock` |
 | Language server | `taplo lsp stdio` |
 | Formatter | Taplo's own, configured by `.taplo.toml` |
-| Editor | Table header, dotted key, string, number and literal patterns, `#` comments |
+| Editor | TextMate grammar `source.toml` (Taplo), the injections that colour TOML front matter and ```toml fences in Markdown, `#` comment marker |
 | Icon | TOML file icon in the sidebar and tabs |
 
 ## Configuration
@@ -183,6 +183,8 @@ Taplo runs as your user, with access to your files and network, the same as if y
 
 ## Changelog
 
+**1.0.5** — Ships the TextMate grammar `source.toml` in place of the manifest's token patterns and keyword list, plus the two injections that colour TOML front matter and ```toml fences in Markdown. Colouring now needs Phantom 0.17.0.
+
 **1.0.4** — Published under Isac Petinate.
 
 **1.0.3** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -195,4 +197,4 @@ Taplo runs as your user, with access to your files and network, the same as if y
 
 ## License and credits
 
-The extension is released under the MIT License. [Taplo](https://github.com/tamasfe/taplo) is © tamasfe and contributors (MIT). TOML is a specification of the [TOML project](https://toml.io/); this extension is not affiliated with either.
+The extension is released under the MIT License. [Taplo](https://github.com/tamasfe/taplo) is © tamasfe and contributors (MIT). TOML is a specification of the [TOML project](https://toml.io/); this extension is not affiliated with either. The grammars are the ones [Taplo](https://github.com/tamasfe/taplo) carries, © tamasfe and contributors (MIT).

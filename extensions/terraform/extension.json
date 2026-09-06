@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.terraform",
   "name": "Terraform",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Terraform: highlighting and terraform-ls.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/terraform",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -22,42 +22,6 @@
         "blockComment": {
           "open": "/*",
           "close": "*/"
-        },
-        "keywords": [
-          "check",
-          "count",
-          "data",
-          "depends_on",
-          "dynamic",
-          "else",
-          "endfor",
-          "endif",
-          "false",
-          "for",
-          "for_each",
-          "if",
-          "import",
-          "in",
-          "lifecycle",
-          "locals",
-          "module",
-          "moved",
-          "null",
-          "output",
-          "provider",
-          "provisioner",
-          "removed",
-          "resource",
-          "terraform",
-          "true",
-          "variable"
-        ],
-        "syntax": {
-          "string": "<<-?[A-Z]+[\\s\\S]*?^[ \\t]*[A-Z]+$|\"(?:[^\"\\\\]|\\\\.)*\"",
-          "number": "preset:number",
-          "type": "\\b(?:string|number|bool|any|list|set|map|object|tuple)\\b",
-          "function": "preset:callBeforeParen",
-          "attribute": "^[ \\t]*[A-Za-z_][A-Za-z0-9_-]*(?=[ \\t]*=(?!=))|\\$\\{[^}]*\\}"
         },
         "server": {
           "command": "terraform-ls",
@@ -77,6 +41,15 @@
             "documentationURL": "https://github.com/hashicorp/terraform-ls/blob/main/docs/installation.md"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.hcl.terraform",
+        "path": "syntaxes/terraform.tmLanguage.json",
+        "languageId": "terraform",
+        "license": "MPL-2.0",
+        "grammarSource": "https://github.com/hashicorp/syntax/blob/16375ff2107c4d12551b1637bf17b371cf9ac103/syntaxes/terraform.tmGrammar.json"
       }
     ]
   }

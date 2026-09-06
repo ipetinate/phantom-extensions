@@ -1,7 +1,7 @@
 ---
 title: Vue
 tagline: Vue single-file components for Phantom — the Vue Language Server and its TypeScript plugin.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -75,7 +75,7 @@ The formatter. Prettier handles `.vue` out of the box, with no plugin. Phantom r
 | File types | `.vue` |
 | Language id | `vue` |
 | Language server | `vue-language-server --stdio` |
-| Editor | `<!-- -->` comment markers |
+| Editor | TextMate grammar `text.html.vue` (vuejs/language-tools) with its four injections, each block handed to the extension that owns its `lang`; `<!-- -->` comment markers |
 | Icon | Vue file icon in the sidebar and tabs |
 
 The extension contributes **no highlighting patterns**, and that is deliberate. A single-file component is a container for three languages, and Phantom's own highlighter splits it into markup, script and style, painting each block by its own rules. A manifest describes one language with one keyword list, which is strictly worse for this file type. Promote this contribution over the built-in only if you have a reason to; the language server is what the extension is for.
@@ -178,6 +178,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `text.html.vue` and its four injections, and declares the HTML, CSS, TypeScript, JSON, YAML, TOML and Markdown extensions as dependencies for the blocks a component embeds. A `.vue` file is coloured for the first time; that needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -192,4 +194,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [@vue/language-server and @vue/typescript-plugin](https://github.com/vuejs/language-tools) are © the Vue authors (MIT). [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) is licensed under the Apache License 2.0, with parts from Visual Studio Code under MIT. [Prettier](https://github.com/prettier/prettier) is © James Long and contributors (MIT). Vue is © Evan You and contributors (MIT); this extension is not affiliated with the Vue project.
+The extension is released under the MIT License. [@vue/language-server and @vue/typescript-plugin](https://github.com/vuejs/language-tools) are © the Vue authors (MIT). [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) is licensed under the Apache License 2.0, with parts from Visual Studio Code under MIT. [Prettier](https://github.com/prettier/prettier) is © James Long and contributors (MIT). Vue is © Evan You and contributors (MIT); this extension is not affiliated with the Vue project. The grammars are the ones [vuejs/language-tools](https://github.com/vuejs/language-tools) carries, © the Vue authors (MIT).
