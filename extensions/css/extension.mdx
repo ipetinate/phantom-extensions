@@ -1,7 +1,8 @@
 ---
 title: CSS
 tagline: CSS, SCSS and Less for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.5
+version: 1.0.6
+updated: 2026-09-06
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -28,7 +29,7 @@ Three languages rather than one, because the server behaves as the document says
       Completion for properties, values, at-rules and `@media` features, hover with the MDN description of a property, colour information, document symbols, folding, go to definition inside a stylesheet and find references. Lint rules cover empty rulesets, unknown properties, invalid hex colours, duplicate properties and vendor prefixes.
     </Feature>
     <Feature title="Formatting" icon="sparkles">
-      The server ships a formatter and Phantom switches it on at startup, so Format works with nothing else installed.
+      The server ships a formatter and the extension asks for it at startup, so Format works with nothing else installed.
     </Feature>
   </Features>
   <Screenshot src="media/editor.png" alt="A stylesheet open in Phantom with highlighted selectors, property names and values, one diagnostic underlined in red and a hover card below it" caption="Highlighting, a diagnostic and its hover card in the Phantom editor" />
@@ -92,7 +93,7 @@ Phantom answers the server's `workspace/configuration` request with one null per
 
 `css.validate`, `scss.validate` and `less.validate` all default to on. The full list is in the [VS Code CSS documentation](https://code.visualstudio.com/docs/languages/css).
 
-What does reach the server is `initializationOptions`, sent once at startup. Phantom sends this on its own:
+What does reach the server is `initializationOptions`, sent once at startup. The extension declares this one:
 
 ```json
 { "provideFormatter": true }
@@ -104,7 +105,7 @@ The server answers `initialize` with `documentFormattingProvider: initialization
 
 <Details summary="Overriding initializationOptions">
 
-Settings → Languages → CSS Language Server has an **initializationOptions (JSON)** box. Leave it blank and Phantom sends the flag above. Fill it in and your JSON is sent **instead of** Phantom's, so repeat the flag or you lose formatting:
+Settings → Languages → CSS Language Server has an **initializationOptions (JSON)** box. Leave it blank and the manifest's flag above is sent. Fill it in and your JSON is sent **instead of** the manifest's, so repeat the flag or you lose formatting:
 
 ```json
 {
@@ -171,6 +172,8 @@ The servers run as your user, with access to your files and network, the same as
 </Callout>
 
 ## Changelog
+
+**1.0.6** — Asks for the formatter itself, through `initializationOptions` in the manifest. Phantom 0.17.0 no longer knows this server, so the flag travels with the extension or not at all.
 
 **1.0.5** — Ships the TextMate grammars `source.css`, `source.css.scss` and `source.css.less` in place of the manifest's token patterns and keyword lists. Colouring now needs Phantom 0.17.0.
 

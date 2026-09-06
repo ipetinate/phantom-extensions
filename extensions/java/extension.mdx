@@ -1,7 +1,7 @@
 ---
 title: Java
 tagline: Java language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -68,7 +68,7 @@ The Eclipse JDT Language Server. Without it the highlighter still works. It need
 | Area | Contribution |
 |---|---|
 | File types | `.java` |
-| Language server | `jdtls` (stdio) |
+| Language server | `jdtls -data ${HOME}/.cache/jdtls-workspace` (stdio) |
 | Formatter | The Eclipse formatter, built into the language server |
 | Editor | TextMate grammar `source.java` (vscode-java), `//` and `/* */` comment markers |
 | Icon | Java file icon in the sidebar and tabs |
@@ -77,9 +77,15 @@ The Eclipse JDT Language Server. Without it the highlighter still works. It need
 
 <Details summary="Where the server keeps its workspace">
 
-Eclipse stores its index and project model in a data directory, chosen with the `-data` argument. This extension passes no arguments, so the launcher picks the directory itself: one per working directory, named from a hash of it, under your cache directory.
+Eclipse stores its index and project model in a data directory, chosen with the `-data` argument. The extension pins one:
 
-Phantom's own compiled-in Java row pins a single shared directory instead. The difference matters when you move between projects: a directory per project re-uses each index, and one shared directory re-imports on every switch. If you want a specific path, set it in Settings → Language Servers under **Arguments**:
+```
+-data ${HOME}/.cache/jdtls-workspace
+```
+
+`${HOME}` is the one token Phantom expands in an argument, so the path follows the user rather than the machine that packaged the extension.
+
+One shared directory rather than one per project is a trade: moving between projects re-imports the one you arrive at, where a directory per project would have kept its index. It is the cheaper half of the trade, because a launcher left to choose for itself hashes the working directory into a fresh name, and a fresh name means a full index rather than a re-import. If you would rather keep an index per project, set your own path in Settings → Language Servers under **Arguments**:
 
 ```
 -data /Users/you/.cache/jdtls/my-project
@@ -152,6 +158,8 @@ The tools run as your user, with access to your files and network, the same as i
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Names the Eclipse workspace directory itself: `-data ${HOME}/.cache/jdtls-workspace`. Phantom 0.17.0 stopped supplying one, and jdtls with no `-data` indexes each project from scratch under a hashed name.
 
 **1.0.6** — Ships the TextMate grammar `source.java` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
 

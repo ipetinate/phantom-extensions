@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.json",
   "name": "JSON",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "JSON and JSON with Comments: highlighting, vscode-json-language-server and schema completion.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/json",
@@ -30,6 +30,9 @@
           "args": [
             "--stdio"
           ],
+          "initializationOptions": {
+            "provideFormatter": true
+          },
           "installHint": "npm i -g vscode-langservers-extracted",
           "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
           "install": {
@@ -72,6 +75,9 @@
           "args": [
             "--stdio"
           ],
+          "initializationOptions": {
+            "provideFormatter": true
+          },
           "installHint": "npm i -g vscode-langservers-extracted",
           "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
           "install": {

@@ -1,7 +1,8 @@
 ---
 title: HTML
 tagline: HTML support for Phantom — highlighting, diagnostics, completion and the formatter the server ships.
-version: 1.0.5
+version: 1.0.6
+updated: 2026-09-06
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -28,7 +29,7 @@ The same npm package ships the CSS and JSON servers, so one install covers all t
       Tag and attribute completion from the HTML5 data set, hover documentation for elements and attributes, symbols for the document outline, tag rename, folding and selection ranges. Embedded CSS and JavaScript are served from inside the same process.
     </Feature>
     <Feature title="Formatting" icon="sparkles">
-      The server carries js-beautify and formats the whole document, embedded blocks included. Phantom switches the formatter on at startup, so Format works with nothing else installed.
+      The server carries js-beautify and formats the whole document, embedded blocks included. The extension asks for the formatter at startup, so Format works with nothing else installed.
     </Feature>
   </Features>
   <Screenshot src="media/editor.png" alt="An HTML file open in Phantom with highlighted tags, attributes and quoted values, one diagnostic underlined in red and a hover card below it" caption="Highlighting, a diagnostic and its hover card in the Phantom editor" />
@@ -75,7 +76,7 @@ Completion, hover, symbols, folding, tag rename and formatting. Without it the h
 
 Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`. Every `html.*` setting VS Code exposes — `html.format.wrapLineLength`, `html.format.wrapAttributes`, `html.suggest.html5`, `html.validate.scripts`, `html.validate.styles` — arrives through exactly those two channels, so in Phantom the server runs on its own defaults.
 
-What does reach it is `initializationOptions`, sent once at startup. Phantom sends this on its own:
+What does reach it is `initializationOptions`, sent once at startup. The extension declares this one:
 
 ```json
 { "provideFormatter": true }
@@ -87,7 +88,7 @@ That flag is not cosmetic. The server answers `initialize` with `documentFormatt
 
 <Details summary="Overriding initializationOptions">
 
-Settings → Languages → HTML Language Server has an **initializationOptions (JSON)** box. Leave it blank and Phantom sends the flag above. Fill it in and your JSON is sent **instead of** Phantom's, so repeat the flag or you lose formatting:
+Settings → Languages → HTML Language Server has an **initializationOptions (JSON)** box. Leave it blank and the manifest's flag above is sent. Fill it in and your JSON is sent **instead of** the manifest's, so repeat the flag or you lose formatting:
 
 ```json
 {
@@ -166,6 +167,8 @@ The server runs as your user, with access to your files and network, the same as
 </Callout>
 
 ## Changelog
+
+**1.0.6** — Asks for the formatter itself, through `initializationOptions` in the manifest. Phantom 0.17.0 no longer knows this server, so the flag travels with the extension or not at all.
 
 **1.0.5** — Ships the TextMate grammars `text.html.basic` and `text.html.derivative` in place of the manifest's token patterns, and declares the CSS and TypeScript extensions as dependencies for `<style>` and `<script>`. Colouring now needs Phantom 0.17.0.
 

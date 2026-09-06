@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.java",
   "name": "Java",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
   "description": "Java: highlighting and the Eclipse JDT Language Server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/java",
@@ -24,6 +24,10 @@
         },
         "server": {
           "command": "jdtls",
+          "args": [
+            "-data",
+            "${HOME}/.cache/jdtls-workspace"
+          ],
           "installHint": "brew install jdtls",
           "documentationURL": "https://github.com/eclipse-jdtls/eclipse.jdt.ls",
           "install": {

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.css",
   "name": "CSS",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "CSS, SCSS and Less: highlighting and vscode-css-language-server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/css",
@@ -26,6 +26,9 @@
           "args": [
             "--stdio"
           ],
+          "initializationOptions": {
+            "provideFormatter": true
+          },
           "installHint": "npm i -g vscode-langservers-extracted",
           "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
           "install": {
@@ -68,6 +71,9 @@
           "args": [
             "--stdio"
           ],
+          "initializationOptions": {
+            "provideFormatter": true
+          },
           "installHint": "npm i -g vscode-langservers-extracted",
           "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
           "install": {
@@ -110,6 +116,9 @@
           "args": [
             "--stdio"
           ],
+          "initializationOptions": {
+            "provideFormatter": true
+          },
           "installHint": "npm i -g vscode-langservers-extracted",
           "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
           "install": {

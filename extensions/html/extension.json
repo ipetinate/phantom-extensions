@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.html",
   "name": "HTML",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "HTML: highlighting, vscode-html-language-server and the formatter it ships.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/html",
@@ -32,6 +32,9 @@
           "args": [
             "--stdio"
           ],
+          "initializationOptions": {
+            "provideFormatter": true
+          },
           "installHint": "npm i -g vscode-langservers-extracted",
           "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
           "install": {

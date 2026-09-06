@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.kotlin",
   "name": "Kotlin",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
   "description": "Kotlin: highlighting and the Kotlin Language Server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/kotlin",
@@ -25,6 +25,7 @@
         },
         "server": {
           "command": "kotlin-language-server",
+          "maximumJavaFeatureVersion": 21,
           "installHint": "brew install kotlin-language-server",
           "documentationURL": "https://github.com/fwcd/kotlin-language-server",
           "install": {

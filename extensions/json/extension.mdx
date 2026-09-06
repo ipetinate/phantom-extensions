@@ -1,7 +1,8 @@
 ---
 title: JSON
 tagline: JSON and JSON with Comments for Phantom — schema completion, diagnostics and formatting.
-version: 1.0.5
+version: 1.0.6
+updated: 2026-09-06
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -28,7 +29,7 @@ Most of what the server is worth comes from a schema. Without one it is a brace 
       Completion for keys and enumerated values, hover with the schema's own description, diagnostics for a missing required key or a value of the wrong type, document symbols, folding, and quick fixes for the mistakes the parser can name.
     </Feature>
     <Feature title="Formatting" icon="sparkles">
-      The server ships a formatter and Phantom switches it on at startup, so Format works with nothing else installed.
+      The server ships a formatter and the extension asks for it at startup, so Format works with nothing else installed.
     </Feature>
   </Features>
   <Screenshot src="media/editor.png" alt="A JSON file open in Phantom with highlighted keys and values, one key underlined in red and a hover card below it" caption="Highlighting, a schema diagnostic and its hover card in the Phantom editor" />
@@ -105,13 +106,13 @@ Two file types most worth completing carry no such key — neither `package.json
 
 Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`. The `json.*` settings VS Code exposes — `json.schemas`, `json.validate.enable`, `json.format.enable`, `json.schemaDownload.enable`, `json.resultLimit` — arrive through exactly those two channels, so in Phantom the server runs on its own defaults.
 
-What does reach it is `initializationOptions`, sent once at startup. Phantom sends this on its own:
+What does reach it is `initializationOptions`, sent once at startup. The extension declares this one:
 
 ```json
 { "provideFormatter": true }
 ```
 
-The server answers `initialize` with a formatter capability derived from that flag, so without it the formatter is present and switched off. To send your own options, use the **initializationOptions (JSON)** box in Settings → Languages → JSON Language Server — and repeat `provideFormatter`, because your JSON replaces Phantom's rather than merging with it.
+The server answers `initialize` with a formatter capability derived from that flag, so without it the formatter is present and switched off. To send your own options, use the **initializationOptions (JSON)** box in Settings → Languages → JSON Language Server — and repeat `provideFormatter`, because your JSON replaces the manifest's rather than merging with it.
 
 </Details>
 
@@ -165,6 +166,8 @@ The server runs as your user, with access to your files and network, the same as
 </Callout>
 
 ## Changelog
+
+**1.0.6** — Asks for the formatter itself, through `initializationOptions` in the manifest. Phantom 0.17.0 no longer knows this server, so the flag travels with the extension or not at all.
 
 **1.0.5** — Ships the TextMate grammars `source.json` and `source.json.comments` in place of the manifest's token patterns and keyword lists. Colouring now needs Phantom 0.17.0.
 

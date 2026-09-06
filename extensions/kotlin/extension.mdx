@@ -1,7 +1,7 @@
 ---
 title: Kotlin
 tagline: Kotlin language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -40,7 +40,7 @@ The server resolves your dependencies by asking Gradle or Maven for them, so it 
 Phantom does not bundle the server. Install it if you want diagnostics and formatting; the extension detects it on your `PATH`.
 
 <Requirement command="kotlin-language-server" install="brew install kotlin-language-server" url="https://github.com/fwcd/kotlin-language-server">
-The language server by fwcd, built on the Kotlin compiler's own APIs. Without it the highlighter still works. It runs on a JVM, and the Homebrew formula installs a JDK 21 for it. Read the note below before installing it on a machine whose `JAVA_HOME` names a newer JDK.
+The language server by fwcd, built on the Kotlin compiler's own APIs. Without it the highlighter still works. It runs on a JVM, and the Homebrew formula installs a JDK 21 for it. The extension caps the JVM it is handed at feature version 21, so a machine on a newer JDK still starts it.
 </Requirement>
 
 ## Getting started
@@ -68,7 +68,7 @@ The language server by fwcd, built on the Kotlin compiler's own APIs. Without it
 | Area | Contribution |
 |---|---|
 | File types | `.kt`, `.kts` |
-| Language server | `kotlin-language-server` (stdio) |
+| Language server | `kotlin-language-server` (stdio), on a JVM no newer than feature version 21 |
 | Formatter | ktfmt, built into the language server |
 | Editor | TextMate grammar `source.kotlin` (vscode-kotlin), a fenced-block injection for Markdown, `//` and `/* */` comment markers |
 | Icon | Kotlin file icon in the sidebar and tabs |
@@ -114,9 +114,9 @@ The same screen overrides the command and its arguments, which is how you point 
 
 <Details summary="The server exits immediately on a machine with a new JDK">
 
-Version 1.3.13 bundles a Kotlin compiler whose IntelliJ core cannot read the version string of a JDK 25, and it exits before answering `initialize`. Phantom's own compiled-in Kotlin row caps the JVM it hands the server at feature version 21 for exactly this reason. **A contributed server carries no such cap**, so this extension passes your environment through as it is.
+Version 1.3.13 bundles kotlin-compiler 2.1.0, whose IntelliJ core throws `IllegalArgumentException: 25.0.3` reading a JDK 25 and exits before answering `initialize`. The manifest declares `maximumJavaFeatureVersion: 21`, so Phantom looks for an older JVM and starts the server with that one when the environment's is above 21.
 
-Homebrew's launcher sets `JAVA_HOME` to its own JDK 21 only when `JAVA_HOME` is not already set. If yours names a newer JDK, either unset it for the app, point it at a JDK 21, or uninstall this extension and use Phantom's built-in Kotlin support, which applies the cap.
+The cap is a ceiling, not a requirement: it says which JVMs the server survives, not which one your Kotlin targets. If Phantom finds no JDK 21 or older, it falls back to the environment's; install one, or point `JAVA_HOME` at it, and the server starts. Homebrew's launcher sets `JAVA_HOME` to its own JDK 21 only when `JAVA_HOME` is not already set.
 
 </Details>
 
@@ -137,6 +137,8 @@ The tools run as your user, with access to your files and network, the same as i
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Declares `maximumJavaFeatureVersion: 21`, the ceiling Phantom used to apply from its own table. kotlin-language-server 1.3.13 dies on a JDK 25 before it answers `initialize`, and Phantom 0.17.0 knows nothing about this server beyond what the manifest says.
 
 **1.0.6** — Ships the TextMate grammar `source.kotlin` in place of the manifest's token patterns and keyword list, plus the injection that colours ```kotlin fences in Markdown. Colouring now needs Phantom 0.17.0.
 
