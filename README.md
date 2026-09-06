@@ -121,3 +121,21 @@ Media lives under `media/`, up to 32 files and 24 MiB in total. Images (`png`, `
 A manifest can name a program to run: a language server, a formatter. Phantom asks before running one that came from outside its own bundle, and the approval is keyed by the extension `id` and the digest of the manifest bytes, so an updated manifest asks again. The index carries a `sha256` for every zip and Phantom refuses a download that does not match.
 
 `extensions/lua` is the reference extension. Copy it.
+
+## Sandbox
+
+`scripts/sandbox.mjs` installs an extension from this checkout into the debug build's own directory, so a change can be seen in Phantom without publishing a release. It needs nothing but Node.
+
+```sh
+node scripts/sandbox.mjs install typescript vue   # copy those two in
+node scripts/sandbox.mjs install --all            # copy every extension in
+node scripts/sandbox.mjs list                     # what is installed, with versions
+node scripts/sandbox.mjs remove typescript        # take one out
+node scripts/sandbox.mjs remove --all             # empty the directory
+```
+
+The directory is `~/.config/phantom-debug/extensions/`, one subdirectory per extension named by the manifest's `id`. That is where a debug build of Phantom looks: the release build reads `~/.config/phantom/extensions/`, which this script never writes to, never reads and never deletes. Installing over an extension that is already there replaces it whole.
+
+`install` and `remove` take **directory names** — `typescript`, not `phantom.typescript` — and derive the id from `extension.json`. `remove` also accepts an id, for something installed from a directory this checkout no longer has. A name that is not a directory under `extensions/`, or an id that is not one path segment, is refused rather than resolved.
+
+Phantom rereads the directory when it starts, so restart the debug build after an install. An extension installed this way is a user-scope contribution, which sits below the compiled-in registry: a language Phantom already ships is listed as shadowed until you promote it in Settings → Language Servers.
