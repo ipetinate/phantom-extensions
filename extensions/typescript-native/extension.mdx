@@ -1,0 +1,179 @@
+---
+title: TypeScript Native
+tagline: The native TypeScript 7 server, tsc --lsp, as an alternative to the typescript-language-server wrapper.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [typescript, javascript, jsx, language, lsp]
+---
+
+TypeScript and JavaScript support built on **`tsc --lsp --stdio`** — the language server inside TypeScript 7, the Go rewrite of the compiler. It speaks the Language Server Protocol itself, so there is no `tsserver.js` to find and no npm wrapper to install. One binary, `tsc`, is the whole toolchain.
+
+This is the alternative to the **TypeScript** extension, which runs `typescript-language-server`. Both claim the same four language ids, so only one of them serves a file at a time. TypeScript wins by default; this one is the deliberate choice, and the section below says when to make it.
+
+## Which of the two to install
+
+<Features columns="2">
+  <Feature title="Choose TypeScript Native" icon="bolt">
+    The machine's only TypeScript is 7, so there is no `tsserver.js` for a wrapper to drive. The project is plain TypeScript or JavaScript. You want one binary rather than a wrapper plus a compiler.
+  </Feature>
+  <Feature title="Choose TypeScript" icon="package">
+    The project pins TypeScript 5 or 6 in `package.json`, and the editor must type-check it with the version the build uses. The repository holds `.vue`, `.svelte`, `.astro` or `.mdx` files. A tsserver plugin has to load.
+  </Feature>
+</Features>
+
+| Question | TypeScript Native | TypeScript |
+|---|---|---|
+| Program | `tsc` | `typescript-language-server` |
+| Arguments | `--lsp --stdio` | `--stdio` |
+| Reports itself as | `typescript-go 7.0.2` | the wrapper, driving the project's `tsserver.js` |
+| Needs a TypeScript in the workspace | no | yes — the project's own, or a global one |
+| Serves a project pinned to TypeScript 5 or 6 | no, it type-checks as 7 | yes, with the pinned version |
+| Hosts a tsserver plugin, such as the Vue one | no | yes |
+| File types Phantom will hand it | `.ts` `.tsx` `.js` `.jsx` `.mts` `.cts` `.json` and nothing else | any file its languages claim |
+
+The last row is the one to read twice. It is a hard limit, not a preference, and the callout below says what happens at the edge of it.
+
+<Callout kind="warning" title="tsc --lsp dies on a file it cannot parse">
+A language server is meant to decline a document it does not understand. This one does not: handed a `.vue`, `.svelte`, `.astro`, `.mdx` or `.css` file, or a file with no extension at all, the process **panics and exits** with `panic: ScriptKind must be specified when parsing source file`, and every other document that process was serving stops being served with it.
+
+Phantom guards against this. It refuses to hand `tsc` any file outside the list above, whatever a manifest or a hand-written override says, so the crash cannot be reached from the editor. The extension claims only file types measured as safe, for the same reason — and `.mjs` and `.cjs`, safe but outside the guard's list, are coloured without being served.
+
+This is a defect in `typescript-go`, not a design limit. If the upstream project fixes it, the guard and this list can grow.
+</Callout>
+
+## Requirements
+
+Phantom does not bundle the compiler. Install it once; the extension finds it on your `PATH`.
+
+<Requirement command="tsc" install="brew install typescript" url="https://github.com/microsoft/typescript-go">
+TypeScript 7. `brew install typescript` and `npm install -g typescript` both give version 7, and both put `tsc` on the `PATH`. Ask it for `tsc --version` to be sure: a 5.x or 6.x answer means the older compiler, which has no `--lsp` and cannot serve anything.
+</Requirement>
+
+Nothing else. There is no separate server package, and the extension contributes no formatter — Prettier is resolved from the project, exactly as the TypeScript extension describes.
+
+## Getting started
+
+<Steps>
+  <Step title="Install TypeScript 7">
+    Run `brew install typescript`, or `npm install -g typescript`. Check the result with `tsc --version`.
+  </Step>
+  <Step title="Install the extension">
+    Open the Extensions pane in the sidebar, or Settings → Extensions, and press **Install** next to TypeScript Native.
+  </Step>
+  <Step title="Promote it over the TypeScript extension">
+    With both installed, this one is listed as **Shadowed** and does nothing. Open Settings → Extensions, choose TypeScript Native, and press **Use This Instead of** the other extension under **Precedence**. Do it once per language id you want it to serve.
+  </Step>
+  <Step title="Open a TypeScript file">
+    The first time a project needs the server, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+</Steps>
+
+Installing this extension **instead** of TypeScript needs no promotion: with nothing else claiming the languages, it is active as soon as it is installed.
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.ts`, `.mts`, `.cts`, `.tsx`, `.js`, `.mjs`, `.cjs`, `.jsx` |
+| Language ids | `typescript`, `typescriptreact`, `javascript`, `javascriptreact` |
+| Language server | `tsc --lsp --stdio` |
+| Editor | TextMate grammars `source.ts`, `source.tsx`, `source.js` and `source.js.jsx`, `//` and `/* */` comment markers |
+| Icon | TypeScript file icon in the sidebar and tabs |
+
+The grammars are the same four the TypeScript extension ships, from the same Visual Studio Code release, under the same licence. They are duplicated rather than shared because a shadowed contribution is inert whole: an extension that lost the language would take its colouring with it, and the two are meant to be interchangeable.
+
+## What the server answers
+
+Twenty-nine capabilities, reported at `initialize` by `typescript-go 7.0.2`:
+
+| Area | Capabilities |
+|---|---|
+| Reading | hover, completion, signature help, document symbol, workspace symbol, folding range, selection range, semantic tokens |
+| Navigation | definition, type definition, implementation, references, call hierarchy, document highlight |
+| Editing | rename, linked editing range, code action, code lens, inlay hint |
+| Formatting | document formatting, range formatting, on-type formatting |
+| Diagnostics | pull diagnostics |
+
+## Configuration
+
+<Details summary="Compiler: tsconfig.json">
+
+The server reads the project's own `tsconfig.json` — or `jsconfig.json` for a JavaScript project — from the directory of the file upwards. Phantom passes the project root as the workspace; nothing about the compiler is configured in the editor.
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}
+```
+
+TypeScript 7 reads the same file as TypeScript 5 and 6, and rejects a few options they accepted. A project that fails to load here but loads under the wrapper is usually a project whose `tsconfig.json` still carries something version 7 removed.
+
+</Details>
+
+<Details summary="A project pinned to TypeScript 5 or 6">
+
+`tsc --lsp` type-checks with **its own** version, and it has no way to load the compiler the project depends on. In a repository whose `package.json` pins `typescript@5.x`, the editor and the build then disagree, and the editor is the one that is wrong.
+
+There is no setting that fixes this, because there is nothing to point at: the wrapper exists precisely to drive an arbitrary `tsserver.js`, and this server has none. Use the TypeScript extension for such a project.
+
+</Details>
+
+<Details summary="Repointing a server by hand">
+
+Settings → Extensions gives every contributed server an **Override** section with a **Command** field and an **Arguments** field. That is the escape hatch when a manifest is close to right but not exact — a `tsc` installed somewhere the login shell's `PATH` does not reach, for instance, can be named by its absolute path there.
+
+The same two fields turn the TypeScript extension into this one without installing anything: set **Command** to `tsc` and **Arguments** to `--lsp --stdio`, then press **Restart Server**. Phantom asks for approval again after the change, and the file-type guard described above still applies, because the guard is keyed on the command rather than on which extension named it.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The contribution is listed as Shadowed">
+
+Another extension already claims these languages — the TypeScript extension, in almost every case. A shadowed contribution is parsed and listed but not in effect, so that installing something can never quietly change a language you already had.
+
+Settings → Extensions → TypeScript Native → the language section has a **Precedence** control, **Use This Instead of**, which puts this extension ahead for that one language id until you turn it back. Promote each language id you want served: `typescript`, `typescriptreact`, `javascript` and `javascriptreact` are four separate decisions.
+
+</Details>
+
+<Details summary="No diagnostics in a .mjs or .cjs file">
+
+Those two file types are coloured by this extension but not served by it. `tsc --lsp` handles them correctly — measured — but Phantom's allowlist for the `tsc` command does not yet name them, and the guard is deliberately an allowlist rather than a list of what to refuse. Rename to `.js`, or use the TypeScript extension, until the allowlist grows.
+
+</Details>
+
+<Details summary="tsc --version prints 5.x or 6.x">
+
+That is the old compiler, and it has no `--lsp` flag. Version 7 is what publishes the server: `npm install -g typescript` and `brew install typescript` both give it. A project-local `node_modules/.bin/tsc` does not matter here — the extension resolves `tsc` on your login shell's `PATH`.
+
+</Details>
+
+<Details summary="The server stopped by itself">
+
+Something handed the process a file it cannot parse, and it panicked rather than declining. Phantom's guard covers the files it opens, so the usual cause is a file the server pulled in on its own through a `tsconfig.json` `include` or an import. Narrow the `include` to the sources, and press **Restart Server** under Settings → Extensions.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: the four TypeScript and JavaScript language ids served by `tsc --lsp --stdio`, with the same four TextMate grammars the TypeScript extension ships.
+
+## License and credits
+
+The extension is released under the MIT License. TypeScript and `typescript-go` are © Microsoft (Apache-2.0); this extension is not affiliated with Microsoft. The grammars are [TypeScript-TmLanguage](https://github.com/microsoft/TypeScript-TmLanguage) by Microsoft (MIT), in the JSON form [Visual Studio Code](https://github.com/microsoft/vscode) ships.

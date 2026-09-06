@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.typescript-native",
+  "name": "TypeScript Native",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "TypeScript and JavaScript served by tsc --lsp, the native TypeScript 7 server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript-native",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "typescript",
+        "name": "TypeScript",
+        "extensions": [
+          "ts",
+          "mts",
+          "cts"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "server": {
+          "command": "tsc",
+          "args": [
+            "--lsp",
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript",
+          "documentationURL": "https://github.com/microsoft/typescript-go",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript",
+                "uninstall": "brew uninstall typescript"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript",
+                "uninstall": "npm uninstall -g typescript"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript",
+                "uninstall": "pnpm remove -g typescript"
+              }
+            ],
+            "documentationURL": "https://www.typescriptlang.org/download/"
+          }
+        }
+      },
+      {
+        "languageId": "typescriptreact",
+        "name": "TypeScript JSX",
+        "extensions": [
+          "tsx"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "server": {
+          "command": "tsc",
+          "args": [
+            "--lsp",
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript",
+          "documentationURL": "https://github.com/microsoft/typescript-go",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript",
+                "uninstall": "brew uninstall typescript"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript",
+                "uninstall": "npm uninstall -g typescript"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript",
+                "uninstall": "pnpm remove -g typescript"
+              }
+            ],
+            "documentationURL": "https://www.typescriptlang.org/download/"
+          }
+        }
+      },
+      {
+        "languageId": "javascript",
+        "name": "JavaScript",
+        "extensions": [
+          "js",
+          "mjs",
+          "cjs"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "server": {
+          "command": "tsc",
+          "args": [
+            "--lsp",
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript",
+          "documentationURL": "https://github.com/microsoft/typescript-go",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript",
+                "uninstall": "brew uninstall typescript"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript",
+                "uninstall": "npm uninstall -g typescript"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript",
+                "uninstall": "pnpm remove -g typescript"
+              }
+            ],
+            "documentationURL": "https://www.typescriptlang.org/download/"
+          }
+        }
+      },
+      {
+        "languageId": "javascriptreact",
+        "name": "JavaScript JSX",
+        "extensions": [
+          "jsx"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "server": {
+          "command": "tsc",
+          "args": [
+            "--lsp",
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript",
+          "documentationURL": "https://github.com/microsoft/typescript-go",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript",
+                "uninstall": "brew uninstall typescript"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript",
+                "uninstall": "npm uninstall -g typescript"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript",
+                "uninstall": "pnpm remove -g typescript"
+              }
+            ],
+            "documentationURL": "https://www.typescriptlang.org/download/"
+          }
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.ts",
+        "path": "syntaxes/typescript.tmLanguage.json",
+        "languageId": "typescript",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/typescript-basics/syntaxes/TypeScript.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.tsx",
+        "path": "syntaxes/typescriptreact.tmLanguage.json",
+        "languageId": "typescriptreact",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/typescript-basics/syntaxes/TypeScriptReact.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "meta.tag.attributes.tsx": "typescriptreact",
+          "meta.embedded.expression.tsx": "typescriptreact"
+        }
+      },
+      {
+        "scopeName": "source.js",
+        "path": "syntaxes/javascript.tmLanguage.json",
+        "languageId": "javascript",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/javascript/syntaxes/JavaScript.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.attributes.js": "javascript",
+          "meta.embedded.expression.js": "javascript"
+        }
+      },
+      {
+        "scopeName": "source.js.jsx",
+        "path": "syntaxes/javascriptreact.tmLanguage.json",
+        "languageId": "javascriptreact",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/javascript/syntaxes/JavaScriptReact.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.attributes.js.jsx": "javascriptreact",
+          "meta.embedded.expression.js": "javascriptreact"
+        }
+      }
+    ]
+  }
+}
