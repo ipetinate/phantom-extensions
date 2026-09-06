@@ -1,0 +1,174 @@
+---
+title: HTML
+tagline: HTML support for Phantom — highlighting, diagnostics, completion and the formatter the server ships.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [html, markup, web, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+HTML support for the Phantom editor. The extension teaches Phantom the language — file types, tags, attributes, entities and comments — and connects **vscode-html-language-server**, the server Microsoft writes for VS Code and [hrsh7th/vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) publishes to npm as a standalone binary. The server is optional: highlighting works the moment the extension is installed.
+
+The same npm package ships the CSS and JSON servers, so one install covers all three. Inside an HTML file the server also serves the `<style>` and `<script>` blocks, which is why a stylesheet error is reported without a second server running.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Opening and closing tags, the doctype, attribute names, single- and double-quoted values, character entities such as `&nbsp;` and `&#160;`, and `<!-- -->` comments.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Tag and attribute completion from the HTML5 data set, hover documentation for elements and attributes, symbols for the document outline, tag rename, folding and selection ranges. Embedded CSS and JavaScript are served from inside the same process.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      The server carries js-beautify and formats the whole document, embedded blocks included. Phantom switches the formatter on at startup, so Format works with nothing else installed.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="An HTML file open in Phantom with highlighted tags, attributes and quoted values, one diagnostic underlined in red and a hover card below it" caption="Highlighting, a diagnostic and its hover card in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want more than highlighting; the extension finds it on your `PATH`.
+
+<Requirement command="vscode-html-language-server" install="npm install -g vscode-langservers-extracted" url="https://github.com/hrsh7th/vscode-langservers-extracted">
+Completion, hover, symbols, folding, tag rename and formatting. Without it the highlighter still works. The package also installs `vscode-css-language-server` and `vscode-json-language-server`; removing any one of the three removes the package, and so the other two with it.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to HTML.
+  </Step>
+  <Step title="Install the server">
+    Run the npm command above, or open Settings → Languages, select **HTML Language Server** and press **Install**. Phantom picks the binary up without a restart.
+  </Step>
+  <Step title="Open an HTML file">
+    The first time a project needs a server that came from an extension, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.html`, `.htm`, `.xhtml` |
+| Language server | `vscode-html-language-server --stdio` |
+| Formatter | The server's own, driven by js-beautify |
+| Editor | Tag, attribute, entity, string and comment patterns |
+| Icon | HTML file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="What Phantom sends the server, and what it does not">
+
+Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`. Every `html.*` setting VS Code exposes — `html.format.wrapLineLength`, `html.format.wrapAttributes`, `html.suggest.html5`, `html.validate.scripts`, `html.validate.styles` — arrives through exactly those two channels, so in Phantom the server runs on its own defaults.
+
+What does reach it is `initializationOptions`, sent once at startup. Phantom sends this on its own:
+
+```json
+{ "provideFormatter": true }
+```
+
+That flag is not cosmetic. The server answers `initialize` with `documentFormattingProvider: initializationOptions?.provideFormatter === true`, so a client that sends nothing gets a server that can format and reports that it cannot.
+
+</Details>
+
+<Details summary="Overriding initializationOptions">
+
+Settings → Languages → HTML Language Server has an **initializationOptions (JSON)** box. Leave it blank and Phantom sends the flag above. Fill it in and your JSON is sent **instead of** Phantom's, so repeat the flag or you lose formatting:
+
+```json
+{
+  "provideFormatter": true,
+  "embeddedLanguages": { "css": true, "javascript": true },
+  "dataPaths": ["/Users/me/work/site/html-data.json"]
+}
+```
+
+| Key | What it does |
+|---|---|
+| `provideFormatter` | Turns the document formatter on. Default off |
+| `embeddedLanguages` | Which embedded blocks the server serves. Default `css` and `javascript` both on |
+| `dataPaths` | Custom data files describing your own tags and attributes |
+| `handledSchemas` | URI schemes the client resolves for the server. Default `["file"]` |
+
+The box takes effect the next time the server starts; the **Restart Server** button beside it is quicker than reopening the project.
+
+</Details>
+
+<Details summary="Custom tags and attributes">
+
+`dataPaths` points at files in the [VS Code custom data format](https://github.com/microsoft/vscode-custom-data). One file describes the tags and attributes your components add, and the server completes and documents them like any other:
+
+```json
+{
+  "version": 1.1,
+  "tags": [
+    {
+      "name": "app-card",
+      "description": "A card from the design system.",
+      "attributes": [
+        { "name": "variant", "values": [{ "name": "flat" }, { "name": "raised" }] }
+      ]
+    }
+  ]
+}
+```
+
+Use absolute paths. The server resolves them itself, and it is not started from your project directory.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Settings shows the language as Shadowed">
+
+Phantom ships its own HTML definition, and the compiled-in registry outranks an extension on purpose: copying a file into a directory must never change a language you already had. The row in Settings → Languages says which claim was taken and by whom, and its Precedence section carries a **Use This Instead of Phantom** button that puts this extension ahead, for this language only, until you say otherwise.
+
+Nothing is broken while the row reads Shadowed. Phantom's own definition already runs `vscode-html-language-server`, so the server, the diagnostics and the formatting are the same either way.
+
+</Details>
+
+<Details summary="The editor says vscode-html-language-server is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. Phantom resolves that `PATH` once per run, so a version manager that moved the npm bin directory after the app started needs a restart.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Formatting is the server's, so an HTML file cannot be formatted without it. If you filled the **initializationOptions (JSON)** box and left `provideFormatter` out, the server was told to keep the formatter off; add it and restart the server.
+
+A project with a Prettier setup is a different route: Phantom resolves Prettier from the project itself and prefers it for the files it owns.
+
+</Details>
+
+<Details summary="A .vue or template file is not served">
+
+This extension claims `.html`, `.htm` and `.xhtml`. A single-file component is a container for three languages and belongs to Phantom's own Vue support, which runs a different server.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.html`, `.htm` and `.xhtml`, and vscode-html-language-server wiring with install commands for npm, pnpm and Yarn.
+
+## License and credits
+
+The extension is released under the MIT License. [vscode-html-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). Its formatter is [js-beautify](https://github.com/beautifier/js-beautify) (MIT). HTML is a specification of the [WHATWG](https://whatwg.org/); this extension is not affiliated with either project.
