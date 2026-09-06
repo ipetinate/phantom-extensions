@@ -1,0 +1,155 @@
+---
+title: XML
+tagline: XML for Phantom — highlighting for the whole family of XML file types, and xmllint formatting for the ones Phantom does not already format.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [xml, markup, xmllint, formatter, language]
+screenshots:
+  - media/editor.png
+---
+
+XML support for the Phantom editor. The extension teaches Phantom the language — tags, attributes, entities, processing instructions, CDATA sections and comments — across the twenty file suffixes that are XML under another name, and wires **xmllint** as the formatter for the project files Phantom does not already format.
+
+There is no language server here, and that is deliberate rather than unfinished: Phantom ships none for XML, so this extension contributes what it can honestly contribute — the language, and one formatter that is a single process, text in and text out.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="XML highlighting, not HTML" icon="brush">
+      Phantom paints `.xml` and `.svg` with its HTML rules, which is close but not the same language. This definition knows the XML declaration, processing instructions, namespaced tags and attributes such as `xsi:type`, `<![CDATA[ ]]>` sections, numeric and named entities, and `<!-- -->` comments.
+    </Feature>
+    <Feature title="Twenty file types" icon="package">
+      A `.csproj`, a `.props`, a `.resx`, a `.xaml`, a `.wsdl`, an `.iml`, a `.nuspec`, an RSS or Atom feed — all XML, none of them painted as anything before now.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      `xmllint --format`, which ships with macOS. The buffer goes in on stdin, so the file does not have to be saved first, and the reindented document comes back.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="An XML file open in Phantom with highlighted tags, attributes and quoted values, one attribute underlined in red and a hover card below it" caption="XML highlighting in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Nothing to install for highlighting. Formatting needs one program, and macOS already has it.
+
+<Requirement command="xmllint" url="https://gnome.pages.gitlab.gnome.org/libxml2/xmllint.html">
+The command-line XML tool from libxml2, at `/usr/bin/xmllint` on every macOS install. There is no install command in this extension's manifest on purpose: Homebrew's `libxml2` is keg-only because macOS provides it, so installing the formula does not put its `xmllint` on your `PATH` and the button would do nothing you could see.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to XML.
+  </Step>
+  <Step title="Open an XML file">
+    Highlighting needs nothing else. A language contribution with no server has nothing to approve, and Settings says so.
+  </Step>
+  <Step title="Format a project file">
+    Open a `.csproj`, a `.resx` or another suffix from the table below and press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd>, or turn on Format on Save under Settings → Editor.
+  </Step>
+  <Step title="Check the formatter row">
+    Settings → Editor lists every formatter with a switch. The row for this one names the command it runs.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.xml`, `.xsd`, `.xsl`, `.xslt`, `.svg`, `.plist`, `.storyboard`, `.xib`, `.csproj`, `.vbproj`, `.props`, `.targets`, `.resx`, `.xaml`, `.wsdl`, `.rss`, `.atom`, `.iml`, `.nuspec`, `.opf` |
+| Language server | None — Phantom ships none for XML |
+| Formatter | `xmllint --format -` for `.csproj`, `.vbproj`, `.props`, `.targets`, `.resx`, `.xaml`, `.wsdl`, `.rss`, `.atom`, `.iml`, `.nuspec`, `.opf` |
+| Editor | Tag, namespace, attribute, entity, CDATA and processing-instruction patterns, `<!-- -->` comments |
+| Icon | XML file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Why the formatter covers those twelve suffixes and not .xml">
+
+Phantom already formats `.xml`, `.xsd`, `.xsl`, `.xslt`, `.svg`, `.plist`, `.storyboard` and `.xib` with the same tool and the same arguments, and a contributed formatter whose file type is already claimed is listed as shadowed and never runs. Repeating those eight suffixes here would add a row to Settings that does nothing.
+
+The twelve this extension claims are the ones nothing owned: the .NET project and package files, the Java and JetBrains module files, the feed formats and the ebook manifest. In those files Format now works where it previously did nothing.
+
+</Details>
+
+<Details summary="Indentation, and the environment it comes from">
+
+`xmllint --format` indents with two spaces, and the `XMLLINT_INDENT` environment variable is what changes it:
+
+```sh
+XMLLINT_INDENT="    " xmllint --format file.csproj
+```
+
+Phantom takes only `PATH` from your login shell and passes its own environment through for the rest, so exporting the variable in `.zshrc` does not reach the formatter. Set it for the whole session before launching the app:
+
+```sh
+launchctl setenv XMLLINT_INDENT "    "
+```
+
+There is no per-project configuration file. `xmllint` is a single process with flags, not a formatter with a config format, which is exactly why it can be wired up this simply.
+
+</Details>
+
+<Details summary="The other things xmllint does">
+
+Not wired into the editor, and worth knowing from a terminal in the same project:
+
+| Option | What it does |
+|---|---|
+| `--format` | Reformat and reindent the output |
+| `--pretty 2` | Save with `XML_SAVE_WSNONSIG`; `--pretty 1` is `--format` |
+| `--schema FILE` | Validate against a W3C XML Schema |
+| `--dtdvalid URL` | Validate against a DTD |
+| `--xpath EXPR` | Print the result of an XPath expression |
+| `--noout` | Print nothing but the errors |
+
+`--noblanks` is documented by libxml2 as unreliable and best left alone.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Settings shows the language as Shadowed">
+
+Phantom's highlighter already claims `.xml` and `.svg` — it paints them with its HTML rules — and the compiled-in tables outrank an extension on purpose: copying a file into a directory must never change a language you already had. Because one claim is enough to shadow the whole contribution, the other eighteen suffixes wait with it.
+
+The row in Settings → Languages says which claim was taken, and its Precedence section carries a **Use This Instead of Phantom** button. Pressing it is what turns XML highlighting on everywhere, `.xml` included. The formatter is a separate contribution and is not affected either way.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Three causes, in the order worth checking. The file is one of the eight Phantom already formats, so its own row in Settings → Editor is the one to look at. The switch for this formatter is off. Or the document does not parse — a buffer halfway through an edit makes `xmllint` exit with an error and print nothing, and Phantom keeps your text rather than emptying the file.
+
+</Details>
+
+<Details summary="An XML declaration appeared at the top of the file">
+
+`xmllint` writes `<?xml version="1.0"?>` on a document that had none. Harmless in the files people keep — a `.csproj` and a `.nuspec` both carry one already — and a surprise in a fragment. Phantom says the same thing on the built-in formatter's row for the same reason.
+
+</Details>
+
+<Details summary="Completion and go to definition do nothing">
+
+There is no XML language server in Phantom, so there is nothing to complete from: no schema is read, and a `.xsd` beside the document is just another file. Word completion from the buffer still works, as it does in any file.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The formatter runs as your user, with access to your files, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for twenty XML file types, and an `xmllint --format` formatter for the twelve project and feed formats Phantom does not already format.
+
+## License and credits
+
+The extension is released under the MIT License. [xmllint](https://gitlab.gnome.org/GNOME/libxml2) is part of libxml2, © Daniel Veillard and contributors (MIT), and ships with macOS. XML is a specification of the [W3C](https://www.w3.org/XML/); this extension is not affiliated with either project.
