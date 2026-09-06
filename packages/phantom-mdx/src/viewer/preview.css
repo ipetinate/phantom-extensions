@@ -1,3 +1,8 @@
+html,
+body {
+  background: var(--ph-bg);
+}
+
 .ph-preview-bar {
   position: fixed;
   top: 0.75rem;

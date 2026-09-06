@@ -19,6 +19,7 @@ export interface IndexEntry {
   phantom: string | null;
   contributes: ContributionKind[];
   languages: string[];
+  categories: string[];
   download: Download;
   versions: VersionEntry[];
   card: Card;
@@ -61,6 +62,13 @@ export async function build(out: string, repo: string, options: BuildOptions = {
       languages: entriesOf(manifest, "languages")
         .map((language) => language["languageId"])
         .filter((languageId): languageId is string => typeof languageId === "string"),
+      categories: [
+        ...new Set(
+          entriesOf(manifest, "languages")
+            .map((language) => language["category"])
+            .filter((category): category is string => typeof category === "string"),
+        ),
+      ].sort(),
       download,
       versions: mergeVersions({ version: manifest.version, download }, publishedVersions(published, manifest.id)),
       card,

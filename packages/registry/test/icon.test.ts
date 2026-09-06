@@ -58,3 +58,26 @@ describe("inline icon", () => {
     expect(entries[0]?.card.iconData).toBeNull();
   });
 });
+
+describe("categories", () => {
+  it("lists the categories the languages declare, once and sorted", async () => {
+    const manifest = languageManifest({
+      contributes: {
+        languages: [
+          { languageId: "a", name: "A", extensions: ["a"], category: "script", icon: "icons/a.svg" },
+          { languageId: "b", name: "B", extensions: ["b"], category: "compiled", icon: "icons/b.svg" },
+          { languageId: "c", name: "C", extensions: ["c"], category: "script", icon: "icons/c.svg" },
+        ],
+      },
+    });
+    new ExtensionFixture(path.join(root, "extensions"), "sample", manifest);
+    const entries = await run();
+    expect(entries[0]?.categories).toEqual(["compiled", "script"]);
+  });
+
+  it("has no categories when nothing declares one", async () => {
+    new ExtensionFixture(path.join(root, "extensions"), "agent", agentsManifest());
+    const entries = await run();
+    expect(entries[0]?.categories).toEqual([]);
+  });
+});

@@ -20,7 +20,7 @@
   font-size: var(--ph-base-size);
   line-height: 1.55;
   color: var(--ph-fg);
-  background: var(--ph-bg);
+  background: transparent;
   -webkit-font-smoothing: antialiased;
   word-wrap: break-word;
 }
