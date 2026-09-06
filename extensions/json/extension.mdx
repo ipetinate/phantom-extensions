@@ -1,0 +1,173 @@
+---
+title: JSON
+tagline: JSON and JSON with Comments for Phantom — schema completion, diagnostics and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [json, jsonc, data, schema, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+JSON support for the Phantom editor. The extension teaches Phantom two languages — JSON and JSON with Comments — and connects **vscode-json-language-server**, the server Microsoft writes for VS Code and [hrsh7th/vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) publishes to npm as a standalone binary. The server is optional: highlighting works the moment the extension is installed.
+
+Most of what the server is worth comes from a schema. Without one it is a brace matcher that reports trailing commas; with one it completes keys, describes them on hover and marks the values that do not fit.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keys told apart from string values, numbers, `true`, `false` and `null`. The JSON with Comments entry adds `//` and `/* */`, which plain JSON does not have.
+    </Feature>
+    <Feature title="Schema intelligence" icon="search">
+      Completion for keys and enumerated values, hover with the schema's own description, diagnostics for a missing required key or a value of the wrong type, document symbols, folding, and quick fixes for the mistakes the parser can name.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      The server ships a formatter and Phantom switches it on at startup, so Format works with nothing else installed.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A JSON file open in Phantom with highlighted keys and values, one key underlined in red and a hover card below it" caption="Highlighting, a schema diagnostic and its hover card in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want more than highlighting; the extension finds it on your `PATH`.
+
+<Requirement command="vscode-json-language-server" install="npm install -g vscode-langservers-extracted" url="https://github.com/hrsh7th/vscode-langservers-extracted">
+Schema completion, hover, validation, symbols, folding and formatting. Without it the highlighter still works. The package also installs `vscode-html-language-server` and `vscode-css-language-server`; removing any one of the three removes the package, and so the other two with it.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to JSON.
+  </Step>
+  <Step title="Install the server">
+    Run the npm command above, or open Settings → Languages, select **JSON Language Server** and press **Install**. Phantom picks the binary up without a restart.
+  </Step>
+  <Step title="Open a file that has a schema">
+    A `package.json` or a `tsconfig.json` is completed straight away: Phantom names their schemas for the server. Any other file declares its own with a `$schema` key.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.json`, `.jsonc` |
+| File names | `.babelrc`, `.eslintrc`, `.jscsrc`, `.jshintrc`, `.prettierrc`, `.swcrc` |
+| Language ids | `json`, `jsonc` — the id decides how comments are judged |
+| Language server | `vscode-json-language-server --stdio` |
+| Formatter | The server's own |
+| Editor | Key, string, number and literal patterns, and `//` comments in `.jsonc` |
+| Icon | JSON file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Giving a file its schema">
+
+The `$schema` key is read by the server itself and needs nothing from the editor:
+
+```json
+{
+  "$schema": "https://www.schemastore.org/prettierrc.json",
+  "semi": false,
+  "singleQuote": true
+}
+```
+
+Two file types most worth completing carry no such key — neither `package.json` nor `tsconfig.json` declares one — so Phantom names their schemas for the server over the `json/schemaAssociations` notification, from a table compiled into the app:
+
+| Pattern | Schema |
+|---|---|
+| `package.json` | schemastore package.json |
+| `tsconfig*.json`, `jsconfig.json` | schemastore tsconfig, jsconfig |
+| `.prettierrc`, `.prettierrc.json` | schemastore prettierrc |
+| `.eslintrc`, `.eslintrc.json` | schemastore eslintrc |
+| `.babelrc`, `.babelrc.json`, `babel.config.json` | schemastore babelrc |
+| `.jscsrc`, `.jshintrc` | schemastore jscsrc, jshintrc |
+| `.swcrc` | swc |
+
+**Phantom never downloads a schema**, and never reads the SchemaStore catalogue. It names URLs; the server fetches one, over its own network stack, only when a document matching the pattern is opened. A session that opens no JSON makes no request. A file type nobody added to that table still gets a schema the moment it carries a `$schema` of its own.
+
+</Details>
+
+<Details summary="What Phantom sends the server, and what it does not">
+
+Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`. The `json.*` settings VS Code exposes — `json.schemas`, `json.validate.enable`, `json.format.enable`, `json.schemaDownload.enable`, `json.resultLimit` — arrive through exactly those two channels, so in Phantom the server runs on its own defaults.
+
+What does reach it is `initializationOptions`, sent once at startup. Phantom sends this on its own:
+
+```json
+{ "provideFormatter": true }
+```
+
+The server answers `initialize` with a formatter capability derived from that flag, so without it the formatter is present and switched off. To send your own options, use the **initializationOptions (JSON)** box in Settings → Languages → JSON Language Server — and repeat `provideFormatter`, because your JSON replaces Phantom's rather than merging with it.
+
+</Details>
+
+<Details summary="Comments, and why the file extension decides">
+
+The server keys the severity of comments and trailing commas off the language id of the document, when no setting says otherwise:
+
+| Announced as | Comments | Trailing commas |
+|---|---|---|
+| `json` | error | error |
+| `jsonc` | ignore | warning |
+
+That is the whole reason this extension contributes a second language rather than one. Phantom's own definition announces a `.jsonc` file as `json`, so its comments come back underlined; the `jsonc` entry here announces it as `jsonc`, and they do not. The entry is inert until you promote it — see Troubleshooting.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Settings shows a language as Shadowed">
+
+Phantom ships its own JSON definition, and the compiled-in registry outranks an extension on purpose: copying a file into a directory must never change a language you already had. The row in Settings → Languages says which claim was taken and by whom, and its Precedence section carries a **Use This Instead of Phantom** button that puts this extension ahead, for that one language, until you say otherwise.
+
+Nothing is broken while a row reads Shadowed. Phantom's own definition already runs `vscode-json-language-server` and already sends the schema associations above. Promoting the `jsonc` entry is the one change that alters behaviour: it is what stops comments in a `.jsonc` file being reported as errors.
+
+</Details>
+
+<Details summary="No completion in a JSON file">
+
+Completion comes from a schema. If the file is not in the table above and has no `$schema` key, the server has nothing to complete from. Add the key, or find the file's schema at [SchemaStore](https://www.schemastore.org/).
+
+A schema that cannot be fetched — no network, a private URL — leaves the same silence. The server does the fetching, over its own network stack, and reports a failure as a diagnostic.
+
+</Details>
+
+<Details summary="The editor says vscode-json-language-server is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. Phantom resolves that `PATH` once per run, so a version manager that moved the npm bin directory after the app started needs a restart.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Formatting is the server's, so a JSON file cannot be formatted without it. If you filled the **initializationOptions (JSON)** box and left `provideFormatter` out, the server was told to keep the formatter off; add it and restart the server.
+
+A project with a Prettier setup is a different route: Phantom resolves Prettier from the project itself and prefers it for the files it owns.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Fetching a schema is its own network request, not Phantom's. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definitions for `.json` and `.jsonc`, the six dotfile names, and vscode-json-language-server wiring with install commands for npm, pnpm and Yarn.
+
+## License and credits
+
+The extension is released under the MIT License. [vscode-json-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). The schemas named above are hosted by [SchemaStore](https://www.schemastore.org/), which this extension links to and does not redistribute. This extension is not affiliated with either project.
