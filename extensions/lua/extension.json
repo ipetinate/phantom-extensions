@@ -2,11 +2,14 @@
   "schemaVersion": 1,
   "id": "ipetinate.lua",
   "name": "Lua",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
   "description": "Lua: highlighting, lua-language-server and StyLua.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/lua",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.c"
+  ],
   "contributes": {
     "languages": [
       {
@@ -24,37 +27,6 @@
         "blockComment": {
           "open": "--[[",
           "close": "]]"
-        },
-        "keywords": [
-          "and",
-          "break",
-          "do",
-          "else",
-          "elseif",
-          "end",
-          "false",
-          "for",
-          "function",
-          "goto",
-          "if",
-          "in",
-          "local",
-          "nil",
-          "not",
-          "or",
-          "repeat",
-          "return",
-          "then",
-          "true",
-          "until",
-          "while"
-        ],
-        "syntax": {
-          "string": "\\[=*\\[[\\s\\S]*?\\]=*\\]|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParen",
-          "attribute": "::[A-Za-z_][A-Za-z0-9_]*::"
         },
         "server": {
           "command": "lua-language-server",
@@ -98,6 +70,15 @@
           ],
           "documentationURL": "https://github.com/JohnnyMorganz/StyLua"
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.lua",
+        "path": "syntaxes/lua.tmLanguage.json",
+        "languageId": "lua",
+        "license": "TextMate Bundle License",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/lua/syntaxes/lua.tmLanguage.json"
       }
     ]
   }

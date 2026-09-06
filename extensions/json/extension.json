@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.json",
   "name": "JSON",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "JSON and JSON with Comments: highlighting, vscode-json-language-server and schema completion.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/json",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -25,16 +25,6 @@
         ],
         "category": "data",
         "icon": "icons/json.png",
-        "keywords": [
-          "true",
-          "false",
-          "null"
-        ],
-        "syntax": {
-          "string": "\"(?:[^\"\\\\]|\\\\.)*\"",
-          "number": "preset:number",
-          "attribute": "\"(?:[^\"\\\\]|\\\\.)*\"(?=\\s*:)"
-        },
         "server": {
           "command": "vscode-json-language-server",
           "args": [
@@ -77,16 +67,6 @@
           "open": "/*",
           "close": "*/"
         },
-        "keywords": [
-          "true",
-          "false",
-          "null"
-        ],
-        "syntax": {
-          "string": "\"(?:[^\"\\\\]|\\\\.)*\"",
-          "number": "preset:number",
-          "attribute": "\"(?:[^\"\\\\]|\\\\.)*\"(?=\\s*:)"
-        },
         "server": {
           "command": "vscode-json-language-server",
           "args": [
@@ -115,6 +95,22 @@
             "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.json",
+        "path": "syntaxes/json.tmLanguage.json",
+        "languageId": "json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/json/syntaxes/JSON.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.json.comments",
+        "path": "syntaxes/jsonc.tmLanguage.json",
+        "languageId": "jsonc",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/json/syntaxes/JSONC.tmLanguage.json"
       }
     ]
   }

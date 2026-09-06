@@ -1,7 +1,7 @@
 ---
 title: Kotlin
 tagline: Kotlin language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -70,7 +70,7 @@ The language server by fwcd, built on the Kotlin compiler's own APIs. Without it
 | File types | `.kt`, `.kts` |
 | Language server | `kotlin-language-server` (stdio) |
 | Formatter | ktfmt, built into the language server |
-| Editor | Keywords and modifiers, `//` and `/* */` comment markers, and patterns for raw strings, generic calls and annotations |
+| Editor | TextMate grammar `source.kotlin` (vscode-kotlin), a fenced-block injection for Markdown, `//` and `/* */` comment markers |
 | Icon | Kotlin file icon in the sidebar and tabs |
 
 ## Configuration
@@ -138,6 +138,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.kotlin` in place of the manifest's token patterns and keyword list, plus the injection that colours ```kotlin fences in Markdown. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -152,4 +154,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. The [Kotlin Language Server](https://github.com/fwcd/kotlin-language-server) is © fwcd and contributors (MIT); its authors note that an [official Kotlin language server](https://github.com/Kotlin/kotlin-lsp) now exists and consider the project deprecated. [ktfmt](https://github.com/facebook/ktfmt) is © Meta Platforms, Inc. (Apache-2.0). Kotlin is a trademark of the Kotlin Foundation; this extension is not affiliated with it.
+The extension is released under the MIT License. The [Kotlin Language Server](https://github.com/fwcd/kotlin-language-server) is © fwcd and contributors (MIT); its authors note that an [official Kotlin language server](https://github.com/Kotlin/kotlin-lsp) now exists and consider the project deprecated. [ktfmt](https://github.com/facebook/ktfmt) is © Meta Platforms, Inc. (Apache-2.0). Kotlin is a trademark of the Kotlin Foundation; this extension is not affiliated with it. The grammar is the one [vscode-kotlin](https://github.com/fwcd/vscode-kotlin) carries, © fwcd and contributors (MIT).

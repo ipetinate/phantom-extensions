@@ -1,7 +1,7 @@
 ---
 title: Markdown
 tagline: Markdown support for Phantom — highlighting, and Marksman for links, references and outlines.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -69,7 +69,7 @@ Completion, go to definition, find references, rename, document and workspace sy
 | File types | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn`, `.mdx` |
 | Language server | `marksman server` (stdio) |
 | Formatter | none. Marksman does not format, and Phantom already routes Markdown to Prettier |
-| Editor | `<!-- -->` comments, headings, code spans and fences, links and wiki links, emphasis, list markers, block quotes |
+| Editor | TextMate grammar `text.html.markdown` (vscode-markdown-tm-grammar), with fenced code handed to the extension that owns the language; `<!-- -->` comment markers |
 | Icon | Markdown file icon in the sidebar and tabs |
 
 ## Configuration
@@ -157,6 +157,8 @@ Marksman runs as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `text.html.markdown` in place of the manifest's token patterns, and declares every extension in the registry whose language a fence can embed as a dependency. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -171,4 +173,4 @@ Marksman runs as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [Marksman](https://github.com/artempyanykh/marksman) is © Artem Pianykh (MIT). This extension is not affiliated with the Marksman project.
+The extension is released under the MIT License. [Marksman](https://github.com/artempyanykh/marksman) is © Artem Pianykh (MIT). This extension is not affiliated with the Marksman project. The grammar is [vscode-markdown-tm-grammar](https://github.com/microsoft/vscode-markdown-tm-grammar) by Microsoft (MIT), itself derived from the [TextMate Markdown bundle](https://github.com/textmate/markdown.tmbundle), in the JSON form Visual Studio Code ships.

@@ -1,7 +1,7 @@
 ---
 title: PHP
 tagline: PHP language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -70,7 +70,7 @@ The PHP language server by Ben Mewburn. Without it the highlighter still works. 
 | File types | `.php`, `.phtml` — the two Intelephense associates by default |
 | Language server | `intelephense --stdio` |
 | Formatter | Intelephense's own, built into the language server |
-| Editor | The PHP 8 keyword set, `//` and `/* */` comment markers, and patterns for `$variables` and `#[Attributes]` |
+| Editor | TextMate grammars `text.html.php` and `source.php` (language-php), with the HTML around the PHP and the SQL, JSON, CSS, JavaScript and XML inside strings handed to their extensions; `//` and `/* */` comment markers |
 | Icon | PHP file icon in the sidebar and tabs |
 
 ## Configuration
@@ -138,6 +138,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammars `text.html.php` and `source.php` in place of the manifest's token patterns and keyword list, and declares the extensions whose languages a PHP file embeds as dependencies. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -152,4 +154,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [Intelephense](https://intelephense.com/) is © Ben Mewburn and is **not** open source: it is distributed under its own licence, free to use with paid premium features. PHP is © The PHP Group; this extension is not affiliated with the PHP project.
+The extension is released under the MIT License. [Intelephense](https://intelephense.com/) is © Ben Mewburn and is **not** open source: it is distributed under its own licence, free to use with paid premium features. PHP is © The PHP Group; this extension is not affiliated with the PHP project. The grammars are [language-php](https://github.com/KapitanOczywisty/language-php) by KapitanOczywisty (MIT), in the JSON form Visual Studio Code ships.

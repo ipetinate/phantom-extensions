@@ -1,7 +1,7 @@
 ---
 title: Lua
 tagline: Lua language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -70,7 +70,7 @@ The formatter. Without it the Format command and Format on Save do nothing for L
 | File types | `.lua`, `.luacheckrc` |
 | Language server | `lua-language-server` (stdio) |
 | Formatter | `stylua --stdin-filepath <file> -` |
-| Editor | Keywords, comment markers, long-string and label patterns |
+| Editor | TextMate grammar `source.lua` (lua.tmbundle), with `ffi.cdef` bodies handed to the C extension; `--` and `--[[ ]]` comment markers |
 | Icon | Lua file icon in the sidebar and tabs |
 
 ## Configuration
@@ -155,6 +155,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.7** — Ships the TextMate grammar `source.lua` in place of the manifest's token patterns and keyword list, and declares the C extension as a dependency for the C the grammar embeds. Colouring now needs Phantom 0.17.0.
+
 **1.0.6** — Published under Isac Petinate.
 
 **1.0.5** — The file explorer draws the same artwork the store shows.
@@ -171,4 +173,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [lua-language-server](https://github.com/LuaLS/lua-language-server) is © LuaLS contributors (MIT). [StyLua](https://github.com/JohnnyMorganz/StyLua) is © Johnny Morganz (MPL-2.0), built on full-moon. Lua is © PUC-Rio; this extension is not affiliated with the Lua project.
+The extension is released under the MIT License. [lua-language-server](https://github.com/LuaLS/lua-language-server) is © LuaLS contributors (MIT). [StyLua](https://github.com/JohnnyMorganz/StyLua) is © Johnny Morganz (MPL-2.0), built on full-moon. Lua is © PUC-Rio; this extension is not affiliated with the Lua project. The grammar is [sumneko's lua.tmbundle](https://github.com/sumneko/lua.tmbundle) (TextMate Bundle License), in the JSON form Visual Studio Code ships.
