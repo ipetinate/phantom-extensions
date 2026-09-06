@@ -1,14 +1,18 @@
 {
   "schemaVersion": 1,
   "id": "phantom.symbols-icons",
-  "name": "Symbols Starter Icons",
-  "version": "1.0.4",
+  "name": "Symbols Icons",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
-  "description": "A small file icon theme: eight icons, and a manifest short enough to read.",
+  "description": "Symbols, the file icon theme Phantom draws its explorer with, and a starter theme short enough to read in one sitting.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/symbols-icons",
   "phantom": "0.16.0",
   "contributes": {
     "iconThemes": [
+      {
+        "name": "Symbols",
+        "path": "symbols"
+      },
       {
         "name": "Symbols Starter",
         "path": "icon-theme"
