@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.tailwind",
+  "name": "Tailwind CSS",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Tailwind CSS: class name completion, colour previews and diagnostics, in the projects that installed Tailwind.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/tailwind",
+  "phantom": "0.17.0",
+  "contributes": {
+    "servers": [
+      {
+        "id": "tailwind",
+        "name": "Tailwind CSS",
+        "command": "tailwindcss-language-server",
+        "args": [
+          "--stdio"
+        ],
+        "languageIds": [
+          "html",
+          "vue",
+          "typescriptreact",
+          "javascriptreact",
+          "javascript"
+        ],
+        "projectMarkers": [
+          "node_modules/tailwindcss"
+        ],
+        "installHint": "npm i -g @tailwindcss/language-server",
+        "documentationURL": "https://github.com/tailwindlabs/tailwindcss-intellisense",
+        "install": {
+          "commands": [
+            {
+              "manager": "npm",
+              "command": "npm install -g @tailwindcss/language-server",
+              "uninstall": "npm uninstall -g @tailwindcss/language-server"
+            },
+            {
+              "manager": "pnpm",
+              "command": "pnpm add -g @tailwindcss/language-server",
+              "uninstall": "pnpm remove -g @tailwindcss/language-server"
+            }
+          ],
+          "documentationURL": "https://github.com/tailwindlabs/tailwindcss-intellisense"
+        }
+      }
+    ]
+  }
+}

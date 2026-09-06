@@ -1,0 +1,138 @@
+---
+title: Tailwind CSS
+tagline: Class name completion, colour previews and diagnostics for Tailwind — in the projects that installed it, and nowhere else.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [tailwind, css, lsp, completion, frontend]
+---
+
+Tailwind support for the Phantom editor. The extension connects **tailwindcss-language-server**, the server behind Tailwind IntelliSense, to the markup and script files a Tailwind project keeps its class names in.
+
+Tailwind is not a language, so this extension contributes none. It contributes a server that attaches **beside** the one already serving the file. A `.vue` file keeps the Vue server, a `.tsx` file keeps `tsserver`, and both also get class name completion.
+
+## Highlights
+
+<Features>
+  <Feature title="Every class the project generates" icon="search">
+    Completion is built from your own configuration, not from a list shipped with the extension. A custom colour, a renamed screen or a plugin's utilities appear the moment the project defines them.
+  </Feature>
+  <Feature title="Colours and spacing on hover" icon="brush">
+    Hovering a class shows the CSS it expands to, with a swatch for a colour and the resolved value for a length. That is the fastest way to tell `bg-sky-500` from `bg-sky-600`.
+  </Feature>
+  <Feature title="Only where Tailwind lives" icon="check">
+    The server starts when the walk up from the file finds `node_modules/tailwindcss`. In a repository that never installed Tailwind, no process is started and nothing is offered.
+  </Feature>
+  <Feature title="Beside, not instead" icon="plug">
+    The language's own server keeps serving the file. Two servers answer for one document, and Phantom merges their completions, hovers and diagnostics.
+  </Feature>
+</Features>
+
+## Requirements
+
+Phantom does not bundle the server. Install it once; the extension finds it on your `PATH`.
+
+<Requirement command="tailwindcss-language-server" install="npm i -g @tailwindcss/language-server" url="https://github.com/tailwindlabs/tailwindcss-intellisense">
+The server Tailwind Labs publishes out of the IntelliSense repository. It reads the project's own Tailwind, so one global copy serves projects on Tailwind 3 and Tailwind 4 alike.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    Open the Extensions pane in the sidebar, or Settings → Extensions, and press **Install** next to Tailwind CSS.
+  </Step>
+  <Step title="Install the server">
+    Run `npm i -g @tailwindcss/language-server`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a file in a Tailwind project">
+    The first time a project needs a server, Phantom asks before starting it and remembers the answer for that extension. Type inside a `class` attribute and the completions appear.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Server | `tailwindcss-language-server --stdio` |
+| Attaches to | `html`, `vue`, `typescriptreact`, `javascriptreact`, `javascript` |
+| Starts when | `node_modules/tailwindcss` is found on the walk up to the workspace root |
+| Languages | none — the file keeps the language, and the server, it already had |
+
+## Configuration
+
+<Details summary="Tailwind 4: the CSS entry point">
+
+Tailwind 4 has no `tailwind.config.js`. The theme lives in the stylesheet that imports Tailwind, and the server reads it from there.
+
+```css
+@import "tailwindcss";
+
+@theme {
+  --color-brand: oklch(0.72 0.15 250);
+  --font-display: "Inter", sans-serif;
+}
+```
+
+`bg-brand` and `font-display` are completed as soon as the file is saved.
+
+</Details>
+
+<Details summary="Tailwind 3: tailwind.config.js">
+
+On Tailwind 3 the server reads `tailwind.config.js`, `.cjs`, `.mjs` or `.ts` from the project root, including the `content` globs that decide which files are scanned.
+
+```js
+export default {
+  content: ["./index.html", "./src/**/*.{vue,ts,tsx}"],
+  theme: {
+    extend: {
+      colors: { brand: "#0ea5e9" },
+    },
+  },
+};
+```
+
+</Details>
+
+<Details summary="A monorepo with more than one Tailwind">
+
+The walk stops at the first `node_modules/tailwindcss` it finds, so a package that installs its own Tailwind is served by that copy rather than the root's. A package with no Tailwind of its own falls back to the one at the root, which is what a hoisted install produces.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="No completions in a project that uses Tailwind">
+
+Check that `node_modules/tailwindcss` exists between the file and the workspace root. A project whose dependencies were never installed has no marker, so the server is not started — that is the rule working, not failing.
+
+</Details>
+
+<Details summary="Completions in the template but not in the script">
+
+The server is offered for the language ids listed above. A class name inside a `.ts` file that is not JSX is outside that list, and a string there is not treated as markup.
+
+</Details>
+
+<Details summary="A new colour does not appear">
+
+The server reads the theme when the configuration or the CSS entry point changes on disk. Save the file; if it still does not appear, restart the server from Settings → Language Servers.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: `tailwindcss-language-server` as a companion server for HTML, Vue, TSX, JSX and JavaScript, gated on `node_modules/tailwindcss`.
+
+## License and credits
+
+The extension is released under the MIT License. [tailwindcss-language-server](https://github.com/tailwindlabs/tailwindcss-intellisense) is © Tailwind Labs Inc. (MIT). Tailwind CSS is © Tailwind Labs Inc.; this extension is not affiliated with the Tailwind project, and the mark is used to identify it.
