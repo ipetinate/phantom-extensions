@@ -1,5 +1,5 @@
 export { build, MAX_ZIP_BYTES } from "./build.ts";
-export type { BuildOptions, Download, IndexEntry } from "./build.ts";
+export type { BuildOptions, IndexEntry } from "./build.ts";
 export { checkIcon, collect } from "./collect.ts";
 export type { Card, Collected } from "./collect.ts";
 export { fail, isRecord, requireAsset, requireString } from "./checks.ts";
@@ -33,4 +33,6 @@ export type { ContributionKind, Manifest } from "./manifest.ts";
 export { EXTENSIONS, ROOT, describe } from "./paths.ts";
 export { ReleaseCheckError, checkReleases, publishedAssets, readRows } from "./releases.ts";
 export { MEDIA_SUFFIXES, suffixOf } from "./suffixes.ts";
+export { MAX_VERSIONS, compareVersions, fetchPublishedIndex, indexURL, mergeVersions, publishedVersions } from "./versions.ts";
+export type { Download, VersionEntry } from "./versions.ts";
 export { buildZip } from "./zip.ts";

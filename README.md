@@ -37,6 +37,8 @@ Directory names are for humans. Identity is `id` in the manifest, and the zip is
 5. Open a pull request. On merge, the publish workflow creates a release `<id>-v<version>` with the zip, then rebuilds `index.json` and uploads it to the `index` release.
 6. To ship a change, raise `version`. A version that already has a release is never rebuilt. Any change under an extension directory needs a version bump, and CI refuses a build whose zip differs from the bytes already released under that version.
 
+An index entry carries `download` for the version in this repository, and `versions`: the ten newest published versions, newest first, each with its own URL, digest and size. The builder reads the published index to find them, so a version it no longer lists drops off. `download` keeps the shape it has always had, so an older Phantom reads the index as before.
+
 ## The manifest
 
 `schemaVersion` is `1`. Phantom ignores keys it does not know inside `contributes`, so a manifest written for a newer Phantom still installs the parts an older one understands.

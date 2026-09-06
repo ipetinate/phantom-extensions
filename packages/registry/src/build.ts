@@ -4,15 +4,10 @@ import path from "node:path";
 import { fail } from "./checks.ts";
 import { collect, type Card } from "./collect.ts";
 import { CONTRIBUTION_KINDS, entriesOf, type ContributionKind } from "./manifest.ts";
+import { fetchPublishedIndex, mergeVersions, publishedVersions, type Download, type VersionEntry } from "./versions.ts";
 import { buildZip } from "./zip.ts";
 
 export const MAX_ZIP_BYTES = 32 * 1024 * 1024;
-
-export interface Download {
-  url: string;
-  sha256: string;
-  bytes: number;
-}
 
 export interface IndexEntry {
   id: string;
@@ -25,18 +20,21 @@ export interface IndexEntry {
   contributes: ContributionKind[];
   languages: string[];
   download: Download;
+  versions: VersionEntry[];
   card: Card;
 }
 
 export interface BuildOptions {
+  offline?: boolean;
   extensionsRoot?: string;
   maxZipBytes?: number;
 }
 
-export function build(out: string, repo: string, options: BuildOptions = {}): IndexEntry[] {
+export async function build(out: string, repo: string, options: BuildOptions = {}): Promise<IndexEntry[]> {
   const maxZipBytes = options.maxZipBytes ?? MAX_ZIP_BYTES;
   const collected = collect(options.extensionsRoot);
   mkdirSync(out, { recursive: true });
+  const published = options.offline === true ? null : await fetchPublishedIndex(repo);
   const entries: IndexEntry[] = [];
   const releases: string[] = [];
   for (const { directory, manifest, card } of collected) {
@@ -64,6 +62,7 @@ export function build(out: string, repo: string, options: BuildOptions = {}): In
         .map((language) => language["languageId"])
         .filter((languageId): languageId is string => typeof languageId === "string"),
       download,
+      versions: mergeVersions({ version: manifest.version, download }, publishedVersions(published, manifest.id)),
       card,
     });
     releases.push(`${tag}\t${archive}\t${manifest.name} ${manifest.version}\n`);

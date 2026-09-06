@@ -11,13 +11,14 @@ interface BuildArguments {
   check: boolean;
   out: string;
   repo: string;
+  offline: boolean;
 }
 
 function usage(): number {
   process.stderr.write(
     [
       "usage:",
-      "  phantom-registry [--check] [--out <dir>] [--repo <owner/name>]",
+      "  phantom-registry [--check] [--out <dir>] [--repo <owner/name>] [--offline]",
       "  phantom-registry check                validate every extension without writing anything",
       "  phantom-registry releases [--dist <dir>]   refuse a version published with different bytes",
       "",
@@ -33,11 +34,15 @@ function splitArgument(argument: string): [string, string | null] {
 }
 
 function parseBuildArguments(argv: string[]): BuildArguments | null {
-  const parsed: BuildArguments = { check: false, out: path.join(ROOT, "dist"), repo: DEFAULT_REPO };
+  const parsed: BuildArguments = { check: false, out: path.join(ROOT, "dist"), repo: DEFAULT_REPO, offline: false };
   for (let index = 0; index < argv.length; index += 1) {
     const [flag, inline] = splitArgument(argv[index] as string);
     if (flag === "check" || flag === "--check") {
       parsed.check = true;
+      continue;
+    }
+    if (flag === "--offline") {
+      parsed.offline = true;
       continue;
     }
     if (flag !== "--out" && flag !== "--repo") return null;
@@ -71,7 +76,7 @@ function report(error: unknown): number {
   return 1;
 }
 
-function main(argv: string[]): number {
+async function main(argv: string[]): Promise<number> {
   if (argv[0] === "releases") {
     const dist = parseReleaseArguments(argv.slice(1));
     if (dist === null) return usage();
@@ -92,7 +97,7 @@ function main(argv: string[]): number {
       }
       return 0;
     }
-    for (const entry of build(parsed.out, parsed.repo)) {
+    for (const entry of await build(parsed.out, parsed.repo, { offline: parsed.offline })) {
       process.stdout.write(`${entry.id} ${entry.version}  ${entry.download.bytes} bytes  ${entry.download.sha256.slice(0, 12)}\n`);
     }
     return 0;
@@ -102,10 +107,12 @@ function main(argv: string[]): number {
   }
 }
 
-try {
-  const code = main(process.argv.slice(2));
-  if (code > 0) process.exitCode = code;
-} catch (error) {
-  process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
-  process.exitCode = 1;
-}
+main(process.argv.slice(2)).then(
+  (code) => {
+    if (code > 0) process.exitCode = code;
+  },
+  (error: unknown) => {
+    process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  },
+);
