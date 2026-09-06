@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 tagline: TypeScript and JavaScript for Phantom — highlighting, diagnostics, completion and navigation.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -14,7 +14,7 @@ screenshots:
   - media/editor.png
 ---
 
-TypeScript and JavaScript support for the Phantom editor. The extension teaches Phantom the four language ids the ecosystem uses — `typescript`, `typescriptreact`, `javascript`, `javascriptreact` — with their file types, keywords, comment markers and token patterns, and connects **typescript-language-server**, the wrapper that drives `tsserver` over the Language Server Protocol. Formatting comes from **Prettier**, which Phantom resolves from the project itself; the extension does not contribute a formatter, and the section below explains why.
+TypeScript and JavaScript support for the Phantom editor. The extension teaches Phantom the four language ids the ecosystem uses — `typescript`, `typescriptreact`, `javascript`, `javascriptreact` — with their file types, comment markers and TextMate grammars, and connects **typescript-language-server**, the wrapper that drives `tsserver` over the Language Server Protocol. Formatting comes from **Prettier**, which Phantom resolves from the project itself; the extension does not contribute a formatter, and the section below explains why.
 
 Highlighting works the moment the extension is installed. The server is optional.
 
@@ -28,8 +28,8 @@ Highlighting works the moment the extension is installed. The server is optional
     <Feature title="Language intelligence" icon="search">
       Diagnostics, hover, completion, go to definition, find references, rename and code actions from `tsserver`. Inlay hints for parameter names, variable types and return types are available through the server's own settings.
     </Feature>
-    <Feature title="Two toolchains" icon="package">
-      Phantom picks the server for the project. A workspace with `node_modules/typescript` gets `typescript-language-server` driving its `tsserver.js`; a workspace without one gets `tsc --lsp --stdio`, the native TypeScript server, which needs no wrapper.
+    <Feature title="The version the project pins" icon="package">
+      The wrapper drives the `tsserver.js` the workspace itself installed, so the editor type-checks with the same TypeScript the build uses — 5, 6 or 7. It also hosts tsserver plugins, which is how the Vue extension serves a single-file component.
     </Feature>
   </Features>
   <Screenshot src="media/editor.png" alt="A TypeScript file open in Phantom with highlighted keywords, types and strings, and one diagnostic underlined in red" caption="Highlighting and a diagnostic in the Phantom editor" />
@@ -74,7 +74,15 @@ The formatter. Phantom runs the project's own `node_modules/.bin/prettier` when 
 | Editor | TextMate grammars `source.ts`, `source.tsx`, `source.js` and `source.js.jsx` (TypeScript-TmLanguage), `//` and `/* */` comment markers |
 | Icon | TypeScript file icon in the sidebar and tabs |
 
-Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. The extension is what makes the pieces installable, removable and readable in one place, and Settings → Language Servers can promote it over the built-in definition when you want the manifest to be the one in force.
+Phantom 0.17.0 has no compiled-in table of languages and servers, so this extension is where TypeScript support comes from. Install it and the four languages exist; remove it and they do not.
+
+## The other TypeScript extension
+
+**TypeScript Native** offers the same four languages served by `tsc --lsp --stdio`, the language server inside TypeScript 7. It needs no wrapper and no `tsserver.js` — one binary is the whole toolchain.
+
+Prefer this extension when the project pins TypeScript 5 or 6, when a tsserver plugin has to load, or when the repository holds `.vue`, `.svelte`, `.astro` or `.mdx` files. Prefer TypeScript Native when the only TypeScript on the machine is 7 and there is no `tsserver.js` for the wrapper to drive.
+
+Both claim the same four language ids, so only one of them serves a file at a time. Installing both lists the second one as **Shadowed**; the Troubleshooting section says how to choose which wins.
 
 Prettier is deliberately absent from the manifest. Phantom does not treat Prettier as one command for one language: `PrettierProject` walks up from the file looking for a config, an ignore file and a local binary, and hands the buffer to that Prettier with `--stdin-filepath`. Declaring a formatter here would put a global `prettier` from your `PATH` ahead of that resolution and run it on every save, including in repositories formatted by something else.
 
@@ -105,7 +113,7 @@ A project that has no `tsconfig.json` is still served: the server falls back to 
 
 <Details summary="Server: initializationOptions">
 
-Settings → Language Servers has an **initializationOptions (JSON)** field per server. It is where the server's own options go, because `typescript-language-server` takes them there rather than from a file of its own.
+Settings → Extensions has an **initializationOptions (JSON)** field per server. It is where the server's own options go, because `typescript-language-server` takes them there rather than from a file of its own.
 
 ```json
 {
@@ -172,15 +180,23 @@ The bar above the file shows the install command. After installing, press **Chec
 
 </Details>
 
-<Details summary="The contribution is listed as Shadowed">
+<Details summary="Could not find a valid TypeScript installation">
 
-Phantom ships its own definitions for these languages, and the compiled-in registry outranks an extension that has not been promoted. That order exists so copying a file into the extensions directory can never change a language you already had. Settings → Language Servers → the contributed row has **Use This Instead of Phantom**, which puts the manifest ahead for that one language id until you turn it back.
+The wrapper says this, in full: `Could not find a valid TypeScript installation. Please ensure that the "typescript" dependency is installed in the workspace or that a valid tsserver.path is specified.` It drives a `tsserver.js` and could not find one — the workspace has no `node_modules/typescript`, and no global TypeScript 5 or 6 either. TypeScript 7 does not help: it ships no `tsserver.js` at all.
+
+Three ways out, in the order most people want them:
+
+1. Install the dependency the project should have: `npm install` in the workspace, or `npm install -D typescript`.
+2. Point the wrapper at a `tsserver.js` yourself, with `tsserver.path` in the **initializationOptions (JSON)** field described above.
+3. Use a server that needs no wrapper. Install the **TypeScript Native** extension, or set this server's **Command** to `tsc` and its **Arguments** to `--lsp --stdio` under Settings → Extensions, then press **Restart Server**. That server type-checks as TypeScript 7 whatever the project pins, so it is the wrong answer for a project pinned to 5 or 6.
 
 </Details>
 
-<Details summary="No diagnostics in a project with no node_modules">
+<Details summary="The contribution is listed as Shadowed">
 
-A workspace without `node_modules/typescript` is served by `tsc --lsp --stdio` instead of the wrapper, so `npm i -g typescript` is what that project needs rather than the wrapper. The native server accepts `.ts`, `.tsx`, `.js`, `.jsx`, `.mts`, `.cts` and `.json` only.
+Another extension already claims these languages — **TypeScript Native**, in almost every case, since it claims the same four language ids. A shadowed contribution is parsed and listed but not in effect, so that installing something can never quietly change a language you already had.
+
+Settings → Extensions → the extension → the language section has a **Precedence** control, **Use This Instead of**, which puts that extension ahead for one language id until you turn it back. Each of `typescript`, `typescriptreact`, `javascript` and `javascriptreact` is a separate decision.
 
 </Details>
 
@@ -195,6 +211,8 @@ The tools run as your user, with access to your files and network, the same as i
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Says that TypeScript Native exists, when to prefer it, and what to do about `Could not find a valid TypeScript installation`. Corrects three statements the removal of Phantom's compiled-in server table made false: the app no longer picks between two TypeScript servers, no longer shadows this extension with a built-in definition, and no longer has a Language Servers pane.
 
 **1.0.6** — Ships the TextMate grammars `source.ts`, `source.tsx`, `source.js` and `source.js.jsx`, one per language id, in place of the manifest's token patterns and keyword lists. Colouring now needs Phantom 0.17.0.
 
