@@ -1,7 +1,7 @@
 ---
 title: Go
 tagline: Go for Phantom — highlighting, go.mod and go.sum, and the gopls language server.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -69,7 +69,7 @@ The Go language server: diagnostics, hover, completion, definitions, references,
 | File types | `.go`, and the names `go.mod`, `go.sum`, `go.work` |
 | Language id | `go` |
 | Language server | `gopls` |
-| Editor | Keywords, `//` and `/* */` markers, string, number, type and call patterns |
+| Editor | TextMate grammar `source.go` (go-syntax), `//` and `/* */` comment markers |
 | Icon | Go file icon in the sidebar and tabs |
 
 Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. Settings → Language Servers can promote it when you want the manifest to be the one in force.
@@ -158,6 +158,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.go` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -172,4 +174,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [gopls](https://github.com/golang/tools/tree/master/gopls) is © The Go Authors, licensed BSD-3-Clause. Go is a trademark of Google LLC; this extension is not affiliated with the Go project.
+The extension is released under the MIT License. [gopls](https://github.com/golang/tools/tree/master/gopls) is © The Go Authors, licensed BSD-3-Clause. Go is a trademark of Google LLC; this extension is not affiliated with the Go project. The grammar is [go-syntax](https://github.com/worlpaker/go-syntax) by worlpaker (MIT), in the JSON form Visual Studio Code ships.

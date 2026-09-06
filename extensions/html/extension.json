@@ -2,11 +2,15 @@
   "schemaVersion": 1,
   "id": "phantom.html",
   "name": "HTML",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "HTML: highlighting, vscode-html-language-server and the formatter it ships.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/html",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.css",
+    "phantom.typescript"
+  ],
   "contributes": {
     "languages": [
       {
@@ -22,12 +26,6 @@
         "blockComment": {
           "open": "<!--",
           "close": "-->"
-        },
-        "syntax": {
-          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
-          "type": "</?[A-Za-z][A-Za-z0-9-]*|<!DOCTYPE",
-          "attribute": "\\b[A-Za-z_:@#$*][-A-Za-z0-9_:.]*(?=\\s*=)",
-          "function": "&[A-Za-z][A-Za-z0-9]*;|&#[0-9]+;"
         },
         "server": {
           "command": "vscode-html-language-server",
@@ -56,6 +54,35 @@
             ],
             "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
           }
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "text.html.basic",
+        "path": "syntaxes/html.tmLanguage.json",
+        "license": "TextMate Bundle License",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/html/syntaxes/html.tmLanguage.json",
+        "embeddedLanguages": {
+          "text.html": "html",
+          "source.css": "css",
+          "source.js": "javascript",
+          "source.python": "python",
+          "source.smarty": "smarty"
+        }
+      },
+      {
+        "scopeName": "text.html.derivative",
+        "path": "syntaxes/html-derivative.tmLanguage.json",
+        "languageId": "html",
+        "license": "TextMate Bundle License",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/html/syntaxes/html-derivative.tmLanguage.json",
+        "embeddedLanguages": {
+          "text.html": "html",
+          "source.css": "css",
+          "source.js": "javascript",
+          "source.python": "python",
+          "source.smarty": "smarty"
         }
       }
     ]

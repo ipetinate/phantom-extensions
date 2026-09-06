@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.go",
   "name": "Go",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Go: highlighting, go.mod and go.sum, and the gopls language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/go",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -22,46 +22,10 @@
         ],
         "category": "compiled",
         "icon": "icons/go.png",
-        "keywords": [
-          "break",
-          "case",
-          "chan",
-          "const",
-          "continue",
-          "default",
-          "defer",
-          "else",
-          "fallthrough",
-          "for",
-          "func",
-          "go",
-          "goto",
-          "if",
-          "import",
-          "interface",
-          "map",
-          "package",
-          "range",
-          "return",
-          "select",
-          "struct",
-          "switch",
-          "type",
-          "var",
-          "nil",
-          "true",
-          "false"
-        ],
         "lineComment": "//",
         "blockComment": {
           "open": "/*",
           "close": "*/"
-        },
-        "syntax": {
-          "string": "preset:cStyleString",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParen"
         },
         "server": {
           "command": "gopls",
@@ -83,6 +47,15 @@
             "documentationURL": "https://go.dev/gopls"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.go",
+        "path": "syntaxes/go.tmLanguage.json",
+        "languageId": "go",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/go/syntaxes/go.tmLanguage.json"
       }
     ]
   }

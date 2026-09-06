@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.java",
   "name": "Java",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Java: highlighting and the Eclipse JDT Language Server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/java",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -21,73 +21,6 @@
         "blockComment": {
           "open": "/*",
           "close": "*/"
-        },
-        "keywords": [
-          "abstract",
-          "assert",
-          "boolean",
-          "break",
-          "byte",
-          "case",
-          "catch",
-          "char",
-          "class",
-          "const",
-          "continue",
-          "default",
-          "do",
-          "double",
-          "else",
-          "enum",
-          "extends",
-          "false",
-          "final",
-          "finally",
-          "float",
-          "for",
-          "goto",
-          "if",
-          "implements",
-          "import",
-          "instanceof",
-          "int",
-          "interface",
-          "long",
-          "native",
-          "new",
-          "null",
-          "package",
-          "permits",
-          "private",
-          "protected",
-          "public",
-          "record",
-          "return",
-          "sealed",
-          "short",
-          "static",
-          "strictfp",
-          "super",
-          "switch",
-          "synchronized",
-          "this",
-          "throw",
-          "throws",
-          "transient",
-          "true",
-          "try",
-          "var",
-          "void",
-          "volatile",
-          "while",
-          "yield"
-        ],
-        "syntax": {
-          "string": "\"\"\"[\\s\\S]*?\"\"\"|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParenOrGeneric",
-          "attribute": "@[A-Za-z_][A-Za-z0-9_]*"
         },
         "server": {
           "command": "jdtls",
@@ -104,6 +37,15 @@
             "documentationURL": "https://github.com/eclipse-jdtls/eclipse.jdt.ls#installation"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.java",
+        "path": "syntaxes/java.tmLanguage.json",
+        "languageId": "java",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/java/syntaxes/java.tmLanguage.json"
       }
     ]
   }

@@ -1,7 +1,7 @@
 ---
 title: HTML
 tagline: HTML support for Phantom — highlighting, diagnostics, completion and the formatter the server ships.
-version: 1.0.4
+version: 1.0.5
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -66,7 +66,7 @@ Completion, hover, symbols, folding, tag rename and formatting. Without it the h
 | File types | `.html`, `.htm`, `.xhtml` |
 | Language server | `vscode-html-language-server --stdio` |
 | Formatter | The server's own, driven by js-beautify |
-| Editor | Tag, attribute, entity, string and comment patterns |
+| Editor | TextMate grammars `text.html.basic` and `text.html.derivative` (html.tmbundle), with `<style>` and `<script>` bodies handed to the CSS and TypeScript extensions; `<!-- -->` comment markers |
 | Icon | HTML file icon in the sidebar and tabs |
 
 ## Configuration
@@ -167,6 +167,8 @@ The server runs as your user, with access to your files and network, the same as
 
 ## Changelog
 
+**1.0.5** — Ships the TextMate grammars `text.html.basic` and `text.html.derivative` in place of the manifest's token patterns, and declares the CSS and TypeScript extensions as dependencies for `<style>` and `<script>`. Colouring now needs Phantom 0.17.0.
+
 **1.0.4** — Published under Isac Petinate.
 
 **1.0.3** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -179,4 +181,4 @@ The server runs as your user, with access to your files and network, the same as
 
 ## License and credits
 
-The extension is released under the MIT License. [vscode-html-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). Its formatter is [js-beautify](https://github.com/beautifier/js-beautify) (MIT). HTML is a specification of the [WHATWG](https://whatwg.org/); this extension is not affiliated with either project.
+The extension is released under the MIT License. [vscode-html-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). Its formatter is [js-beautify](https://github.com/beautifier/js-beautify) (MIT). HTML is a specification of the [WHATWG](https://whatwg.org/); this extension is not affiliated with either project. The grammars are the [TextMate HTML bundle](https://github.com/textmate/html.tmbundle) (TextMate Bundle License), in the JSON form Visual Studio Code ships.

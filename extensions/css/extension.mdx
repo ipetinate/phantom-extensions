@@ -1,7 +1,7 @@
 ---
 title: CSS
 tagline: CSS, SCSS and Less for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.4
+version: 1.0.5
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -71,7 +71,7 @@ Optional, and a companion rather than a replacement: Tailwind CSS IntelliSense c
 | Language ids | `css`, `scss`, `less` — one server process each |
 | Language server | `vscode-css-language-server --stdio` |
 | Formatter | The server's own |
-| Editor | Selector, at-rule, property, function, unit-aware number, string and comment patterns |
+| Editor | TextMate grammars `source.css`, `source.css.scss` and `source.css.less`, `/* */` comment markers |
 | Icon | Stylesheet icon in the sidebar and tabs |
 
 ## Configuration
@@ -172,6 +172,8 @@ The servers run as your user, with access to your files and network, the same as
 
 ## Changelog
 
+**1.0.5** — Ships the TextMate grammars `source.css`, `source.css.scss` and `source.css.less` in place of the manifest's token patterns and keyword lists. Colouring now needs Phantom 0.17.0.
+
 **1.0.4** — Published under Isac Petinate.
 
 **1.0.3** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -184,4 +186,4 @@ The servers run as your user, with access to your files and network, the same as
 
 ## License and credits
 
-The extension is released under the MIT License. [vscode-css-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). [Tailwind CSS IntelliSense](https://github.com/tailwindlabs/tailwindcss-intellisense) is © Tailwind Labs (MIT). CSS is a specification of the [W3C](https://www.w3.org/Style/CSS/); this extension is not affiliated with any of these projects.
+The extension is released under the MIT License. [vscode-css-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). [Tailwind CSS IntelliSense](https://github.com/tailwindlabs/tailwindcss-intellisense) is © Tailwind Labs (MIT). CSS is a specification of the [W3C](https://www.w3.org/Style/CSS/); this extension is not affiliated with any of these projects. The grammars are [vscode-css](https://github.com/microsoft/vscode-css) by Microsoft (MIT), [language-sass](https://github.com/atom/language-sass) by the Atom contributors (MIT) and [Better Less](https://github.com/radium-v/Better-Less) by radium-v (MIT), in the JSON form Visual Studio Code ships.

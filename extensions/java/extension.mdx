@@ -1,7 +1,7 @@
 ---
 title: Java
 tagline: Java language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -16,7 +16,7 @@ screenshots:
 
 Java support for the Phantom editor. The extension gives `.java` files a language definition of their own — Java's keywords, text blocks, annotations and generic calls — and connects the **Eclipse JDT Language Server** for diagnostics, hover, completion, navigation, refactoring and formatting. The server is optional: highlighting works the moment the extension is installed.
 
-Without the extension, Phantom lexes a `.java` file with its Kotlin rules. They share enough shape that the file looks reasonable, and they disagree on the words: `extends`, `implements`, `instanceof`, `static`, `void`, `synchronized` and the primitive types are not Kotlin keywords, and Kotlin's `fun`, `val` and `when` are not Java's.
+Without the extension, a `.java` file is plain text: Phantom colours a language only with the grammar an extension ships for it.
 
 ## Highlights
 
@@ -70,7 +70,7 @@ The Eclipse JDT Language Server. Without it the highlighter still works. It need
 | File types | `.java` |
 | Language server | `jdtls` (stdio) |
 | Formatter | The Eclipse formatter, built into the language server |
-| Editor | The Java keyword set, `//` and `/* */` comment markers, and patterns for text blocks, generic calls and annotations |
+| Editor | TextMate grammar `source.java` (vscode-java), `//` and `/* */` comment markers |
 | Icon | Java file icon in the sidebar and tabs |
 
 ## Configuration
@@ -153,6 +153,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.java` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -167,4 +169,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. The [Eclipse JDT Language Server](https://github.com/eclipse-jdtls/eclipse.jdt.ls) is © the Eclipse Foundation and contributors, under the Eclipse Public License 2.0. Java is a registered trademark of Oracle and its affiliates; this extension is not affiliated with them.
+The extension is released under the MIT License. The [Eclipse JDT Language Server](https://github.com/eclipse-jdtls/eclipse.jdt.ls) is © the Eclipse Foundation and contributors, under the Eclipse Public License 2.0. Java is a registered trademark of Oracle and its affiliates; this extension is not affiliated with them. The grammar is the one [vscode-java](https://github.com/redhat-developer/vscode-java) carries, © Red Hat and contributors (MIT), in the JSON form Visual Studio Code ships.
