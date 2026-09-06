@@ -1,0 +1,121 @@
+---
+title: SQL
+tagline: SQL highlighting for Phantom. It adds colour to .sql files and nothing else.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [sql, database, data, language, highlighting]
+screenshots:
+  - media/editor.png
+---
+
+SQL highlighting for the Phantom editor. This extension contributes a language and nothing else: **no language server, no formatter, no program to install**. Nothing runs, nothing is downloaded, and Phantom never asks you to approve anything.
+
+Say that plainly, because the other language extensions in this registry do more. SQL has no single language server the way Lua or Terraform does — the useful ones are tied to one database and need a live connection — and no formatter that is one process with text in and text out. Until one of those exists here, this extension is the colours and the comment markers.
+
+Phantom already ships SQL highlighting. This extension restates it, adds five further file suffixes, and adds four things Phantom's own rules do not have: doubled quote escapes inside strings, dollar quoted strings, quoted and bracketed identifiers, and bind parameters. Because Phantom already owns `.sql`, the contribution stays inert until you promote it in Settings, which the steps below cover.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Keywords in both cases" icon="brush">
+      Eighty-nine keywords, listed in upper case and lower case, so `SELECT` and `select` both colour. A manifest keyword list is matched exactly as written, which is why both forms are there.
+    </Feature>
+    <Feature title="Strings, identifiers and parameters" icon="code">
+      Single quoted strings including the doubled `''` escape, `$$ dollar quoted $$` bodies, and `N'…'` literals. Quoted identifiers in all three dialect spellings — `"double"`, `` `backtick` `` and `[bracket]` — plus the standard data type names. Bind parameters as `@name`, `:name` and `$1`.
+    </Feature>
+    <Feature title="Comments and calls" icon="terminal">
+      `--` to the end of the line and `/* */` across lines, both understood by the comment toggle command. A name written immediately before `(` is coloured as a function call, so `count(*)` and `coalesce(a, b)` stand out from the keywords around them.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A SQL file open in Phantom with coloured keywords, table and column names, a quoted string, a numeric literal and two comments" caption="Keywords, literals and comments in the Phantom editor. No diagnostics, because nothing is running" />
+</Showcase>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to SQL.
+  </Step>
+  <Step title="Put the extension ahead of the built-in language">
+    Phantom already claims `.sql`, so the contribution is listed as Shadowed and does nothing yet. Open Settings → Extensions, select SQL, and press **Use This Instead of Phantom**. The promotion covers this language only, and you can undo it in the same place.
+  </Step>
+  <Step title="Open a SQL file">
+    That is the whole setup. There is no tool to install and no approval to give, because the extension names no program.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.sql`, `.ddl`, `.dml`, `.pgsql`, `.mysql`, `.tsql` |
+| Language server | none |
+| Formatter | none |
+| Editor | 89 keywords in both cases, `--` and `/* */` comments, strings with `''` escapes, dollar quoted bodies, quoted and bracketed identifiers, data type names, function calls, bind parameters |
+| Icon | SQL file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="There is nothing to configure">
+
+The extension has no settings, because it starts no process. What you can change lives in Phantom itself: the colours come from the theme under Settings → Appearance, and the file icon from the icon theme under Settings → Sidebar → File Explorer.
+
+To change the language definition, edit `extension.json` in the extension's own directory. Settings → Extensions has a **Reveal in Finder** button that takes you there. Phantom rereads the manifest and asks for your approval again if the file changes, even though this one names no program.
+
+</Details>
+
+<Details summary="Dialects">
+
+One definition covers the dialects, because they differ in ways a keyword list cannot express. Three details are dialect specific and all three are included rather than chosen between: `[bracketed]` identifiers are T-SQL, `` `backtick` `` identifiers are MySQL, and `$$ dollar quoted $$` bodies and `$1` parameters are PostgreSQL.
+
+The cost is that a MySQL file colours a `[bracket]` that MySQL would not accept. That is the right trade for a highlighter, which has to read files it cannot validate.
+
+</Details>
+
+<Details summary="Adding your own keywords">
+
+Vendor keywords are not in the list. `MATERIALIZED`, `UPSERT`, `PRAGMA`, `NOLOCK` and the rest belong to one product each, and a shared list of all of them colours words that are ordinary identifiers elsewhere.
+
+Add the ones your team writes by editing the `keywords` array in `extension.json`. Add each word twice, once in each case. Raise `version` afterwards so Phantom sees the change.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The extension is listed as Shadowed">
+
+Phantom's own tables claim `.sql`, and an extension never takes a language you already had without being asked. Settings → Extensions names the claim and offers **Use This Instead of Phantom**. Until you press it, nothing in the language contribution applies, including the extra file suffixes.
+
+</Details>
+
+<Details summary="Mixed case keywords are not coloured">
+
+A keyword list is matched exactly as written, and the list holds `SELECT` and `select`. A word written `Select` matches neither. Add the spelling you use to `keywords` in the manifest.
+
+</Details>
+
+<Details summary="No completion, no diagnostics, no go to definition">
+
+Expected. The extension contributes no language server, so nothing analyses the file. Completion still offers words from the open buffer, which is Phantom's own behaviour for any language.
+
+</Details>
+
+<Details summary="Format does nothing">
+
+Also expected. The extension contributes no formatter. If your project formats SQL with a tool that reads a file and writes it back, run it from the terminal; Phantom's formatter contract needs a program that reads the buffer on standard input and writes the result on standard output.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: SQL language definition for six file suffixes, with keywords in both cases, dialect quoting rules and bind parameters.
+
+## License and credits
+
+The extension is released under the MIT License. It bundles no third-party code and runs no third-party program. SQL is standardised as ISO/IEC 9075; the keyword list here is a reading aid, not a conformance claim.
