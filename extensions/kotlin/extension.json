@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.kotlin",
+  "name": "Kotlin",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Kotlin: highlighting and the Kotlin Language Server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/kotlin",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "kotlin",
+        "name": "Kotlin",
+        "extensions": [
+          "kt",
+          "kts"
+        ],
+        "category": "compiled",
+        "icon": "icons/kotlin.svg",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "keywords": [
+          "abstract",
+          "actual",
+          "annotation",
+          "as",
+          "break",
+          "by",
+          "catch",
+          "class",
+          "companion",
+          "const",
+          "constructor",
+          "continue",
+          "crossinline",
+          "data",
+          "do",
+          "dynamic",
+          "else",
+          "enum",
+          "expect",
+          "external",
+          "false",
+          "final",
+          "finally",
+          "for",
+          "fun",
+          "get",
+          "if",
+          "import",
+          "in",
+          "infix",
+          "init",
+          "inline",
+          "inner",
+          "interface",
+          "internal",
+          "is",
+          "lateinit",
+          "noinline",
+          "null",
+          "object",
+          "open",
+          "operator",
+          "out",
+          "override",
+          "package",
+          "private",
+          "protected",
+          "public",
+          "reified",
+          "return",
+          "sealed",
+          "set",
+          "super",
+          "suspend",
+          "tailrec",
+          "this",
+          "throw",
+          "true",
+          "try",
+          "typealias",
+          "val",
+          "value",
+          "var",
+          "vararg",
+          "when",
+          "where",
+          "while"
+        ],
+        "syntax": {
+          "string": "\"\"\"[\\s\\S]*?\"\"\"|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParenOrGeneric",
+          "attribute": "@(?:[a-z]+:)?[A-Za-z_][A-Za-z0-9_]*"
+        },
+        "server": {
+          "command": "kotlin-language-server",
+          "installHint": "brew install kotlin-language-server",
+          "documentationURL": "https://github.com/fwcd/kotlin-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install kotlin-language-server",
+                "uninstall": "brew uninstall kotlin-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/fwcd/kotlin-language-server/blob/main/EDITORS.md"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+---
+title: Kotlin
+tagline: Kotlin language support for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [kotlin, language, lsp, jvm, gradle]
+screenshots:
+  - media/editor.png
+---
+
+Kotlin support for the Phantom editor. The extension teaches Phantom the language — `.kt` and `.kts` files, keywords, annotations and raw strings — and connects the **Kotlin Language Server** for diagnostics, hover, completion, navigation and formatting. The server is optional: highlighting works the moment the extension is installed.
+
+The server resolves your dependencies by asking Gradle or Maven for them, so it understands a real project rather than one file at a time.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords including the modifiers (`suspend`, `sealed`, `data`, `inline`), type names, generic calls such as `listOf<String>()`, `"""raw strings"""`, numbers and `@Annotations` with their use-site targets. Comments with `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics as you type, completion with snippets, hover documentation, signature help, document symbols and go to definition. The classpath comes from Gradle or Maven, so symbols from your dependencies resolve.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Format on demand or on save, served by the language server itself. It formats with **ktfmt** in Google style, so no second tool has to be installed.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Kotlin file open in Phantom with highlighted keywords, a data class, a suspend function and one diagnostic from the Kotlin Language Server" caption="Highlighting, a suspend function and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want diagnostics and formatting; the extension detects it on your `PATH`.
+
+<Requirement command="kotlin-language-server" install="brew install kotlin-language-server" url="https://github.com/fwcd/kotlin-language-server">
+The language server by fwcd, built on the Kotlin compiler's own APIs. Without it the highlighter still works. It runs on a JVM, and the Homebrew formula installs a JDK 21 for it. Read the note below before installing it on a machine whose `JAVA_HOME` names a newer JDK.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Kotlin.
+  </Step>
+  <Step title="Install the server">
+    Run the Homebrew command above. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a Kotlin file">
+    The first time a project needs kotlin-language-server, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Let it resolve the classpath">
+    On the first run the server invokes Gradle or Maven to list the project's jars. A cold Gradle daemon makes this slow once; completion across dependencies arrives when it finishes.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.kt`, `.kts` |
+| Language server | `kotlin-language-server` (stdio) |
+| Formatter | ktfmt, built into the language server |
+| Editor | Keywords and modifiers, `//` and `/* */` comment markers, and patterns for raw strings, generic calls and annotations |
+| Icon | Kotlin file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Where the classpath comes from">
+
+The server asks Gradle or Maven for the project's jars. A project it cannot build can hand it the list instead: put an executable script at `kls-classpath` in the project root, or at `kotlin-language-server/classpath` under your config directory, and have it print the jars separated by `:`.
+
+```bash
+#!/bin/bash
+echo /opt/kotlin/lib/kotlin-stdlib.jar:/opt/vendor/my-lib.jar
+```
+
+On Windows the same file may be named `classpath.bat` or `classpath.cmd`.
+
+</Details>
+
+<Details summary="Formatting with ktfmt">
+
+Formatting is served by the language server, which uses ktfmt. Its defaults are Google style, an indent of 4, a maximum width of 100, a continuation indent of 8, and unused imports removed.
+
+Those values live in the server's own configuration, delivered by an editor as `kotlin.formatting.*` in a `workspace/didChangeConfiguration` notification. Phantom sends no such notification and answers the server's configuration requests with nulls, so the defaults above are what you get today. Set `kotlin.formatting.formatter` to `none` in a client that can send it to turn formatting off; from Phantom, turn off Format on Save instead.
+
+</Details>
+
+<Details summary="Sending the server your own initializationOptions">
+
+Open Settings → Language Servers, select Kotlin Language Server and fill in the **initializationOptions (JSON)** field, then press **Restart Server**. This server reads exactly one option there — where to keep its cache:
+
+```json
+{
+  "storagePath": "/Users/you/.cache/kotlin-language-server"
+}
+```
+
+The same screen overrides the command and its arguments, which is how you point Phantom at a build you installed yourself.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The server exits immediately on a machine with a new JDK">
+
+Version 1.3.13 bundles a Kotlin compiler whose IntelliJ core cannot read the version string of a JDK 25, and it exits before answering `initialize`. Phantom's own compiled-in Kotlin row caps the JVM it hands the server at feature version 21 for exactly this reason. **A contributed server carries no such cap**, so this extension passes your environment through as it is.
+
+Homebrew's launcher sets `JAVA_HOME` to its own JDK 21 only when `JAVA_HOME` is not already set. If yours names a newer JDK, either unset it for the app, point it at a JDK 21, or uninstall this extension and use Phantom's built-in Kotlin support, which applies the cap.
+
+</Details>
+
+<Details summary="The editor says kotlin-language-server is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell.
+
+</Details>
+
+<Details summary="No completion from dependencies">
+
+The classpath did not resolve. Check that the project builds from the terminal with Gradle or Maven, or hand the server the jars directly with a `kls-classpath` script as shown above.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.kt` and `.kts`, with Kotlin Language Server wiring and a Homebrew install command.
+
+## License and credits
+
+The extension is released under the MIT License. The [Kotlin Language Server](https://github.com/fwcd/kotlin-language-server) is © fwcd and contributors (MIT); its authors note that an [official Kotlin language server](https://github.com/Kotlin/kotlin-lsp) now exists and consider the project deprecated. [ktfmt](https://github.com/facebook/ktfmt) is © Meta Platforms, Inc. (Apache-2.0). Kotlin is a trademark of the Kotlin Foundation; this extension is not affiliated with it.
