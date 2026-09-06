@@ -60,7 +60,7 @@ describe("inline icon", () => {
 });
 
 describe("categories", () => {
-  it("lists the categories the languages declare, once and sorted", async () => {
+  it("lists the categories in the order the languages declare them, once", async () => {
     const manifest = languageManifest({
       contributes: {
         languages: [
@@ -72,7 +72,7 @@ describe("categories", () => {
     });
     new ExtensionFixture(path.join(root, "extensions"), "sample", manifest);
     const entries = await run();
-    expect(entries[0]?.categories).toEqual(["compiled", "script"]);
+    expect(entries[0]?.categories).toEqual(["script", "compiled"]);
   });
 
   it("has no categories when nothing declares one", async () => {

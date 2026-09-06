@@ -68,13 +68,17 @@ export async function build(out: string, repo: string, options: BuildOptions = {
       grammars: entriesOf(manifest, "grammars")
         .map((grammar) => grammar["scopeName"])
         .filter((scopeName): scopeName is string => typeof scopeName === "string"),
+      // In the order the manifest declared them, deduplicated. The reader
+      // sees an extension filed under the first one, and an extension is
+      // what its first language is: Elixir contributes Elixir, EEx and
+      // HEEx, so sorting these put the Elixir extension under Markup.
       categories: [
         ...new Set(
           entriesOf(manifest, "languages")
             .map((language) => language["category"])
             .filter((category): category is string => typeof category === "string"),
         ),
-      ].sort(),
+      ],
       download,
       versions: mergeVersions({ version: manifest.version, download }, publishedVersions(published, manifest.id)),
       card,
