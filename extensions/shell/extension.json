@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.shell",
   "name": "Shell Script",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Phantom",
   "description": "Shell scripts: highlighting, bash-language-server and shfmt.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/shell",

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.java",
   "name": "Java",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Phantom",
   "description": "Java: highlighting and the Eclipse JDT Language Server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/java",

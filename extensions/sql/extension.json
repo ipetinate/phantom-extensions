@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.sql",
   "name": "SQL",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "SQL: highlighting only. No language server and no formatter.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/sql",

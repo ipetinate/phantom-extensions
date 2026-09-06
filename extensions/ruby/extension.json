@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.ruby",
   "name": "Ruby",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Phantom",
   "description": "Ruby: highlighting and Ruby LSP.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/ruby",

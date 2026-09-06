@@ -1,10 +1,10 @@
 ---
 title: GitHub Dark Default
 tagline: The GitHub Dark Default terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.1
+version: 1.0.2
 author:
-  name: Phantom
-  url: https://github.com/ipetinate/phantom
+  name: Isac Petinate
+  url: https://github.com/ipetinate
 license: MIT
 created: 2026-09-06
 icon: media/icon.png
@@ -64,3 +64,7 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/github-dark-default.conf` is a byte-for-byte copy of the
 `GitHub Dark Default` file in that collection. This extension packages it and claims no authorship
 of the palette.
+
+## Changelog
+
+**1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
