@@ -1,7 +1,7 @@
 ---
 title: Prettier
 tagline: Opinionated formatting for the files Prettier has a parser for, in the projects that declare it.
-version: 1.0.0
+version: 1.0.1
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -81,6 +81,8 @@ the MIT License. This extension packages nothing of Prettier's; it tells Phantom
 how to call the copy you install, and claims no authorship of the formatter.
 
 ## Changelog
+
+**1.0.1** — Published under Isac Petinate.
 
 **1.0.0** — Initial release: the suffix table, the project markers, the local
 binary and the working directory, all as manifest data.

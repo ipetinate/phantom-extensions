@@ -1,7 +1,7 @@
 ---
 title: Modus Operandi Deuteranopia
 tagline: The Modus Operandi Deuteranopia terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.1
+version: 1.0.2
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -66,5 +66,7 @@ released under the MIT License. `themes/modus-operandi-deuteranopia.conf` is a b
 of the palette.
 
 ## Changelog
+
+**1.0.2** — Published under Isac Petinate.
 
 **1.0.1** — Credits Isac Petinate, who packaged it, rather than the app.

@@ -1,7 +1,7 @@
 ---
 title: Nord
 tagline: The Nord terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.4
+version: 1.0.5
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -66,5 +66,7 @@ released under the MIT License. `themes/nord.conf` is a byte-for-byte copy of th
 of the palette.
 
 ## Changelog
+
+**1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.

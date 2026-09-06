@@ -1,7 +1,7 @@
 ---
 title: Apple System Colors Light
 tagline: The Apple System Colors Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.3
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -66,5 +66,7 @@ released under the MIT License. `themes/apple-system-colors-light.conf` is a byt
 of the palette.
 
 ## Changelog
+
+**1.0.3** — Published under Isac Petinate.
 
 **1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.

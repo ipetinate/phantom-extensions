@@ -1,7 +1,7 @@
 ---
 title: Atom
 tagline: The Atom terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.3
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -66,5 +66,7 @@ released under the MIT License. `themes/atom.conf` is a byte-for-byte copy of th
 of the palette.
 
 ## Changelog
+
+**1.0.3** — Published under Isac Petinate.
 
 **1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
