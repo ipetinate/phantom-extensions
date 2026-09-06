@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.ruby",
   "name": "Ruby",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Ruby: highlighting and Ruby LSP.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/ruby",
@@ -28,7 +28,7 @@
           "Brewfile"
         ],
         "category": "script",
-        "icon": "icons/ruby.svg",
+        "icon": "icons/ruby.png",
         "lineComment": "#",
         "keywords": [
           "BEGIN",

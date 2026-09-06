@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.markdown",
   "name": "Markdown",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Markdown: highlighting and Marksman.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/markdown",
@@ -22,7 +22,7 @@
           "mdx"
         ],
         "category": "markup",
-        "icon": "icons/markdown.svg",
+        "icon": "icons/markdown.png",
         "blockComment": {
           "open": "<!--",
           "close": "-->"

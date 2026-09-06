@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.terraform",
   "name": "Terraform",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Terraform: highlighting and terraform-ls.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/terraform",
@@ -17,7 +17,7 @@
           "tfvars"
         ],
         "category": "infrastructure",
-        "icon": "icons/terraform.svg",
+        "icon": "icons/terraform.png",
         "lineComment": "#",
         "blockComment": {
           "open": "/*",

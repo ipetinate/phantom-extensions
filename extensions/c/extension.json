@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.c",
   "name": "C",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "C: highlighting and clangd.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/c",
@@ -17,7 +17,7 @@
           "h"
         ],
         "category": "compiled",
-        "icon": "icons/c.svg",
+        "icon": "icons/c.png",
         "lineComment": "//",
         "blockComment": {
           "open": "/*",

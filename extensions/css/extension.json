@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.css",
   "name": "CSS",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "CSS, SCSS and Less: highlighting and vscode-css-language-server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/css",
@@ -16,7 +16,7 @@
           "css"
         ],
         "category": "styles",
-        "icon": "icons/css.svg",
+        "icon": "icons/css.png",
         "blockComment": {
           "open": "/*",
           "close": "*/"
@@ -109,7 +109,7 @@
           "scss"
         ],
         "category": "styles",
-        "icon": "icons/css.svg",
+        "icon": "icons/css.png",
         "lineComment": "//",
         "blockComment": {
           "open": "/*",
@@ -203,7 +203,7 @@
           "less"
         ],
         "category": "styles",
-        "icon": "icons/css.svg",
+        "icon": "icons/css.png",
         "lineComment": "//",
         "blockComment": {
           "open": "/*",

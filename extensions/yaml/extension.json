@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.yaml",
   "name": "YAML",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "YAML: highlighting, yaml-language-server and schema validation.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/yaml",
@@ -17,7 +17,7 @@
           "yml"
         ],
         "category": "data",
-        "icon": "icons/yaml.svg",
+        "icon": "icons/yaml.png",
         "lineComment": "#",
         "keywords": [
           "true",

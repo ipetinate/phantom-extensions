@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.rust",
   "name": "Rust",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Rust: highlighting, attributes and the rust-analyzer language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rust",
@@ -16,7 +16,7 @@
           "rs"
         ],
         "category": "compiled",
-        "icon": "icons/rust.svg",
+        "icon": "icons/rust.png",
         "keywords": [
           "as",
           "async",

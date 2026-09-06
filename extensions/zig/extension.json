@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.zig",
   "name": "Zig",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Zig: highlighting for .zig and .zon, and the ZLS language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/zig",
@@ -17,7 +17,7 @@
           "zon"
         ],
         "category": "compiled",
-        "icon": "icons/zig.svg",
+        "icon": "icons/zig.png",
         "keywords": [
           "align",
           "allowzero",

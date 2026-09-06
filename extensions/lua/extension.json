@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.lua",
   "name": "Lua",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "ipetinate",
   "description": "Lua: highlighting, lua-language-server and StyLua.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/lua",
@@ -19,7 +19,7 @@
           ".luacheckrc"
         ],
         "category": "script",
-        "icon": "icons/lua.svg",
+        "icon": "icons/lua.png",
         "lineComment": "--",
         "blockComment": {
           "open": "--[[",

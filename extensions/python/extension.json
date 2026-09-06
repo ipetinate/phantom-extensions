@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.python",
   "name": "Python",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Python: highlighting, Pyright and Ruff.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/python",
@@ -17,7 +17,7 @@
           "pyi"
         ],
         "category": "script",
-        "icon": "icons/python.svg",
+        "icon": "icons/python.png",
         "lineComment": "#",
         "keywords": [
           "False",

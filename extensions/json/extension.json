@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.json",
   "name": "JSON",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "JSON and JSON with Comments: highlighting, vscode-json-language-server and schema completion.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/json",
@@ -24,7 +24,7 @@
           ".swcrc"
         ],
         "category": "data",
-        "icon": "icons/json.svg",
+        "icon": "icons/json.png",
         "keywords": [
           "true",
           "false",
@@ -71,7 +71,7 @@
           "jsonc"
         ],
         "category": "data",
-        "icon": "icons/json.svg",
+        "icon": "icons/json.png",
         "lineComment": "//",
         "blockComment": {
           "open": "/*",

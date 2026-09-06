@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.html",
   "name": "HTML",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "HTML: highlighting, vscode-html-language-server and the formatter it ships.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/html",
@@ -18,7 +18,7 @@
           "xhtml"
         ],
         "category": "markup",
-        "icon": "icons/html.svg",
+        "icon": "icons/html.png",
         "blockComment": {
           "open": "<!--",
           "close": "-->"

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.typescript",
   "name": "TypeScript",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "TypeScript and JavaScript: highlighting and typescript-language-server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript",
@@ -18,7 +18,7 @@
           "cts"
         ],
         "category": "script",
-        "icon": "icons/typescript.svg",
+        "icon": "icons/typescript.png",
         "keywords": [
           "abstract",
           "as",
@@ -128,7 +128,7 @@
           "tsx"
         ],
         "category": "script",
-        "icon": "icons/typescript.svg",
+        "icon": "icons/typescript.png",
         "keywords": [
           "abstract",
           "as",
@@ -240,7 +240,7 @@
           "cjs"
         ],
         "category": "script",
-        "icon": "icons/typescript.svg",
+        "icon": "icons/typescript.png",
         "keywords": [
           "abstract",
           "as",
@@ -350,7 +350,7 @@
           "jsx"
         ],
         "category": "script",
-        "icon": "icons/typescript.svg",
+        "icon": "icons/typescript.png",
         "keywords": [
           "abstract",
           "as",

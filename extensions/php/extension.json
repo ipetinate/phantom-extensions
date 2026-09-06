@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.php",
   "name": "PHP",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "PHP: highlighting and Intelephense.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/php",
@@ -17,7 +17,7 @@
           "phtml"
         ],
         "category": "script",
-        "icon": "icons/php.svg",
+        "icon": "icons/php.png",
         "lineComment": "//",
         "blockComment": {
           "open": "/*",

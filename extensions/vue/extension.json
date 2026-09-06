@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.vue",
   "name": "Vue",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Phantom",
   "description": "Vue single-file components: the Vue Language Server and its TypeScript plugin.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/vue",
@@ -16,7 +16,7 @@
           "vue"
         ],
         "category": "frontendFramework",
-        "icon": "icons/vue.svg",
+        "icon": "icons/vue.png",
         "keywords": [],
         "lineComment": null,
         "blockComment": {
