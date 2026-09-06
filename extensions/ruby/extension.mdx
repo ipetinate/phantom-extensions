@@ -1,0 +1,160 @@
+---
+title: Ruby
+tagline: Ruby language support for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [ruby, language, lsp, rails, rubocop]
+screenshots:
+  - media/editor.png
+---
+
+Ruby support for the Phantom editor. The extension teaches Phantom the language — file types, the Ruby DSL files that carry no extension, keywords, symbols and instance variables — and connects **Ruby LSP**, Shopify's language server, for diagnostics, hover, completion, navigation and formatting. The server is optional: highlighting works the moment the extension is installed.
+
+Ruby LSP formats through the language server rather than through a separate tool. It looks at the project's dependencies and picks the formatter the project already uses, so no second program has to be installed.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords, constants and class names, `"strings"`, `%w[]` and `%q()` literals, numbers, method calls, `:symbols`, `@instance`, `@@class` and `$global` variables. Comments with `#`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics, hover documentation, completion, go to definition, find references, document symbols, folding ranges, inlay hints and type hierarchy. The server indexes your project and its gems, so navigation reaches into a dependency's source.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Format on demand or on save, served by Ruby LSP itself. A project with RuboCop in its Gemfile is formatted by RuboCop; one with `syntax_tree` is formatted by Syntax Tree; a project with neither is left alone.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Ruby file open in Phantom with highlighted keywords, a class name, symbols, instance variables and one diagnostic from Ruby LSP" caption="Highlighting, symbols and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want diagnostics and formatting; the extension detects it on your `PATH`.
+
+<Requirement command="ruby-lsp" install="brew install ruby-lsp" url="https://shopify.github.io/ruby-lsp/">
+Shopify's language server for Ruby. Without it the highlighter still works. Install it with Homebrew for one copy that serves every project, or with `gem install ruby-lsp` inside the Ruby version you develop against.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Ruby.
+  </Step>
+  <Step title="Install the server">
+    Run the Homebrew command above, or `gem install ruby-lsp`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a Ruby file">
+    The first time a project needs ruby-lsp, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Let it index">
+    On the first run the server indexes the project and its gems. Completion and go to definition across gems become available once that finishes.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.rb`, `.rake`, `.gemspec`, `.ru` |
+| File names | `Gemfile`, `Rakefile`, `Guardfile`, `Capfile`, `Vagrantfile`, `Podfile`, `Brewfile` |
+| Language server | `ruby-lsp` (stdio) |
+| Formatter | Ruby LSP's own, driven by the project's Gemfile |
+| Editor | Keywords, the `#` comment marker, and patterns for percent literals, symbols and variables |
+| Icon | Ruby file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Which formatter runs">
+
+Ruby LSP does not ask you to choose. It reads the project's dependencies at startup and decides:
+
+| What the project has | What formats the file |
+|---|---|
+| A direct dependency whose name starts with `rubocop` | RuboCop, through the server |
+| A direct dependency on `syntax_tree` | Syntax Tree |
+| RuboCop as a transitive dependency **and** a `.rubocop.yml` | RuboCop, through the server |
+| None of the above | Nothing; the buffer is returned unchanged |
+
+RuboCop's own rules come from `.rubocop.yml`, which the server does not read itself — RuboCop does.
+
+</Details>
+
+<Details summary="Indexing: .index.yml">
+
+A `.index.yml` at the project root narrows what the server indexes. The keys are read into the indexer's configuration:
+
+```yaml
+excluded_gems:
+  - rubocop
+  - rspec-mocks
+excluded_patterns:
+  - "vendor/**/*.rb"
+included_patterns:
+  - "config/**/*.rb"
+excluded_magic_comments:
+  - "compiled:true"
+```
+
+The server accepts this file and warns that it is deprecated in favour of editor settings. Phantom has no per-project settings screen for a language server, so this file is the way to configure indexing from disk today. Prefer it over nothing, and expect the warning.
+
+</Details>
+
+<Details summary="Sending Ruby LSP your own initializationOptions">
+
+Phantom answers the server's `workspace/configuration` requests with nulls, so Ruby LSP runs on its defaults. To send options at startup, open Settings → Language Servers, select Ruby LSP and fill in the **initializationOptions (JSON)** field, then press **Restart Server**.
+
+```json
+{
+  "formatter": "standard",
+  "linters": ["standard"],
+  "experimentalFeaturesEnabled": true
+}
+```
+
+`formatter` takes `auto` (the default), a formatter's name, or `none`. Naming `rubocop` activates the add-on that the rubocop gem ships from v1.70.0 onward; `rubocop_internal` asks for Ruby LSP's own integration instead, and is what an older RuboCop falls back to. `linters` is a list of names. `enabledFeatures` takes a map of feature names to booleans, covering `codeActions`, `completion`, `diagnostics`, `formatting`, `hover`, `inlayHint`, `semanticHighlighting` and the rest. `indexing` takes `excludedPatterns`, `includedPatterns`, `excludedGems` and `excludedMagicComments`.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says ruby-lsp is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. A `ruby-lsp` installed into a version manager's shims is only on the `PATH` your login shell builds, which is the one Phantom reads.
+
+</Details>
+
+<Details summary="The server starts against the wrong Ruby">
+
+Phantom launches `ruby-lsp` directly rather than through a shell, so a version manager that switches Ruby per directory does not get a chance to run. Install the gem in the version you develop against, or point the row at a shim: Settings → Language Servers, select Ruby LSP, and set **Command** to the absolute path of the shim, such as `/Users/you/.rbenv/shims/ruby-lsp`.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Ruby LSP formats only when the project names a formatter it recognises. Add RuboCop or `syntax_tree` to the Gemfile, or send `formatter` in the initializationOptions field described above.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.rb`, `.rake`, `.gemspec`, `.ru` and seven Ruby DSL file names, with Ruby LSP wiring and install commands for Homebrew and RubyGems.
+
+## License and credits
+
+The extension is released under the MIT License. [Ruby LSP](https://github.com/Shopify/ruby-lsp) is © Shopify Inc. (MIT). [RuboCop](https://github.com/rubocop/rubocop) is © Bozhidar Batsov and contributors (MIT). Ruby is © Yukihiro Matsumoto and contributors; this extension is not affiliated with the Ruby project.

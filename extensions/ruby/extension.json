@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.ruby",
+  "name": "Ruby",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Ruby: highlighting and Ruby LSP.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/ruby",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "ruby",
+        "name": "Ruby",
+        "extensions": [
+          "rb",
+          "rake",
+          "gemspec",
+          "ru"
+        ],
+        "fileNames": [
+          "Gemfile",
+          "Rakefile",
+          "Guardfile",
+          "Capfile",
+          "Vagrantfile",
+          "Podfile",
+          "Brewfile"
+        ],
+        "category": "script",
+        "icon": "icons/ruby.svg",
+        "lineComment": "#",
+        "keywords": [
+          "BEGIN",
+          "END",
+          "alias",
+          "and",
+          "begin",
+          "break",
+          "case",
+          "class",
+          "def",
+          "do",
+          "else",
+          "elsif",
+          "end",
+          "ensure",
+          "false",
+          "for",
+          "if",
+          "in",
+          "module",
+          "next",
+          "nil",
+          "not",
+          "or",
+          "redo",
+          "rescue",
+          "retry",
+          "return",
+          "self",
+          "super",
+          "then",
+          "true",
+          "undef",
+          "unless",
+          "until",
+          "when",
+          "while",
+          "yield",
+          "__FILE__",
+          "__LINE__",
+          "__ENCODING__"
+        ],
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'|%[wWiIqQ]\\([^)]*\\)|%[wWiIqQ]\\[[^\\]]*\\]",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParen",
+          "attribute": "@{1,2}[A-Za-z_][A-Za-z0-9_]*|\\$[A-Za-z_][A-Za-z0-9_]*|:[A-Za-z_][A-Za-z0-9_]*[?!]?"
+        },
+        "server": {
+          "command": "ruby-lsp",
+          "installHint": "brew install ruby-lsp",
+          "documentationURL": "https://shopify.github.io/ruby-lsp/",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install ruby-lsp",
+                "uninstall": "brew uninstall ruby-lsp"
+              },
+              {
+                "manager": "gem",
+                "command": "gem install ruby-lsp",
+                "uninstall": "gem uninstall ruby-lsp"
+              }
+            ],
+            "documentationURL": "https://shopify.github.io/ruby-lsp/editors.html"
+          }
+        }
+      }
+    ]
+  }
+}
