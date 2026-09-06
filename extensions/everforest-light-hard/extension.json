@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-everforest-light-hard",
+  "name": "Everforest Light Hard",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Everforest Light Hard terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/everforest-light-hard",
+  "phantom": "0.16.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Everforest Light Hard",
+        "path": "themes/everforest-light-hard.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

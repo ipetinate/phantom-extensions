@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-modus-operandi-deuteranopia",
+  "name": "Modus Operandi Deuteranopia",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Modus Operandi Deuteranopia terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/modus-operandi-deuteranopia",
+  "phantom": "0.16.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Modus Operandi Deuteranopia",
+        "path": "themes/modus-operandi-deuteranopia.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

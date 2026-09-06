@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-builtin-tango-light",
+  "name": "Builtin Tango Light",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Builtin Tango Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/builtin-tango-light",
+  "phantom": "0.16.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Builtin Tango Light",
+        "path": "themes/builtin-tango-light.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}
