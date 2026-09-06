@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.theme-raycast-light",
   "name": "Raycast Light",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "The Raycast Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/raycast-light",
-  "phantom": "0.17.0",
+  "phantom": "0.16.0",
   "contributes": {
     "themes": [
       {

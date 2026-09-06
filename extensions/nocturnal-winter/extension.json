@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.theme-nocturnal-winter",
   "name": "Nocturnal Winter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "The Nocturnal Winter terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/nocturnal-winter",
-  "phantom": "0.17.0",
+  "phantom": "0.16.0",
   "contributes": {
     "themes": [
       {

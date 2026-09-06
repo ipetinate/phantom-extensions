@@ -1,7 +1,7 @@
 ---
 title: Rose Pine
 tagline: The Rose Pine terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.0
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom

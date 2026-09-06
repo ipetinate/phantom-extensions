@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.theme-porcelain",
   "name": "Porcelain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "The Porcelain terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/porcelain",
-  "phantom": "0.17.0",
+  "phantom": "0.16.0",
   "contributes": {
     "themes": [
       {

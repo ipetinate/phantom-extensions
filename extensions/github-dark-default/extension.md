@@ -1,7 +1,7 @@
 ---
 title: GitHub Dark Default
 tagline: The GitHub Dark Default terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.0
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
