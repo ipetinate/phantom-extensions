@@ -1,7 +1,7 @@
 ---
 title: XML
 tagline: XML for Phantom — highlighting for the whole family of XML file types, and xmllint formatting for the ones Phantom does not already format.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -66,7 +66,7 @@ The command-line XML tool from libxml2, at `/usr/bin/xmllint` on every macOS ins
 | File types | `.xml`, `.xsd`, `.xsl`, `.xslt`, `.svg`, `.plist`, `.storyboard`, `.xib`, `.csproj`, `.vbproj`, `.props`, `.targets`, `.resx`, `.xaml`, `.wsdl`, `.rss`, `.atom`, `.iml`, `.nuspec`, `.opf` |
 | Language server | None — Phantom ships none for XML |
 | Formatter | `xmllint --format -` for `.csproj`, `.vbproj`, `.props`, `.targets`, `.resx`, `.xaml`, `.wsdl`, `.rss`, `.atom`, `.iml`, `.nuspec`, `.opf` |
-| Editor | Tag, namespace, attribute, entity, CDATA and processing-instruction patterns, `<!-- -->` comments |
+| Editor | TextMate grammars `text.xml` and `text.xml.xsl` (language-xml), with JSP scriptlets handed to the Java extension; `<!-- -->` comment markers |
 | Icon | XML file icon in the sidebar and tabs |
 
 ## Configuration
@@ -148,6 +148,8 @@ The formatter runs as your user, with access to your files, the same as if you s
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammars `text.xml` and `text.xml.xsl` in place of the manifest's token patterns, and declares the Java extension as a dependency for the scriptlets the grammar embeds. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -162,4 +164,4 @@ The formatter runs as your user, with access to your files, the same as if you s
 
 ## License and credits
 
-The extension is released under the MIT License. [xmllint](https://gitlab.gnome.org/GNOME/libxml2) is part of libxml2, © Daniel Veillard and contributors (MIT), and ships with macOS. XML is a specification of the [W3C](https://www.w3.org/XML/); this extension is not affiliated with either project.
+The extension is released under the MIT License. [xmllint](https://gitlab.gnome.org/GNOME/libxml2) is part of libxml2, © Daniel Veillard and contributors (MIT), and ships with macOS. XML is a specification of the [W3C](https://www.w3.org/XML/); this extension is not affiliated with either project. The grammars are [language-xml](https://github.com/atom/language-xml) by the Atom contributors (MIT), in the JSON form Visual Studio Code ships.

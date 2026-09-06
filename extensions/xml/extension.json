@@ -2,11 +2,14 @@
   "schemaVersion": 1,
   "id": "phantom.xml",
   "name": "XML",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "XML: highlighting for the whole family of XML file types, and xmllint formatting for the ones Phantom does not already format.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/xml",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.java"
+  ],
   "contributes": {
     "languages": [
       {
@@ -39,12 +42,6 @@
         "blockComment": {
           "open": "<!--",
           "close": "-->"
-        },
-        "syntax": {
-          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
-          "type": "</?[A-Za-z_][A-Za-z0-9_.:-]*|<\\?[A-Za-z-]+|<!\\[CDATA\\[|\\]\\]>",
-          "attribute": "\\b[A-Za-z_:][-A-Za-z0-9_:.]*(?=\\s*=)",
-          "function": "&[A-Za-z][A-Za-z0-9]*;|&#[0-9]+;|&#x[0-9A-Fa-f]+;"
         }
       }
     ],
@@ -73,6 +70,21 @@
         ],
         "installHint": "Ships with macOS at /usr/bin/xmllint",
         "documentationURL": "https://gnome.pages.gitlab.gnome.org/libxml2/xmllint.html"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "text.xml",
+        "path": "syntaxes/xml.tmLanguage.json",
+        "languageId": "xml",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/xml/syntaxes/xml.tmLanguage.json"
+      },
+      {
+        "scopeName": "text.xml.xsl",
+        "path": "syntaxes/xsl.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/xml/syntaxes/xsl.tmLanguage.json"
       }
     ]
   }

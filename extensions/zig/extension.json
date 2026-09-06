@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.zig",
   "name": "Zig",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Zig: highlighting for .zig and .zon, and the ZLS language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/zig",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -18,65 +18,8 @@
         ],
         "category": "compiled",
         "icon": "icons/zig.png",
-        "keywords": [
-          "align",
-          "allowzero",
-          "and",
-          "anyframe",
-          "anytype",
-          "asm",
-          "async",
-          "await",
-          "break",
-          "catch",
-          "comptime",
-          "const",
-          "continue",
-          "defer",
-          "else",
-          "enum",
-          "errdefer",
-          "error",
-          "export",
-          "extern",
-          "fn",
-          "for",
-          "if",
-          "inline",
-          "noalias",
-          "nosuspend",
-          "opaque",
-          "or",
-          "orelse",
-          "packed",
-          "pub",
-          "resume",
-          "return",
-          "struct",
-          "suspend",
-          "switch",
-          "test",
-          "threadlocal",
-          "try",
-          "union",
-          "unreachable",
-          "usingnamespace",
-          "var",
-          "volatile",
-          "while",
-          "true",
-          "false",
-          "null",
-          "undefined"
-        ],
         "lineComment": "//",
         "blockComment": null,
-        "syntax": {
-          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|\\\\\\\\[^\\n]*",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParen"
-        },
         "server": {
           "command": "zls",
           "args": [],
@@ -93,6 +36,15 @@
             "documentationURL": "https://zigtools.org/zls/install/"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.zig",
+        "path": "syntaxes/zig.tmLanguage.json",
+        "languageId": "zig",
+        "license": "MIT",
+        "grammarSource": "https://github.com/ziglang/vscode-zig/blob/38309f0b1dc0c1bdc4b23e78594302bf28ef43d1/syntaxes/zig.tmLanguage.json"
       }
     ]
   }
