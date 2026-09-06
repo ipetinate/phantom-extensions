@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.dracula",
+  "name": "Dracula Phantom",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Dracula palette, applied to Phantom's window as well as its terminal.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dracula",
+  "phantom": "0.16.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Dracula Phantom",
+        "path": "themes/dracula.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

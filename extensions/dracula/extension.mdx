@@ -1,0 +1,142 @@
+---
+title: Dracula Phantom
+tagline: The Dracula palette, applied to Phantom's splits, search bar, title bar and app icon as well as its terminal.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [theme, dracula, dark, colours, appearance]
+screenshots:
+  - media/palette.png
+---
+
+A dark theme for Phantom built on the Dracula palette. It is the first theme extension in this registry, so it is worth saying what a theme extension is: a file of colour settings and nothing else. It installs no program, starts no process and asks for no approval. Install it, pick it in Settings, and that is all it does.
+
+Phantom already ships Ghostty's Dracula, and that theme sets the sixteen terminal colours, the background, the foreground, the cursor and the selection. This one sets those to the same values, from the same specification, and then keeps going: the divider between splits, the unfocused half of a split, the search bar, the window title bar, and the ghost and screen of the macOS app icon. That is the reason to install it, and the reason it carries a different name — both appear in the theme picker, and picking the wrong one is a real mistake to be able to avoid.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="The official palette" icon="brush">
+      Every value comes from the Dracula specification: the sixteen ANSI colours, background `#282a36`, foreground `#f8f8f2`, selection `#44475a`, comment `#6272a4`, and orange `#ffb86c` for the current search match. Nothing here was picked by eye.
+    </Feature>
+    <Feature title="Phantom's own surfaces" icon="package">
+      Eleven settings beyond the terminal colours: the split divider, the fill behind an unfocused split, four search colours, two title bar colours, the bold colour, and the two colours of the macOS app icon.
+    </Feature>
+    <Feature title="Nothing to install" icon="check">
+      A theme file may set colour keys and no others, and Phantom drops a theme that tries anything else. There is no command in this extension, so no trust prompt and no process.
+    </Feature>
+  </Features>
+  <Screenshot src="media/palette.png" alt="The sixteen Dracula ANSI colours as a grid of swatches above a schematic split window showing the divider, the search highlight and the title bar" caption="The palette, and the window surfaces the theme reaches" />
+</Showcase>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Dracula Phantom.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Dracula Phantom">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Tell it apart from the built-in Dracula">
+    The Dark group also holds **Dracula** and **Dracula+**, which ship with Phantom. Those two set the terminal colours only. The card under Extension Themes is this one.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Dracula Phantom, dark |
+| Terminal | 16 ANSI colours, background, foreground, bold, cursor and cursor text |
+| Selection | Selection background and foreground |
+| Splits | Divider colour, and the fill behind an unfocused split |
+| Search | Background and foreground of a match, and of the selected match |
+| Window | Title bar background and foreground |
+| App icon | Ghost colour and screen colour of the macOS icon |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The theme file">
+
+The whole extension is `themes/dracula.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only.
+
+```ini
+background = #282a36
+foreground = #f8f8f2
+palette = 4=#bd93f9
+
+selection-background = #44475a
+split-divider-color = #44475a
+search-background = #f1fa8c
+search-selected-background = #ffb86c
+window-titlebar-background = #21222c
+macos-icon-ghost-color = #bd93f9
+```
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Where the colours come from">
+
+| Role | Colour | Dracula name |
+|---|---|---|
+| Background | `#282a36` | Background |
+| Foreground | `#f8f8f2` | Foreground |
+| Selection, split divider | `#44475a` | Selection |
+| Bright black, unfocused split | `#21222c` / `#6272a4` | ANSI Black, Comment |
+| Search match | `#f1fa8c` | Yellow |
+| Selected search match | `#ffb86c` | Orange |
+| App icon ghost | `#bd93f9` | Purple |
+
+The ANSI sixteen are the specification's own list and are identical to the values Ghostty's Dracula uses, so switching between the two themes never changes the colour of your shell output.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/dracula.conf`, change what you want, and either point a new entry in `extension.json` at it or drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Two cards are called Dracula">
+
+Three, in fact: **Dracula** and **Dracula+** ship with Phantom and sit in the Dark group, and **Dracula Phantom** is this one, under Extension Themes. The names differ so the cards can be told apart, because Phantom lists bundled and contributed themes side by side.
+
+</Details>
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar or the app icon did not change">
+
+Those two keys reach the window chrome and the macOS icon, which some system settings override. The terminal colours apply immediately in every case; the chrome follows the window's own appearance.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the Dracula palette as a Phantom theme, including the split, search, title bar and app icon colours.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette is [Dracula](https://draculatheme.com), created by Zeno Rocha and the Dracula contributors, and released under the MIT License, © 2023 Dracula Theme. The colour values here are taken from the [Dracula specification](https://spec.draculatheme.com). This extension is an independent theme file built on that palette and is not affiliated with or endorsed by the Dracula project.
