@@ -1,7 +1,7 @@
 ---
 title: XML
 tagline: XML for Phantom — highlighting for the whole family of XML file types, and xmllint formatting for the ones Phantom does not already format.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -147,6 +147,10 @@ The formatter runs as your user, with access to your files, the same as if you s
 </Callout>
 
 ## Changelog
+
+**1.0.7** — The formatter claims `.xml` itself, and `.xsd`, `.xsl`,
+`.xslt` and `.svg` with it. It listed only the twelve project-file
+extensions, so the plainest XML file there is went unformatted.
 
 **1.0.6** — Ships the TextMate grammars `text.xml` and `text.xml.xsl` in place of the manifest's token patterns, and declares the Java extension as a dependency for the scriptlets the grammar embeds. Colouring now needs Phantom 0.17.0.
 
