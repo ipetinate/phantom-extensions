@@ -4,6 +4,7 @@ import { collect } from "./collect.ts";
 import { ManifestError } from "./errors.ts";
 import { ROOT } from "./paths.ts";
 import { checkReleases, ReleaseCheckError } from "./releases.ts";
+import { manifestWarnings } from "./warnings.ts";
 
 const DEFAULT_REPO = "ipetinate/phantom-extensions";
 
@@ -94,6 +95,7 @@ async function main(argv: string[]): Promise<number> {
       for (const { manifest, card } of collect()) {
         const size = (card.mediaBytes / (1024 * 1024)).toFixed(2);
         process.stdout.write(`ok  ${manifest.id} ${manifest.version}  doc:yes  media:${card.media.length} files, ${size} MiB\n`);
+        for (const warning of manifestWarnings(manifest)) process.stdout.write(`warn  ${manifest.id}  ${warning}\n`);
       }
       return 0;
     }

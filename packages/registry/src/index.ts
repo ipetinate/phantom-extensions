@@ -73,4 +73,5 @@ export { ReleaseCheckError, checkReleases, publishedAssets, readRows } from "./r
 export { MEDIA_SUFFIXES, suffixOf } from "./suffixes.ts";
 export { MAX_VERSIONS, compareVersions, fetchPublishedIndex, indexURL, mergeVersions, publishedVersions } from "./versions.ts";
 export type { Download, VersionEntry } from "./versions.ts";
+export { manifestWarnings } from "./warnings.ts";
 export { buildZip } from "./zip.ts";
