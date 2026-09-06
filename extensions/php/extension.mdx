@@ -1,0 +1,145 @@
+---
+title: PHP
+tagline: PHP language support for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [php, language, lsp, intelephense, composer]
+screenshots:
+  - media/editor.png
+---
+
+PHP support for the Phantom editor. The extension teaches Phantom the language — `.php` and `.phtml` files, the modern keyword set, variables and PHP 8 attributes — and connects **Intelephense** for diagnostics, hover, completion, navigation and formatting. The server is optional: highlighting works the moment the extension is installed.
+
+Intelephense is free to use, with a set of premium features unlocked by a one-time licence key. Everything in the list below works either way, except where it says otherwise.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords through PHP 8, including `enum`, `readonly`, `match`, `fn` and `never`; class names, `$variables`, `#[Attributes]`, strings and numbers. Comments with `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics as you type — undefined symbols, undefined variables, argument counts, type errors, unreachable code and deprecations — plus completion, hover, signature help, go to definition, find references and rename. The server indexes your `vendor` directory, so Composer dependencies resolve.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Format on demand or on save, served by Intelephense. No second tool has to be installed.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A PHP file open in Phantom with a namespace declaration, a readonly class, typed properties and one diagnostic from Intelephense" caption="Highlighting, an attribute and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want diagnostics and formatting; the extension detects it on your `PATH`.
+
+<Requirement command="intelephense" install="npm install -g intelephense" url="https://intelephense.com/">
+The PHP language server by Ben Mewburn. Without it the highlighter still works. There is no Homebrew formula; it is published on npm, so npm or pnpm installs it. It needs Node, not PHP, to run.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to PHP.
+  </Step>
+  <Step title="Install the server">
+    Run the npm command above. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a PHP file">
+    The first time a project needs intelephense, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Let it index">
+    On the first run the server reads the project and its `vendor` directory. Completion across Composer packages arrives once that finishes.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.php`, `.phtml` — the two Intelephense associates by default |
+| Language server | `intelephense --stdio` |
+| Formatter | Intelephense's own, built into the language server |
+| Editor | The PHP 8 keyword set, `//` and `/* */` comment markers, and patterns for `$variables` and `#[Attributes]` |
+| Icon | PHP file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Server settings, and what Phantom can send">
+
+Intelephense takes its settings from the editor rather than from a file in your project. Phantom answers the server's `workspace/configuration` requests with nulls, which means "no opinion, use your defaults" — so the server runs on the defaults below until you send something.
+
+| Setting | Default |
+|---|---|
+| `intelephense.environment.phpVersion` | `8.5.0` in the current release; it tracks the newest PHP the server knows |
+| `intelephense.files.maxSize` | `1000000` bytes; a larger file is not indexed |
+| `intelephense.files.associations` | `["*.php", "*.phtml"]` |
+| `intelephense.files.exclude` | Version-control directories and the usual noise |
+| `intelephense.diagnostics.exclude` | `{"**/vendor/**": ["*"]}` — dependencies are indexed but not reported on |
+| `intelephense.diagnostics.undefinedVariables` | `on` |
+| `intelephense.diagnostics.strictTypes` | `false` |
+| `intelephense.format.enable` | `true` |
+| `intelephense.completion.maxItems` | `100` |
+| `intelephense.telemetry.enabled` | `false` |
+
+To send your own, open Settings → Language Servers, select Intelephense, fill in the **initializationOptions (JSON)** field and press **Restart Server**.
+
+</Details>
+
+<Details summary="A note on `#` comments">
+
+PHP accepts three comment forms: `//`, `/* */` and `#`. A contributed language definition declares one line marker and one block pair, and this extension declares `//` and `/* */` — the two that a modern codebase and the PSR style guides use.
+
+The consequence is exact and small: a comment written with `#` is not painted as a comment by this extension. `#[Attribute]` is painted, because it is matched as an attribute rather than as a comment, and that is the case the choice was made for. Phantom's compiled-in PHP rules do read all three; if a codebase leans on `#` comments, that is a reason to prefer them over this extension.
+
+</Details>
+
+<Details summary="The premium licence">
+
+Some features are premium: rename, find all implementations, go to type definition, go to declaration, type hierarchy, code lens, inlay hints, document links, smart select, code folding, automatic PHPDoc, the code actions that import a symbol or implement abstract methods, and `@mixin` support. Everything else is free and, in the author's words, always will be. A licence is a one-time purchase, $35 for personal use and $75 per user for business, and it must be activated over https before use.
+
+The key is registered through the editor. Phantom has no command for it; send `licenceKey` in the **initializationOptions (JSON)** field described above, or activate the key once from a client that has the command.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says intelephense is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. Intelephense runs on Node, so a Node installed only inside a version manager has to be active in your login shell too.
+
+</Details>
+
+<Details summary="Everything from Composer is reported as undefined">
+
+The `vendor` directory was not indexed. Check that `composer install` has run, and that the project root Phantom opened is the directory holding `composer.json`. A file opened outside any repository is served without a workspace, so nothing around it is indexed.
+
+</Details>
+
+<Details summary="A large generated file is ignored">
+
+Files above `intelephense.files.maxSize`, one megabyte by default, are skipped. Raise it through the initializationOptions field, or exclude the generated file so the rest of the project indexes faster.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.php` and `.phtml`, with Intelephense wiring and install commands for npm and pnpm.
+
+## License and credits
+
+The extension is released under the MIT License. [Intelephense](https://intelephense.com/) is © Ben Mewburn and is **not** open source: it is distributed under its own licence, free to use with paid premium features. PHP is © The PHP Group; this extension is not affiliated with the PHP project.
