@@ -887,3 +887,29 @@
     grid-template-columns: repeat(4, minmax(0, 7.5em));
   }
 }
+
+.ph-unsupported {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5em;
+  margin: 0 0 1em;
+  padding: 0.6em 0.9em;
+  border: 1px dashed var(--ph-border);
+  border-radius: 8px;
+  color: var(--ph-muted);
+  font-size: 0.9em;
+}
+
+.ph-unsupported-name {
+  font-family: var(--ph-font-mono);
+  color: var(--ph-fg);
+}
+
+.ph-unsupported-body {
+  flex-basis: 100%;
+}
+
+.ph-unsupported-body > :last-child {
+  margin-bottom: 0;
+}

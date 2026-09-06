@@ -50,17 +50,25 @@ describe("viewer", () => {
     expect(document.querySelector(".ph-body h2")?.textContent).toBe("Hello");
   });
 
-  it("reports validation failures with a position", async () => {
+  it("renders past a component it does not know and names it in the warnings", async () => {
     const messages = await loadViewer(true);
     await act(async () => {
       window.phantomViewer.render({ source: "Text\n\n<Unknown />\n", baseURL: "file:///ext/a/" });
     });
     await settle();
     const last = messages.at(-1)!;
-    expect(last.type).toBe("failed");
-    expect(last.line).toBe(3);
-    expect(last.column).toBe(1);
-    expect(String(last.message)).toContain("<Unknown>");
+    expect(last.type).toBe("rendered");
+    expect(JSON.stringify(last.warnings)).toContain("<Unknown>");
+    expect(JSON.stringify(last.warnings)).toContain("line 3");
+  });
+
+  it("still reports a document it cannot parse as failed", async () => {
+    const messages = await loadViewer(true);
+    await act(async () => {
+      window.phantomViewer.render({ source: "<Callout kind={1} />\n", baseURL: "file:///ext/a/" });
+    });
+    await settle();
+    expect(messages.at(-1)!.type).toBe("failed");
   });
 
   it("posts open for link clicks and prevents navigation when the bridge exists", async () => {

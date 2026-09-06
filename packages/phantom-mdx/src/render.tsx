@@ -5,7 +5,7 @@ import { Component, useEffect, useLayoutEffect, useMemo, useRef, type ReactNode 
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { componentMap } from "./components/index.ts";
+import { componentMap, unsupported } from "./components/index.ts";
 import { CodeBlock } from "./components/CodeBlock.tsx";
 
 const renderComponents = { ...componentMap, pre: CodeBlock };
@@ -33,7 +33,7 @@ export interface DocumentProps {
 }
 
 type Compiled =
-  | { kind: "ok"; content: ReactNode }
+  | { kind: "ok"; content: ReactNode; violations: Violation[] }
   | { kind: "invalid"; violations: Violation[]; failure: RenderFailure }
   | { kind: "error"; failure: RenderFailure };
 
@@ -47,13 +47,28 @@ interface NamedExpression {
   name?: string;
 }
 
+/// A violation the document cannot survive.
+///
+/// Only a parse failure qualifies: there is no tree to draw. Everything else
+/// costs the document the node it names and nothing more, because a reader's
+/// Phantom can be older than the document it opens, and refusing the page for
+/// one unknown name loses everything the reader could still have read.
+const FATAL_CODES = new Set(["syntax"]);
+
+function isFatal(violation: Violation): boolean {
+  return FATAL_CODES.has(violation.code);
+}
+
 function componentEvaluater(): Evaluater {
   return {
     evaluateExpression(expression: NamedExpression) {
-      if (expression.type === "Identifier" && expression.name && Object.prototype.hasOwnProperty.call(componentMap, expression.name)) {
-        return componentMap[expression.name];
+      if (expression.type === "Identifier" && expression.name) {
+        if (Object.prototype.hasOwnProperty.call(componentMap, expression.name)) {
+          return componentMap[expression.name];
+        }
+        return unsupported(expression.name);
       }
-      throw new Error(`the document may not evaluate ${expression.type === "Identifier" ? `<${expression.name}>` : expression.type}`);
+      throw new Error(`the document may not evaluate ${expression.type}`);
     },
     evaluateProgram() {
       throw new Error("import and export are not allowed");
@@ -86,12 +101,13 @@ export function compile(source: string): Compiled {
     return { kind: "invalid", violations: [violation], failure: violation };
   }
   const violations = validateTree(tree);
-  if (violations.length > 0) {
-    const first = violations[0] as Violation;
-    return { kind: "invalid", violations, failure: { message: first.message, line: first.line, column: first.column } };
+  const fatal = violations.filter(isFatal);
+  if (fatal.length > 0) {
+    const first = fatal[0] as Violation;
+    return { kind: "invalid", violations: fatal, failure: { message: first.message, line: first.line, column: first.column } };
   }
   try {
-    return { kind: "ok", content: renderTree(tree) };
+    return { kind: "ok", content: renderTree(tree), violations };
   } catch (error) {
     return { kind: "error", failure: { message: error instanceof Error ? error.message : String(error) } };
   }
@@ -160,7 +176,10 @@ export function Document({ source, baseURL, theme, onLink, onCopy, cover, onRend
     } else if (caught.current) {
       onFailed?.(caught.current);
     } else {
-      onRendered?.([...warnings]);
+      const reported = compiled.kind === "ok"
+        ? compiled.violations.map((v) => `line ${v.line}: ${v.message}`)
+        : [];
+      onRendered?.([...reported, ...warnings]);
     }
   }, [compiled, warnings, onRendered, onFailed]);
 

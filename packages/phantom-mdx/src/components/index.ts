@@ -1,3 +1,4 @@
+export { Unsupported, unsupported } from "./Unsupported.tsx";
 import type { ComponentType } from "react";
 import { Badge } from "./Badge.tsx";
 import { Callout } from "./Callout.tsx";

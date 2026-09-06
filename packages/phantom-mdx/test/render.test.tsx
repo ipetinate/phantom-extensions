@@ -66,15 +66,23 @@ describe("Document", () => {
     expect(onRendered.mock.calls[0]![0][0]).toContain("Cover");
   });
 
-  it("reports validation failures instead of rendering", async () => {
+  it("draws the rest of the document and marks the part it cannot draw", async () => {
     const onFailed = vi.fn();
     const onRendered = vi.fn();
     await act(async () => {
-      render(<Document source={"# Title\n\n<Unknown />\n"} baseURL={base} onFailed={onFailed} onRendered={onRendered} />);
+      render(<Document source={"## Title\n\nkept\n\n<Unknown />\n"} baseURL={base} onFailed={onFailed} onRendered={onRendered} />);
     });
-    expect(onRendered).not.toHaveBeenCalled();
-    expect(onFailed).toHaveBeenCalledWith({ message: "a level 1 heading is not allowed; the title comes from the front matter", line: 1, column: 1 });
-    expect(document.querySelector(".ph-failure")).not.toBeNull();
+    expect(onFailed).not.toHaveBeenCalled();
+    expect(document.querySelector(".ph-body")?.textContent).toContain("kept");
+    expect(document.querySelector(".ph-unsupported")?.textContent).toContain("<Unknown>");
+    expect(onRendered.mock.calls[0]?.[0]?.join(" ")).toContain("unknown component <Unknown>");
+  });
+
+  it("refuses a document it cannot parse at all", async () => {
+    const onFailed = vi.fn();
+    await act(async () => {
+      render(<Document source={"<Callout kind={1} />\n"} baseURL={base} onFailed={onFailed} />);
+    });
     expect(document.querySelector(".ph-body")).toBeNull();
   });
 
