@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-detuned",
+  "name": "Detuned",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Detuned terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/detuned",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Detuned",
+        "path": "themes/detuned.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

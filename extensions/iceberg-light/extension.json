@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-iceberg-light",
+  "name": "Iceberg Light",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Iceberg Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/iceberg-light",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Iceberg Light",
+        "path": "themes/iceberg-light.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

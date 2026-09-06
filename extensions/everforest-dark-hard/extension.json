@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-everforest-dark-hard",
+  "name": "Everforest Dark Hard",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Everforest Dark Hard terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/everforest-dark-hard",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Everforest Dark Hard",
+        "path": "themes/everforest-dark-hard.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

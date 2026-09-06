@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-apple-system-colors",
+  "name": "Apple System Colors",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Apple System Colors terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/apple-system-colors",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Apple System Colors",
+        "path": "themes/apple-system-colors.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

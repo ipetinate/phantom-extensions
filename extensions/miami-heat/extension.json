@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-miami-heat",
+  "name": "Miami Heat",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Miami Heat terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/miami-heat",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Miami Heat",
+        "path": "themes/miami-heat.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-builtin-pastel-dark",
+  "name": "Builtin Pastel Dark",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Builtin Pastel Dark terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/builtin-pastel-dark",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Builtin Pastel Dark",
+        "path": "themes/builtin-pastel-dark.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

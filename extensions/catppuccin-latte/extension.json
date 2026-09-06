@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-catppuccin-latte",
+  "name": "Catppuccin Latte",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Catppuccin Latte terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/catppuccin-latte",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Catppuccin Latte",
+        "path": "themes/catppuccin-latte.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

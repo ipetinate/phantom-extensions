@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-seedflip-glacier",
+  "name": "SeedFlip Glacier",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The SeedFlip Glacier terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/seedflip-glacier",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "SeedFlip Glacier",
+        "path": "themes/seedflip-glacier.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

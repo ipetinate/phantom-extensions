@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-patina-lichen",
+  "name": "Patina Lichen",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Patina Lichen terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/patina-lichen",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Patina Lichen",
+        "path": "themes/patina-lichen.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

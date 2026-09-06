@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-github-dark-default",
+  "name": "GitHub Dark Default",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The GitHub Dark Default terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/github-dark-default",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "GitHub Dark Default",
+        "path": "themes/github-dark-default.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

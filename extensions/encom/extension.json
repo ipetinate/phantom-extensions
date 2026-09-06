@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-encom",
+  "name": "ENCOM",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The ENCOM terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/encom",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "ENCOM",
+        "path": "themes/encom.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

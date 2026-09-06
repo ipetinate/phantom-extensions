@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-12-bit-rainbow",
+  "name": "12-bit Rainbow",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The 12-bit Rainbow terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/12-bit-rainbow",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "12-bit Rainbow",
+        "path": "themes/12-bit-rainbow.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

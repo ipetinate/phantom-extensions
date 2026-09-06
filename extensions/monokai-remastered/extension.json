@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-monokai-remastered",
+  "name": "Monokai Remastered",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Monokai Remastered terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/monokai-remastered",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Monokai Remastered",
+        "path": "themes/monokai-remastered.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

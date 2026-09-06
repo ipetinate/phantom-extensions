@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-modus-vivendi-tritanopia",
+  "name": "Modus Vivendi Tritanopia",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Modus Vivendi Tritanopia terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/modus-vivendi-tritanopia",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Modus Vivendi Tritanopia",
+        "path": "themes/modus-vivendi-tritanopia.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

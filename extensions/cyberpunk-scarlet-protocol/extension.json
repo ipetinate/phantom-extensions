@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-cyberpunk-scarlet-protocol",
+  "name": "Cyberpunk Scarlet Protocol",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Cyberpunk Scarlet Protocol terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/cyberpunk-scarlet-protocol",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Cyberpunk Scarlet Protocol",
+        "path": "themes/cyberpunk-scarlet-protocol.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

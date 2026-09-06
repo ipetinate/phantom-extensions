@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-aardvark-blue",
+  "name": "Aardvark Blue",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Aardvark Blue terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/aardvark-blue",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Aardvark Blue",
+        "path": "themes/aardvark-blue.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

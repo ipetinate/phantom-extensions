@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-monokai-pro-light",
+  "name": "Monokai Pro Light",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Monokai Pro Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/monokai-pro-light",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Monokai Pro Light",
+        "path": "themes/monokai-pro-light.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

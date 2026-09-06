@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-challenger-deep",
+  "name": "Challenger Deep",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Challenger Deep terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/challenger-deep",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Challenger Deep",
+        "path": "themes/challenger-deep.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

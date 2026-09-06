@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-3024-day",
+  "name": "3024 Day",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The 3024 Day terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/3024-day",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "3024 Day",
+        "path": "themes/3024-day.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

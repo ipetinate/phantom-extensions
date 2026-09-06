@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-github-light-default",
+  "name": "GitHub Light Default",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The GitHub Light Default terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/github-light-default",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "GitHub Light Default",
+        "path": "themes/github-light-default.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

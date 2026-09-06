@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-purple-portal",
+  "name": "Purple Portal",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Purple Portal terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/purple-portal",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Purple Portal",
+        "path": "themes/purple-portal.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

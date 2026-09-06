@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-base16-icy",
+  "name": "base16-icy",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The base16-icy terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/base16-icy",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "base16-icy",
+        "path": "themes/base16-icy.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

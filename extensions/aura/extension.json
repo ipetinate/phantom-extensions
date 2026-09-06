@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-aura",
+  "name": "Aura",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Aura terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/aura",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Aura",
+        "path": "themes/aura.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

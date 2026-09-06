@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-fahrenheit",
+  "name": "Fahrenheit",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Fahrenheit terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/fahrenheit",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Fahrenheit",
+        "path": "themes/fahrenheit.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

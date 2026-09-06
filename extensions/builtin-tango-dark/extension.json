@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-builtin-tango-dark",
+  "name": "Builtin Tango Dark",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Builtin Tango Dark terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/builtin-tango-dark",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Builtin Tango Dark",
+        "path": "themes/builtin-tango-dark.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

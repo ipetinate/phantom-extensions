@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-tokyonight-day",
+  "name": "TokyoNight Day",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The TokyoNight Day terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/tokyonight-day",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "TokyoNight Day",
+        "path": "themes/tokyonight-day.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

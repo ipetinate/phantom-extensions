@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-purple-rain",
+  "name": "Purple Rain",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Purple Rain terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/purple-rain",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Purple Rain",
+        "path": "themes/purple-rain.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

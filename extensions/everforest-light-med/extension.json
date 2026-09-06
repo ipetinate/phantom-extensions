@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-everforest-light-med",
+  "name": "Everforest Light Med",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Everforest Light Med terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/everforest-light-med",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Everforest Light Med",
+        "path": "themes/everforest-light-med.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

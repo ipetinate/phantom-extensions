@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-blue-matrix",
+  "name": "Blue Matrix",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Blue Matrix terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/blue-matrix",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Blue Matrix",
+        "path": "themes/blue-matrix.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

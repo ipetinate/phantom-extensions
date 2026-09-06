@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-seedflip-amethyst",
+  "name": "SeedFlip Amethyst",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The SeedFlip Amethyst terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/seedflip-amethyst",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "SeedFlip Amethyst",
+        "path": "themes/seedflip-amethyst.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

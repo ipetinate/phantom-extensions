@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-material-ocean",
+  "name": "Material Ocean",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Material Ocean terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/material-ocean",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Material Ocean",
+        "path": "themes/material-ocean.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}

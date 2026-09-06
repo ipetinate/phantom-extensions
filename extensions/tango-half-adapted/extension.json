@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-tango-half-adapted",
+  "name": "Tango Half Adapted",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Tango Half Adapted terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/tango-half-adapted",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Tango Half Adapted",
+        "path": "themes/tango-half-adapted.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

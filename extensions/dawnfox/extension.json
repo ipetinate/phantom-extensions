@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-dawnfox",
+  "name": "Dawnfox",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Dawnfox terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dawnfox",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Dawnfox",
+        "path": "themes/dawnfox.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.theme-grape",
+  "name": "Grape",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "The Grape terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/grape",
+  "phantom": "0.17.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Grape",
+        "path": "themes/grape.conf",
+        "appearance": "dark"
+      }
+    ]
+  }
+}
