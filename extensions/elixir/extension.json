@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.elixir",
   "name": "Elixir",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "Isac Petinate",
   "description": "Elixir, EEx and HEEx: highlighting and ElixirLS.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/elixir",
@@ -123,6 +123,37 @@
         "languageId": "heex",
         "license": "MIT",
         "grammarSource": "https://github.com/elixir-lsp/vscode-elixir-ls/blob/c98bbfe025fc85205b554571fb687c901f702649/syntaxes/html-eex.json"
+      }
+    ],
+    "formatters": [
+      {
+        "id": "mix-format",
+        "name": "mix format",
+        "command": "mix",
+        "args": [
+          "format",
+          "-"
+        ],
+        "extensions": [
+          "ex",
+          "exs"
+        ],
+        "projectMarkers": [
+          "mix.exs"
+        ],
+        "workingDirectory": "marker",
+        "installHint": "brew install elixir",
+        "documentationURL": "https://hexdocs.pm/mix/Mix.Tasks.Format.html",
+        "install": {
+          "commands": [
+            {
+              "manager": "brew",
+              "command": "brew install elixir",
+              "uninstall": "brew uninstall elixir"
+            }
+          ],
+          "documentationURL": "https://elixir-lang.org/install.html"
+        }
       }
     ]
   }

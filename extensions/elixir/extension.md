@@ -1,7 +1,7 @@
 ---
 title: Elixir
 tagline: Elixir, EEx and HEEx for Phantom — highlighting from a grammar, diagnostics and completion from ElixirLS.
-version: 1.0.0
+version: 1.1.0
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -70,9 +70,11 @@ project for its build; add that directory to `.gitignore`.
 3. Open a `.ex`, `.exs`, `.eex` or `.heex` file. It is coloured at once. The
    first time a project needs `elixir-ls`, Phantom asks before starting it and
    remembers your answer for that extension.
-4. Formatting comes from the server: press ⌘ ⇧ F, or turn on Format on Save
-   under Settings → Editor, and `mix format` runs with the project's
-   `.formatter.exs`.
+4. Formatting: press ⌘ ⇧ F, or turn on Format on Save under Settings →
+   Editor. The extension contributes `mix format` directly, run in the
+   directory that holds `mix.exs`, so it works whether or not the server has
+   finished loading the project. A file that does not parse is not formatted:
+   the Elixir formatter refuses text it cannot read, and says nothing.
 
 ## What the extension adds
 
@@ -80,7 +82,7 @@ project for its build; add that directory to `.gitignore`.
 | --- | --- |
 | File types | `.ex`, `.exs`, `mix.lock` as Elixir; `.eex`, `.leex` as Embedded Elixir; `.heex` as HEEx |
 | Language server | `elixir-ls` (stdio), for all three languages |
-| Formatter | `mix format`, through the language server |
+| Formatter | `mix format`, contributed directly and through the language server |
 | Editor | TextMate grammars `source.elixir`, `text.elixir` and `text.html.elixir` (vscode-elixir-ls), with the HTML of a HEEx template handed to the HTML extension; `#`, `<%# %>` and `<%!-- --%>` comment markers |
 | Icon | A droplet, drawn for this extension, in the sidebar and tabs |
 
@@ -126,6 +128,10 @@ extension's manifest or the program's path changes. You can review or change
 the answer under Settings → Extensions.
 
 ## Changelog
+
+**1.1.0** — A contributed `mix format` formatter, so formatting no longer
+depends on the language server having loaded the project. It runs in the
+directory holding `mix.exs` and reads that project's `.formatter.exs`.
 
 **1.0.0** — Initial release: three language definitions, the ElixirLS grammars
 for Elixir, EEx and HEEx, and `elixir-ls` wiring with install and uninstall
