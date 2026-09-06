@@ -3,6 +3,7 @@ import path from "node:path";
 import { fail } from "./checks.ts";
 import { ManifestError } from "./errors.ts";
 import { loadDocument, type DocumentCard } from "./document.ts";
+import { inlineIcon } from "./icon.ts";
 import { isDirectory } from "./files.ts";
 import { checkLayout } from "./layout.ts";
 import { checkMedia, type MediaEntry } from "./media.ts";
@@ -10,6 +11,7 @@ import { loadManifest, manifestIcons, manifestTools, type Manifest, type Tool } 
 import { describe, EXTENSIONS } from "./paths.ts";
 
 export interface Card extends DocumentCard {
+  iconData: string | null;
   media: MediaEntry[];
   mediaBytes: number;
   tools: Tool[];
@@ -19,6 +21,10 @@ export interface Collected {
   directory: string;
   manifest: Manifest;
   card: Card;
+}
+
+export function iconPath(manifest: Manifest, card: DocumentCard): string | null {
+  return card.icon ?? manifestIcons(manifest)[0] ?? null;
 }
 
 export function checkIcon(directory: string, manifest: Manifest, card: DocumentCard): void {
@@ -45,7 +51,13 @@ export function collect(extensionsRoot: string = EXTENSIONS): Collected[] {
     collected.push({
       directory,
       manifest,
-      card: { ...document, media: media.entries, mediaBytes: media.bytes, tools: manifestTools(directory, manifest) },
+      card: {
+        ...document,
+        iconData: inlineIcon(directory, iconPath(manifest, document)),
+        media: media.entries,
+        mediaBytes: media.bytes,
+        tools: manifestTools(directory, manifest),
+      },
     });
   }
   if (collected.length === 0) throw new ManifestError("no extensions found");
