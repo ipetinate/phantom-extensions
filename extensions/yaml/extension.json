@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.yaml",
+  "name": "YAML",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "YAML: highlighting, yaml-language-server and schema validation.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/yaml",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "yaml",
+        "name": "YAML",
+        "extensions": [
+          "yaml",
+          "yml"
+        ],
+        "category": "data",
+        "icon": "icons/yaml.svg",
+        "lineComment": "#",
+        "keywords": [
+          "true",
+          "false",
+          "null",
+          "yes",
+          "no",
+          "on",
+          "off"
+        ],
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
+          "number": "preset:number",
+          "type": "!![A-Za-z0-9_:/.-]+|![A-Za-z0-9_:/.-]+|&[A-Za-z0-9_-]+|\\*[A-Za-z0-9_-]+",
+          "attribute": "^\\s*[-\\w.$/]+(?=\\s*:)"
+        },
+        "server": {
+          "command": "yaml-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm i -g yaml-language-server",
+          "documentationURL": "https://github.com/redhat-developer/yaml-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "npm",
+                "command": "npm install -g yaml-language-server",
+                "uninstall": "npm rm -g yaml-language-server"
+              },
+              {
+                "manager": "brew",
+                "command": "brew install yaml-language-server",
+                "uninstall": "brew uninstall yaml-language-server"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g yaml-language-server",
+                "uninstall": "pnpm remove -g yaml-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/redhat-developer/yaml-language-server"
+          }
+        }
+      }
+    ]
+  }
+}

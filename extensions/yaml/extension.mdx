@@ -1,0 +1,172 @@
+---
+title: YAML
+tagline: YAML support for Phantom — schema validation, completion, hover and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [yaml, yml, data, schema, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+YAML support for the Phantom editor. The extension teaches Phantom the language — file types, keys, anchors, tags and comments — and connects **yaml-language-server**, the server Red Hat writes and publishes to npm. The server is optional: highlighting works the moment the extension is installed.
+
+The server is worth installing for one reason above the others: it matches your file against a schema and tells you which key is wrong before the pipeline does. It knows several thousand schemas through [SchemaStore](https://www.schemastore.org/), and a file can always name its own.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keys told apart from values, quoted and single-quoted strings, numbers, the boolean and null spellings YAML allows, tags such as `!!str`, anchors and aliases, and `#` comments.
+    </Feature>
+    <Feature title="Schema intelligence" icon="search">
+      Completion for keys and enumerated values, hover with the schema's description, validation with the offending node underlined, document symbols for the outline, and support for multi-document files. YAML 1.2 by default, with 1.1 available.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      The server formats the whole document. Phantom does not claim dynamic registration for formatting, so the server advertises it at startup and Format works as soon as the binary is installed.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A YAML file open in Phantom with highlighted keys, values and a sequence, one key underlined in red and a hover card below it" caption="Highlighting, a schema diagnostic and its hover card in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want more than highlighting; the extension finds it on your `PATH`.
+
+<Requirement command="yaml-language-server" install="npm install -g yaml-language-server" url="https://github.com/redhat-developer/yaml-language-server">
+Schema validation, completion, hover, symbols and formatting. Without it the highlighter still works. Homebrew has the same server as `brew install yaml-language-server`; it needs Node either way.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to YAML.
+  </Step>
+  <Step title="Install the server">
+    Run the npm command above, or open Settings → Languages, select **YAML Language Server** and press **Install**. Phantom picks the binary up without a restart.
+  </Step>
+  <Step title="Point the file at a schema">
+    A `.github/workflows/ci.yml` or a `docker-compose.yml` is recognised by SchemaStore on its own. Anything else takes one comment line — see Configuration.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.yaml`, `.yml` |
+| Language server | `yaml-language-server --stdio` |
+| Formatter | The server's own |
+| Editor | Key, string, number, tag, anchor and alias patterns, `#` comments |
+| Icon | YAML file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Naming a schema from inside the file">
+
+Two forms, both read by the server itself and neither needing anything from the editor. The modeline goes on the first line:
+
+```yaml
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+name: CI
+on:
+  push:
+    branches: [main]
+```
+
+A relative path works the same way, which is what a repository with its own schemas wants:
+
+```yaml
+# yaml-language-server: $schema=../schemas/service.json
+service:
+  name: billing
+  replicas: 3
+```
+
+A top-level `$schema` key does the same job when the format you are writing tolerates the extra key:
+
+```yaml
+$schema: https://www.schemastore.org/dependabot-2.0.json
+version: 2
+```
+
+</Details>
+
+<Details summary="What Phantom sends the server, and what it does not">
+
+Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`. This server reads its settings from those two channels alone — it has no `initializationOptions` fallback — so in Phantom it runs entirely on its own defaults:
+
+| Setting | Default in Phantom |
+|---|---|
+| `yaml.schemaStore.enable` | `true` — SchemaStore is consulted |
+| `yaml.validate` | `true` |
+| `yaml.completion`, `yaml.hover` | `true` |
+| `yaml.format.enable` | `true` |
+| `yaml.format.printWidth` | `80` |
+| `yaml.format.singleQuote` | `false` |
+| `yaml.yamlVersion` | `1.2` |
+| `yaml.maxItemsComputed` | `5000` |
+| `yaml.keyOrdering` | `false` |
+| `yaml.disableAdditionalProperties` | `false` |
+| `yaml.customTags` | none |
+
+The consequences worth knowing: a `yaml.schemas` map cannot be configured from Phantom, so schema selection happens through SchemaStore or the modeline above; a custom tag the server has not been told about is reported as unknown; and the Kubernetes schema, which VS Code selects through `yaml.schemas`, is reached here by naming its URL in the modeline like any other.
+
+</Details>
+
+<Details summary="Formatting, and the width it wraps at">
+
+The formatter is the server's, so its options are the `yaml.format.*` settings above and they hold at their defaults: 80 columns, double quotes, flow collections preserved as written. A repository that wants a different width formats YAML with Prettier instead — Phantom resolves Prettier from the project and prefers it for the files it owns.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Settings shows the language as Shadowed">
+
+Phantom ships its own YAML definition, and the compiled-in registry outranks an extension on purpose: copying a file into a directory must never change a language you already had. The row in Settings → Languages says which claim was taken and by whom, and its Precedence section carries a **Use This Instead of Phantom** button that puts this extension ahead, for this language only, until you say otherwise.
+
+Nothing is broken while the row reads Shadowed. Phantom's own definition already runs `yaml-language-server`, so the schemas, the diagnostics and the formatting are the same either way.
+
+</Details>
+
+<Details summary="No validation in a file that should have a schema">
+
+SchemaStore matches on the file name and, for some entries, on the directory it sits in — `ci.yml` at the root of a repository is not a workflow. Put the modeline above at the top of the file and the guessing stops.
+
+A schema that cannot be fetched leaves the same silence: the server does the fetching, over its own network stack, and reports a failure as a diagnostic.
+
+</Details>
+
+<Details summary="An error on a line that a tool accepts">
+
+Two common causes. A custom tag — `!Ref`, `!GetAtt` in a CloudFormation template — is unknown to the server unless `yaml.customTags` names it, and that setting cannot be reached from Phantom. A document written for YAML 1.1, where `yes` and `no` are booleans, is parsed as 1.2, where they are strings.
+
+</Details>
+
+<Details summary="The editor says yaml-language-server is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. Phantom resolves that `PATH` once per run, so a version manager that moved the npm bin directory after the app started needs a restart.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Fetching a schema is its own network request, not Phantom's. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.yaml` and `.yml`, and yaml-language-server wiring with install commands for npm, Homebrew and pnpm.
+
+## License and credits
+
+The extension is released under the MIT License. [yaml-language-server](https://github.com/redhat-developer/yaml-language-server) is © Red Hat and contributors (MIT). The schemas it matches are hosted by [SchemaStore](https://www.schemastore.org/), which this extension links to and does not redistribute. YAML is a specification of the [YAML project](https://yaml.org/); this extension is not affiliated with any of them.
