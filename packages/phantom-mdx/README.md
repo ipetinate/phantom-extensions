@@ -54,6 +54,8 @@ Props take quoted strings only. A block component starts on its own line; its co
 | `Requirement` | `command` required; `install`; `url` https | Markdown |
 | `Details` | `summary` required | Markdown |
 
+`Requirement` describes a program the extension needs in prose. The manifest says the same thing as data: an `install` block on a language `server`, on a formatter or on an agent, holding one command per package manager (`brew`, `npm`, `pnpm`, `yarn`, `cargo`, `gem`, `pipx`, `go`, `dotnet`, `nix`), an optional `uninstall` beside each, and an https `documentationURL`. Phantom installs from that block; the registry README carries the rules. Keep the two in step when you write both.
+
 Glyphs for `Feature icon`: `bolt`, `book`, `brush`, `bug`, `check`, `code`, `gear`, `globe`, `keyboard`, `lock`, `package`, `plug`, `search`, `sparkles`, `star`, `terminal`.
 
 ### Rules the checker enforces

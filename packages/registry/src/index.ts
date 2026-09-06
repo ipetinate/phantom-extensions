@@ -18,6 +18,8 @@ export { FrontMatterError, ManifestError } from "./errors.ts";
 export { extensionFiles } from "./files.ts";
 export { parseFrontMatter } from "./frontMatter.ts";
 export type { FrontMatter, FrontMatterValue } from "./frontMatter.ts";
+export { INSTALL_MANAGERS, validateInstall } from "./install.ts";
+export type { Install, InstallCommand, InstallManager } from "./install.ts";
 export { checkLayout } from "./layout.ts";
 export {
   MAX_GIF_BYTES,
@@ -28,8 +30,14 @@ export {
   checkMedia,
 } from "./media.ts";
 export type { MediaEntry, MediaReport } from "./media.ts";
-export { CONTRIBUTION_KINDS, loadManifest, manifestIcons, referencedPaths } from "./manifest.ts";
-export type { ContributionKind, Manifest } from "./manifest.ts";
+export {
+  CONTRIBUTION_KINDS,
+  loadManifest,
+  manifestIcons,
+  manifestTools,
+  referencedPaths,
+} from "./manifest.ts";
+export type { ContributionKind, Manifest, Tool } from "./manifest.ts";
 export { EXTENSIONS, ROOT, describe } from "./paths.ts";
 export { ReleaseCheckError, checkReleases, publishedAssets, readRows } from "./releases.ts";
 export { MEDIA_SUFFIXES, suffixOf } from "./suffixes.ts";

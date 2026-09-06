@@ -51,6 +51,7 @@ An index entry carries `download` for the version in this repository, and `versi
 | `contributes.formatters[]` | planned, 0.16.0 |
 | `contributes.themes[]`, `contributes.iconThemes[]` | planned, 0.16.0 |
 | `contributes.agents[]` | planned, 0.16.0 |
+| `install` on a language `server`, on a formatter or on an agent | planned, 0.16.0 |
 | `extension.mdx` or `extension.md`, and the `card` it produces in the index | planned, 0.16.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
@@ -59,9 +60,32 @@ A theme file may set colour keys only (`background`, `foreground`, `palette`, `c
 
 `syntax` takes the token kinds `string`, `number`, `type`, `function`, `attribute`. Each value is a regular expression, or a preset by name: `preset:number`, `preset:cStyleString`, `preset:capitalizedType`, `preset:callBeforeParen`, `preset:callBeforeParenOrGeneric`. Comments come from `lineComment` and `blockComment`, keywords from `keywords`; neither takes a pattern. Patterns are combined into one expression by the highlighter, so use `(?:…)` for grouping and no backreferences.
 
+## Installing what an extension needs
+
+A language server, a formatter and an agent each name a program Phantom runs but does not ship. `installHint` is one sentence for a person to read. `install` says the same thing as data, so Phantom installs and removes the program itself.
+
+```json
+"server": {
+  "command": "lua-language-server",
+  "install": {
+    "commands": [
+      { "manager": "brew", "command": "brew install lua-language-server", "uninstall": "brew uninstall lua-language-server" },
+      { "manager": "npm", "command": "npm install -g lua-language-server" }
+    ],
+    "documentationURL": "https://luals.github.io/wiki/"
+  }
+}
+```
+
+The block reads the same on `contributes.languages[].server`, on `contributes.formatters[]` and on `contributes.agents[]`. `manager` is one of `brew`, `npm`, `pnpm`, `yarn`, `cargo`, `gem`, `pipx`, `go`, `dotnet`, `nix`. `command` starts with that manager's own binary and holds nothing else: no `curl`, no `|`, no `sudo`, no `;`, `&&`, `&`, `$( )`, no backticks and no redirects. `uninstall` is optional and follows the same rules. `documentationURL` is https. The build refuses a manifest that breaks one of these.
+
+An agent written for the older format, whose `install.commands` holds plain strings, still builds: each string becomes `{ "manager": <its first word>, "command": <the string> }`.
+
+`installHint` stays accepted, and it is what an entry without an `install` block still shows. The index lists every one of these programs in `card.tools` — one entry per language server, formatter and agent, with its `command`, its `installHint` and its `install` block — so Phantom knows what an extension needs before the download.
+
 ## Agents
 
-An agent entry teaches Phantom a coding agent it did not ship with: what to launch (`command`), how to resume a conversation (`resume.withSession` with `{session}`, `resume.withoutSession`), how to install it (`install.commands`, package-manager commands only), its `icon` (SVG) and `brandColour` (`#RRGGBB`, or `artwork` to keep the SVG's own colours), and the two integrations Phantom drives:
+An agent entry teaches Phantom a coding agent it did not ship with: what to launch (`command`), how to resume a conversation (`resume.withSession` with `{session}`, `resume.withoutSession`), how to install it (the `install` block above), its `icon` (SVG) and `brandColour` (`#RRGGBB`, or `artwork` to keep the SVG's own colours), and the two integrations Phantom drives:
 
 - `hooks` — where the agent reads lifecycle hooks and the map from its event names to Phantom's states (`working`, `awaiting`, `done`, `failed`, `compacting`, `denied`, `ended`, `notify`, or `""` for "a session lives here"). `kind` is `json` (a hooks object in a settings file, `entryShape` `grouped` like Claude's or `flat`), `toml` (a hooks table), or `file` (Phantom writes a plugin from your `template`, for agents that load code instead of reading a hooks file). `script.sessionKeys` says where the session id sits in the payload the agent hands each hook.
 - `mcp` — where the agent lists MCP servers (`json` key or `toml` table) and the shape of one entry (`separateArguments` writes `command` and `args`; `singleArray` writes one array). `extras` adds fixed fields such as `"type": "stdio"`; it may not name `command` or `args`.

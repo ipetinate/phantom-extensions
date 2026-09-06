@@ -6,12 +6,13 @@ import { loadDocument, type DocumentCard } from "./document.ts";
 import { isDirectory } from "./files.ts";
 import { checkLayout } from "./layout.ts";
 import { checkMedia, type MediaEntry } from "./media.ts";
-import { loadManifest, manifestIcons, type Manifest } from "./manifest.ts";
+import { loadManifest, manifestIcons, manifestTools, type Manifest, type Tool } from "./manifest.ts";
 import { describe, EXTENSIONS } from "./paths.ts";
 
 export interface Card extends DocumentCard {
   media: MediaEntry[];
   mediaBytes: number;
+  tools: Tool[];
 }
 
 export interface Collected {
@@ -44,7 +45,7 @@ export function collect(extensionsRoot: string = EXTENSIONS): Collected[] {
     collected.push({
       directory,
       manifest,
-      card: { ...document, media: media.entries, mediaBytes: media.bytes },
+      card: { ...document, media: media.entries, mediaBytes: media.bytes, tools: manifestTools(directory, manifest) },
     });
   }
   if (collected.length === 0) throw new ManifestError("no extensions found");

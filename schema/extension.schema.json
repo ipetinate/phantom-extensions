@@ -86,6 +86,67 @@
       "type": "string",
       "pattern": "^(?!/)(?!.*\\.\\.)[^\\\\]+$"
     },
+    "installManager": {
+      "enum": [
+        "brew",
+        "npm",
+        "pnpm",
+        "yarn",
+        "cargo",
+        "gem",
+        "pipx",
+        "go",
+        "dotnet",
+        "nix"
+      ]
+    },
+    "installCommand": {
+      "type": "object",
+      "required": [
+        "manager",
+        "command"
+      ],
+      "properties": {
+        "manager": {
+          "$ref": "#/$defs/installManager"
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Starts with the manager's own binary; no curl, pipes, sudo, ;, &&, &, $( ), backticks or redirects."
+        },
+        "uninstall": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Removes what command installed, under the same rules."
+        }
+      }
+    },
+    "install": {
+      "type": "object",
+      "description": "How Phantom installs the program this entry names. installHint stays the sentence shown when there is no install block.",
+      "properties": {
+        "commands": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/installCommand"
+              },
+              {
+                "type": "string",
+                "minLength": 1,
+                "description": "The older form: one command whose first word is its package manager."
+              }
+            ]
+          }
+        },
+        "documentationURL": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
     "language": {
       "type": "object",
       "required": [
@@ -205,6 +266,9 @@
             "documentationURL": {
               "type": "string",
               "format": "uri"
+            },
+            "install": {
+              "$ref": "#/$defs/install"
             }
           }
         }
@@ -252,6 +316,9 @@
         "documentationURL": {
           "type": "string",
           "format": "uri"
+        },
+        "install": {
+          "$ref": "#/$defs/install"
         }
       }
     },
@@ -602,20 +669,7 @@
           }
         },
         "install": {
-          "type": "object",
-          "properties": {
-            "commands": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "description": "Starts with a package manager; no curl, pipes, sudo, ;, &&, &, $( ), backticks or redirects."
-              }
-            },
-            "documentationURL": {
-              "type": "string",
-              "format": "uri"
-            }
-          }
+          "$ref": "#/$defs/install"
         },
         "icon": {
           "$ref": "#/$defs/relativePath"

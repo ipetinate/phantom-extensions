@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.lua",
   "name": "Lua",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "ipetinate",
   "description": "Lua: highlighting, lua-language-server and StyLua.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/lua",
@@ -59,7 +59,17 @@
         "server": {
           "command": "lua-language-server",
           "installHint": "brew install lua-language-server",
-          "documentationURL": "https://luals.github.io/"
+          "documentationURL": "https://luals.github.io/",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install lua-language-server",
+                "uninstall": "brew uninstall lua-language-server"
+              }
+            ],
+            "documentationURL": "https://luals.github.io/wiki/"
+          }
         }
       }
     ],
@@ -77,7 +87,17 @@
           "lua"
         ],
         "installHint": "brew install stylua",
-        "documentationURL": "https://github.com/JohnnyMorganz/StyLua"
+        "documentationURL": "https://github.com/JohnnyMorganz/StyLua",
+        "install": {
+          "commands": [
+            {
+              "manager": "brew",
+              "command": "brew install stylua",
+              "uninstall": "brew uninstall stylua"
+            }
+          ],
+          "documentationURL": "https://github.com/JohnnyMorganz/StyLua"
+        }
       }
     ]
   }

@@ -2,6 +2,7 @@ import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fail, isRecord, requireAsset, requireString, type JsonObject, type JsonValue } from "./checks.ts";
 import { quoted } from "./errors.ts";
+import { validateInstall, type Install } from "./install.ts";
 
 export const ID_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
 export const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
@@ -24,6 +25,14 @@ export interface Manifest {
   readonly homepage?: string;
   readonly phantom?: string;
   readonly contributes: JsonObject;
+}
+
+export interface Tool {
+  kind: "server" | "formatter" | "agent";
+  name: string;
+  command: string;
+  installHint: string | null;
+  install: Install | null;
 }
 
 export function entriesOf(manifest: Manifest, kind: ContributionKind): JsonObject[] {
@@ -78,6 +87,7 @@ function validateLanguage(directory: string, language: JsonValue): void {
   if (server !== undefined && server !== null) {
     if (!isRecord(server)) fail(directory, "server must be an object");
     requireString(directory, server, "command");
+    validateInstall(directory, `language ${quoted(languageId)} server`, server["install"]);
   }
 }
 
@@ -90,14 +100,16 @@ function validateFormatter(directory: string, formatter: JsonValue): void {
   if (!Array.isArray(extensions) || extensions.length === 0) {
     fail(directory, `formatter ${quoted(id)} needs at least one file extension`);
   }
+  validateInstall(directory, `formatter ${quoted(id)}`, formatter["install"]);
 }
 
 function validateAgent(directory: string, agent: JsonValue): void {
   if (!isRecord(agent)) fail(directory, "each agent must be an object");
-  requireString(directory, agent, "agentId", AGENT_ID_PATTERN);
+  const agentId = requireString(directory, agent, "agentId", AGENT_ID_PATTERN);
   requireString(directory, agent, "name");
   requireString(directory, agent, "command");
   if (agent["icon"] !== undefined) requireAsset(directory, agent["icon"]);
+  validateInstall(directory, `agent ${quoted(agentId)}`, agent["install"]);
 }
 
 function validatePathed(directory: string, kind: ContributionKind, entry: JsonValue): void {
@@ -128,6 +140,50 @@ export function referencedPaths(manifest: Manifest): Set<string> {
     if (isRecord(hooks) && typeof hooks["template"] === "string") paths.add(hooks["template"]);
   }
   return new Set([...paths].map((entry) => entry.split(path.sep).join("/")));
+}
+
+function toolName(entry: JsonObject, fallback: string): string {
+  return typeof entry["name"] === "string" ? entry["name"] : fallback;
+}
+
+function installHintOf(entry: JsonObject): string | null {
+  return typeof entry["installHint"] === "string" ? entry["installHint"] : null;
+}
+
+export function manifestTools(directory: string, manifest: Manifest): Tool[] {
+  const tools: Tool[] = [];
+  for (const language of entriesOf(manifest, "languages")) {
+    const server = language["server"];
+    if (!isRecord(server) || typeof server["command"] !== "string") continue;
+    tools.push({
+      kind: "server",
+      name: toolName(language, server["command"]),
+      command: server["command"],
+      installHint: installHintOf(server),
+      install: validateInstall(directory, "server", server["install"]),
+    });
+  }
+  for (const formatter of entriesOf(manifest, "formatters")) {
+    if (typeof formatter["command"] !== "string") continue;
+    tools.push({
+      kind: "formatter",
+      name: toolName(formatter, formatter["command"]),
+      command: formatter["command"],
+      installHint: installHintOf(formatter),
+      install: validateInstall(directory, "formatter", formatter["install"]),
+    });
+  }
+  for (const agent of entriesOf(manifest, "agents")) {
+    if (typeof agent["command"] !== "string") continue;
+    tools.push({
+      kind: "agent",
+      name: toolName(agent, agent["command"]),
+      command: agent["command"],
+      installHint: installHintOf(agent),
+      install: validateInstall(directory, "agent", agent["install"]),
+    });
+  }
+  return tools;
 }
 
 export function loadManifest(directory: string): Manifest {
