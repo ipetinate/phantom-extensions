@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-gruvbox-light",
   "name": "Gruvbox Light",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "The Gruvbox Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/gruvbox-light",

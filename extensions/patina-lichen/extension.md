@@ -1,7 +1,7 @@
 ---
 title: Patina Lichen
 tagline: The Patina Lichen terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Patina Lichen" background="#cdd1c6" foreground="#393a34" cursor="#393a34" selection="#aab0a3" ansi="#393a34, #8b4646, #33644d, #7f5031, #35616d, #854b3f, #2a6361, #5a5248, #5b5b54, #8b4646, #426338, #7f5031, #35616d, #854b3f, #2a6361, #393a34" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#cdd1c6" name="Background" />
-  <Swatch color="#393a34" name="Foreground" />
-  <Swatch color="#393a34" name="Cursor" />
-  <Swatch color="#cdd1c6" name="Cursor text" />
-  <Swatch color="#aab0a3" name="Selection" />
-  <Swatch color="#393a34" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#cdd1c6` |
+| Foreground | `foreground` | `#393a34` |
+| Cursor | `cursor-color` | `#393a34` |
+| Cursor text | `cursor-text` | `#cdd1c6` |
+| Selection background | `selection-background` | `#aab0a3` |
+| Selection foreground | `selection-foreground` | `#393a34` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#393a34" name="0 Black" />
-  <Swatch color="#8b4646" name="1 Red" />
-  <Swatch color="#33644d" name="2 Green" />
-  <Swatch color="#7f5031" name="3 Yellow" />
-  <Swatch color="#35616d" name="4 Blue" />
-  <Swatch color="#854b3f" name="5 Magenta" />
-  <Swatch color="#2a6361" name="6 Cyan" />
-  <Swatch color="#5a5248" name="7 White" />
-  <Swatch color="#5b5b54" name="8 Bright black" />
-  <Swatch color="#8b4646" name="9 Bright red" />
-  <Swatch color="#426338" name="10 Bright green" />
-  <Swatch color="#7f5031" name="11 Bright yellow" />
-  <Swatch color="#35616d" name="12 Bright blue" />
-  <Swatch color="#854b3f" name="13 Bright magenta" />
-  <Swatch color="#2a6361" name="14 Bright cyan" />
-  <Swatch color="#393a34" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#393a34` | 8 | Bright black | `#5b5b54` |
+| 1 | Red | `#8b4646` | 9 | Bright red | `#8b4646` |
+| 2 | Green | `#33644d` | 10 | Bright green | `#426338` |
+| 3 | Yellow | `#7f5031` | 11 | Bright yellow | `#7f5031` |
+| 4 | Blue | `#35616d` | 12 | Bright blue | `#35616d` |
+| 5 | Magenta | `#854b3f` | 13 | Bright magenta | `#854b3f` |
+| 6 | Cyan | `#2a6361` | 14 | Bright cyan | `#2a6361` |
+| 7 | White | `#5a5248` | 15 | Bright white | `#393a34` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/patina-lichen.conf` is a byte-for-byte copy of the
 `Patina Lichen` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

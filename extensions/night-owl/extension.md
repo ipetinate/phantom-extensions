@@ -1,7 +1,7 @@
 ---
 title: Night Owl
 tagline: The Night Owl terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Night Owl" background="#011627" foreground="#d6deeb" cursor="#7e57c2" selection="#5f7e97" ansi="#011627, #ef5350, #22da6e, #addb67, #82aaff, #c792ea, #21c7a8, #ffffff, #575656, #ef5350, #22da6e, #ffeb95, #82aaff, #c792ea, #7fdbca, #ffffff" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#011627" name="Background" />
-  <Swatch color="#d6deeb" name="Foreground" />
-  <Swatch color="#7e57c2" name="Cursor" />
-  <Swatch color="#ffffff" name="Cursor text" />
-  <Swatch color="#5f7e97" name="Selection" />
-  <Swatch color="#dfe5ee" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#011627` |
+| Foreground | `foreground` | `#d6deeb` |
+| Cursor | `cursor-color` | `#7e57c2` |
+| Cursor text | `cursor-text` | `#ffffff` |
+| Selection background | `selection-background` | `#5f7e97` |
+| Selection foreground | `selection-foreground` | `#dfe5ee` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#011627" name="0 Black" />
-  <Swatch color="#ef5350" name="1 Red" />
-  <Swatch color="#22da6e" name="2 Green" />
-  <Swatch color="#addb67" name="3 Yellow" />
-  <Swatch color="#82aaff" name="4 Blue" />
-  <Swatch color="#c792ea" name="5 Magenta" />
-  <Swatch color="#21c7a8" name="6 Cyan" />
-  <Swatch color="#ffffff" name="7 White" />
-  <Swatch color="#575656" name="8 Bright black" />
-  <Swatch color="#ef5350" name="9 Bright red" />
-  <Swatch color="#22da6e" name="10 Bright green" />
-  <Swatch color="#ffeb95" name="11 Bright yellow" />
-  <Swatch color="#82aaff" name="12 Bright blue" />
-  <Swatch color="#c792ea" name="13 Bright magenta" />
-  <Swatch color="#7fdbca" name="14 Bright cyan" />
-  <Swatch color="#ffffff" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#011627` | 8 | Bright black | `#575656` |
+| 1 | Red | `#ef5350` | 9 | Bright red | `#ef5350` |
+| 2 | Green | `#22da6e` | 10 | Bright green | `#22da6e` |
+| 3 | Yellow | `#addb67` | 11 | Bright yellow | `#ffeb95` |
+| 4 | Blue | `#82aaff` | 12 | Bright blue | `#82aaff` |
+| 5 | Magenta | `#c792ea` | 13 | Bright magenta | `#c792ea` |
+| 6 | Cyan | `#21c7a8` | 14 | Bright cyan | `#7fdbca` |
+| 7 | White | `#ffffff` | 15 | Bright white | `#ffffff` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/night-owl.conf` is a byte-for-byte copy of the
 `Night Owl` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

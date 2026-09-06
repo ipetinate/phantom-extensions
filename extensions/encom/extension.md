@@ -1,7 +1,7 @@
 ---
 title: ENCOM
 tagline: The ENCOM terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="ENCOM" background="#000000" foreground="#00a595" cursor="#bbbbbb" selection="#00a48c" ansi="#000000, #9f0000, #008b00, #ffd000, #0081ff, #bc00ca, #008b8b, #bbbbbb, #555555, #ff0000, #00ee00, #ffff00, #0000ff, #ff00ff, #00cdcd, #ffffff" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#000000" name="Background" />
-  <Swatch color="#00a595" name="Foreground" />
-  <Swatch color="#bbbbbb" name="Cursor" />
-  <Swatch color="#ffffff" name="Cursor text" />
-  <Swatch color="#00a48c" name="Selection" />
-  <Swatch color="#3de1c9" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#000000` |
+| Foreground | `foreground` | `#00a595` |
+| Cursor | `cursor-color` | `#bbbbbb` |
+| Cursor text | `cursor-text` | `#ffffff` |
+| Selection background | `selection-background` | `#00a48c` |
+| Selection foreground | `selection-foreground` | `#3de1c9` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#000000" name="0 Black" />
-  <Swatch color="#9f0000" name="1 Red" />
-  <Swatch color="#008b00" name="2 Green" />
-  <Swatch color="#ffd000" name="3 Yellow" />
-  <Swatch color="#0081ff" name="4 Blue" />
-  <Swatch color="#bc00ca" name="5 Magenta" />
-  <Swatch color="#008b8b" name="6 Cyan" />
-  <Swatch color="#bbbbbb" name="7 White" />
-  <Swatch color="#555555" name="8 Bright black" />
-  <Swatch color="#ff0000" name="9 Bright red" />
-  <Swatch color="#00ee00" name="10 Bright green" />
-  <Swatch color="#ffff00" name="11 Bright yellow" />
-  <Swatch color="#0000ff" name="12 Bright blue" />
-  <Swatch color="#ff00ff" name="13 Bright magenta" />
-  <Swatch color="#00cdcd" name="14 Bright cyan" />
-  <Swatch color="#ffffff" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#000000` | 8 | Bright black | `#555555` |
+| 1 | Red | `#9f0000` | 9 | Bright red | `#ff0000` |
+| 2 | Green | `#008b00` | 10 | Bright green | `#00ee00` |
+| 3 | Yellow | `#ffd000` | 11 | Bright yellow | `#ffff00` |
+| 4 | Blue | `#0081ff` | 12 | Bright blue | `#0000ff` |
+| 5 | Magenta | `#bc00ca` | 13 | Bright magenta | `#ff00ff` |
+| 6 | Cyan | `#008b8b` | 14 | Bright cyan | `#00cdcd` |
+| 7 | White | `#bbbbbb` | 15 | Bright white | `#ffffff` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/encom.conf` is a byte-for-byte copy of the
 `ENCOM` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

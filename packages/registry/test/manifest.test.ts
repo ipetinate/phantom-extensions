@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { requireAsset } from "../src/checks.ts";
 import { collect } from "../src/collect.ts";
 import { checkLayout } from "../src/layout.ts";
-import { loadManifest } from "../src/manifest.ts";
+import { MAX_PROJECT_MARKERS, WORKING_DIRECTORIES, loadManifest } from "../src/manifest.ts";
 import { ExtensionFixture, FRONT_MATTER, agentsManifest, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
 
 let root: string;
@@ -166,5 +166,109 @@ describe("checkLayout", () => {
     };
     const fixture = new ExtensionFixture(root, "agent", manifest, false);
     expect(() => checkLayout(fixture.directory, loadManifest(fixture.directory))).not.toThrow();
+  });
+});
+
+function formatterManifest(formatter: Record<string, unknown> = {}): Record<string, unknown> {
+  return languageManifest({
+    contributes: {
+      formatters: [{ id: "tool", name: "Tool", command: "tool", extensions: ["smp"], ...formatter }],
+    },
+  });
+}
+
+function formatterOf(directory: string): Record<string, unknown> {
+  const formatters = loadManifest(directory).contributes["formatters"] as Record<string, unknown>[];
+  return formatters[0] as Record<string, unknown>;
+}
+
+describe("a formatter's project keys", () => {
+  it("reads the three of them", () => {
+    const fixture = new ExtensionFixture(
+      root,
+      "tool",
+      formatterManifest({
+        projectMarkers: [".toolrc", { file: "package.json", containsKey: "tool" }],
+        localBinary: "node_modules/.bin/tool",
+        workingDirectory: "marker",
+      }),
+    );
+    const formatter = formatterOf(fixture.directory);
+    expect(formatter["projectMarkers"]).toEqual([".toolrc", { file: "package.json", containsKey: "tool" }]);
+    expect(formatter["localBinary"]).toBe("node_modules/.bin/tool");
+    expect(formatter["workingDirectory"]).toBe("marker");
+  });
+
+  it("lets a formatter declare none of them", () => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest());
+    expect(formatterOf(fixture.directory)["projectMarkers"]).toBeUndefined();
+  });
+
+  it("refuses an empty marker list", () => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ projectMarkers: [] }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/at least one entry in projectMarkers/);
+  });
+
+  it("refuses more markers than the walk should stat", () => {
+    const markers = Array.from({ length: MAX_PROJECT_MARKERS + 1 }, (_, index) => `.toolrc${index}`);
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ projectMarkers: markers }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/more than 32 projectMarkers/);
+  });
+
+  it("refuses a marker that is neither a name nor a {file, containsKey} object", () => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ projectMarkers: [7] }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/must be a file name or a \{file, containsKey\} object/);
+  });
+
+  it.each([{ file: "package.json" }, { containsKey: "tool" }])("needs both halves of a containsKey marker", (marker) => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ projectMarkers: [marker] }));
+    expect(() => loadManifest(fixture.directory)).toThrow();
+  });
+
+  it("only reads a key out of a manifest the editor can parse", () => {
+    const markers = [{ file: "Cargo.toml", containsKey: "tool" }];
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ projectMarkers: markers }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/containsKey only reads json, yaml, yml/);
+  });
+
+  it("takes a key out of YAML as well as JSON", () => {
+    const markers = [
+      { file: "package.yaml", containsKey: "tool" },
+      { file: "package.yml", containsKey: "tool" },
+    ];
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ projectMarkers: markers }));
+    expect(() => loadManifest(fixture.directory)).not.toThrow();
+  });
+
+  it.each(["/etc/passwd", "~/.ssh/id_rsa", "../../../usr/bin/tool", "node_modules/../../tool", "./tool", "a//b"])(
+    "refuses the project path %s, which resolves against the reader's project and not the extension",
+    (bad) => {
+      const binary = new ExtensionFixture(root, "binary", formatterManifest({ localBinary: bad }));
+      expect(() => loadManifest(binary.directory)).toThrow(/must be relative and must not climb out/);
+
+      const marker = new ExtensionFixture(root, "marker", formatterManifest({ projectMarkers: [bad] }));
+      expect(() => loadManifest(marker.directory)).toThrow(/must be relative and must not climb out/);
+    },
+  );
+
+  it("holds the working directory to the three the editor implements", () => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ workingDirectory: "elsewhere" }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/workingDirectory must be one of marker, file, workspace/);
+  });
+
+  it.each(WORKING_DIRECTORIES)("takes the working directory %s", (where) => {
+    const markers = where === "marker" ? { projectMarkers: [".toolrc"] } : {};
+    const fixture = new ExtensionFixture(root, `tool-${where}`, formatterManifest({ workingDirectory: where, ...markers }));
+    expect(() => loadManifest(fixture.directory)).not.toThrow();
+  });
+
+  it("refuses a marker working directory with nothing to look for", () => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ workingDirectory: "marker" }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/needs projectMarkers to find one/);
+  });
+
+  it("refuses a file extension the editor could never match", () => {
+    const fixture = new ExtensionFixture(root, "tool", formatterManifest({ extensions: ["js.flow"] }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/bad file extension/);
   });
 });

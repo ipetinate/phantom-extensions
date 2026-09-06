@@ -1,7 +1,7 @@
 ---
 title: Duskfox
 tagline: The Duskfox terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Duskfox" background="#232136" foreground="#e0def4" cursor="#e0def4" selection="#433c59" ansi="#393552, #eb6f92, #a3be8c, #f6c177, #569fba, #c4a7e7, #9ccfd8, #e0def4, #544d8a, #f083a2, #b1d196, #f9cb8c, #65b1cd, #ccb1ed, #a6dae3, #e2e0f7" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#232136" name="Background" />
-  <Swatch color="#e0def4" name="Foreground" />
-  <Swatch color="#e0def4" name="Cursor" />
-  <Swatch color="#232136" name="Cursor text" />
-  <Swatch color="#433c59" name="Selection" />
-  <Swatch color="#e0def4" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#232136` |
+| Foreground | `foreground` | `#e0def4` |
+| Cursor | `cursor-color` | `#e0def4` |
+| Cursor text | `cursor-text` | `#232136` |
+| Selection background | `selection-background` | `#433c59` |
+| Selection foreground | `selection-foreground` | `#e0def4` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#393552" name="0 Black" />
-  <Swatch color="#eb6f92" name="1 Red" />
-  <Swatch color="#a3be8c" name="2 Green" />
-  <Swatch color="#f6c177" name="3 Yellow" />
-  <Swatch color="#569fba" name="4 Blue" />
-  <Swatch color="#c4a7e7" name="5 Magenta" />
-  <Swatch color="#9ccfd8" name="6 Cyan" />
-  <Swatch color="#e0def4" name="7 White" />
-  <Swatch color="#544d8a" name="8 Bright black" />
-  <Swatch color="#f083a2" name="9 Bright red" />
-  <Swatch color="#b1d196" name="10 Bright green" />
-  <Swatch color="#f9cb8c" name="11 Bright yellow" />
-  <Swatch color="#65b1cd" name="12 Bright blue" />
-  <Swatch color="#ccb1ed" name="13 Bright magenta" />
-  <Swatch color="#a6dae3" name="14 Bright cyan" />
-  <Swatch color="#e2e0f7" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#393552` | 8 | Bright black | `#544d8a` |
+| 1 | Red | `#eb6f92` | 9 | Bright red | `#f083a2` |
+| 2 | Green | `#a3be8c` | 10 | Bright green | `#b1d196` |
+| 3 | Yellow | `#f6c177` | 11 | Bright yellow | `#f9cb8c` |
+| 4 | Blue | `#569fba` | 12 | Bright blue | `#65b1cd` |
+| 5 | Magenta | `#c4a7e7` | 13 | Bright magenta | `#ccb1ed` |
+| 6 | Cyan | `#9ccfd8` | 14 | Bright cyan | `#a6dae3` |
+| 7 | White | `#e0def4` | 15 | Bright white | `#e2e0f7` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/duskfox.conf` is a byte-for-byte copy of the
 `Duskfox` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

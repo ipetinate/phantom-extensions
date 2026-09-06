@@ -1,7 +1,7 @@
 ---
 title: Monokai Remastered
 tagline: The Monokai Remastered terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Monokai Remastered" background="#0c0c0c" foreground="#d9d9d9" cursor="#fc971f" selection="#343434" ansi="#1a1a1a, #f4005f, #98e024, #fd971f, #9d65ff, #f4005f, #58d1eb, #c4c5b5, #625e4c, #f4005f, #98e024, #e0d561, #9d65ff, #f4005f, #58d1eb, #f6f6ef" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#0c0c0c" name="Background" />
-  <Swatch color="#d9d9d9" name="Foreground" />
-  <Swatch color="#fc971f" name="Cursor" />
-  <Swatch color="#000000" name="Cursor text" />
-  <Swatch color="#343434" name="Selection" />
-  <Swatch color="#ffffff" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#0c0c0c` |
+| Foreground | `foreground` | `#d9d9d9` |
+| Cursor | `cursor-color` | `#fc971f` |
+| Cursor text | `cursor-text` | `#000000` |
+| Selection background | `selection-background` | `#343434` |
+| Selection foreground | `selection-foreground` | `#ffffff` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#1a1a1a" name="0 Black" />
-  <Swatch color="#f4005f" name="1 Red" />
-  <Swatch color="#98e024" name="2 Green" />
-  <Swatch color="#fd971f" name="3 Yellow" />
-  <Swatch color="#9d65ff" name="4 Blue" />
-  <Swatch color="#f4005f" name="5 Magenta" />
-  <Swatch color="#58d1eb" name="6 Cyan" />
-  <Swatch color="#c4c5b5" name="7 White" />
-  <Swatch color="#625e4c" name="8 Bright black" />
-  <Swatch color="#f4005f" name="9 Bright red" />
-  <Swatch color="#98e024" name="10 Bright green" />
-  <Swatch color="#e0d561" name="11 Bright yellow" />
-  <Swatch color="#9d65ff" name="12 Bright blue" />
-  <Swatch color="#f4005f" name="13 Bright magenta" />
-  <Swatch color="#58d1eb" name="14 Bright cyan" />
-  <Swatch color="#f6f6ef" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#1a1a1a` | 8 | Bright black | `#625e4c` |
+| 1 | Red | `#f4005f` | 9 | Bright red | `#f4005f` |
+| 2 | Green | `#98e024` | 10 | Bright green | `#98e024` |
+| 3 | Yellow | `#fd971f` | 11 | Bright yellow | `#e0d561` |
+| 4 | Blue | `#9d65ff` | 12 | Bright blue | `#9d65ff` |
+| 5 | Magenta | `#f4005f` | 13 | Bright magenta | `#f4005f` |
+| 6 | Cyan | `#58d1eb` | 14 | Bright cyan | `#58d1eb` |
+| 7 | White | `#c4c5b5` | 15 | Bright white | `#f6f6ef` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/monokai-remastered.conf` is a byte-for-byte copy of the
 `Monokai Remastered` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

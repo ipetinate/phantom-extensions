@@ -1,7 +1,7 @@
 ---
 title: Pyrokai Light
 tagline: The Pyrokai Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Pyrokai Light" background="#faf6f5" foreground="#242120" cursor="#b65318" selection="#e4e0de" ansi="#242120, #b84963, #568413, #8e7100, #0979c4, #b44a74, #008490, #b4afad, #807c7a, #943c50, #456a13, #735a00, #0f619d, #913c5d, #006a74, #faf6f5" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#faf6f5" name="Background" />
-  <Swatch color="#242120" name="Foreground" />
-  <Swatch color="#b65318" name="Cursor" />
-  <Swatch color="#faf6f5" name="Cursor text" />
-  <Swatch color="#e4e0de" name="Selection" />
-  <Swatch color="#242120" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#faf6f5` |
+| Foreground | `foreground` | `#242120` |
+| Cursor | `cursor-color` | `#b65318` |
+| Cursor text | `cursor-text` | `#faf6f5` |
+| Selection background | `selection-background` | `#e4e0de` |
+| Selection foreground | `selection-foreground` | `#242120` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#242120" name="0 Black" />
-  <Swatch color="#b84963" name="1 Red" />
-  <Swatch color="#568413" name="2 Green" />
-  <Swatch color="#8e7100" name="3 Yellow" />
-  <Swatch color="#0979c4" name="4 Blue" />
-  <Swatch color="#b44a74" name="5 Magenta" />
-  <Swatch color="#008490" name="6 Cyan" />
-  <Swatch color="#b4afad" name="7 White" />
-  <Swatch color="#807c7a" name="8 Bright black" />
-  <Swatch color="#943c50" name="9 Bright red" />
-  <Swatch color="#456a13" name="10 Bright green" />
-  <Swatch color="#735a00" name="11 Bright yellow" />
-  <Swatch color="#0f619d" name="12 Bright blue" />
-  <Swatch color="#913c5d" name="13 Bright magenta" />
-  <Swatch color="#006a74" name="14 Bright cyan" />
-  <Swatch color="#faf6f5" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#242120` | 8 | Bright black | `#807c7a` |
+| 1 | Red | `#b84963` | 9 | Bright red | `#943c50` |
+| 2 | Green | `#568413` | 10 | Bright green | `#456a13` |
+| 3 | Yellow | `#8e7100` | 11 | Bright yellow | `#735a00` |
+| 4 | Blue | `#0979c4` | 12 | Bright blue | `#0f619d` |
+| 5 | Magenta | `#b44a74` | 13 | Bright magenta | `#913c5d` |
+| 6 | Cyan | `#008490` | 14 | Bright cyan | `#006a74` |
+| 7 | White | `#b4afad` | 15 | Bright white | `#faf6f5` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/pyrokai-light.conf` is a byte-for-byte copy of the
 `Pyrokai Light` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

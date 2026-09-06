@@ -1,7 +1,7 @@
 ---
 title: Iceberg Light
 tagline: The Iceberg Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Iceberg Light" background="#e8e9ec" foreground="#33374c" cursor="#33374c" selection="#33374c" ansi="#dcdfe7, #cc517a, #668e3d, #c57339, #2d539e, #7759b4, #3f83a6, #33374c, #8389a3, #cc3768, #598030, #b6662d, #22478e, #6845ad, #327698, #262a3f" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#e8e9ec" name="Background" />
-  <Swatch color="#33374c" name="Foreground" />
-  <Swatch color="#33374c" name="Cursor" />
-  <Swatch color="#e8e9ec" name="Cursor text" />
-  <Swatch color="#33374c" name="Selection" />
-  <Swatch color="#e8e9ec" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#e8e9ec` |
+| Foreground | `foreground` | `#33374c` |
+| Cursor | `cursor-color` | `#33374c` |
+| Cursor text | `cursor-text` | `#e8e9ec` |
+| Selection background | `selection-background` | `#33374c` |
+| Selection foreground | `selection-foreground` | `#e8e9ec` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#dcdfe7" name="0 Black" />
-  <Swatch color="#cc517a" name="1 Red" />
-  <Swatch color="#668e3d" name="2 Green" />
-  <Swatch color="#c57339" name="3 Yellow" />
-  <Swatch color="#2d539e" name="4 Blue" />
-  <Swatch color="#7759b4" name="5 Magenta" />
-  <Swatch color="#3f83a6" name="6 Cyan" />
-  <Swatch color="#33374c" name="7 White" />
-  <Swatch color="#8389a3" name="8 Bright black" />
-  <Swatch color="#cc3768" name="9 Bright red" />
-  <Swatch color="#598030" name="10 Bright green" />
-  <Swatch color="#b6662d" name="11 Bright yellow" />
-  <Swatch color="#22478e" name="12 Bright blue" />
-  <Swatch color="#6845ad" name="13 Bright magenta" />
-  <Swatch color="#327698" name="14 Bright cyan" />
-  <Swatch color="#262a3f" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#dcdfe7` | 8 | Bright black | `#8389a3` |
+| 1 | Red | `#cc517a` | 9 | Bright red | `#cc3768` |
+| 2 | Green | `#668e3d` | 10 | Bright green | `#598030` |
+| 3 | Yellow | `#c57339` | 11 | Bright yellow | `#b6662d` |
+| 4 | Blue | `#2d539e` | 12 | Bright blue | `#22478e` |
+| 5 | Magenta | `#7759b4` | 13 | Bright magenta | `#6845ad` |
+| 6 | Cyan | `#3f83a6` | 14 | Bright cyan | `#327698` |
+| 7 | White | `#33374c` | 15 | Bright white | `#262a3f` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/iceberg-light.conf` is a byte-for-byte copy of the
 `Iceberg Light` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

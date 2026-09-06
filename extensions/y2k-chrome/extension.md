@@ -1,7 +1,7 @@
 ---
 title: Y2K Chrome
 tagline: The Y2K Chrome terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Y2K Chrome" background="#f1f5f9" foreground="#0f172a" cursor="#0f172a" selection="#0f172a" ansi="#383f4f, #dc2626, #15803d, #0891b2, #f97316, #7c3aed, #2563eb, #475569, #a3b1c4, #b01e1e, #116631, #077792, #c75c12, #632ebe, #1e4fbc, #0f172a" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#f1f5f9" name="Background" />
-  <Swatch color="#0f172a" name="Foreground" />
-  <Swatch color="#0f172a" name="Cursor" />
-  <Swatch color="#f1f5f9" name="Cursor text" />
-  <Swatch color="#0f172a" name="Selection" />
-  <Swatch color="#f1f5f9" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#f1f5f9` |
+| Foreground | `foreground` | `#0f172a` |
+| Cursor | `cursor-color` | `#0f172a` |
+| Cursor text | `cursor-text` | `#f1f5f9` |
+| Selection background | `selection-background` | `#0f172a` |
+| Selection foreground | `selection-foreground` | `#f1f5f9` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#383f4f" name="0 Black" />
-  <Swatch color="#dc2626" name="1 Red" />
-  <Swatch color="#15803d" name="2 Green" />
-  <Swatch color="#0891b2" name="3 Yellow" />
-  <Swatch color="#f97316" name="4 Blue" />
-  <Swatch color="#7c3aed" name="5 Magenta" />
-  <Swatch color="#2563eb" name="6 Cyan" />
-  <Swatch color="#475569" name="7 White" />
-  <Swatch color="#a3b1c4" name="8 Bright black" />
-  <Swatch color="#b01e1e" name="9 Bright red" />
-  <Swatch color="#116631" name="10 Bright green" />
-  <Swatch color="#077792" name="11 Bright yellow" />
-  <Swatch color="#c75c12" name="12 Bright blue" />
-  <Swatch color="#632ebe" name="13 Bright magenta" />
-  <Swatch color="#1e4fbc" name="14 Bright cyan" />
-  <Swatch color="#0f172a" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#383f4f` | 8 | Bright black | `#a3b1c4` |
+| 1 | Red | `#dc2626` | 9 | Bright red | `#b01e1e` |
+| 2 | Green | `#15803d` | 10 | Bright green | `#116631` |
+| 3 | Yellow | `#0891b2` | 11 | Bright yellow | `#077792` |
+| 4 | Blue | `#f97316` | 12 | Bright blue | `#c75c12` |
+| 5 | Magenta | `#7c3aed` | 13 | Bright magenta | `#632ebe` |
+| 6 | Cyan | `#2563eb` | 14 | Bright cyan | `#1e4fbc` |
+| 7 | White | `#475569` | 15 | Bright white | `#0f172a` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/y2k-chrome.conf` is a byte-for-byte copy of the
 `Y2K Chrome` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-monokai-pro",
   "name": "Monokai Pro",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "The Monokai Pro terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/monokai-pro",

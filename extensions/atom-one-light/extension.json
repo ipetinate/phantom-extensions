@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-atom-one-light",
   "name": "Atom One Light",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "The Atom One Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/atom-one-light",

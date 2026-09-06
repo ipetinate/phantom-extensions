@@ -1,7 +1,7 @@
 ---
 title: SeedFlip Glacier
 tagline: The SeedFlip Glacier terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="SeedFlip Glacier" background="#f8fafc" foreground="#0f172a" cursor="#0ea5e9" selection="#ffffff" ansi="#c2d4e5, #bd0f0f, #0fbd49, #bda00f, #0f58bd, #bd0fbd, #0fbdbd, #080d17, #8dadce, #ee2b2b, #12d452, #d4b312, #2b7cee, #ee2bee, #12d4d4, #0f172a" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#f8fafc" name="Background" />
-  <Swatch color="#0f172a" name="Foreground" />
-  <Swatch color="#0ea5e9" name="Cursor" />
-  <Swatch color="#0f172a" name="Cursor text" />
-  <Swatch color="#ffffff" name="Selection" />
-  <Swatch color="#0f172a" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#f8fafc` |
+| Foreground | `foreground` | `#0f172a` |
+| Cursor | `cursor-color` | `#0ea5e9` |
+| Cursor text | `cursor-text` | `#0f172a` |
+| Selection background | `selection-background` | `#ffffff` |
+| Selection foreground | `selection-foreground` | `#0f172a` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#c2d4e5" name="0 Black" />
-  <Swatch color="#bd0f0f" name="1 Red" />
-  <Swatch color="#0fbd49" name="2 Green" />
-  <Swatch color="#bda00f" name="3 Yellow" />
-  <Swatch color="#0f58bd" name="4 Blue" />
-  <Swatch color="#bd0fbd" name="5 Magenta" />
-  <Swatch color="#0fbdbd" name="6 Cyan" />
-  <Swatch color="#080d17" name="7 White" />
-  <Swatch color="#8dadce" name="8 Bright black" />
-  <Swatch color="#ee2b2b" name="9 Bright red" />
-  <Swatch color="#12d452" name="10 Bright green" />
-  <Swatch color="#d4b312" name="11 Bright yellow" />
-  <Swatch color="#2b7cee" name="12 Bright blue" />
-  <Swatch color="#ee2bee" name="13 Bright magenta" />
-  <Swatch color="#12d4d4" name="14 Bright cyan" />
-  <Swatch color="#0f172a" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#c2d4e5` | 8 | Bright black | `#8dadce` |
+| 1 | Red | `#bd0f0f` | 9 | Bright red | `#ee2b2b` |
+| 2 | Green | `#0fbd49` | 10 | Bright green | `#12d452` |
+| 3 | Yellow | `#bda00f` | 11 | Bright yellow | `#d4b312` |
+| 4 | Blue | `#0f58bd` | 12 | Bright blue | `#2b7cee` |
+| 5 | Magenta | `#bd0fbd` | 13 | Bright magenta | `#ee2bee` |
+| 6 | Cyan | `#0fbdbd` | 14 | Bright cyan | `#12d4d4` |
+| 7 | White | `#080d17` | 15 | Bright white | `#0f172a` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/seedflip-glacier.conf` is a byte-for-byte copy of the
 `SeedFlip Glacier` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

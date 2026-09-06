@@ -1,7 +1,7 @@
 ---
 title: Nord Light
 tagline: The Nord Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Nord Light" background="#e5e9f0" foreground="#414858" cursor="#7bb3c3" selection="#d8dee9" ansi="#3b4252, #bf616a, #96b17f, #c5a565, #81a1c1, #b48ead, #7bb3c3, #a5abb6, #4c566a, #bf616a, #96b17f, #c5a565, #81a1c1, #b48ead, #82afae, #eceff4" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#e5e9f0" name="Background" />
-  <Swatch color="#414858" name="Foreground" />
-  <Swatch color="#7bb3c3" name="Cursor" />
-  <Swatch color="#3b4252" name="Cursor text" />
-  <Swatch color="#d8dee9" name="Selection" />
-  <Swatch color="#4c556a" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#e5e9f0` |
+| Foreground | `foreground` | `#414858` |
+| Cursor | `cursor-color` | `#7bb3c3` |
+| Cursor text | `cursor-text` | `#3b4252` |
+| Selection background | `selection-background` | `#d8dee9` |
+| Selection foreground | `selection-foreground` | `#4c556a` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#3b4252" name="0 Black" />
-  <Swatch color="#bf616a" name="1 Red" />
-  <Swatch color="#96b17f" name="2 Green" />
-  <Swatch color="#c5a565" name="3 Yellow" />
-  <Swatch color="#81a1c1" name="4 Blue" />
-  <Swatch color="#b48ead" name="5 Magenta" />
-  <Swatch color="#7bb3c3" name="6 Cyan" />
-  <Swatch color="#a5abb6" name="7 White" />
-  <Swatch color="#4c566a" name="8 Bright black" />
-  <Swatch color="#bf616a" name="9 Bright red" />
-  <Swatch color="#96b17f" name="10 Bright green" />
-  <Swatch color="#c5a565" name="11 Bright yellow" />
-  <Swatch color="#81a1c1" name="12 Bright blue" />
-  <Swatch color="#b48ead" name="13 Bright magenta" />
-  <Swatch color="#82afae" name="14 Bright cyan" />
-  <Swatch color="#eceff4" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#3b4252` | 8 | Bright black | `#4c566a` |
+| 1 | Red | `#bf616a` | 9 | Bright red | `#bf616a` |
+| 2 | Green | `#96b17f` | 10 | Bright green | `#96b17f` |
+| 3 | Yellow | `#c5a565` | 11 | Bright yellow | `#c5a565` |
+| 4 | Blue | `#81a1c1` | 12 | Bright blue | `#81a1c1` |
+| 5 | Magenta | `#b48ead` | 13 | Bright magenta | `#b48ead` |
+| 6 | Cyan | `#7bb3c3` | 14 | Bright cyan | `#82afae` |
+| 7 | White | `#a5abb6` | 15 | Bright white | `#eceff4` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/nord-light.conf` is a byte-for-byte copy of the
 `Nord Light` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

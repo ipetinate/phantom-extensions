@@ -1,7 +1,7 @@
 ---
 title: Purple Portal
 tagline: The Purple Portal terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Purple Portal" background="#160528" foreground="#faf5ff" cursor="#faf5ff" selection="#faf5ff" ansi="#483a57, #fb7185, #34d399, #f472b6, #facc15, #38bdf8, #580ff0, #d8b4fe, #503872, #fc8d9d, #5ddcad, #f68bc3, #fbd644, #60caf9, #793ff3, #faf5ff" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#160528" name="Background" />
-  <Swatch color="#faf5ff" name="Foreground" />
-  <Swatch color="#faf5ff" name="Cursor" />
-  <Swatch color="#160528" name="Cursor text" />
-  <Swatch color="#faf5ff" name="Selection" />
-  <Swatch color="#160528" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#160528` |
+| Foreground | `foreground` | `#faf5ff` |
+| Cursor | `cursor-color` | `#faf5ff` |
+| Cursor text | `cursor-text` | `#160528` |
+| Selection background | `selection-background` | `#faf5ff` |
+| Selection foreground | `selection-foreground` | `#160528` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#483a57" name="0 Black" />
-  <Swatch color="#fb7185" name="1 Red" />
-  <Swatch color="#34d399" name="2 Green" />
-  <Swatch color="#f472b6" name="3 Yellow" />
-  <Swatch color="#facc15" name="4 Blue" />
-  <Swatch color="#38bdf8" name="5 Magenta" />
-  <Swatch color="#580ff0" name="6 Cyan" />
-  <Swatch color="#d8b4fe" name="7 White" />
-  <Swatch color="#503872" name="8 Bright black" />
-  <Swatch color="#fc8d9d" name="9 Bright red" />
-  <Swatch color="#5ddcad" name="10 Bright green" />
-  <Swatch color="#f68bc3" name="11 Bright yellow" />
-  <Swatch color="#fbd644" name="12 Bright blue" />
-  <Swatch color="#60caf9" name="13 Bright magenta" />
-  <Swatch color="#793ff3" name="14 Bright cyan" />
-  <Swatch color="#faf5ff" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#483a57` | 8 | Bright black | `#503872` |
+| 1 | Red | `#fb7185` | 9 | Bright red | `#fc8d9d` |
+| 2 | Green | `#34d399` | 10 | Bright green | `#5ddcad` |
+| 3 | Yellow | `#f472b6` | 11 | Bright yellow | `#f68bc3` |
+| 4 | Blue | `#facc15` | 12 | Bright blue | `#fbd644` |
+| 5 | Magenta | `#38bdf8` | 13 | Bright magenta | `#60caf9` |
+| 6 | Cyan | `#580ff0` | 14 | Bright cyan | `#793ff3` |
+| 7 | White | `#d8b4fe` | 15 | Bright white | `#faf5ff` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/purple-portal.conf` is a byte-for-byte copy of the
 `Purple Portal` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

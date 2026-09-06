@@ -1,7 +1,7 @@
 ---
 title: iTerm2 Solarized Light
 tagline: The iTerm2 Solarized Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="iTerm2 Solarized Light" background="#fdf6e3" foreground="#657b83" cursor="#657b83" selection="#eee8d5" ansi="#073642, #dc322f, #859900, #b58900, #268bd2, #d33682, #2aa198, #bbb5a2, #002b36, #cb4b16, #586e75, #657b83, #839496, #6c71c4, #93a1a1, #fdf6e3" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#fdf6e3" name="Background" />
-  <Swatch color="#657b83" name="Foreground" />
-  <Swatch color="#657b83" name="Cursor" />
-  <Swatch color="#eee8d5" name="Cursor text" />
-  <Swatch color="#eee8d5" name="Selection" />
-  <Swatch color="#586e75" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#fdf6e3` |
+| Foreground | `foreground` | `#657b83` |
+| Cursor | `cursor-color` | `#657b83` |
+| Cursor text | `cursor-text` | `#eee8d5` |
+| Selection background | `selection-background` | `#eee8d5` |
+| Selection foreground | `selection-foreground` | `#586e75` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#073642" name="0 Black" />
-  <Swatch color="#dc322f" name="1 Red" />
-  <Swatch color="#859900" name="2 Green" />
-  <Swatch color="#b58900" name="3 Yellow" />
-  <Swatch color="#268bd2" name="4 Blue" />
-  <Swatch color="#d33682" name="5 Magenta" />
-  <Swatch color="#2aa198" name="6 Cyan" />
-  <Swatch color="#bbb5a2" name="7 White" />
-  <Swatch color="#002b36" name="8 Bright black" />
-  <Swatch color="#cb4b16" name="9 Bright red" />
-  <Swatch color="#586e75" name="10 Bright green" />
-  <Swatch color="#657b83" name="11 Bright yellow" />
-  <Swatch color="#839496" name="12 Bright blue" />
-  <Swatch color="#6c71c4" name="13 Bright magenta" />
-  <Swatch color="#93a1a1" name="14 Bright cyan" />
-  <Swatch color="#fdf6e3" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#073642` | 8 | Bright black | `#002b36` |
+| 1 | Red | `#dc322f` | 9 | Bright red | `#cb4b16` |
+| 2 | Green | `#859900` | 10 | Bright green | `#586e75` |
+| 3 | Yellow | `#b58900` | 11 | Bright yellow | `#657b83` |
+| 4 | Blue | `#268bd2` | 12 | Bright blue | `#839496` |
+| 5 | Magenta | `#d33682` | 13 | Bright magenta | `#6c71c4` |
+| 6 | Cyan | `#2aa198` | 14 | Bright cyan | `#93a1a1` |
+| 7 | White | `#bbb5a2` | 15 | Bright white | `#fdf6e3` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/iterm2-solarized-light.conf` is a byte-for-byte copy of the
 `iTerm2 Solarized Light` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

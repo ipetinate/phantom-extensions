@@ -1,7 +1,7 @@
 ---
 title: Synthwave Everything
 tagline: The Synthwave Everything terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.1
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,46 +17,29 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
-## The theme
-
-<ThemePreview title="Synthwave Everything" background="#2a2139" foreground="#f0eff1" cursor="#72f1b8" selection="#181521" ansi="#fefefe, #f97e72, #72f1b8, #fede5d, #6d77b3, #c792ea, #f772e0, #fefefe, #fefefe, #f88414, #72f1b8, #fff951, #36f9f6, #e1acff, #f92aad, #fefefe" />
-
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
 ## Terminal colours
 
-<Swatches columns="6">
-  <Swatch color="#2a2139" name="Background" />
-  <Swatch color="#f0eff1" name="Foreground" />
-  <Swatch color="#72f1b8" name="Cursor" />
-  <Swatch color="#1a1a1a" name="Cursor text" />
-  <Swatch color="#181521" name="Selection" />
-  <Swatch color="#f0eff1" name="Selection text" />
-</Swatches>
+| Role | Key | Colour |
+|---|---|---|
+| Background | `background` | `#2a2139` |
+| Foreground | `foreground` | `#f0eff1` |
+| Cursor | `cursor-color` | `#72f1b8` |
+| Cursor text | `cursor-text` | `#1a1a1a` |
+| Selection background | `selection-background` | `#181521` |
+| Selection foreground | `selection-foreground` | `#f0eff1` |
 
 ## The ANSI 16
 
-<Swatches columns="8">
-  <Swatch color="#fefefe" name="0 Black" />
-  <Swatch color="#f97e72" name="1 Red" />
-  <Swatch color="#72f1b8" name="2 Green" />
-  <Swatch color="#fede5d" name="3 Yellow" />
-  <Swatch color="#6d77b3" name="4 Blue" />
-  <Swatch color="#c792ea" name="5 Magenta" />
-  <Swatch color="#f772e0" name="6 Cyan" />
-  <Swatch color="#fefefe" name="7 White" />
-  <Swatch color="#fefefe" name="8 Bright black" />
-  <Swatch color="#f88414" name="9 Bright red" />
-  <Swatch color="#72f1b8" name="10 Bright green" />
-  <Swatch color="#fff951" name="11 Bright yellow" />
-  <Swatch color="#36f9f6" name="12 Bright blue" />
-  <Swatch color="#e1acff" name="13 Bright magenta" />
-  <Swatch color="#f92aad" name="14 Bright cyan" />
-  <Swatch color="#fefefe" name="15 Bright white" />
-</Swatches>
+| # | Name | Colour | # | Name | Colour |
+|---|---|---|---|---|---|
+| 0 | Black | `#fefefe` | 8 | Bright black | `#fefefe` |
+| 1 | Red | `#f97e72` | 9 | Bright red | `#f88414` |
+| 2 | Green | `#72f1b8` | 10 | Bright green | `#72f1b8` |
+| 3 | Yellow | `#fede5d` | 11 | Bright yellow | `#fff951` |
+| 4 | Blue | `#6d77b3` | 12 | Bright blue | `#36f9f6` |
+| 5 | Magenta | `#c792ea` | 13 | Bright magenta | `#e1acff` |
+| 6 | Cyan | `#f772e0` | 14 | Bright cyan | `#f92aad` |
+| 7 | White | `#fefefe` | 15 | Bright white | `#fefefe` |
 
 ## Installing
 
@@ -81,7 +64,3 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/synthwave-everything.conf` is a byte-for-byte copy of the
 `Synthwave Everything` file in that collection. This extension packages it and claims no authorship
 of the palette.
-
-## Changelog
-
-**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
