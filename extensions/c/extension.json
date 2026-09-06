@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.c",
   "name": "C",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "C: highlighting and clangd.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/c",

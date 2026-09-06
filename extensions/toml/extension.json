@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.toml",
   "name": "TOML",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "TOML: highlighting and the Taplo language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/toml",

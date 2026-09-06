@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.html",
   "name": "HTML",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "HTML: highlighting, vscode-html-language-server and the formatter it ships.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/html",

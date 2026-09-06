@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.kotlin",
   "name": "Kotlin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "Kotlin: highlighting and the Kotlin Language Server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/kotlin",
