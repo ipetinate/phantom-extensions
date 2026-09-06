@@ -10,6 +10,7 @@
   "dependencies": [
     "phantom.c",
     "phantom.css",
+    "ipetinate.elixir",
     "phantom.go",
     "phantom.html",
     "phantom.java",
