@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.terraform",
+  "name": "Terraform",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Terraform: highlighting and terraform-ls.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/terraform",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "terraform",
+        "name": "Terraform",
+        "extensions": [
+          "tf",
+          "tfvars"
+        ],
+        "category": "infrastructure",
+        "icon": "icons/terraform.svg",
+        "lineComment": "#",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "keywords": [
+          "check",
+          "count",
+          "data",
+          "depends_on",
+          "dynamic",
+          "else",
+          "endfor",
+          "endif",
+          "false",
+          "for",
+          "for_each",
+          "if",
+          "import",
+          "in",
+          "lifecycle",
+          "locals",
+          "module",
+          "moved",
+          "null",
+          "output",
+          "provider",
+          "provisioner",
+          "removed",
+          "resource",
+          "terraform",
+          "true",
+          "variable"
+        ],
+        "syntax": {
+          "string": "<<-?[A-Z]+[\\s\\S]*?^[ \\t]*[A-Z]+$|\"(?:[^\"\\\\]|\\\\.)*\"",
+          "number": "preset:number",
+          "type": "\\b(?:string|number|bool|any|list|set|map|object|tuple)\\b",
+          "function": "preset:callBeforeParen",
+          "attribute": "^[ \\t]*[A-Za-z_][A-Za-z0-9_-]*(?=[ \\t]*=(?!=))|\\$\\{[^}]*\\}"
+        },
+        "server": {
+          "command": "terraform-ls",
+          "args": [
+            "serve"
+          ],
+          "installHint": "brew install hashicorp/tap/terraform-ls",
+          "documentationURL": "https://github.com/hashicorp/terraform-ls",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install hashicorp/tap/terraform-ls",
+                "uninstall": "brew uninstall hashicorp/tap/terraform-ls"
+              }
+            ],
+            "documentationURL": "https://github.com/hashicorp/terraform-ls/blob/main/docs/installation.md"
+          }
+        }
+      }
+    ]
+  }
+}

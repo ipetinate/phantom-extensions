@@ -1,0 +1,147 @@
+---
+title: Terraform
+tagline: Terraform support for Phantom — highlighting, and terraform-ls for completion, validation and navigation.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [terraform, hcl, infrastructure, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Terraform support for the Phantom editor. The extension declares the language — `.tf` and `.tfvars`, top level block keywords, HCL strings and heredocs, type constraints and interpolations — and connects **terraform-ls**, HashiCorp's language server. terraform-ls is optional. Highlighting works without it.
+
+Phantom already ships a Terraform language and the same server. This extension restates both as data, so Phantom can install and remove terraform-ls for you, and it corrects three things in the highlighting: HCL has no single quoted strings and no backticks, it has heredocs, and its type constraints are lowercase words rather than capitalised names. Because Phantom already owns `.tf`, the contribution stays inert until you promote it in Settings, which the steps below cover.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Block keywords such as `resource`, `data`, `module` and `variable`, double quoted strings and `<<EOT` heredocs, numbers, the type constraints `string`, `number`, `bool`, `list`, `map` and `object`, function calls, attribute names before `=`, and `${…}` interpolations. Comments with `#`, `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      terraform-ls indexes the folder and offers completion, hover, signature help, go to definition and declaration, find references, document links, document and workspace symbols, code actions, code lenses and semantic tokens.
+    </Feature>
+    <Feature title="Formatting through the server" icon="sparkles">
+      terraform-ls answers `textDocument/formatting`, so ⇧⌘F and Format on Save reformat the file with Terraform's own rules. This extension contributes no separate formatter, because the server already covers it.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Terraform file open in Phantom with a resource block, quoted arguments, a nested dynamic block and a completion list" caption="Blocks, arguments and completion in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle terraform-ls. Install it to get the language intelligence; the extension finds it on your `PATH`.
+
+<Requirement command="terraform-ls" install="brew install hashicorp/tap/terraform-ls" url="https://github.com/hashicorp/terraform-ls">
+Completion, hover, navigation, symbols, code actions, formatting and validation. It runs the `terraform` binary for some of that work and finds it on your `PATH`. Without the server the highlighter still works.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Terraform.
+  </Step>
+  <Step title="Put the extension ahead of the built-in language">
+    Phantom already claims `.tf`, so the contribution is listed as Shadowed and does nothing yet. Open Settings → Extensions, select Terraform, and press **Use This Instead of Phantom**. The promotion covers this language only, and you can undo it in the same place.
+  </Step>
+  <Step title="Install the server">
+    Run `brew install hashicorp/tap/terraform-ls`. The tap carries stable releases only. Phantom picks the binary up without a restart.
+  </Step>
+  <Step title="Open the folder, not the file">
+    terraform-ls indexes a folder. Opening a single file gives you a reduced mode with no completion of `module.*` references and no workspace symbols.
+  </Step>
+  <Step title="Open a Terraform file">
+    The first time a project needs terraform-ls, Phantom asks before starting it and remembers your answer for this extension.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.tf`, `.tfvars` |
+| Language server | `terraform-ls serve` (stdio) |
+| Formatter | none. terraform-ls formats through the server itself |
+| Editor | Block keywords, `#`, `//` and `/* */` comments, HCL strings and heredocs, type constraints, calls, arguments, interpolations |
+| Icon | Terraform file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Server settings">
+
+terraform-ls takes its settings from the client. Phantom sends none of its own, so these are what you would set in another editor; they are listed here because they explain the server's behaviour.
+
+| Setting | Default | What it does |
+|---|---|---|
+| `terraform.path` | detected on `PATH` | Which `terraform` binary the server runs |
+| `terraform.timeout` | server default | Execution timeout, in Go duration form such as `30s` |
+| `terraform.logFilePath` | unset | Where Terraform executions are logged |
+| `indexing.ignorePaths` | empty | Paths skipped when the workspace is indexed |
+| `indexing.ignoreDirectoryNames` | `.git`, `.idea`, `.vscode`, `terraform.tfstate.d`, `.terragrunt-cache` | Directory names never indexed |
+| `ignoreSingleFileWarning` | `false` | Suppresses the warning about opening one file instead of a folder |
+| `validation.enableEnhancedValidation` | `true` | Enhanced validation |
+| `experimentalFeatures.validateOnSave` | `false` | Runs `terraform validate` on save |
+| `experimentalFeatures.prefillRequiredFields` | `false` | Fills required arguments into completed blocks |
+
+`rootModulePaths`, `excludeModulePaths`, `ignoreDirectoryNames`, `terraformExecPath`, `terraformExecTimeout` and `terraformLogFilePath` are the old names of some of these and are deprecated.
+
+</Details>
+
+<Details summary="Which files terraform-ls accepts">
+
+The server handles `*.tf` for configuration and `*.tfvars` for variable files, and it separately handles the stacks, deploy, search and policy file types that use compound suffixes such as `*.tfdeploy.hcl`. The manifest format takes a single suffix per entry, so this extension claims `tf` and `tfvars` only.
+
+The server deliberately does not accept `*.tf.json`, `*.tfvars.json`, Packer HCL, or other HCL files, so the extension does not claim `.hcl` either. A `.hcl` file that is not Terraform would otherwise be handed to a server that cannot read it.
+
+</Details>
+
+<Details summary="Telemetry">
+
+terraform-ls collects data only when the client asks for it during initialization. Phantom does not ask, so nothing is sent.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The extension is listed as Shadowed">
+
+Phantom's own tables claim `.tf` and the `terraform` language id, and an extension never takes a language you already had without being asked. Settings → Extensions names the claim and offers **Use This Instead of Phantom**. Until you press it, nothing in the language contribution applies.
+
+</Details>
+
+<Details summary="No completion for providers or resources">
+
+Provider schemas come from the modules Terraform has installed. Run `terraform init` in the folder, then restart the server from Settings → Languages. Until the schema is on disk the server can complete the language but not the provider.
+
+</Details>
+
+<Details summary="A warning about opening a single file">
+
+terraform-ls indexes folders. Open the repository or the module directory instead of the individual file, or set `ignoreSingleFileWarning` in a client that can send settings.
+
+</Details>
+
+<Details summary="Indexing a large repository is slow">
+
+`indexing.ignorePaths` and `indexing.ignoreDirectoryNames` exist for this. Vendored modules and caches are the usual cause.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+terraform-ls runs as your user, with access to your files and network, the same as if you started it from the terminal. It also runs the `terraform` binary itself. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.tf` and `.tfvars`, corrected HCL string, heredoc and type patterns, terraform-ls wiring, and an install command for it.
+
+## License and credits
+
+The extension is released under the MIT License. [terraform-ls](https://github.com/hashicorp/terraform-ls) is © HashiCorp (MPL-2.0). Terraform is a registered trademark of HashiCorp; this extension is not affiliated with or endorsed by HashiCorp.
