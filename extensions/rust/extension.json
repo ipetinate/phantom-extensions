@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.rust",
   "name": "Rust",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Rust: highlighting, attributes and the rust-analyzer language server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rust",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -17,57 +17,10 @@
         ],
         "category": "compiled",
         "icon": "icons/rust.png",
-        "keywords": [
-          "as",
-          "async",
-          "await",
-          "break",
-          "const",
-          "continue",
-          "crate",
-          "dyn",
-          "else",
-          "enum",
-          "extern",
-          "false",
-          "fn",
-          "for",
-          "if",
-          "impl",
-          "in",
-          "let",
-          "loop",
-          "match",
-          "mod",
-          "move",
-          "mut",
-          "pub",
-          "ref",
-          "return",
-          "self",
-          "Self",
-          "static",
-          "struct",
-          "super",
-          "trait",
-          "true",
-          "type",
-          "unsafe",
-          "use",
-          "where",
-          "while"
-        ],
         "lineComment": "//",
         "blockComment": {
           "open": "/*",
           "close": "*/"
-        },
-        "syntax": {
-          "string": "preset:cStyleString",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParen",
-          "attribute": "#!?\\[[^\\]]*\\]"
         },
         "server": {
           "command": "rust-analyzer",
@@ -85,6 +38,15 @@
             "documentationURL": "https://rust-analyzer.github.io/book/rust_analyzer_binary.html"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.rust",
+        "path": "syntaxes/rust.tmLanguage.json",
+        "languageId": "rust",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/rust/syntaxes/rust.tmLanguage.json"
       }
     ]
   }

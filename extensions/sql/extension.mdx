@@ -1,7 +1,7 @@
 ---
 title: SQL
 tagline: SQL highlighting for Phantom. It adds colour to .sql files and nothing else.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -23,8 +23,8 @@ Phantom already ships SQL highlighting. This extension restates it, adds five fu
 
 <Showcase>
   <Features>
-    <Feature title="Keywords in both cases" icon="brush">
-      Eighty-nine keywords, listed in upper case and lower case, so `SELECT` and `select` both colour. A manifest keyword list is matched exactly as written, which is why both forms are there.
+    <Feature title="Keywords in any case" icon="brush">
+      The grammar matches keywords without regard to case, so `SELECT`, `select` and `Select` all colour, along with the data types, the operators and the built-in functions of the standard and the common dialects.
     </Feature>
     <Feature title="Strings, identifiers and parameters" icon="code">
       Single quoted strings including the doubled `''` escape, `$$ dollar quoted $$` bodies, and `N'…'` literals. Quoted identifiers in all three dialect spellings — `"double"`, `` `backtick` `` and `[bracket]` — plus the standard data type names. Bind parameters as `@name`, `:name` and `$1`.
@@ -57,7 +57,7 @@ Phantom already ships SQL highlighting. This extension restates it, adds five fu
 | File types | `.sql`, `.ddl`, `.dml`, `.pgsql`, `.mysql`, `.tsql` |
 | Language server | none |
 | Formatter | none |
-| Editor | 89 keywords in both cases, `--` and `/* */` comments, strings with `''` escapes, dollar quoted bodies, quoted and bracketed identifiers, data type names, function calls, bind parameters |
+| Editor | TextMate grammar `source.sql` (vscode-mssql), which matches keywords in any case; `--` and `/* */` comment markers |
 | Icon | SQL file icon in the sidebar and tabs |
 
 ## Configuration
@@ -80,9 +80,7 @@ The cost is that a MySQL file colours a `[bracket]` that MySQL would not accept.
 
 <Details summary="Adding your own keywords">
 
-Vendor keywords are not in the list. `MATERIALIZED`, `UPSERT`, `PRAGMA`, `NOLOCK` and the rest belong to one product each, and a shared list of all of them colours words that are ordinary identifiers elsewhere.
-
-Add the ones your team writes by editing the `keywords` array in `extension.json`. Add each word twice, once in each case. Raise `version` afterwards so Phantom sees the change.
+Colouring comes from the TextMate grammar in `syntaxes/sql.tmLanguage.json`. A vendor keyword the grammar does not know can be added to the alternation in its `keyword.other.DML.sql` or `keyword.other.DDL.create.II.sql` rules; the patterns are case-insensitive, so one spelling is enough. Raise `version` afterwards so Phantom sees the change.
 
 </Details>
 
@@ -94,9 +92,9 @@ Phantom's own tables claim `.sql`, and an extension never takes a language you a
 
 </Details>
 
-<Details summary="Mixed case keywords are not coloured">
+<Details summary="A word I expect to be a keyword is not coloured">
 
-A keyword list is matched exactly as written, and the list holds `SELECT` and `select`. A word written `Select` matches neither. Add the spelling you use to `keywords` in the manifest.
+The grammar colours the keywords of the SQL standard and the common dialects, in any case. A word it leaves plain is one it does not list; see "Adding your own keywords" above.
 
 </Details>
 
@@ -114,6 +112,8 @@ Also expected. The extension contributes no formatter. If your project formats S
 
 ## Changelog
 
+**1.0.4** — Ships the TextMate grammar `source.sql` in place of the manifest's token patterns and the keyword list in both cases; the grammar matches keywords whatever their case. Colouring now needs Phantom 0.17.0.
+
 **1.0.3** — Published under Isac Petinate.
 
 **1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -124,4 +124,4 @@ Also expected. The extension contributes no formatter. If your project formats S
 
 ## License and credits
 
-The extension is released under the MIT License. It bundles no third-party code and runs no third-party program. SQL is standardised as ISO/IEC 9075; the keyword list here is a reading aid, not a conformance claim.
+The extension is released under the MIT License. It runs no third-party program. SQL is standardised as ISO/IEC 9075; the grammar's keyword set is a reading aid, not a conformance claim. The grammar is the one [vscode-mssql](https://github.com/microsoft/vscode-mssql) carries, © Microsoft (MIT), in the JSON form Visual Studio Code ships.

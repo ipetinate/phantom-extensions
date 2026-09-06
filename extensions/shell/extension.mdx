@@ -1,7 +1,7 @@
 ---
 title: Shell Script
 tagline: Shell script support for Phantom — highlighting, bash-language-server and shfmt.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -78,7 +78,7 @@ Optional, and read only by the language server. bash-language-server calls Shell
 | File names | `.bashrc`, `.bash_profile`, `.bash_login`, `.bash_logout`, `.bash_aliases`, `.profile`, `.zshrc`, `.zshenv`, `.zprofile`, `.zlogin`, `.zlogout`, `.kshrc` |
 | Language server | `bash-language-server start` (stdio) |
 | Formatter | `shfmt --filename <file>` |
-| Editor | Keywords and builtins, `#` comments, quoted and ANSI-C strings, parameter expansions |
+| Editor | TextMate grammar `source.shell` (better-shell-syntax), `#` comment marker |
 | Icon | Shell file icon in the sidebar and tabs |
 
 ## Configuration
@@ -177,6 +177,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.shell` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -191,4 +193,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [bash-language-server](https://github.com/bash-lsp/bash-language-server) is © the bash-lsp contributors (MIT). [shfmt](https://github.com/mvdan/sh) is © Daniel Martí (BSD-3-Clause). [ShellCheck](https://www.shellcheck.net/) is © Vidar Holen (GPL-3.0) and is neither bundled nor run by Phantom. This extension is not affiliated with any of these projects.
+The extension is released under the MIT License. [bash-language-server](https://github.com/bash-lsp/bash-language-server) is © the bash-lsp contributors (MIT). [shfmt](https://github.com/mvdan/sh) is © Daniel Martí (BSD-3-Clause). [ShellCheck](https://www.shellcheck.net/) is © Vidar Holen (GPL-3.0) and is neither bundled nor run by Phantom. This extension is not affiliated with any of these projects. The grammar is [better-shell-syntax](https://github.com/jeff-hykin/better-shell-syntax) by Jeff Hykin (MIT), in the JSON form Visual Studio Code ships.

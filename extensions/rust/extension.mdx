@@ -1,7 +1,7 @@
 ---
 title: Rust
 tagline: Rust for Phantom — highlighting, attributes and the rust-analyzer language server.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -69,7 +69,7 @@ The Rust language server: diagnostics, hover, completion, definitions, reference
 | File types | `.rs` |
 | Language id | `rust` |
 | Language server | `rust-analyzer` |
-| Editor | Keywords, `//` and `/* */` markers, string, number, type, call and attribute patterns |
+| Editor | TextMate grammar `source.rust` (rust-syntax), `//` and `/* */` comment markers |
 | Icon | Rust file icon in the sidebar and tabs |
 
 Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. Settings → Language Servers can promote it when you want the manifest to be the one in force.
@@ -166,6 +166,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.rust` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -180,4 +182,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [rust-analyzer](https://github.com/rust-lang/rust-analyzer) is © rust-analyzer contributors, dual-licensed Apache-2.0 OR MIT. [rustfmt](https://github.com/rust-lang/rustfmt) carries the same dual licence. Rust is a trademark of the Rust Foundation; this extension is not affiliated with the Rust project.
+The extension is released under the MIT License. [rust-analyzer](https://github.com/rust-lang/rust-analyzer) is © rust-analyzer contributors, dual-licensed Apache-2.0 OR MIT. [rustfmt](https://github.com/rust-lang/rustfmt) carries the same dual licence. Rust is a trademark of the Rust Foundation; this extension is not affiliated with the Rust project. The grammar is [rust-syntax](https://github.com/dustypomerleau/rust-syntax) by Dusty Pomerleau (MIT), in the JSON form Visual Studio Code ships.

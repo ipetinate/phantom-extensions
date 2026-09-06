@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "phantom.python",
   "name": "Python",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Python: highlighting, Pyright and Ruff.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/python",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
   "contributes": {
     "languages": [
       {
@@ -19,53 +19,6 @@
         "category": "script",
         "icon": "icons/python.png",
         "lineComment": "#",
-        "keywords": [
-          "False",
-          "None",
-          "True",
-          "and",
-          "as",
-          "assert",
-          "async",
-          "await",
-          "break",
-          "case",
-          "class",
-          "continue",
-          "def",
-          "del",
-          "elif",
-          "else",
-          "except",
-          "finally",
-          "for",
-          "from",
-          "global",
-          "if",
-          "import",
-          "in",
-          "is",
-          "lambda",
-          "match",
-          "nonlocal",
-          "not",
-          "or",
-          "pass",
-          "raise",
-          "return",
-          "try",
-          "type",
-          "while",
-          "with",
-          "yield"
-        ],
-        "syntax": {
-          "string": "(?:[rRbBuUfF]{0,2})(?:\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*')",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParen",
-          "attribute": "@[A-Za-z_][A-Za-z0-9_.]*"
-        },
         "server": {
           "command": "pyright-langserver",
           "args": [
@@ -128,6 +81,15 @@
           ],
           "documentationURL": "https://docs.astral.sh/ruff/installation/"
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.python",
+        "path": "syntaxes/python.tmLanguage.json",
+        "languageId": "python",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/python/syntaxes/MagicPython.tmLanguage.json"
       }
     ]
   }

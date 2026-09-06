@@ -1,7 +1,7 @@
 ---
 title: Python
 tagline: Python language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.5
+version: 1.0.6
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -74,7 +74,7 @@ The formatter, from Astral. Without it the Format command and Format on Save do 
 | File types | `.py`, `.pyi` |
 | Language server | `pyright-langserver --stdio` |
 | Formatter | `ruff format --stdin-filename <file> -` |
-| Editor | Keywords including `match`, `case` and `type`, the `#` comment marker, decorator and string patterns |
+| Editor | TextMate grammar `source.python` (MagicPython), `#` comment marker |
 | Icon | Python file icon in the sidebar and tabs |
 
 ## Configuration
@@ -172,6 +172,8 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## Changelog
 
+**1.0.6** — Ships the TextMate grammar `source.python` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
+
 **1.0.5** — Published under Isac Petinate.
 
 **1.0.4** — Credits Isac Petinate, who packaged it, rather than the app.
@@ -186,4 +188,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [Pyright](https://github.com/microsoft/pyright) is © Microsoft Corporation (MIT). [Ruff](https://github.com/astral-sh/ruff) is © Astral Software Inc. (MIT). Python is a trademark of the Python Software Foundation; this extension is not affiliated with it.
+The extension is released under the MIT License. [Pyright](https://github.com/microsoft/pyright) is © Microsoft Corporation (MIT). [Ruff](https://github.com/astral-sh/ruff) is © Astral Software Inc. (MIT). Python is a trademark of the Python Software Foundation; this extension is not affiliated with it. The grammar is [MagicPython](https://github.com/MagicStack/MagicPython) by MagicStack Inc. (MIT), in the JSON form Visual Studio Code ships.

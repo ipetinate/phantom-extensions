@@ -2,11 +2,22 @@
   "schemaVersion": 1,
   "id": "phantom.ruby",
   "name": "Ruby",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "Ruby: highlighting and Ruby LSP.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/ruby",
-  "phantom": "0.16.0",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.c",
+    "phantom.css",
+    "phantom.html",
+    "ipetinate.lua",
+    "phantom.shell",
+    "phantom.sql",
+    "phantom.typescript",
+    "phantom.xml",
+    "phantom.yaml"
+  ],
   "contributes": {
     "languages": [
       {
@@ -30,55 +41,6 @@
         "category": "script",
         "icon": "icons/ruby.png",
         "lineComment": "#",
-        "keywords": [
-          "BEGIN",
-          "END",
-          "alias",
-          "and",
-          "begin",
-          "break",
-          "case",
-          "class",
-          "def",
-          "do",
-          "else",
-          "elsif",
-          "end",
-          "ensure",
-          "false",
-          "for",
-          "if",
-          "in",
-          "module",
-          "next",
-          "nil",
-          "not",
-          "or",
-          "redo",
-          "rescue",
-          "retry",
-          "return",
-          "self",
-          "super",
-          "then",
-          "true",
-          "undef",
-          "unless",
-          "until",
-          "when",
-          "while",
-          "yield",
-          "__FILE__",
-          "__LINE__",
-          "__ENCODING__"
-        ],
-        "syntax": {
-          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'|%[wWiIqQ]\\([^)]*\\)|%[wWiIqQ]\\[[^\\]]*\\]",
-          "number": "preset:number",
-          "type": "preset:capitalizedType",
-          "function": "preset:callBeforeParen",
-          "attribute": "@{1,2}[A-Za-z_][A-Za-z0-9_]*|\\$[A-Za-z_][A-Za-z0-9_]*|:[A-Za-z_][A-Za-z0-9_]*[?!]?"
-        },
         "server": {
           "command": "ruby-lsp",
           "installHint": "brew install ruby-lsp",
@@ -99,6 +61,15 @@
             "documentationURL": "https://shopify.github.io/ruby-lsp/editors.html"
           }
         }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.ruby",
+        "path": "syntaxes/ruby.tmLanguage.json",
+        "languageId": "ruby",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/ruby/syntaxes/ruby.tmLanguage.json"
       }
     ]
   }
