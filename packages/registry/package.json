@@ -1,0 +1,36 @@
+{
+  "name": "phantom-registry",
+  "version": "0.1.0",
+  "description": "The registry builder for Phantom extensions: manifest and document validation, deterministic zips, index.json.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Isac Petinate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipetinate/phantom-extensions.git",
+    "directory": "packages/registry"
+  },
+  "bin": {
+    "phantom-registry": "dist/cli.js"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "build": "vite build",
+    "check": "node dist/cli.js check"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3"
+  }
+}

@@ -32,7 +32,7 @@ screenshots:
 </Features>
 ```
 
-The front matter is read by the registry's `scripts/build_index.py`, which puts it on the index entry as the `card`; the registry README lists every key and its limits. The body is Markdown (with GFM tables, task lists and strikethrough) plus the components below. Level 1 headings are not allowed: the title comes from the front matter.
+The front matter is read by the registry builder in `packages/registry`, which puts it on the index entry as the `card`; the registry README lists every key and its limits. The body is Markdown (with GFM tables, task lists and strikethrough) plus the components below. Level 1 headings are not allowed: the title comes from the front matter.
 
 ### Components
 

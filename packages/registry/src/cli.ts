@@ -1,0 +1,111 @@
+import path from "node:path";
+import { build } from "./build.ts";
+import { collect } from "./collect.ts";
+import { ManifestError } from "./errors.ts";
+import { ROOT } from "./paths.ts";
+import { checkReleases, ReleaseCheckError } from "./releases.ts";
+
+const DEFAULT_REPO = "ipetinate/phantom-extensions";
+
+interface BuildArguments {
+  check: boolean;
+  out: string;
+  repo: string;
+}
+
+function usage(): number {
+  process.stderr.write(
+    [
+      "usage:",
+      "  phantom-registry [--check] [--out <dir>] [--repo <owner/name>]",
+      "  phantom-registry check                validate every extension without writing anything",
+      "  phantom-registry releases [--dist <dir>]   refuse a version published with different bytes",
+      "",
+    ].join("\n"),
+  );
+  return 2;
+}
+
+function splitArgument(argument: string): [string, string | null] {
+  const at = argument.indexOf("=");
+  if (!argument.startsWith("--") || at === -1) return [argument, null];
+  return [argument.slice(0, at), argument.slice(at + 1)];
+}
+
+function parseBuildArguments(argv: string[]): BuildArguments | null {
+  const parsed: BuildArguments = { check: false, out: path.join(ROOT, "dist"), repo: DEFAULT_REPO };
+  for (let index = 0; index < argv.length; index += 1) {
+    const [flag, inline] = splitArgument(argv[index] as string);
+    if (flag === "check" || flag === "--check") {
+      parsed.check = true;
+      continue;
+    }
+    if (flag !== "--out" && flag !== "--repo") return null;
+    let value = inline;
+    if (value === null) {
+      value = argv[index + 1] ?? null;
+      index += 1;
+    }
+    if (value === null || value === "") return null;
+    if (flag === "--out") parsed.out = value;
+    else parsed.repo = value;
+  }
+  return parsed;
+}
+
+function parseReleaseArguments(argv: string[]): string | null {
+  let dist = path.join(ROOT, "dist");
+  for (let index = 0; index < argv.length; index += 1) {
+    const [flag, inline] = splitArgument(argv[index] as string);
+    if (flag !== "--dist") return null;
+    const value = inline ?? argv[index + 1] ?? null;
+    if (inline === null) index += 1;
+    if (value === null || value === "") return null;
+    dist = value;
+  }
+  return dist;
+}
+
+function report(error: unknown): number {
+  process.stderr.write(`error: ${error instanceof Error ? error.message : String(error)}\n`);
+  return 1;
+}
+
+function main(argv: string[]): number {
+  if (argv[0] === "releases") {
+    const dist = parseReleaseArguments(argv.slice(1));
+    if (dist === null) return usage();
+    try {
+      return checkReleases(dist);
+    } catch (error) {
+      if (error instanceof ReleaseCheckError || error instanceof Error) return report(error);
+      throw error;
+    }
+  }
+  const parsed = parseBuildArguments(argv);
+  if (parsed === null) return usage();
+  try {
+    if (parsed.check) {
+      for (const { manifest, card } of collect()) {
+        const size = (card.mediaBytes / (1024 * 1024)).toFixed(2);
+        process.stdout.write(`ok  ${manifest.id} ${manifest.version}  doc:yes  media:${card.media.length} files, ${size} MiB\n`);
+      }
+      return 0;
+    }
+    for (const entry of build(parsed.out, parsed.repo)) {
+      process.stdout.write(`${entry.id} ${entry.version}  ${entry.download.bytes} bytes  ${entry.download.sha256.slice(0, 12)}\n`);
+    }
+    return 0;
+  } catch (error) {
+    if (error instanceof ManifestError) return report(error);
+    throw error;
+  }
+}
+
+try {
+  const code = main(process.argv.slice(2));
+  if (code > 0) process.exitCode = code;
+} catch (error) {
+  process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+  process.exitCode = 1;
+}

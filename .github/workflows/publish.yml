@@ -18,7 +18,18 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - run: python3 scripts/build_index.py --out dist --repo "${GH_REPO}"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            packages/registry/package-lock.json
+            packages/phantom-mdx/package-lock.json
+      - run: npm ci
+        working-directory: packages/registry
+      - run: npm run build
+        working-directory: packages/registry
+      - run: node packages/registry/dist/cli.js --out dist --repo "${GH_REPO}"
       - name: Release new extension versions
         run: |
           set -euo pipefail
@@ -31,7 +42,7 @@ jobs:
               --notes "Install from Phantom > Settings > Extensions, or unzip into ~/.config/phantom/extensions/."
             echo "created $tag"
           done < dist/releases.tsv
-      - run: python3 scripts/check_releases.py
+      - run: node packages/registry/dist/cli.js releases
       - name: Publish the index
         run: |
           set -euo pipefail
@@ -40,11 +51,6 @@ jobs:
               --notes "index.json is rebuilt on every push to main. Phantom reads it from this release's stable download URL."
           fi
           gh release upload index dist/index.json --clobber
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: packages/phantom-mdx/package-lock.json
       - run: npm ci
         working-directory: packages/phantom-mdx
       - run: npm run build
