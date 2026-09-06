@@ -1,0 +1,173 @@
+---
+title: Rust
+tagline: Rust for Phantom — highlighting, attributes and the rust-analyzer language server.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [rust, cargo, rust-analyzer, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Rust support for the Phantom editor. The extension teaches Phantom the language — `.rs` files, keywords, comment markers, attributes and token patterns — and connects **rust-analyzer**, the language server the Rust project maintains. rust-analyzer is also the formatter: it advertises formatting and runs `rustfmt` on the buffer, so ⇧⌘F and Format on Save need no second tool.
+
+Highlighting works the moment the extension is installed. The server is optional.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords, attributes in both forms — `#[derive(Debug)]` and the inner `#![no_std]` — strings, numbers with `_` separators, capitalized types and function calls. Comments with `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics from `cargo check`, hover with documentation and type information, completion, go to definition, find references, rename, and the assists that fill in match arms or add a missing `impl` member. Proc macros and build scripts are expanded, so generated items resolve.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      `rustfmt` runs through the server, which means it uses the toolchain the project pins and reads the project's own `rustfmt.toml`.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Rust file open in Phantom with highlighted keywords, an attribute, types and strings, and one diagnostic underlined in red" caption="Highlighting and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tool. Install it and the extension detects it on your `PATH`.
+
+<Requirement command="rust-analyzer" install="brew install rust-analyzer" url="https://rust-analyzer.github.io">
+The Rust language server: diagnostics, hover, completion, definitions, references, rename, assists and formatting. Without it the highlighter still works, and Format does nothing for Rust files.
+</Requirement>
+
+`rustup component add rust-analyzer` installs the copy that matches your toolchain, which is the better answer on a machine that already has rustup. That route is not in the manifest — rustup is not one of the package managers Phantom will run — so run it yourself and Phantom will find the binary on the `PATH`.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Rust.
+  </Step>
+  <Step title="Install the server">
+    Run `brew install rust-analyzer`, or `rustup component add rust-analyzer` if you have rustup. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a file inside a Cargo workspace">
+    The first time a project needs rust-analyzer, Phantom asks before starting it and remembers your answer for that extension. The server loads the project with `cargo metadata`, so the first answers arrive once that finishes.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.rs` |
+| Language id | `rust` |
+| Language server | `rust-analyzer` |
+| Editor | Keywords, `//` and `/* */` markers, string, number, type, call and attribute patterns |
+| Icon | Rust file icon in the sidebar and tabs |
+
+Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. Settings → Language Servers can promote it when you want the manifest to be the one in force.
+
+## Configuration
+
+<Details summary="Server: rust-analyzer.toml">
+
+rust-analyzer reads a `rust-analyzer.toml` from the project root, or from your user configuration directory such as `~/.config/rust-analyzer/`. Keys are the server's settings **without the `rust-analyzer.` prefix**, so `rust-analyzer.cargo.allTargets` is written as `cargo.allTargets`.
+
+The file is a work in progress upstream, and not every setting is read from it yet. Anything it does not cover goes in the **initializationOptions (JSON)** field in Settings → Language Servers, which is the path the server has always supported.
+
+```toml
+[cargo]
+allTargets = true
+features = "all"
+
+[check]
+command = "clippy"
+extraArgs = ["--", "-W", "clippy::pedantic"]
+
+[procMacro]
+enable = true
+
+[imports.granularity]
+enforce = true
+```
+
+| Setting | Default | What it does |
+|---|---|---|
+| `cargo.allTargets` | `true` | Passes `--all-targets` to every cargo invocation |
+| `cargo.features` | `[]` | Which features to activate; `"all"` activates every one |
+| `cargo.noDefaultFeatures` | `false` | Drops the crate's default features |
+| `cargo.target` | none | The target triple to analyse for |
+| `cargo.buildScripts.enable` | `true` | Runs build scripts so generated code resolves |
+| `check.command` | `"check"` | The cargo subcommand run for diagnostics — `clippy` is the usual change |
+| `check.extraArgs` | `[]` | Extra arguments for that command |
+| `check.workspace` | `true` | Checks the whole workspace rather than the open crate |
+| `checkOnSave` | `true` | Whether that command runs on save at all |
+| `procMacro.enable` | `true` | Expands procedural macros |
+| `diagnostics.disabled` | `[]` | Diagnostic codes to silence |
+| `files.exclude` | `[]` | Paths the server does not read |
+| `inlayHints.typeHints.enable` | `true` | Inferred types shown inline |
+
+The complete list is in the [rust-analyzer configuration reference](https://rust-analyzer.github.io/book/configuration.html).
+
+</Details>
+
+<Details summary="Formatter: rustfmt.toml">
+
+`rustfmt` reads `rustfmt.toml` or `.rustfmt.toml`, walking up from the file. rust-analyzer runs it through the project's toolchain, so a `rust-toolchain.toml` decides which `rustfmt` that is.
+
+```toml
+edition = "2021"
+max_width = 100
+use_small_heuristics = "Max"
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+```
+
+`imports_granularity` and `group_imports` are nightly-only options. On a stable toolchain rustfmt ignores them and prints a warning; keep them out of a project that must format on stable.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says rust-analyzer is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. A rustup component lands in `~/.cargo/bin`.
+
+</Details>
+
+<Details summary="Everything is slow or silent on a large workspace">
+
+The first load runs `cargo metadata` and builds the crate graph, and proc-macro expansion builds the macro crates. Until that finishes the server answers little. `cargo.allTargets = false` and a narrower `cargo.features` cut the work if the wait is the problem rather than a symptom.
+
+</Details>
+
+<Details summary="Diagnostics do not match cargo clippy">
+
+By default the server runs `cargo check`. Set `check.command = "clippy"` for the two to agree.
+
+</Details>
+
+<Details summary="A generated item does not resolve">
+
+Proc macros and build scripts have to be expanded for that. Both are on by default; a workspace that turned them off, or one whose build script fails, leaves those items invisible to the server while `cargo build` still succeeds.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.rs`, and rust-analyzer wiring with a Homebrew install and uninstall command.
+
+## License and credits
+
+The extension is released under the MIT License. [rust-analyzer](https://github.com/rust-lang/rust-analyzer) is © rust-analyzer contributors, dual-licensed Apache-2.0 OR MIT. [rustfmt](https://github.com/rust-lang/rustfmt) carries the same dual licence. Rust is a trademark of the Rust Foundation; this extension is not affiliated with the Rust project.

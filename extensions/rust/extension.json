@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.rust",
+  "name": "Rust",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Rust: highlighting, attributes and the rust-analyzer language server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rust",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "rust",
+        "name": "Rust",
+        "extensions": [
+          "rs"
+        ],
+        "category": "compiled",
+        "icon": "icons/rust.svg",
+        "keywords": [
+          "as",
+          "async",
+          "await",
+          "break",
+          "const",
+          "continue",
+          "crate",
+          "dyn",
+          "else",
+          "enum",
+          "extern",
+          "false",
+          "fn",
+          "for",
+          "if",
+          "impl",
+          "in",
+          "let",
+          "loop",
+          "match",
+          "mod",
+          "move",
+          "mut",
+          "pub",
+          "ref",
+          "return",
+          "self",
+          "Self",
+          "static",
+          "struct",
+          "super",
+          "trait",
+          "true",
+          "type",
+          "unsafe",
+          "use",
+          "where",
+          "while"
+        ],
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "syntax": {
+          "string": "preset:cStyleString",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParen",
+          "attribute": "#!?\\[[^\\]]*\\]"
+        },
+        "server": {
+          "command": "rust-analyzer",
+          "args": [],
+          "installHint": "brew install rust-analyzer",
+          "documentationURL": "https://rust-analyzer.github.io",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install rust-analyzer",
+                "uninstall": "brew uninstall rust-analyzer"
+              }
+            ],
+            "documentationURL": "https://rust-analyzer.github.io/book/rust_analyzer_binary.html"
+          }
+        }
+      }
+    ]
+  }
+}
