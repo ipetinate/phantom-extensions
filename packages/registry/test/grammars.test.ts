@@ -254,6 +254,16 @@ function otherManifest(dependencies?: string[]): Record<string, unknown> {
   };
 }
 
+function twinManifest(): Record<string, unknown> {
+  return {
+    ...languageManifest({ id: "tests.sample-twin", name: "Sample Twin" }),
+    contributes: {
+      languages: [{ languageId: "sample-twin", name: "Sample Twin", extensions: ["twin"], icon: "icons/twin.svg" }],
+      grammars: [grammarEntry({ languageId: "sample-twin" })],
+    },
+  };
+}
+
 describe("resolving includes across the registry", () => {
   it("passes when the providing extension is a dependency", () => {
     grammarFixture(root, "sample");
@@ -278,6 +288,22 @@ describe("resolving includes across the registry", () => {
   it("lets an include name a scope nobody in the registry provides", () => {
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(), "syntaxes/other.tmLanguage.json");
     expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other"]);
+  });
+
+  it("passes when one of two extensions providing the scope is a dependency", () => {
+    grammarFixture(root, "sample");
+    grammarFixture(root, "sample-twin", SAMPLE_GRAMMAR, twinManifest());
+    grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(["tests.sample"]), "syntaxes/other.tmLanguage.json");
+    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample", "tests.sample-twin"]);
+  });
+
+  it("names both providers when neither is a dependency", () => {
+    grammarFixture(root, "sample");
+    grammarFixture(root, "sample-twin", SAMPLE_GRAMMAR, twinManifest());
+    grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(), "syntaxes/other.tmLanguage.json");
+    expect(() => collect(root)).toThrow(
+      /includes 'source.sample', which tests.sample and tests.sample-twin provide; add one of them to dependencies/,
+    );
   });
 
   it("lets a grammar include its own extension's scopes without a dependency", () => {

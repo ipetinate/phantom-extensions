@@ -242,11 +242,21 @@ export interface GrammarOwner {
   grammars: readonly GrammarEntry[];
 }
 
+function providedBy(providers: readonly string[]): string {
+  if (providers.length === 1) return `which ${providers[0]} provides; add it to dependencies`;
+  const listed = `${providers.slice(0, -1).join(", ")} and ${providers[providers.length - 1]}`;
+  return `which ${listed} provide; add one of them to dependencies`;
+}
+
 export function checkGrammarDependencies(owners: readonly GrammarOwner[]): void {
   const extensions = new Set(owners.map((owner) => owner.id));
-  const ownerOfScope = new Map<string, string>();
+  const providersOfScope = new Map<string, string[]>();
   for (const owner of owners) {
-    for (const grammar of owner.grammars) ownerOfScope.set(grammar.scopeName, owner.id);
+    for (const grammar of owner.grammars) {
+      const providers = providersOfScope.get(grammar.scopeName);
+      if (providers === undefined) providersOfScope.set(grammar.scopeName, [owner.id]);
+      else if (!providers.includes(owner.id)) providers.push(owner.id);
+    }
   }
   for (const owner of owners) {
     for (const dependency of owner.dependencies) {
@@ -255,12 +265,10 @@ export function checkGrammarDependencies(owners: readonly GrammarOwner[]): void 
     const declared = new Set(owner.dependencies);
     for (const grammar of owner.grammars) {
       for (const include of grammar.includes) {
-        const provider = ownerOfScope.get(include.scope);
-        if (provider === undefined || provider === owner.id || declared.has(provider)) continue;
-        fail(
-          owner.directory,
-          `${grammar.path}: ${include.rulePath} includes ${quoted(include.scope)}, which ${provider} provides; add it to dependencies`,
-        );
+        const providers = providersOfScope.get(include.scope);
+        if (providers === undefined) continue;
+        if (providers.some((provider) => provider === owner.id || declared.has(provider))) continue;
+        fail(owner.directory, `${grammar.path}: ${include.rulePath} includes ${quoted(include.scope)}, ${providedBy(providers)}`);
       }
     }
   }
