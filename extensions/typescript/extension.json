@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.typescript",
   "name": "TypeScript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Phantom",
   "description": "TypeScript and JavaScript: highlighting and typescript-language-server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript",
