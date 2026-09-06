@@ -1,0 +1,147 @@
+---
+title: Swift
+tagline: Swift for Phantom — highlighting and SourceKit-LSP, the server that ships with Xcode.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [swift, apple, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Swift support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, attributes, multi-line string literals and comment markers — and connects **SourceKit-LSP**, the language server the Swift project maintains. There is nothing to install: SourceKit-LSP comes with Xcode and with every Swift toolchain, so the server is already on the machine that can compile the code.
+
+Both `.swift` and `.swiftinterface` are covered. A `.swiftinterface` is a module's public interface, which is where go to definition lands when a symbol lives in a framework rather than in your own source.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords including the concurrency and ownership ones — `actor`, `async`, `await`, `nonisolated`, `consuming`, `each` — attributes such as `@MainActor`, capitalized types, calls, numbers with `_` separators, and `"""` multi-line strings.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics from the compiler itself, hover with documentation, completion, go to definition, find references, rename and code actions. Cross-module navigation lands in the generated interface.
+    </Feature>
+    <Feature title="Nothing to install" icon="check">
+      The server ships with Xcode. `xcode-select --install` is the only command in this document, and only for a machine that has no developer tools at all.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Swift file open in Phantom with highlighted keywords, types and strings, and one diagnostic underlined in red" caption="Highlighting and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+<Requirement command="sourcekit-lsp" url="https://github.com/swiftlang/sourcekit-lsp">
+The Swift language server. **It has no install command in the manifest, on purpose**: it is part of Xcode and of every Swift toolchain, so a package manager should not be asked to put a second one on the machine. If the binary is missing, the developer tools are missing — run `xcode-select --install`.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Swift.
+  </Step>
+  <Step title="Check the toolchain">
+    Run `xcrun --find sourcekit-lsp` in a terminal. A path means the server is there. Nothing means the developer tools are not installed.
+  </Step>
+  <Step title="Open a Swift package or an Xcode project">
+    The server needs build settings to answer anything. A directory with a `Package.swift` works out of the box; an Xcode project needs a `compile_commands.json` or the Build Server Protocol.
+  </Step>
+  <Step title="Wait for the first index">
+    Background indexing builds the project's index the first time. Navigation across files is thin until it finishes.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.swift`, `.swiftinterface` |
+| Language id | `swift` |
+| Language server | `sourcekit-lsp` |
+| Editor | Keywords, `//` and `/* */` markers, `"""` strings, attribute, type and call patterns |
+| Icon | Swift file icon in the sidebar and tabs |
+
+Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. Settings → Language Servers can promote it when you want the manifest to be the one in force.
+
+There is no formatter. `swift-format` is a separate tool with a project-level configuration, and Phantom has no entry for it; a manifest cannot describe it as one process that takes a buffer and returns one.
+
+## Configuration
+
+<Details summary="Server: .sourcekit-lsp/config.json">
+
+SourceKit-LSP reads a JSON configuration file. A project-level one lives at `.sourcekit-lsp/config.json` in the workspace root, and a user-level one at `~/.sourcekit-lsp/config.json` — on macOS also at `~/Library/Application Support/org.swift.sourcekit-lsp/config.json`. The project file wins where the two overlap.
+
+```json
+{
+  "swiftPM": {
+    "configuration": "debug",
+    "swiftCompilerFlags": ["-warnings-as-errors"]
+  },
+  "backgroundIndexing": true,
+  "backgroundPreparationMode": "enabled",
+  "compilationDatabase": {
+    "searchPaths": ["build"]
+  }
+}
+```
+
+| Key | What it holds |
+|---|---|
+| `swiftPM` | `configuration`, `triple`, `sdk`, `scratchPath`, `swiftCompilerFlags`, `linkerFlags` and the rest of the SwiftPM build settings |
+| `compilationDatabase` | `searchPaths`: where to look for `compile_commands.json` |
+| `fallbackBuildSystem` | `sdk` and the compiler flags used for a file no build system claims |
+| `backgroundIndexing` | Whether the index is built in the background |
+| `backgroundPreparationMode` | `build`, `noLazy` or `enabled` — how much of a target is prepared before it is indexed |
+| `clangdOptions` | Extra arguments for the `clangd` that serves C and Objective-C files |
+| `index` | `indexPrefixMap` and `updateIndexStoreTimeout` |
+| `logging` | `level` and `privacyLevel` |
+| `defaultWorkspaceType` | `buildServer`, `compilationDatabase` or `swiftPM` |
+
+</Details>
+
+<Details summary="Build settings for a non-SwiftPM project">
+
+The server answers from build settings, so it needs to know how each file is compiled. A SwiftPM package answers that from `Package.swift`. For anything else, generate a `compile_commands.json` and point `compilationDatabase` at it, or run a Build Server Protocol server such as `xcode-build-server` in the project root.
+
+A file the build system does not claim falls back to `fallbackBuildSystem`, which is enough for syntax and hover and not enough for cross-file navigation.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says sourcekit-lsp is not installed">
+
+Run `xcode-select --install`, or install Xcode from the App Store. If Xcode is there and the binary is not found, `sudo xcode-select --switch /Applications/Xcode.app` points the command line tools at it.
+
+</Details>
+
+<Details summary="Hover works and go to definition does not">
+
+The index is not built yet, or the file is not part of a target the build system knows. Check that the project has a `Package.swift` or a `compile_commands.json`, and give background indexing time to finish on the first open.
+
+</Details>
+
+<Details summary="Diagnostics disagree with a build in Xcode">
+
+The server compiles with the settings it was given. A project whose real build depends on an Xcode scheme — a build configuration, a define, a generated file — will diverge until those settings reach the server, which is what the Build Server Protocol is for.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.swift` and `.swiftinterface`, and SourceKit-LSP wiring with no install command, because the server ships with Xcode.
+
+## License and credits
+
+The extension is released under the MIT License. [SourceKit-LSP](https://github.com/swiftlang/sourcekit-lsp) is licensed under the Apache License 2.0 with the Runtime Library Exception, © Apple Inc. and the Swift project authors. Swift is a trademark of Apple Inc.; this extension is not affiliated with Apple.
