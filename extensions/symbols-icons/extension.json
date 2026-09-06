@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.symbols-icons",
+  "name": "Symbols Starter Icons",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "A small file icon theme: eight icons, and a manifest short enough to read.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/symbols-icons",
+  "phantom": "0.16.0",
+  "contributes": {
+    "iconThemes": [
+      {
+        "name": "Symbols Starter",
+        "path": "icon-theme"
+      }
+    ]
+  }
+}

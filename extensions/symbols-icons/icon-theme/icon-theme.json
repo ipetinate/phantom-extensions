@@ -1,0 +1,64 @@
+{
+  "iconDefinitions": {
+    "js": { "iconPath": "./icons/js.svg" },
+    "ts": { "iconPath": "./icons/ts.svg" },
+    "json": { "iconPath": "./icons/json.svg" },
+    "markdown": { "iconPath": "./icons/markdown.svg" },
+    "lock": { "iconPath": "./icons/lock.svg" },
+    "image": { "iconPath": "./icons/image.svg" },
+    "folder": { "iconPath": "./icons/folder.svg" },
+    "folder-open": { "iconPath": "./icons/folder-open.svg" }
+  },
+
+  "fileExtensions": {
+    "js": "js",
+    "mjs": "js",
+    "cjs": "js",
+    "jsx": "js",
+    "ts": "ts",
+    "mts": "ts",
+    "cts": "ts",
+    "tsx": "ts",
+    "json": "json",
+    "jsonc": "json",
+    "json5": "json",
+    "md": "markdown",
+    "markdown": "markdown",
+    "mdx": "markdown",
+    "lock": "lock",
+    "png": "image",
+    "jpg": "image",
+    "jpeg": "image",
+    "gif": "image",
+    "webp": "image",
+    "avif": "image",
+    "bmp": "image",
+    "ico": "image",
+    "svg": "image"
+  },
+
+  "fileNames": {
+    "package-lock.json": "lock",
+    "yarn.lock": "lock",
+    "pnpm-lock.yaml": "lock",
+    "bun.lockb": "lock",
+    "cargo.lock": "lock",
+    "gemfile.lock": "lock",
+    "poetry.lock": "lock",
+    "composer.lock": "lock",
+    "flake.lock": "lock"
+  },
+
+  "languageIds": {
+    "javascript": "js",
+    "javascriptreact": "js",
+    "typescript": "ts",
+    "typescriptreact": "ts",
+    "json": "json",
+    "jsonc": "json",
+    "markdown": "markdown"
+  },
+
+  "folder": "folder",
+  "folderExpanded": "folder-open"
+}

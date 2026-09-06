@@ -1,0 +1,155 @@
+---
+title: Symbols Starter Icons
+tagline: A file icon theme with eight icons and a manifest short enough to read in one sitting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [icons, icon-theme, sidebar, explorer, appearance]
+screenshots:
+  - media/explorer.png
+---
+
+A file icon theme for Phantom's explorer. It is the first icon theme extension in this registry, and it is deliberately small: eight icons, covering JavaScript, TypeScript, JSON, Markdown, lock files, images and folders. It installs no program, starts no process and asks for no approval.
+
+This is a starting point, not a finished set. Phantom already ships **Symbols**, a theme with hundreds of icons that covers almost every file type you will meet; this one exists so you can read a whole icon theme in one file and then make your own. Everything a file type does not match falls through to Phantom's SF Symbols table, which is why eight icons are enough to be usable rather than half broken.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Eight icons" icon="package">
+      JavaScript and TypeScript, including their `.mjs`, `.cjs`, `.jsx`, `.mts`, `.cts` and `.tsx` spellings. JSON, Markdown, lock files, images in nine formats, and a folder that changes when it opens.
+    </Feature>
+    <Feature title="Falls through on purpose" icon="check">
+      The theme sets no default file icon. A file it does not know draws the SF Symbol Phantom would have drawn anyway, so nothing appears blank and nothing looks generic.
+    </Feature>
+    <Feature title="Readable as a template" icon="book">
+      One `icon-theme.json` of about sixty lines and eight SVGs, each a handful of shapes. Copy the directory, change the paths, and you have your own theme with no build step.
+    </Feature>
+  </Features>
+  <Screenshot src="media/explorer.png" alt="Phantom's file explorer showing a folder tree where TypeScript, JavaScript, JSON, Markdown, image and lock files each carry a distinct coloured icon" caption="The eight icons in the file explorer, beside an open editor" />
+</Showcase>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Symbols Starter Icons.
+  </Step>
+  <Step title="Open Settings → Sidebar">
+    The **File Explorer** section holds the **Icon Theme** picker. The explorer's own gear menu has the same control.
+  </Step>
+  <Step title="Pick Symbols Starter">
+    Contributed themes are listed as the theme name followed by the extension that supplied it, so this row reads **Symbols Starter — Symbols Starter Icons**. Every open explorer repaints as you pick.
+  </Step>
+  <Step title="Go back whenever you want">
+    The same picker holds **Symbols**, the theme Phantom ships and selects by default, and **No Theme (SF Symbols)** for the built-in table on its own.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Icon | Matches |
+|---|---|
+| JavaScript | `.js`, `.mjs`, `.cjs`, `.jsx`, and the `javascript` and `javascriptreact` language ids |
+| TypeScript | `.ts`, `.mts`, `.cts`, `.tsx`, and the `typescript` and `typescriptreact` language ids |
+| JSON | `.json`, `.jsonc`, `.json5` |
+| Markdown | `.md`, `.markdown`, `.mdx` |
+| Lock | `.lock`, plus `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `bun.lockb`, `Cargo.lock`, `Gemfile.lock`, `poetry.lock`, `composer.lock` and `flake.lock` by name |
+| Image | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.avif`, `.bmp`, `.ico`, `.svg` |
+| Folder | every folder, closed |
+| Folder open | every folder, expanded |
+
+Everything else falls through to SF Symbols. There is no default file icon and no root folder icon.
+
+## Configuration
+
+<Details summary="The theme file">
+
+Phantom reads the SVG half of the VS Code file icon theme format. The whole theme is `icon-theme/icon-theme.json` and the SVGs it points at.
+
+```json
+{
+  "iconDefinitions": {
+    "ts": { "iconPath": "./icons/ts.svg" }
+  },
+  "fileExtensions": { "ts": "ts", "tsx": "ts" },
+  "fileNames": { "yarn.lock": "lock" },
+  "languageIds": { "typescript": "ts" },
+  "folder": "folder",
+  "folderExpanded": "folder-open"
+}
+```
+
+| Key | What it does |
+|---|---|
+| `iconDefinitions` | Icon id to SVG path, relative to the theme directory |
+| `fileExtensions` | Suffix to icon id. A longer suffix wins, so `spec.ts` can differ from `ts` |
+| `fileNames` | Whole file name to icon id. A name beats any suffix |
+| `languageIds` | Language id to icon id, consulted last |
+| `folder`, `folderExpanded` | Icon for a closed and an open folder |
+| `file` | Icon for a file nothing else matched. This theme sets none |
+| `rootFolder`, `rootFolderNames`, `folderNames` | Also read. This theme sets none |
+
+Phantom resolves an icon in VS Code's own order: an exact file name first, then the longest matching suffix, then the language id. Keys are matched without regard to case.
+
+</Details>
+
+<Details summary="Making your own">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy the `icon-theme` directory somewhere of your own, change the SVGs and the mapping, and drop it into Phantom's icon themes folder. Settings → Sidebar names that folder under the Icon Theme picker, and a theme copied there is listed with no install step.
+
+Two rules to keep in mind. A theme is listed under the directory's name unless an extension supplies one, and a contributed theme whose name is already taken by a bundled or copied theme is dropped rather than shown twice. And the icons must be SVG: a theme that draws from a font parses cleanly, draws nothing, and is listed as having no artwork.
+
+</Details>
+
+<Details summary="Adding an icon">
+
+Three lines and a file. Put the SVG in `icons/`, add it to `iconDefinitions` under a new id, and point a suffix or a file name at that id.
+
+```json
+"iconDefinitions": { "yaml": { "iconPath": "./icons/yaml.svg" } },
+"fileExtensions": { "yaml": "yaml", "yml": "yaml" }
+```
+
+Draw at 24 by 24, the size the eight icons here use, and keep the artwork inside the box. Raise `version` in `extension.json` afterwards so Phantom sees the change.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the picker">
+
+Phantom drops a contributed icon theme whose name is already used by a bundled theme or by one copied into your icon themes folder. It also needs `icon-theme.json`, or a file whose name ends in `icon-theme.json`, directly inside the directory the manifest names.
+
+</Details>
+
+<Details summary="Some rows still show SF Symbols">
+
+That is the design. The theme defines eight icons and no default, so a file type it does not list keeps the symbol Phantom would have drawn. If you would rather have one generic document icon everywhere, add a `"file"` key naming an icon id.
+
+</Details>
+
+<Details summary="A file has the wrong icon">
+
+Resolution order decides this: a whole file name beats a suffix, and a longer suffix beats a shorter one. `Cargo.lock` matches by name before `.lock` is considered, and a `component.spec.ts` would match a `spec.ts` key ahead of `ts` if one existed.
+
+</Details>
+
+<Details summary="The icons look heavy or faint against my theme">
+
+They are flat colour with no outline, chosen to hold up on a light and a dark sidebar. Edit the `fill` and `stroke` values in the SVGs; nothing in Phantom recolours them.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: eight icons for JavaScript, TypeScript, JSON, Markdown, lock files, images and folders, with no default file icon.
+
+## License and credits
+
+The extension is released under the MIT License. The eight icons were drawn for this extension and copy no other icon set, including the Symbols theme Phantom ships. The file icon theme format is Visual Studio Code's; Phantom reads its SVG half.
