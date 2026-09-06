@@ -1,0 +1,165 @@
+---
+title: Go
+tagline: Go for Phantom — highlighting, go.mod and go.sum, and the gopls language server.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [go, golang, gopls, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Go support for the Phantom editor. The extension teaches Phantom the language — `.go` files, the three module manifests, keywords, comment markers and token patterns — and connects **gopls**, the language server the Go team maintains. gopls is also the formatter: it advertises `documentFormattingProvider`, so ⇧⌘F and Format on Save run `gofmt` through the server, and no second tool is needed.
+
+Highlighting works the moment the extension is installed. The server is optional.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords, raw and interpreted string literals, runes, numbers with `_` separators, capitalized types and function calls. Comments with `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics from the compiler and from `go vet`, hover with documentation, completion including unimported packages, go to definition, find references, rename, and the quick fixes that add or remove an import.
+    </Feature>
+    <Feature title="Module files by name" icon="package">
+      `go.mod`, `go.sum` and `go.work` are matched by their whole name rather than by suffix, because `.mod` and `.sum` belong to plenty of things that are not Go. gopls serves all three with the same language id as Go source.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Go file open in Phantom with highlighted keywords, types and strings, and one diagnostic underlined in red" caption="Highlighting and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tool. Install it and the extension detects it on your `PATH`.
+
+<Requirement command="gopls" install="brew install gopls" url="https://go.dev/gopls">
+The Go language server: diagnostics, hover, completion, definitions, references, rename, code actions and formatting. Without it the highlighter still works, and Format does nothing for Go files.
+</Requirement>
+
+`go install golang.org/x/tools/gopls@latest` installs the same binary from source into `$GOPATH/bin`, which is what a machine with a Go toolchain and no Homebrew wants. That route has no uninstall command; delete the binary to remove it.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Go.
+  </Step>
+  <Step title="Install the server">
+    Run `brew install gopls`, or `go install golang.org/x/tools/gopls@latest`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a file inside a module">
+    The first time a project needs gopls, Phantom asks before starting it and remembers your answer for that extension. gopls wants a module — a directory with a `go.mod` — or a workspace with a `go.work`.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor. gopls formats; there is no separate formatter to install.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.go`, and the names `go.mod`, `go.sum`, `go.work` |
+| Language id | `go` |
+| Language server | `gopls` |
+| Editor | Keywords, `//` and `/* */` markers, string, number, type and call patterns |
+| Icon | Go file icon in the sidebar and tabs |
+
+Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. Settings → Language Servers can promote it when you want the manifest to be the one in force.
+
+## Configuration
+
+<Details summary="Server: initializationOptions">
+
+gopls has no configuration file of its own. Every setting is passed by the editor, which for Phantom is the **initializationOptions (JSON)** field in Settings → Language Servers.
+
+```json
+{
+  "gofumpt": true,
+  "staticcheck": true,
+  "usePlaceholders": true,
+  "semanticTokens": true,
+  "directoryFilters": ["-**/node_modules", "-**/vendor"],
+  "analyses": {
+    "unusedparam": true,
+    "shadow": true
+  },
+  "hints": {
+    "assignVariableTypes": true,
+    "compositeLiteralFields": true,
+    "constantValues": true,
+    "parameterNames": true
+  }
+}
+```
+
+| Setting | Default | What it does |
+|---|---|---|
+| `buildFlags` | `[]` | Flags passed to every underlying `go` command |
+| `env` | `{}` | Environment variables for those commands |
+| `directoryFilters` | `["-**/node_modules"]` | Directories excluded from the workspace scan |
+| `templateExtensions` | `[]` | Suffixes served as Go templates |
+| `gofumpt` | `false` | Formats with `gofumpt` rather than plain `gofmt` |
+| `local` | `""` | The module prefix whose imports are grouped last |
+| `analyses` | `{}` | Turns individual analysers on or off by name |
+| `staticcheck` | `false` | Runs the staticcheck analysers as well |
+| `codelenses` | `generate`, `regenerate_cgo`, `run_govulncheck`, `tidy`, `upgrade_dependency`, `vendor` on | Which code lenses are offered |
+| `hints` | `{}` | Which inlay hints are shown |
+| `semanticTokens` | `false` | Sends semantic token data to the editor |
+| `usePlaceholders` | `false` | Completes a function call with its parameters filled in |
+
+</Details>
+
+<Details summary="Project: go.mod and go.work">
+
+gopls resolves a workspace from the module files, not from a setting. A repository with one `go.mod` at the root is the simple case. Several modules in one checkout need a `go.work` at the root naming them, otherwise gopls serves whichever module contains the file and cross-module navigation does not resolve.
+
+```
+go 1.24
+
+use (
+    ./api
+    ./worker
+)
+```
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says gopls is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. A `go install` puts it in `$GOPATH/bin`, which is often `~/go/bin` and is not on the default `PATH`.
+
+</Details>
+
+<Details summary="No completion outside a module">
+
+gopls needs a module. A `.go` file in a directory with no `go.mod` above it is served in a degraded mode: syntax and local symbols work, and nothing that needs the package graph does. `go mod init` is the fix.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+gopls is the formatter for Go. If it is not installed, or the server has not finished starting, there is no other tool to fall back to. Phantom waits for the handshake on ⇧⌘F and reports what the server answered.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.go`, `go.mod`, `go.sum` and `go.work`, and gopls wiring with Homebrew and `go install` commands.
+
+## License and credits
+
+The extension is released under the MIT License. [gopls](https://github.com/golang/tools/tree/master/gopls) is © The Go Authors, licensed BSD-3-Clause. Go is a trademark of Google LLC; this extension is not affiliated with the Go project.

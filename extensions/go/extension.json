@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.go",
+  "name": "Go",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Go: highlighting, go.mod and go.sum, and the gopls language server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/go",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "go",
+        "name": "Go",
+        "extensions": [
+          "go"
+        ],
+        "fileNames": [
+          "go.mod",
+          "go.sum",
+          "go.work"
+        ],
+        "category": "compiled",
+        "icon": "icons/go.svg",
+        "keywords": [
+          "break",
+          "case",
+          "chan",
+          "const",
+          "continue",
+          "default",
+          "defer",
+          "else",
+          "fallthrough",
+          "for",
+          "func",
+          "go",
+          "goto",
+          "if",
+          "import",
+          "interface",
+          "map",
+          "package",
+          "range",
+          "return",
+          "select",
+          "struct",
+          "switch",
+          "type",
+          "var",
+          "nil",
+          "true",
+          "false"
+        ],
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "syntax": {
+          "string": "preset:cStyleString",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParen"
+        },
+        "server": {
+          "command": "gopls",
+          "args": [],
+          "installHint": "brew install gopls",
+          "documentationURL": "https://go.dev/gopls",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install gopls",
+                "uninstall": "brew uninstall gopls"
+              },
+              {
+                "manager": "go",
+                "command": "go install golang.org/x/tools/gopls@latest"
+              }
+            ],
+            "documentationURL": "https://go.dev/gopls"
+          }
+        }
+      }
+    ]
+  }
+}
