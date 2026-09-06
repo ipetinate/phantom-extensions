@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-abernathy",
   "name": "Abernathy",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Isac Petinate",
   "description": "The Abernathy terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/abernathy",

@@ -1,7 +1,7 @@
 ---
 title: Kanagawa Lotus
 tagline: The Kanagawa Lotus terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Kanagawa Lotus" background="#f2ecbc" foreground="#545464" cursor="#43436c" selection="#545464" ansi="#1f1f28, #c84053, #6f894e, #77713f, #4d699b, #b35b79, #597b75, #545464, #8a8980, #d7474b, #6e915f, #836f4a, #6693bf, #624c83, #5e857a, #43436c" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#f2ecbc` |
-| Foreground | `foreground` | `#545464` |
-| Cursor | `cursor-color` | `#43436c` |
-| Cursor text | `cursor-text` | `#f2ecbc` |
-| Selection background | `selection-background` | `#545464` |
-| Selection foreground | `selection-foreground` | `#f2ecbc` |
+<Swatches columns="6">
+  <Swatch color="#f2ecbc" name="Background" />
+  <Swatch color="#545464" name="Foreground" />
+  <Swatch color="#43436c" name="Cursor" />
+  <Swatch color="#f2ecbc" name="Cursor text" />
+  <Swatch color="#545464" name="Selection" />
+  <Swatch color="#f2ecbc" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#1f1f28` | 8 | Bright black | `#8a8980` |
-| 1 | Red | `#c84053` | 9 | Bright red | `#d7474b` |
-| 2 | Green | `#6f894e` | 10 | Bright green | `#6e915f` |
-| 3 | Yellow | `#77713f` | 11 | Bright yellow | `#836f4a` |
-| 4 | Blue | `#4d699b` | 12 | Bright blue | `#6693bf` |
-| 5 | Magenta | `#b35b79` | 13 | Bright magenta | `#624c83` |
-| 6 | Cyan | `#597b75` | 14 | Bright cyan | `#5e857a` |
-| 7 | White | `#545464` | 15 | Bright white | `#43436c` |
+<Swatches columns="8">
+  <Swatch color="#1f1f28" name="0 Black" />
+  <Swatch color="#c84053" name="1 Red" />
+  <Swatch color="#6f894e" name="2 Green" />
+  <Swatch color="#77713f" name="3 Yellow" />
+  <Swatch color="#4d699b" name="4 Blue" />
+  <Swatch color="#b35b79" name="5 Magenta" />
+  <Swatch color="#597b75" name="6 Cyan" />
+  <Swatch color="#545464" name="7 White" />
+  <Swatch color="#8a8980" name="8 Bright black" />
+  <Swatch color="#d7474b" name="9 Bright red" />
+  <Swatch color="#6e915f" name="10 Bright green" />
+  <Swatch color="#836f4a" name="11 Bright yellow" />
+  <Swatch color="#6693bf" name="12 Bright blue" />
+  <Swatch color="#624c83" name="13 Bright magenta" />
+  <Swatch color="#5e857a" name="14 Bright cyan" />
+  <Swatch color="#43436c" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/kanagawa-lotus.conf` is a byte-for-byte 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

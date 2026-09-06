@@ -1,7 +1,7 @@
 ---
 title: Monokai Classic
 tagline: The Monokai Classic terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Monokai Classic" background="#272822" foreground="#fdfff1" cursor="#c0c1b5" selection="#57584f" ansi="#272822, #f92672, #a6e22e, #e6db74, #fd971f, #ae81ff, #66d9ef, #fdfff1, #6e7066, #f92672, #a6e22e, #e6db74, #fd971f, #ae81ff, #66d9ef, #fdfff1" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#272822` |
-| Foreground | `foreground` | `#fdfff1` |
-| Cursor | `cursor-color` | `#c0c1b5` |
-| Cursor text | `cursor-text` | `#8d8e82` |
-| Selection background | `selection-background` | `#57584f` |
-| Selection foreground | `selection-foreground` | `#fdfff1` |
+<Swatches columns="6">
+  <Swatch color="#272822" name="Background" />
+  <Swatch color="#fdfff1" name="Foreground" />
+  <Swatch color="#c0c1b5" name="Cursor" />
+  <Swatch color="#8d8e82" name="Cursor text" />
+  <Swatch color="#57584f" name="Selection" />
+  <Swatch color="#fdfff1" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#272822` | 8 | Bright black | `#6e7066` |
-| 1 | Red | `#f92672` | 9 | Bright red | `#f92672` |
-| 2 | Green | `#a6e22e` | 10 | Bright green | `#a6e22e` |
-| 3 | Yellow | `#e6db74` | 11 | Bright yellow | `#e6db74` |
-| 4 | Blue | `#fd971f` | 12 | Bright blue | `#fd971f` |
-| 5 | Magenta | `#ae81ff` | 13 | Bright magenta | `#ae81ff` |
-| 6 | Cyan | `#66d9ef` | 14 | Bright cyan | `#66d9ef` |
-| 7 | White | `#fdfff1` | 15 | Bright white | `#fdfff1` |
+<Swatches columns="8">
+  <Swatch color="#272822" name="0 Black" />
+  <Swatch color="#f92672" name="1 Red" />
+  <Swatch color="#a6e22e" name="2 Green" />
+  <Swatch color="#e6db74" name="3 Yellow" />
+  <Swatch color="#fd971f" name="4 Blue" />
+  <Swatch color="#ae81ff" name="5 Magenta" />
+  <Swatch color="#66d9ef" name="6 Cyan" />
+  <Swatch color="#fdfff1" name="7 White" />
+  <Swatch color="#6e7066" name="8 Bright black" />
+  <Swatch color="#f92672" name="9 Bright red" />
+  <Swatch color="#a6e22e" name="10 Bright green" />
+  <Swatch color="#e6db74" name="11 Bright yellow" />
+  <Swatch color="#fd971f" name="12 Bright blue" />
+  <Swatch color="#ae81ff" name="13 Bright magenta" />
+  <Swatch color="#66d9ef" name="14 Bright cyan" />
+  <Swatch color="#fdfff1" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/monokai-classic.conf` is a byte-for-byte
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

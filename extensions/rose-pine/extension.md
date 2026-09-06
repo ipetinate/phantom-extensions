@@ -1,7 +1,7 @@
 ---
 title: Rose Pine
 tagline: The Rose Pine terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Rose Pine" background="#191724" foreground="#e0def4" cursor="#e0def4" selection="#403d52" ansi="#26233a, #eb6f92, #31748f, #f6c177, #9ccfd8, #c4a7e7, #ebbcba, #e0def4, #6e6a86, #eb6f92, #31748f, #f6c177, #9ccfd8, #c4a7e7, #ebbcba, #e0def4" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#191724` |
-| Foreground | `foreground` | `#e0def4` |
-| Cursor | `cursor-color` | `#e0def4` |
-| Cursor text | `cursor-text` | `#191724` |
-| Selection background | `selection-background` | `#403d52` |
-| Selection foreground | `selection-foreground` | `#e0def4` |
+<Swatches columns="6">
+  <Swatch color="#191724" name="Background" />
+  <Swatch color="#e0def4" name="Foreground" />
+  <Swatch color="#e0def4" name="Cursor" />
+  <Swatch color="#191724" name="Cursor text" />
+  <Swatch color="#403d52" name="Selection" />
+  <Swatch color="#e0def4" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#26233a` | 8 | Bright black | `#6e6a86` |
-| 1 | Red | `#eb6f92` | 9 | Bright red | `#eb6f92` |
-| 2 | Green | `#31748f` | 10 | Bright green | `#31748f` |
-| 3 | Yellow | `#f6c177` | 11 | Bright yellow | `#f6c177` |
-| 4 | Blue | `#9ccfd8` | 12 | Bright blue | `#9ccfd8` |
-| 5 | Magenta | `#c4a7e7` | 13 | Bright magenta | `#c4a7e7` |
-| 6 | Cyan | `#ebbcba` | 14 | Bright cyan | `#ebbcba` |
-| 7 | White | `#e0def4` | 15 | Bright white | `#e0def4` |
+<Swatches columns="8">
+  <Swatch color="#26233a" name="0 Black" />
+  <Swatch color="#eb6f92" name="1 Red" />
+  <Swatch color="#31748f" name="2 Green" />
+  <Swatch color="#f6c177" name="3 Yellow" />
+  <Swatch color="#9ccfd8" name="4 Blue" />
+  <Swatch color="#c4a7e7" name="5 Magenta" />
+  <Swatch color="#ebbcba" name="6 Cyan" />
+  <Swatch color="#e0def4" name="7 White" />
+  <Swatch color="#6e6a86" name="8 Bright black" />
+  <Swatch color="#eb6f92" name="9 Bright red" />
+  <Swatch color="#31748f" name="10 Bright green" />
+  <Swatch color="#f6c177" name="11 Bright yellow" />
+  <Swatch color="#9ccfd8" name="12 Bright blue" />
+  <Swatch color="#c4a7e7" name="13 Bright magenta" />
+  <Swatch color="#ebbcba" name="14 Bright cyan" />
+  <Swatch color="#e0def4" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/rose-pine.conf` is a byte-for-byte copy 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

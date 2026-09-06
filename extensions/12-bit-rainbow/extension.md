@@ -1,7 +1,7 @@
 ---
 title: 12-bit Rainbow
 tagline: The 12-bit Rainbow terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="12-bit Rainbow" background="#040404" foreground="#feffff" cursor="#e0d000" selection="#606060" ansi="#000000, #a03050, #40d080, #e09040, #3060b0, #603090, #0090c0, #dbded8, #685656, #c06060, #90d050, #e0d000, #00b0c0, #801070, #20b0c0, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#040404` |
-| Foreground | `foreground` | `#feffff` |
-| Cursor | `cursor-color` | `#e0d000` |
-| Cursor text | `cursor-text` | `#000000` |
-| Selection background | `selection-background` | `#606060` |
-| Selection foreground | `selection-foreground` | `#ffffff` |
+<Swatches columns="6">
+  <Swatch color="#040404" name="Background" />
+  <Swatch color="#feffff" name="Foreground" />
+  <Swatch color="#e0d000" name="Cursor" />
+  <Swatch color="#000000" name="Cursor text" />
+  <Swatch color="#606060" name="Selection" />
+  <Swatch color="#ffffff" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#000000` | 8 | Bright black | `#685656` |
-| 1 | Red | `#a03050` | 9 | Bright red | `#c06060` |
-| 2 | Green | `#40d080` | 10 | Bright green | `#90d050` |
-| 3 | Yellow | `#e09040` | 11 | Bright yellow | `#e0d000` |
-| 4 | Blue | `#3060b0` | 12 | Bright blue | `#00b0c0` |
-| 5 | Magenta | `#603090` | 13 | Bright magenta | `#801070` |
-| 6 | Cyan | `#0090c0` | 14 | Bright cyan | `#20b0c0` |
-| 7 | White | `#dbded8` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#000000" name="0 Black" />
+  <Swatch color="#a03050" name="1 Red" />
+  <Swatch color="#40d080" name="2 Green" />
+  <Swatch color="#e09040" name="3 Yellow" />
+  <Swatch color="#3060b0" name="4 Blue" />
+  <Swatch color="#603090" name="5 Magenta" />
+  <Swatch color="#0090c0" name="6 Cyan" />
+  <Swatch color="#dbded8" name="7 White" />
+  <Swatch color="#685656" name="8 Bright black" />
+  <Swatch color="#c06060" name="9 Bright red" />
+  <Swatch color="#90d050" name="10 Bright green" />
+  <Swatch color="#e0d000" name="11 Bright yellow" />
+  <Swatch color="#00b0c0" name="12 Bright blue" />
+  <Swatch color="#801070" name="13 Bright magenta" />
+  <Swatch color="#20b0c0" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/12-bit-rainbow.conf` is a byte-for-byte 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

@@ -1,7 +1,7 @@
 ---
 title: Detuned
 tagline: The Detuned terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Detuned" background="#000000" foreground="#c7c7c7" cursor="#c7c7c7" selection="#c1deff" ansi="#171717, #fe4386, #a6e32d, #e6da73, #0094d9, #9b37ff, #50b7d9, #c7c7c7, #686868, #fa80ac, #bde371, #fff27f, #00beff, #be9eff, #5ed7ff, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#000000` |
-| Foreground | `foreground` | `#c7c7c7` |
-| Cursor | `cursor-color` | `#c7c7c7` |
-| Cursor text | `cursor-text` | `#8c8c8c` |
-| Selection background | `selection-background` | `#c1deff` |
-| Selection foreground | `selection-foreground` | `#000000` |
+<Swatches columns="6">
+  <Swatch color="#000000" name="Background" />
+  <Swatch color="#c7c7c7" name="Foreground" />
+  <Swatch color="#c7c7c7" name="Cursor" />
+  <Swatch color="#8c8c8c" name="Cursor text" />
+  <Swatch color="#c1deff" name="Selection" />
+  <Swatch color="#000000" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#171717` | 8 | Bright black | `#686868` |
-| 1 | Red | `#fe4386` | 9 | Bright red | `#fa80ac` |
-| 2 | Green | `#a6e32d` | 10 | Bright green | `#bde371` |
-| 3 | Yellow | `#e6da73` | 11 | Bright yellow | `#fff27f` |
-| 4 | Blue | `#0094d9` | 12 | Bright blue | `#00beff` |
-| 5 | Magenta | `#9b37ff` | 13 | Bright magenta | `#be9eff` |
-| 6 | Cyan | `#50b7d9` | 14 | Bright cyan | `#5ed7ff` |
-| 7 | White | `#c7c7c7` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#171717" name="0 Black" />
+  <Swatch color="#fe4386" name="1 Red" />
+  <Swatch color="#a6e32d" name="2 Green" />
+  <Swatch color="#e6da73" name="3 Yellow" />
+  <Swatch color="#0094d9" name="4 Blue" />
+  <Swatch color="#9b37ff" name="5 Magenta" />
+  <Swatch color="#50b7d9" name="6 Cyan" />
+  <Swatch color="#c7c7c7" name="7 White" />
+  <Swatch color="#686868" name="8 Bright black" />
+  <Swatch color="#fa80ac" name="9 Bright red" />
+  <Swatch color="#bde371" name="10 Bright green" />
+  <Swatch color="#fff27f" name="11 Bright yellow" />
+  <Swatch color="#00beff" name="12 Bright blue" />
+  <Swatch color="#be9eff" name="13 Bright magenta" />
+  <Swatch color="#5ed7ff" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/detuned.conf` is a byte-for-byte copy of
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

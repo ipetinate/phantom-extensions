@@ -1,7 +1,7 @@
 ---
 title: Cyberpunk
 tagline: The Cyberpunk terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Cyberpunk" background="#332a57" foreground="#e5e5e5" cursor="#21f6bc" selection="#c1deff" ansi="#000000, #ff7092, #00fbac, #fffa6a, #00bfff, #df95ff, #86cbfe, #ffffff, #595959, #ff8aa4, #21f6bc, #fff787, #1bccfd, #e6aefe, #99d6fc, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#332a57` |
-| Foreground | `foreground` | `#e5e5e5` |
-| Cursor | `cursor-color` | `#21f6bc` |
-| Cursor text | `cursor-text` | `#999999` |
-| Selection background | `selection-background` | `#c1deff` |
-| Selection foreground | `selection-foreground` | `#000000` |
+<Swatches columns="6">
+  <Swatch color="#332a57" name="Background" />
+  <Swatch color="#e5e5e5" name="Foreground" />
+  <Swatch color="#21f6bc" name="Cursor" />
+  <Swatch color="#999999" name="Cursor text" />
+  <Swatch color="#c1deff" name="Selection" />
+  <Swatch color="#000000" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#000000` | 8 | Bright black | `#595959` |
-| 1 | Red | `#ff7092` | 9 | Bright red | `#ff8aa4` |
-| 2 | Green | `#00fbac` | 10 | Bright green | `#21f6bc` |
-| 3 | Yellow | `#fffa6a` | 11 | Bright yellow | `#fff787` |
-| 4 | Blue | `#00bfff` | 12 | Bright blue | `#1bccfd` |
-| 5 | Magenta | `#df95ff` | 13 | Bright magenta | `#e6aefe` |
-| 6 | Cyan | `#86cbfe` | 14 | Bright cyan | `#99d6fc` |
-| 7 | White | `#ffffff` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#000000" name="0 Black" />
+  <Swatch color="#ff7092" name="1 Red" />
+  <Swatch color="#00fbac" name="2 Green" />
+  <Swatch color="#fffa6a" name="3 Yellow" />
+  <Swatch color="#00bfff" name="4 Blue" />
+  <Swatch color="#df95ff" name="5 Magenta" />
+  <Swatch color="#86cbfe" name="6 Cyan" />
+  <Swatch color="#ffffff" name="7 White" />
+  <Swatch color="#595959" name="8 Bright black" />
+  <Swatch color="#ff8aa4" name="9 Bright red" />
+  <Swatch color="#21f6bc" name="10 Bright green" />
+  <Swatch color="#fff787" name="11 Bright yellow" />
+  <Swatch color="#1bccfd" name="12 Bright blue" />
+  <Swatch color="#e6aefe" name="13 Bright magenta" />
+  <Swatch color="#99d6fc" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/cyberpunk.conf` is a byte-for-byte copy 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

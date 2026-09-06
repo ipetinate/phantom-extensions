@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-rose-pine",
   "name": "Rose Pine",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Isac Petinate",
   "description": "The Rose Pine terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rose-pine",

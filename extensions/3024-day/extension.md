@@ -1,7 +1,7 @@
 ---
 title: 3024 Day
 tagline: The 3024 Day terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="3024 Day" background="#f7f7f7" foreground="#4a4543" cursor="#4a4543" selection="#a5a2a2" ansi="#090300, #db2d20, #01a252, #caba00, #01a0e4, #a16a94, #8fbece, #a5a2a2, #5c5855, #dbaec3, #3a3432, #4a4543, #807d7c, #bcbbba, #cdab53, #f7f7f7" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#f7f7f7` |
-| Foreground | `foreground` | `#4a4543` |
-| Cursor | `cursor-color` | `#4a4543` |
-| Cursor text | `cursor-text` | `#f7f7f7` |
-| Selection background | `selection-background` | `#a5a2a2` |
-| Selection foreground | `selection-foreground` | `#4a4543` |
+<Swatches columns="6">
+  <Swatch color="#f7f7f7" name="Background" />
+  <Swatch color="#4a4543" name="Foreground" />
+  <Swatch color="#4a4543" name="Cursor" />
+  <Swatch color="#f7f7f7" name="Cursor text" />
+  <Swatch color="#a5a2a2" name="Selection" />
+  <Swatch color="#4a4543" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#090300` | 8 | Bright black | `#5c5855` |
-| 1 | Red | `#db2d20` | 9 | Bright red | `#dbaec3` |
-| 2 | Green | `#01a252` | 10 | Bright green | `#3a3432` |
-| 3 | Yellow | `#caba00` | 11 | Bright yellow | `#4a4543` |
-| 4 | Blue | `#01a0e4` | 12 | Bright blue | `#807d7c` |
-| 5 | Magenta | `#a16a94` | 13 | Bright magenta | `#bcbbba` |
-| 6 | Cyan | `#8fbece` | 14 | Bright cyan | `#cdab53` |
-| 7 | White | `#a5a2a2` | 15 | Bright white | `#f7f7f7` |
+<Swatches columns="8">
+  <Swatch color="#090300" name="0 Black" />
+  <Swatch color="#db2d20" name="1 Red" />
+  <Swatch color="#01a252" name="2 Green" />
+  <Swatch color="#caba00" name="3 Yellow" />
+  <Swatch color="#01a0e4" name="4 Blue" />
+  <Swatch color="#a16a94" name="5 Magenta" />
+  <Swatch color="#8fbece" name="6 Cyan" />
+  <Swatch color="#a5a2a2" name="7 White" />
+  <Swatch color="#5c5855" name="8 Bright black" />
+  <Swatch color="#dbaec3" name="9 Bright red" />
+  <Swatch color="#3a3432" name="10 Bright green" />
+  <Swatch color="#4a4543" name="11 Bright yellow" />
+  <Swatch color="#807d7c" name="12 Bright blue" />
+  <Swatch color="#bcbbba" name="13 Bright magenta" />
+  <Swatch color="#cdab53" name="14 Bright cyan" />
+  <Swatch color="#f7f7f7" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/3024-day.conf` is a byte-for-byte copy o
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

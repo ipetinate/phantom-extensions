@@ -1,7 +1,7 @@
 ---
 title: Atom One Light
 tagline: The Atom One Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Atom One Light" background="#f9f9f9" foreground="#2a2c33" cursor="#bbbbbb" selection="#ededed" ansi="#000000, #de3e35, #3f953a, #d2b67c, #2f5af3, #950095, #3f953a, #bbbbbb, #000000, #de3e35, #3f953a, #d2b67c, #2f5af3, #a00095, #3f953a, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#f9f9f9` |
-| Foreground | `foreground` | `#2a2c33` |
-| Cursor | `cursor-color` | `#bbbbbb` |
-| Cursor text | `cursor-text` | `#ffffff` |
-| Selection background | `selection-background` | `#ededed` |
-| Selection foreground | `selection-foreground` | `#2a2c33` |
+<Swatches columns="6">
+  <Swatch color="#f9f9f9" name="Background" />
+  <Swatch color="#2a2c33" name="Foreground" />
+  <Swatch color="#bbbbbb" name="Cursor" />
+  <Swatch color="#ffffff" name="Cursor text" />
+  <Swatch color="#ededed" name="Selection" />
+  <Swatch color="#2a2c33" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#000000` | 8 | Bright black | `#000000` |
-| 1 | Red | `#de3e35` | 9 | Bright red | `#de3e35` |
-| 2 | Green | `#3f953a` | 10 | Bright green | `#3f953a` |
-| 3 | Yellow | `#d2b67c` | 11 | Bright yellow | `#d2b67c` |
-| 4 | Blue | `#2f5af3` | 12 | Bright blue | `#2f5af3` |
-| 5 | Magenta | `#950095` | 13 | Bright magenta | `#a00095` |
-| 6 | Cyan | `#3f953a` | 14 | Bright cyan | `#3f953a` |
-| 7 | White | `#bbbbbb` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#000000" name="0 Black" />
+  <Swatch color="#de3e35" name="1 Red" />
+  <Swatch color="#3f953a" name="2 Green" />
+  <Swatch color="#d2b67c" name="3 Yellow" />
+  <Swatch color="#2f5af3" name="4 Blue" />
+  <Swatch color="#950095" name="5 Magenta" />
+  <Swatch color="#3f953a" name="6 Cyan" />
+  <Swatch color="#bbbbbb" name="7 White" />
+  <Swatch color="#000000" name="8 Bright black" />
+  <Swatch color="#de3e35" name="9 Bright red" />
+  <Swatch color="#3f953a" name="10 Bright green" />
+  <Swatch color="#d2b67c" name="11 Bright yellow" />
+  <Swatch color="#2f5af3" name="12 Bright blue" />
+  <Swatch color="#a00095" name="13 Bright magenta" />
+  <Swatch color="#3f953a" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/atom-one-light.conf` is a byte-for-byte 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

@@ -1,7 +1,7 @@
 ---
 title: Builtin Tango Light
 tagline: The Builtin Tango Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.3
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Builtin Tango Light" background="#ffffff" foreground="#000000" cursor="#000000" selection="#b5d5ff" ansi="#000000, #cc0000, #4e9a06, #c4a000, #3465a4, #75507b, #06989a, #b9bdb5, #555753, #ef2929, #7dd527, #d6c329, #729fcf, #ad7fa8, #27d5d5, #eeeeec" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#ffffff` |
-| Foreground | `foreground` | `#000000` |
-| Cursor | `cursor-color` | `#000000` |
-| Cursor text | `cursor-text` | `#ffffff` |
-| Selection background | `selection-background` | `#b5d5ff` |
-| Selection foreground | `selection-foreground` | `#000000` |
+<Swatches columns="6">
+  <Swatch color="#ffffff" name="Background" />
+  <Swatch color="#000000" name="Foreground" />
+  <Swatch color="#000000" name="Cursor" />
+  <Swatch color="#ffffff" name="Cursor text" />
+  <Swatch color="#b5d5ff" name="Selection" />
+  <Swatch color="#000000" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#000000` | 8 | Bright black | `#555753` |
-| 1 | Red | `#cc0000` | 9 | Bright red | `#ef2929` |
-| 2 | Green | `#4e9a06` | 10 | Bright green | `#7dd527` |
-| 3 | Yellow | `#c4a000` | 11 | Bright yellow | `#d6c329` |
-| 4 | Blue | `#3465a4` | 12 | Bright blue | `#729fcf` |
-| 5 | Magenta | `#75507b` | 13 | Bright magenta | `#ad7fa8` |
-| 6 | Cyan | `#06989a` | 14 | Bright cyan | `#27d5d5` |
-| 7 | White | `#b9bdb5` | 15 | Bright white | `#eeeeec` |
+<Swatches columns="8">
+  <Swatch color="#000000" name="0 Black" />
+  <Swatch color="#cc0000" name="1 Red" />
+  <Swatch color="#4e9a06" name="2 Green" />
+  <Swatch color="#c4a000" name="3 Yellow" />
+  <Swatch color="#3465a4" name="4 Blue" />
+  <Swatch color="#75507b" name="5 Magenta" />
+  <Swatch color="#06989a" name="6 Cyan" />
+  <Swatch color="#b9bdb5" name="7 White" />
+  <Swatch color="#555753" name="8 Bright black" />
+  <Swatch color="#ef2929" name="9 Bright red" />
+  <Swatch color="#7dd527" name="10 Bright green" />
+  <Swatch color="#d6c329" name="11 Bright yellow" />
+  <Swatch color="#729fcf" name="12 Bright blue" />
+  <Swatch color="#ad7fa8" name="13 Bright magenta" />
+  <Swatch color="#27d5d5" name="14 Bright cyan" />
+  <Swatch color="#eeeeec" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/builtin-tango-light.conf` is a byte-for-
 of the palette.
 
 ## Changelog
+
+**1.0.3** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.2** — Published under Isac Petinate.
 

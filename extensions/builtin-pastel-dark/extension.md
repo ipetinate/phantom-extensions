@@ -1,7 +1,7 @@
 ---
 title: Builtin Pastel Dark
 tagline: The Builtin Pastel Dark terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Builtin Pastel Dark" background="#000000" foreground="#bbbbbb" cursor="#ffa560" selection="#363983" ansi="#4f4f4f, #ff6c60, #a8ff60, #ffffb6, #96cbfe, #ff73fd, #c6c5fe, #eeeeee, #7c7c7c, #ffb6b0, #ceffac, #ffffcc, #b5dcff, #ff9cfe, #dfdffe, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#000000` |
-| Foreground | `foreground` | `#bbbbbb` |
-| Cursor | `cursor-color` | `#ffa560` |
-| Cursor text | `cursor-text` | `#ffffff` |
-| Selection background | `selection-background` | `#363983` |
-| Selection foreground | `selection-foreground` | `#f2f2f2` |
+<Swatches columns="6">
+  <Swatch color="#000000" name="Background" />
+  <Swatch color="#bbbbbb" name="Foreground" />
+  <Swatch color="#ffa560" name="Cursor" />
+  <Swatch color="#ffffff" name="Cursor text" />
+  <Swatch color="#363983" name="Selection" />
+  <Swatch color="#f2f2f2" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#4f4f4f` | 8 | Bright black | `#7c7c7c` |
-| 1 | Red | `#ff6c60` | 9 | Bright red | `#ffb6b0` |
-| 2 | Green | `#a8ff60` | 10 | Bright green | `#ceffac` |
-| 3 | Yellow | `#ffffb6` | 11 | Bright yellow | `#ffffcc` |
-| 4 | Blue | `#96cbfe` | 12 | Bright blue | `#b5dcff` |
-| 5 | Magenta | `#ff73fd` | 13 | Bright magenta | `#ff9cfe` |
-| 6 | Cyan | `#c6c5fe` | 14 | Bright cyan | `#dfdffe` |
-| 7 | White | `#eeeeee` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#4f4f4f" name="0 Black" />
+  <Swatch color="#ff6c60" name="1 Red" />
+  <Swatch color="#a8ff60" name="2 Green" />
+  <Swatch color="#ffffb6" name="3 Yellow" />
+  <Swatch color="#96cbfe" name="4 Blue" />
+  <Swatch color="#ff73fd" name="5 Magenta" />
+  <Swatch color="#c6c5fe" name="6 Cyan" />
+  <Swatch color="#eeeeee" name="7 White" />
+  <Swatch color="#7c7c7c" name="8 Bright black" />
+  <Swatch color="#ffb6b0" name="9 Bright red" />
+  <Swatch color="#ceffac" name="10 Bright green" />
+  <Swatch color="#ffffcc" name="11 Bright yellow" />
+  <Swatch color="#b5dcff" name="12 Bright blue" />
+  <Swatch color="#ff9cfe" name="13 Bright magenta" />
+  <Swatch color="#dfdffe" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/builtin-pastel-dark.conf` is a byte-for-
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

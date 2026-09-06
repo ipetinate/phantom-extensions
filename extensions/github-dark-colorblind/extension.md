@@ -1,7 +1,7 @@
 ---
 title: GitHub Dark Colorblind
 tagline: The GitHub Dark Colorblind terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="GitHub Dark Colorblind" background="#0d1117" foreground="#c9d1d9" cursor="#58a6ff" selection="#c9d1d9" ansi="#484f58, #ec8e2c, #58a6ff, #d29922, #58a6ff, #bc8cff, #39c5cf, #b1bac4, #6e7681, #fdac54, #79c0ff, #e3b341, #79c0ff, #d2a8ff, #56d4dd, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#0d1117` |
-| Foreground | `foreground` | `#c9d1d9` |
-| Cursor | `cursor-color` | `#58a6ff` |
-| Cursor text | `cursor-text` | `#98e6ff` |
-| Selection background | `selection-background` | `#c9d1d9` |
-| Selection foreground | `selection-foreground` | `#0d1117` |
+<Swatches columns="6">
+  <Swatch color="#0d1117" name="Background" />
+  <Swatch color="#c9d1d9" name="Foreground" />
+  <Swatch color="#58a6ff" name="Cursor" />
+  <Swatch color="#98e6ff" name="Cursor text" />
+  <Swatch color="#c9d1d9" name="Selection" />
+  <Swatch color="#0d1117" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#484f58` | 8 | Bright black | `#6e7681` |
-| 1 | Red | `#ec8e2c` | 9 | Bright red | `#fdac54` |
-| 2 | Green | `#58a6ff` | 10 | Bright green | `#79c0ff` |
-| 3 | Yellow | `#d29922` | 11 | Bright yellow | `#e3b341` |
-| 4 | Blue | `#58a6ff` | 12 | Bright blue | `#79c0ff` |
-| 5 | Magenta | `#bc8cff` | 13 | Bright magenta | `#d2a8ff` |
-| 6 | Cyan | `#39c5cf` | 14 | Bright cyan | `#56d4dd` |
-| 7 | White | `#b1bac4` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#484f58" name="0 Black" />
+  <Swatch color="#ec8e2c" name="1 Red" />
+  <Swatch color="#58a6ff" name="2 Green" />
+  <Swatch color="#d29922" name="3 Yellow" />
+  <Swatch color="#58a6ff" name="4 Blue" />
+  <Swatch color="#bc8cff" name="5 Magenta" />
+  <Swatch color="#39c5cf" name="6 Cyan" />
+  <Swatch color="#b1bac4" name="7 White" />
+  <Swatch color="#6e7681" name="8 Bright black" />
+  <Swatch color="#fdac54" name="9 Bright red" />
+  <Swatch color="#79c0ff" name="10 Bright green" />
+  <Swatch color="#e3b341" name="11 Bright yellow" />
+  <Swatch color="#79c0ff" name="12 Bright blue" />
+  <Swatch color="#d2a8ff" name="13 Bright magenta" />
+  <Swatch color="#56d4dd" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/github-dark-colorblind.conf` is a byte-f
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

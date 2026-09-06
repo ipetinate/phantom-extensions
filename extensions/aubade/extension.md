@@ -1,7 +1,7 @@
 ---
 title: Aubade
 tagline: The Aubade terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Aubade" background="#fbf6fb" foreground="#3a3340" cursor="#ae3f84" selection="#ebe2ee" ansi="#33293f, #c0303a, #2e7d6e, #8c610c, #4a3cc0, #8a4bc0, #ae3f84, #b2b2b2, #9a8fa8, #c0303a, #2e7d6e, #ae3f84, #4a3cc0, #d8b670, #ae3f84, #3a3340" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#fbf6fb` |
-| Foreground | `foreground` | `#3a3340` |
-| Cursor | `cursor-color` | `#ae3f84` |
-| Cursor text | `cursor-text` | `#fbf6fb` |
-| Selection background | `selection-background` | `#ebe2ee` |
-| Selection foreground | `selection-foreground` | `#aea9ae` |
+<Swatches columns="6">
+  <Swatch color="#fbf6fb" name="Background" />
+  <Swatch color="#3a3340" name="Foreground" />
+  <Swatch color="#ae3f84" name="Cursor" />
+  <Swatch color="#fbf6fb" name="Cursor text" />
+  <Swatch color="#ebe2ee" name="Selection" />
+  <Swatch color="#aea9ae" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#33293f` | 8 | Bright black | `#9a8fa8` |
-| 1 | Red | `#c0303a` | 9 | Bright red | `#c0303a` |
-| 2 | Green | `#2e7d6e` | 10 | Bright green | `#2e7d6e` |
-| 3 | Yellow | `#8c610c` | 11 | Bright yellow | `#ae3f84` |
-| 4 | Blue | `#4a3cc0` | 12 | Bright blue | `#4a3cc0` |
-| 5 | Magenta | `#8a4bc0` | 13 | Bright magenta | `#d8b670` |
-| 6 | Cyan | `#ae3f84` | 14 | Bright cyan | `#ae3f84` |
-| 7 | White | `#b2b2b2` | 15 | Bright white | `#3a3340` |
+<Swatches columns="8">
+  <Swatch color="#33293f" name="0 Black" />
+  <Swatch color="#c0303a" name="1 Red" />
+  <Swatch color="#2e7d6e" name="2 Green" />
+  <Swatch color="#8c610c" name="3 Yellow" />
+  <Swatch color="#4a3cc0" name="4 Blue" />
+  <Swatch color="#8a4bc0" name="5 Magenta" />
+  <Swatch color="#ae3f84" name="6 Cyan" />
+  <Swatch color="#b2b2b2" name="7 White" />
+  <Swatch color="#9a8fa8" name="8 Bright black" />
+  <Swatch color="#c0303a" name="9 Bright red" />
+  <Swatch color="#2e7d6e" name="10 Bright green" />
+  <Swatch color="#ae3f84" name="11 Bright yellow" />
+  <Swatch color="#4a3cc0" name="12 Bright blue" />
+  <Swatch color="#d8b670" name="13 Bright magenta" />
+  <Swatch color="#ae3f84" name="14 Bright cyan" />
+  <Swatch color="#3a3340" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/aubade.conf` is a byte-for-byte copy of 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

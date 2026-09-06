@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-snazzy",
   "name": "Snazzy",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Isac Petinate",
   "description": "The Snazzy terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/snazzy",

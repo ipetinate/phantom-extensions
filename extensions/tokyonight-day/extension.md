@@ -1,7 +1,7 @@
 ---
 title: TokyoNight Day
 tagline: The TokyoNight Day terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="TokyoNight Day" background="#e1e2e7" foreground="#3760bf" cursor="#3760bf" selection="#99a7df" ansi="#e9e9ed, #f52a65, #587539, #8c6c3e, #2e7de9, #9854f1, #007197, #6172b0, #a1a6c5, #f52a65, #587539, #8c6c3e, #2e7de9, #9854f1, #007197, #3760bf" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#e1e2e7` |
-| Foreground | `foreground` | `#3760bf` |
-| Cursor | `cursor-color` | `#3760bf` |
-| Cursor text | `cursor-text` | `#e1e2e7` |
-| Selection background | `selection-background` | `#99a7df` |
-| Selection foreground | `selection-foreground` | `#3760bf` |
+<Swatches columns="6">
+  <Swatch color="#e1e2e7" name="Background" />
+  <Swatch color="#3760bf" name="Foreground" />
+  <Swatch color="#3760bf" name="Cursor" />
+  <Swatch color="#e1e2e7" name="Cursor text" />
+  <Swatch color="#99a7df" name="Selection" />
+  <Swatch color="#3760bf" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#e9e9ed` | 8 | Bright black | `#a1a6c5` |
-| 1 | Red | `#f52a65` | 9 | Bright red | `#f52a65` |
-| 2 | Green | `#587539` | 10 | Bright green | `#587539` |
-| 3 | Yellow | `#8c6c3e` | 11 | Bright yellow | `#8c6c3e` |
-| 4 | Blue | `#2e7de9` | 12 | Bright blue | `#2e7de9` |
-| 5 | Magenta | `#9854f1` | 13 | Bright magenta | `#9854f1` |
-| 6 | Cyan | `#007197` | 14 | Bright cyan | `#007197` |
-| 7 | White | `#6172b0` | 15 | Bright white | `#3760bf` |
+<Swatches columns="8">
+  <Swatch color="#e9e9ed" name="0 Black" />
+  <Swatch color="#f52a65" name="1 Red" />
+  <Swatch color="#587539" name="2 Green" />
+  <Swatch color="#8c6c3e" name="3 Yellow" />
+  <Swatch color="#2e7de9" name="4 Blue" />
+  <Swatch color="#9854f1" name="5 Magenta" />
+  <Swatch color="#007197" name="6 Cyan" />
+  <Swatch color="#6172b0" name="7 White" />
+  <Swatch color="#a1a6c5" name="8 Bright black" />
+  <Swatch color="#f52a65" name="9 Bright red" />
+  <Swatch color="#587539" name="10 Bright green" />
+  <Swatch color="#8c6c3e" name="11 Bright yellow" />
+  <Swatch color="#2e7de9" name="12 Bright blue" />
+  <Swatch color="#9854f1" name="13 Bright magenta" />
+  <Swatch color="#007197" name="14 Bright cyan" />
+  <Swatch color="#3760bf" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/tokyonight-day.conf` is a byte-for-byte 
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

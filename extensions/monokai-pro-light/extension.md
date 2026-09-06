@@ -1,7 +1,7 @@
 ---
 title: Monokai Pro Light
 tagline: The Monokai Pro Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Monokai Pro Light" background="#faf4f2" foreground="#29242a" cursor="#706b6e" selection="#bfb9ba" ansi="#faf4f2, #e14775, #269d69, #cc7a0a, #e16032, #7058be, #1c8ca8, #29242a, #a59fa0, #e14775, #269d69, #cc7a0a, #e16032, #7058be, #1c8ca8, #29242a" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#faf4f2` |
-| Foreground | `foreground` | `#29242a` |
-| Cursor | `cursor-color` | `#706b6e` |
-| Cursor text | `cursor-text` | `#a39ea1` |
-| Selection background | `selection-background` | `#bfb9ba` |
-| Selection foreground | `selection-foreground` | `#29242a` |
+<Swatches columns="6">
+  <Swatch color="#faf4f2" name="Background" />
+  <Swatch color="#29242a" name="Foreground" />
+  <Swatch color="#706b6e" name="Cursor" />
+  <Swatch color="#a39ea1" name="Cursor text" />
+  <Swatch color="#bfb9ba" name="Selection" />
+  <Swatch color="#29242a" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#faf4f2` | 8 | Bright black | `#a59fa0` |
-| 1 | Red | `#e14775` | 9 | Bright red | `#e14775` |
-| 2 | Green | `#269d69` | 10 | Bright green | `#269d69` |
-| 3 | Yellow | `#cc7a0a` | 11 | Bright yellow | `#cc7a0a` |
-| 4 | Blue | `#e16032` | 12 | Bright blue | `#e16032` |
-| 5 | Magenta | `#7058be` | 13 | Bright magenta | `#7058be` |
-| 6 | Cyan | `#1c8ca8` | 14 | Bright cyan | `#1c8ca8` |
-| 7 | White | `#29242a` | 15 | Bright white | `#29242a` |
+<Swatches columns="8">
+  <Swatch color="#faf4f2" name="0 Black" />
+  <Swatch color="#e14775" name="1 Red" />
+  <Swatch color="#269d69" name="2 Green" />
+  <Swatch color="#cc7a0a" name="3 Yellow" />
+  <Swatch color="#e16032" name="4 Blue" />
+  <Swatch color="#7058be" name="5 Magenta" />
+  <Swatch color="#1c8ca8" name="6 Cyan" />
+  <Swatch color="#29242a" name="7 White" />
+  <Swatch color="#a59fa0" name="8 Bright black" />
+  <Swatch color="#e14775" name="9 Bright red" />
+  <Swatch color="#269d69" name="10 Bright green" />
+  <Swatch color="#cc7a0a" name="11 Bright yellow" />
+  <Swatch color="#e16032" name="12 Bright blue" />
+  <Swatch color="#7058be" name="13 Bright magenta" />
+  <Swatch color="#1c8ca8" name="14 Bright cyan" />
+  <Swatch color="#29242a" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/monokai-pro-light.conf` is a byte-for-by
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

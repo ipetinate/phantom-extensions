@@ -1,7 +1,7 @@
 ---
 title: Modus Operandi Tritanopia
 tagline: The Modus Operandi Tritanopia terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.2
+version: 1.0.3
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Modus Operandi Tritanopia" background="#ffffff" foreground="#000000" cursor="#000000" selection="#bdbdbd" ansi="#000000, #a60000, #006800, #695500, #0031a9, #721045, #005e8b, #a6a6a6, #595959, #b21100, #00663f, #973300, #3548cf, #531ab6, #005f5f, #595959" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#ffffff` |
-| Foreground | `foreground` | `#000000` |
-| Cursor | `cursor-color` | `#000000` |
-| Cursor text | `cursor-text` | `#ffffff` |
-| Selection background | `selection-background` | `#bdbdbd` |
-| Selection foreground | `selection-foreground` | `#000000` |
+<Swatches columns="6">
+  <Swatch color="#ffffff" name="Background" />
+  <Swatch color="#000000" name="Foreground" />
+  <Swatch color="#000000" name="Cursor" />
+  <Swatch color="#ffffff" name="Cursor text" />
+  <Swatch color="#bdbdbd" name="Selection" />
+  <Swatch color="#000000" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#000000` | 8 | Bright black | `#595959` |
-| 1 | Red | `#a60000` | 9 | Bright red | `#b21100` |
-| 2 | Green | `#006800` | 10 | Bright green | `#00663f` |
-| 3 | Yellow | `#695500` | 11 | Bright yellow | `#973300` |
-| 4 | Blue | `#0031a9` | 12 | Bright blue | `#3548cf` |
-| 5 | Magenta | `#721045` | 13 | Bright magenta | `#531ab6` |
-| 6 | Cyan | `#005e8b` | 14 | Bright cyan | `#005f5f` |
-| 7 | White | `#a6a6a6` | 15 | Bright white | `#595959` |
+<Swatches columns="8">
+  <Swatch color="#000000" name="0 Black" />
+  <Swatch color="#a60000" name="1 Red" />
+  <Swatch color="#006800" name="2 Green" />
+  <Swatch color="#695500" name="3 Yellow" />
+  <Swatch color="#0031a9" name="4 Blue" />
+  <Swatch color="#721045" name="5 Magenta" />
+  <Swatch color="#005e8b" name="6 Cyan" />
+  <Swatch color="#a6a6a6" name="7 White" />
+  <Swatch color="#595959" name="8 Bright black" />
+  <Swatch color="#b21100" name="9 Bright red" />
+  <Swatch color="#00663f" name="10 Bright green" />
+  <Swatch color="#973300" name="11 Bright yellow" />
+  <Swatch color="#3548cf" name="12 Bright blue" />
+  <Swatch color="#531ab6" name="13 Bright magenta" />
+  <Swatch color="#005f5f" name="14 Bright cyan" />
+  <Swatch color="#595959" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/modus-operandi-tritanopia.conf` is a byt
 of the palette.
 
 ## Changelog
+
+**1.0.3** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.2** — Published under Isac Petinate.
 

@@ -1,7 +1,7 @@
 ---
 title: Apple System Colors Light
 tagline: The Apple System Colors Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Apple System Colors Light" background="#feffff" foreground="#000000" cursor="#98989d" selection="#abd8ff" ansi="#1a1a1a, #cc372e, #26a439, #cdac08, #0869cb, #9647bf, #479ec2, #98989d, #464646, #ff453a, #32d74b, #e5bc00, #0a84ff, #bf5af2, #69c9f2, #ffffff" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#feffff` |
-| Foreground | `foreground` | `#000000` |
-| Cursor | `cursor-color` | `#98989d` |
-| Cursor text | `cursor-text` | `#ffffff` |
-| Selection background | `selection-background` | `#abd8ff` |
-| Selection foreground | `selection-foreground` | `#000000` |
+<Swatches columns="6">
+  <Swatch color="#feffff" name="Background" />
+  <Swatch color="#000000" name="Foreground" />
+  <Swatch color="#98989d" name="Cursor" />
+  <Swatch color="#ffffff" name="Cursor text" />
+  <Swatch color="#abd8ff" name="Selection" />
+  <Swatch color="#000000" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#1a1a1a` | 8 | Bright black | `#464646` |
-| 1 | Red | `#cc372e` | 9 | Bright red | `#ff453a` |
-| 2 | Green | `#26a439` | 10 | Bright green | `#32d74b` |
-| 3 | Yellow | `#cdac08` | 11 | Bright yellow | `#e5bc00` |
-| 4 | Blue | `#0869cb` | 12 | Bright blue | `#0a84ff` |
-| 5 | Magenta | `#9647bf` | 13 | Bright magenta | `#bf5af2` |
-| 6 | Cyan | `#479ec2` | 14 | Bright cyan | `#69c9f2` |
-| 7 | White | `#98989d` | 15 | Bright white | `#ffffff` |
+<Swatches columns="8">
+  <Swatch color="#1a1a1a" name="0 Black" />
+  <Swatch color="#cc372e" name="1 Red" />
+  <Swatch color="#26a439" name="2 Green" />
+  <Swatch color="#cdac08" name="3 Yellow" />
+  <Swatch color="#0869cb" name="4 Blue" />
+  <Swatch color="#9647bf" name="5 Magenta" />
+  <Swatch color="#479ec2" name="6 Cyan" />
+  <Swatch color="#98989d" name="7 White" />
+  <Swatch color="#464646" name="8 Bright black" />
+  <Swatch color="#ff453a" name="9 Bright red" />
+  <Swatch color="#32d74b" name="10 Bright green" />
+  <Swatch color="#e5bc00" name="11 Bright yellow" />
+  <Swatch color="#0a84ff" name="12 Bright blue" />
+  <Swatch color="#bf5af2" name="13 Bright magenta" />
+  <Swatch color="#69c9f2" name="14 Bright cyan" />
+  <Swatch color="#ffffff" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -66,6 +83,8 @@ released under the MIT License. `themes/apple-system-colors-light.conf` is a byt
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 
 **1.0.3** — Published under Isac Petinate.
 

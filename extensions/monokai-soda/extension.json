@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-monokai-soda",
   "name": "Monokai Soda",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Isac Petinate",
   "description": "The Monokai Soda terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/monokai-soda",
