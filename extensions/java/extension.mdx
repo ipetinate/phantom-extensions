@@ -1,0 +1,160 @@
+---
+title: Java
+tagline: Java language support for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [java, language, lsp, jvm, maven, gradle]
+screenshots:
+  - media/editor.png
+---
+
+Java support for the Phantom editor. The extension gives `.java` files a language definition of their own — Java's keywords, text blocks, annotations and generic calls — and connects the **Eclipse JDT Language Server** for diagnostics, hover, completion, navigation, refactoring and formatting. The server is optional: highlighting works the moment the extension is installed.
+
+Without the extension, Phantom lexes a `.java` file with its Kotlin rules. They share enough shape that the file looks reasonable, and they disagree on the words: `extends`, `implements`, `instanceof`, `static`, `void`, `synchronized` and the primitive types are not Kotlin keywords, and Kotlin's `fun`, `val` and `when` are not Java's.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      The Java keyword set, including `record`, `sealed`, `permits`, `var` and `yield`; type names, generic calls such as `Collections.emptyList()`, `"""text blocks"""`, character literals, numbers and `@Annotations`. Comments with `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics from the Eclipse compiler, completion, hover with Javadoc, go to definition, find references, call and type hierarchies, organize imports and the refactorings JDT ships. Maven and Gradle projects are imported and their dependencies resolved.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Format on demand or on save, served by the language server. It uses the Eclipse formatter, which reads a profile you point it at, so a team's existing house style applies.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Java file open in Phantom with a package declaration, an annotated class, a record and one diagnostic from the Eclipse JDT Language Server" caption="Highlighting, annotations and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want diagnostics and formatting; the extension detects it on your `PATH`.
+
+<Requirement command="jdtls" install="brew install jdtls" url="https://github.com/eclipse-jdtls/eclipse.jdt.ls">
+The Eclipse JDT Language Server. Without it the highlighter still works. It needs a Java 21 runtime or newer to run; the Homebrew formula installs one as a dependency. The Java your *project* targets is a separate question, and the server handles older ones.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Java.
+  </Step>
+  <Step title="Install the server">
+    Run the Homebrew command above. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a Java file">
+    The first time a project needs jdtls, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Let the project import">
+    On the first run the server imports the project from its `pom.xml` or Gradle build and indexes the JDK and the dependencies. This is slow once and fast afterwards, because the index is kept on disk.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.java` |
+| Language server | `jdtls` (stdio) |
+| Formatter | The Eclipse formatter, built into the language server |
+| Editor | The Java keyword set, `//` and `/* */` comment markers, and patterns for text blocks, generic calls and annotations |
+| Icon | Java file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Where the server keeps its workspace">
+
+Eclipse stores its index and project model in a data directory, chosen with the `-data` argument. This extension passes no arguments, so the launcher picks the directory itself: one per working directory, named from a hash of it, under your cache directory.
+
+Phantom's own compiled-in Java row pins a single shared directory instead. The difference matters when you move between projects: a directory per project re-uses each index, and one shared directory re-imports on every switch. If you want a specific path, set it in Settings → Language Servers under **Arguments**:
+
+```
+-data /Users/you/.cache/jdtls/my-project
+```
+
+</Details>
+
+<Details summary="Sending the server your own initializationOptions">
+
+Most of what jdtls can be told arrives as `initializationOptions`, under a `settings.java` object. Open Settings → Language Servers, select Eclipse JDT Language Server, fill in the **initializationOptions (JSON)** field and press **Restart Server**.
+
+```json
+{
+  "settings": {
+    "java": {
+      "format": {
+        "settings": {
+          "url": "/Users/you/code/config/eclipse-formatter.xml",
+          "profile": "House Style"
+        }
+      },
+      "configuration": {
+        "updateBuildConfiguration": "automatic"
+      },
+      "import": {
+        "gradle": { "enabled": true },
+        "maven": { "enabled": true }
+      },
+      "saveActions": { "organizeImports": true }
+    }
+  }
+}
+```
+
+| Key | What it does |
+|---|---|
+| `java.home` | The JDK the server runs on, when you do not want the one on `PATH` |
+| `java.format.settings.url` | An Eclipse formatter profile, as a path or a URL |
+| `java.format.settings.profile` | Which profile inside that file to use |
+| `java.configuration.updateBuildConfiguration` | `disabled`, `interactive` or `automatic` |
+| `java.import.gradle.enabled`, `java.import.maven.enabled` | Whether each build system is imported |
+| `java.completion.favoriteStaticMembers`, `java.completion.importOrder` | Completion behaviour for static imports and the order of new ones |
+| `java.saveActions.organizeImports` | Organize imports on save |
+| `java.referencesCodeLens.enabled`, `java.signatureHelp.enabled` | Switch those two features on |
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says jdtls is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell.
+
+</Details>
+
+<Details summary="The server refuses to start and names a Java version">
+
+jdtls needs a Java 21 runtime or newer for itself. Its launcher checks the version it is about to use and stops rather than failing later. Point it at a suitable JDK with `java.home` in the initializationOptions field above, or set `JAVA_HOME` before starting Phantom.
+
+</Details>
+
+<Details summary="Diagnostics say a symbol cannot be resolved in a project that builds">
+
+The project has not finished importing, or it failed to. jdtls resolves symbols from the model it built out of `pom.xml` or the Gradle build, not from the source tree alone. Check that the project builds from the terminal, then restart the server from Settings → Language Servers.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: a language definition of Java's own for `.java`, replacing the Kotlin rules the file was lexed with, plus Eclipse JDT Language Server wiring and a Homebrew install command.
+
+## License and credits
+
+The extension is released under the MIT License. The [Eclipse JDT Language Server](https://github.com/eclipse-jdtls/eclipse.jdt.ls) is © the Eclipse Foundation and contributors, under the Eclipse Public License 2.0. Java is a registered trademark of Oracle and its affiliates; this extension is not affiliated with them.
