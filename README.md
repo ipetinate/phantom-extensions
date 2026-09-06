@@ -54,6 +54,7 @@ An index entry carries `download` for the version in this repository, and `versi
 | `install` on a language `server`, on a formatter or on an agent | 0.16.0 |
 | `extension.mdx` or `extension.md`, and the `card` it produces in the index | 0.16.0 |
 | `contributes.grammars[]` and `dependencies` | 0.17.0 |
+| `contributes.servers[]`, and `resolver`, `maximumJavaFeatureVersion` and `${HOME}` on any server | 0.17.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
 
@@ -85,6 +86,45 @@ The build compiles every `match`, `begin`, `end` and `while` pattern with Onigur
 
 An `include` may name `#rule`, `$self`, `$base`, another grammar's scope, or `scope#rule`. When the scope belongs to a grammar in another extension of this registry, that extension must be listed in the manifest's top-level `dependencies`, an array of extension ids; the build refuses an include that reaches an undeclared extension and a dependency that names no extension. A scope no extension in the registry provides is allowed, because grammars written for other editors include languages this registry does not carry, and the editor leaves such a region uncoloured rather than failing the grammar.
 
+## Servers
+
+A language names the server that serves it under `contributes.languages[].server`. A tool that serves several languages, and only in the projects that adopted it, is a server of its own:
+
+```json
+"servers": [
+  {
+    "id": "tailwind",
+    "name": "Tailwind CSS",
+    "command": "tailwindcss-language-server",
+    "args": ["--stdio"],
+    "languageIds": ["html", "vue", "typescriptreact", "javascriptreact", "javascript"],
+    "projectMarkers": ["node_modules/tailwindcss"],
+    "installHint": "npm i -g @tailwindcss/language-server"
+  }
+]
+```
+
+Such a server attaches beside the server of the language being edited rather than replacing it. `languageIds` says which documents it is offered for, by language id, from this extension or from any other. `projectMarkers` says when: Phantom walks up from the edited file to the workspace root and starts the server only where it finds one of them, so a project that never adopted the tool never runs it. An absent or empty list means every project. `id` is kebab-case and unique inside the extension; `name` is what Settings shows. `languageIds` and `projectMarkers` hold at most 32 entries each, and a marker is a path inside the project: no leading `/`, no `..`.
+
+Both homes read the same server block — `command`, `args`, `initializationOptions`, `installHint`, `documentationURL`, `install`, and the three below.
+
+`maximumJavaFeatureVersion` is the newest Java feature version the server runs on, from 8 to 99. It is a ceiling, not a requirement: a server that bundles an old compiler dies on a newer JDK, so Phantom hands it an older JVM when the one on the machine is above the ceiling.
+
+`resolver` names a capability Phantom implements, for the glue a manifest cannot carry as data. There are two, and no others:
+
+| `kind` | What Phantom does |
+|---|---|
+| `typescriptSDKArgument` | Finds the project's TypeScript lib directory and appends `--tsdk=<dir>` to `args` |
+| `typescriptPluginHost` | Resolves the project's `tsserver.js` and the location of `plugin`, then builds the tsserver `initializationOptions` that load that plugin for `languages` |
+
+`plugin` and `languages` belong to `typescriptPluginHost`; the other kind takes neither.
+
+In an argument, `${HOME}` becomes the user's home directory. Nothing else is expanded, and a manifest carrying any other `${…}` token is refused. That is how a server declares one fixed workspace directory rather than one per project:
+
+```json
+"args": ["-data", "${HOME}/.cache/jdtls-workspace"]
+```
+
 ## Installing what an extension needs
 
 A language server, a formatter and an agent each name a program Phantom runs but does not ship. `installHint` is one sentence for a person to read. `install` says the same thing as data, so Phantom installs and removes the program itself.
@@ -102,11 +142,11 @@ A language server, a formatter and an agent each name a program Phantom runs but
 }
 ```
 
-The block reads the same on `contributes.languages[].server`, on `contributes.formatters[]` and on `contributes.agents[]`. `manager` is one of `brew`, `npm`, `pnpm`, `yarn`, `cargo`, `gem`, `pipx`, `go`, `dotnet`, `nix`. `command` starts with that manager's own binary and holds nothing else: no `curl`, no `|`, no `sudo`, no `;`, `&&`, `&`, `$( )`, no backticks and no redirects. `uninstall` is optional and follows the same rules. `documentationURL` is https. The build refuses a manifest that breaks one of these.
+The block reads the same on `contributes.languages[].server`, on `contributes.servers[]`, on `contributes.formatters[]` and on `contributes.agents[]`. `manager` is one of `brew`, `npm`, `pnpm`, `yarn`, `cargo`, `gem`, `pipx`, `go`, `dotnet`, `nix`. `command` starts with that manager's own binary and holds nothing else: no `curl`, no `|`, no `sudo`, no `;`, `&&`, `&`, `$( )`, no backticks and no redirects. `uninstall` is optional and follows the same rules. `documentationURL` is https. The build refuses a manifest that breaks one of these.
 
 An agent written for the older format, whose `install.commands` holds plain strings, still builds: each string becomes `{ "manager": <its first word>, "command": <the string> }`.
 
-`installHint` stays accepted, and it is what an entry without an `install` block still shows. The index lists every one of these programs in `card.tools` — one entry per language server, formatter and agent, with its `command`, its `installHint` and its `install` block — so Phantom knows what an extension needs before the download.
+`installHint` stays accepted, and it is what an entry without an `install` block still shows. The index lists every one of these programs in `card.tools` — one entry per server, formatter and agent, with its `command`, its `installHint` and its `install` block — so Phantom knows what an extension needs before the download.
 
 ## Agents
 

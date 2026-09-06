@@ -4,7 +4,8 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { requireAsset } from "../src/checks.ts";
 import { collect } from "../src/collect.ts";
 import { checkLayout } from "../src/layout.ts";
-import { MAX_PROJECT_MARKERS, WORKING_DIRECTORIES, loadManifest } from "../src/manifest.ts";
+import { WORKING_DIRECTORIES, loadManifest } from "../src/manifest.ts";
+import { MAX_PROJECT_MARKERS } from "../src/projectPaths.ts";
 import { ExtensionFixture, FRONT_MATTER, agentsManifest, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
 
 let root: string;

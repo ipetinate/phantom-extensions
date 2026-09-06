@@ -63,6 +63,13 @@
             "$ref": "#/$defs/language"
           }
         },
+        "servers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/companionServer"
+          },
+          "description": "Servers that attach beside a language's own server, for several languages, only when the project uses the tool they serve."
+        },
         "formatters": {
           "type": "array",
           "items": {
@@ -163,6 +170,148 @@
         }
       }
     },
+    "serverArgument": {
+      "type": "string",
+      "pattern": "^(?:[^$]|\\$(?!\\{)|\\$\\{HOME\\})*$",
+      "description": "One argument for the server. Phantom replaces ${HOME} with the user's home directory and expands nothing else, so no other ${...} token may appear."
+    },
+    "resolver": {
+      "type": "object",
+      "description": "A capability Phantom implements for glue a manifest cannot express as data. The extension names the capability; Phantom does the resolving.",
+      "required": [
+        "kind"
+      ],
+      "oneOf": [
+        {
+          "title": "typescriptSDKArgument",
+          "description": "Phantom finds the project's TypeScript lib directory and appends --tsdk=<dir> to args.",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "typescriptSDKArgument"
+            }
+          }
+        },
+        {
+          "title": "typescriptPluginHost",
+          "description": "Phantom resolves the project's tsserver.js and the plugin's location, and builds the tsserver initializationOptions that load that plugin for those languages.",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "plugin",
+            "languages"
+          ],
+          "properties": {
+            "kind": {
+              "const": "typescriptPluginHost"
+            },
+            "plugin": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The npm package name of the tsserver plugin, such as @vue/typescript-plugin."
+            },
+            "languages": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9_+-]+$"
+              },
+              "description": "The language ids the plugin serves inside the host process."
+            }
+          }
+        }
+      ]
+    },
+    "server": {
+      "type": "object",
+      "required": [
+        "command"
+      ],
+      "properties": {
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/serverArgument"
+          }
+        },
+        "initializationOptions": {
+          "type": "object"
+        },
+        "maximumJavaFeatureVersion": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 99,
+          "description": "The newest Java feature version this server runs on. A ceiling, not a requirement: Phantom hands the server an older JVM when the environment's is above it."
+        },
+        "resolver": {
+          "$ref": "#/$defs/resolver"
+        },
+        "installHint": {
+          "type": "string"
+        },
+        "documentationURL": {
+          "type": "string",
+          "format": "uri"
+        },
+        "install": {
+          "$ref": "#/$defs/install"
+        }
+      }
+    },
+    "companionServer": {
+      "type": "object",
+      "description": "A server that attaches beside the server of the language being edited. Phantom walks up from the file to the workspace root looking for any one of projectMarkers, and starts the server only when it finds one; no markers means always.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/server"
+        }
+      ],
+      "required": [
+        "id",
+        "name",
+        "command",
+        "languageIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Names the server inside this extension; no two servers of one extension share it."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The name Settings shows for the server."
+        },
+        "languageIds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_+-]+$"
+          },
+          "description": "The documents this server is offered for, by language id, from any extension."
+        },
+        "projectMarkers": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/projectRelativePath"
+          },
+          "description": "Files or directories whose presence means the project uses the tool. Phantom walks up from the edited file to the workspace root; when it finds none, the server does not start. An absent or empty list starts the server for every project."
+        }
+      }
+    },
     "language": {
       "type": "object",
       "required": [
@@ -230,35 +379,7 @@
           }
         },
         "server": {
-          "type": "object",
-          "required": [
-            "command"
-          ],
-          "properties": {
-            "command": {
-              "type": "string",
-              "minLength": 1
-            },
-            "args": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "initializationOptions": {
-              "type": "object"
-            },
-            "installHint": {
-              "type": "string"
-            },
-            "documentationURL": {
-              "type": "string",
-              "format": "uri"
-            },
-            "install": {
-              "$ref": "#/$defs/install"
-            }
-          }
+          "$ref": "#/$defs/server"
         }
       }
     },

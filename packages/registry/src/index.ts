@@ -42,6 +42,17 @@ export {
   checkMedia,
 } from "./media.ts";
 export type { MediaEntry, MediaReport } from "./media.ts";
+export { MAX_PROJECT_MARKERS, validateProjectPath } from "./projectPaths.ts";
+export {
+  MAX_JAVA_FEATURE_VERSION,
+  MAX_SERVER_LANGUAGE_IDS,
+  MIN_JAVA_FEATURE_VERSION,
+  RESOLVER_KINDS,
+  SERVER_ID_PATTERN,
+  validateCompanionServer,
+  validateServerBlock,
+} from "./servers.ts";
+export type { ResolverKind } from "./servers.ts";
 export {
   CONTRIBUTION_KINDS,
   RETIRED_LANGUAGE_KEYS,

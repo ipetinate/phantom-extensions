@@ -4,6 +4,8 @@ import { fail, isRecord, requireAsset, requireString, type JsonObject, type Json
 import { quoted } from "./errors.ts";
 import { grammarEntries, validateGrammars, type GrammarEntry } from "./grammars.ts";
 import { validateInstall, type Install } from "./install.ts";
+import { MAX_PROJECT_MARKERS, validateProjectPath } from "./projectPaths.ts";
+import { validateCompanionServer, validateServerBlock } from "./servers.ts";
 import { suffixOf } from "./suffixes.ts";
 
 export const ID_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
@@ -12,12 +14,11 @@ export const LANGUAGE_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const AGENT_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const FORMATTER_ID_PATTERN = /^[a-z0-9_-]+$/;
 export const CATEGORIES = ["script", "compiled", "markup", "frontendFramework", "styles", "data", "infrastructure"] as const;
-export const CONTRIBUTION_KINDS = ["languages", "formatters", "themes", "iconThemes", "grammars", "agents"] as const;
+export const CONTRIBUTION_KINDS = ["languages", "servers", "formatters", "themes", "iconThemes", "grammars", "agents"] as const;
 export const RETIRED_LANGUAGE_KEYS = ["syntax", "keywords"] as const;
 export const WORKING_DIRECTORIES = ["marker", "file", "workspace"] as const;
 export const MANIFEST_SUFFIXES = ["json", "yaml", "yml"] as const;
 export const MAX_MANIFEST_BYTES = 512 * 1024;
-export const MAX_PROJECT_MARKERS = 32;
 
 export type ContributionKind = (typeof CONTRIBUTION_KINDS)[number];
 
@@ -82,8 +83,7 @@ function validateLanguage(directory: string, language: JsonValue): string {
   const server = language["server"];
   if (server !== undefined && server !== null) {
     if (!isRecord(server)) fail(directory, "server must be an object");
-    requireString(directory, server, "command");
-    validateInstall(directory, `language ${quoted(languageId)} server`, server["install"]);
+    validateServerBlock(directory, `language ${quoted(languageId)} server`, server);
   }
   return languageId;
 }
@@ -113,16 +113,6 @@ export function manifestGrammars(directory: string, manifest: Manifest): Grammar
   return grammarEntries(directory, rawEntries(manifest.contributes, "grammars"), languageIdsOf(manifest));
 }
 
-function validateProjectPath(directory: string, id: string, what: string, value: JsonValue | undefined): void {
-  if (typeof value !== "string" || !value) {
-    fail(directory, `formatter ${quoted(id)}: ${what} must be a non-empty string`);
-  }
-  const segments = value.split("/");
-  if (value.startsWith("/") || value.startsWith("~") || segments.some((segment) => segment === "" || segment === "." || segment === "..")) {
-    fail(directory, `formatter ${quoted(id)}: ${what} must be relative and must not climb out: ${quoted(value)}`);
-  }
-}
-
 function validateProjectMarkers(directory: string, id: string, markers: JsonValue): void {
   if (!Array.isArray(markers) || markers.length === 0) {
     fail(directory, `formatter ${quoted(id)} needs at least one entry in projectMarkers`);
@@ -132,13 +122,13 @@ function validateProjectMarkers(directory: string, id: string, markers: JsonValu
   }
   for (const marker of markers) {
     if (typeof marker === "string") {
-      validateProjectPath(directory, id, "a projectMarkers entry", marker);
+      validateProjectPath(directory, `formatter ${quoted(id)}`, "a projectMarkers entry", marker);
       continue;
     }
     if (!isRecord(marker)) {
       fail(directory, `formatter ${quoted(id)}: a projectMarkers entry must be a file name or a {file, containsKey} object`);
     }
-    validateProjectPath(directory, id, "projectMarkers[].file", marker["file"]);
+    validateProjectPath(directory, `formatter ${quoted(id)}`, "projectMarkers[].file", marker["file"]);
     if (typeof marker["containsKey"] !== "string" || !marker["containsKey"]) {
       fail(directory, `formatter ${quoted(id)}: projectMarkers[].containsKey must be a non-empty string`);
     }
@@ -164,7 +154,7 @@ function validateFormatter(directory: string, formatter: JsonValue): void {
     }
   }
   if (formatter["projectMarkers"] !== undefined) validateProjectMarkers(directory, id, formatter["projectMarkers"]);
-  if (formatter["localBinary"] !== undefined) validateProjectPath(directory, id, "localBinary", formatter["localBinary"]);
+  if (formatter["localBinary"] !== undefined) validateProjectPath(directory, `formatter ${quoted(id)}`, "localBinary", formatter["localBinary"]);
   const workingDirectory = formatter["workingDirectory"];
   if (workingDirectory !== undefined && !(WORKING_DIRECTORIES as readonly JsonValue[]).includes(workingDirectory)) {
     fail(directory, `formatter ${quoted(id)}: workingDirectory must be one of ${WORKING_DIRECTORIES.join(", ")}`);
@@ -235,6 +225,16 @@ export function manifestTools(directory: string, manifest: Manifest): Tool[] {
       install: validateInstall(directory, "server", server["install"]),
     });
   }
+  for (const server of entriesOf(manifest, "servers")) {
+    if (typeof server["command"] !== "string") continue;
+    tools.push({
+      kind: "server",
+      name: toolName(server, server["command"]),
+      command: server["command"],
+      installHint: installHintOf(server),
+      install: validateInstall(directory, "server", server["install"]),
+    });
+  }
   for (const formatter of entriesOf(manifest, "formatters")) {
     if (typeof formatter["command"] !== "string") continue;
     tools.push({
@@ -294,6 +294,8 @@ export function loadManifest(directory: string): Manifest {
     fail(directory, `contributes must hold at least one of ${CONTRIBUTION_KINDS.join(", ")}`);
   }
   const languageIds = new Set(rawEntries(contributes, "languages").map((language) => validateLanguage(directory, language)));
+  const serverIds = new Set<string>();
+  for (const server of rawEntries(contributes, "servers")) validateCompanionServer(directory, server, serverIds);
   for (const formatter of rawEntries(contributes, "formatters")) validateFormatter(directory, formatter);
   for (const kind of ["themes", "iconThemes"] as const) {
     for (const entry of rawEntries(contributes, kind)) validatePathed(directory, kind, entry);

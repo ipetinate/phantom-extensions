@@ -94,6 +94,31 @@ export function grammarFixture(
   return fixture;
 }
 
+export function companionServer(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    id: "tailwind",
+    name: "Tailwind CSS",
+    command: "tailwindcss-language-server",
+    args: ["--stdio"],
+    languageIds: ["html", "vue"],
+    ...overrides,
+  };
+}
+
+export function serversManifest(server: Record<string, unknown> = {}, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    schemaVersion: 1,
+    id: "tests.servers",
+    name: "Servers",
+    version: "1.0.0",
+    publisher: "tests",
+    contributes: {
+      servers: [companionServer(server)],
+    },
+    ...overrides,
+  };
+}
+
 export function agentsManifest(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
     schemaVersion: 1,
