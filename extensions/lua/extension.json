@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.lua",
   "name": "Lua",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "ipetinate",
   "description": "Lua: highlighting, lua-language-server and StyLua.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/lua",
@@ -12,16 +12,42 @@
       {
         "languageId": "lua",
         "name": "Lua",
-        "extensions": ["lua"],
-        "fileNames": [".luacheckrc"],
+        "extensions": [
+          "lua"
+        ],
+        "fileNames": [
+          ".luacheckrc"
+        ],
         "category": "script",
         "icon": "icons/lua.svg",
         "lineComment": "--",
-        "blockComment": { "open": "--[[", "close": "]]" },
+        "blockComment": {
+          "open": "--[[",
+          "close": "]]"
+        },
         "keywords": [
-          "and", "break", "do", "else", "elseif", "end", "false", "for", "function",
-          "goto", "if", "in", "local", "nil", "not", "or", "repeat", "return", "then",
-          "true", "until", "while"
+          "and",
+          "break",
+          "do",
+          "else",
+          "elseif",
+          "end",
+          "false",
+          "for",
+          "function",
+          "goto",
+          "if",
+          "in",
+          "local",
+          "nil",
+          "not",
+          "or",
+          "repeat",
+          "return",
+          "then",
+          "true",
+          "until",
+          "while"
         ],
         "syntax": {
           "string": "\\[=*\\[[\\s\\S]*?\\]=*\\]|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
@@ -42,8 +68,14 @@
         "id": "stylua",
         "name": "StyLua",
         "command": "stylua",
-        "args": ["--stdin-filepath", "$FILE", "-"],
-        "extensions": ["lua"],
+        "args": [
+          "--stdin-filepath",
+          "$FILE",
+          "-"
+        ],
+        "extensions": [
+          "lua"
+        ],
         "installHint": "brew install stylua",
         "documentationURL": "https://github.com/JohnnyMorganz/StyLua"
       }
