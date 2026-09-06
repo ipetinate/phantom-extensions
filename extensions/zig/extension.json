@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.zig",
+  "name": "Zig",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Zig: highlighting for .zig and .zon, and the ZLS language server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/zig",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "zig",
+        "name": "Zig",
+        "extensions": [
+          "zig",
+          "zon"
+        ],
+        "category": "compiled",
+        "icon": "icons/zig.svg",
+        "keywords": [
+          "align",
+          "allowzero",
+          "and",
+          "anyframe",
+          "anytype",
+          "asm",
+          "async",
+          "await",
+          "break",
+          "catch",
+          "comptime",
+          "const",
+          "continue",
+          "defer",
+          "else",
+          "enum",
+          "errdefer",
+          "error",
+          "export",
+          "extern",
+          "fn",
+          "for",
+          "if",
+          "inline",
+          "noalias",
+          "nosuspend",
+          "opaque",
+          "or",
+          "orelse",
+          "packed",
+          "pub",
+          "resume",
+          "return",
+          "struct",
+          "suspend",
+          "switch",
+          "test",
+          "threadlocal",
+          "try",
+          "union",
+          "unreachable",
+          "usingnamespace",
+          "var",
+          "volatile",
+          "while",
+          "true",
+          "false",
+          "null",
+          "undefined"
+        ],
+        "lineComment": "//",
+        "blockComment": null,
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|\\\\\\\\[^\\n]*",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParen"
+        },
+        "server": {
+          "command": "zls",
+          "args": [],
+          "installHint": "brew install zls",
+          "documentationURL": "https://zigtools.org/zls/",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install zls",
+                "uninstall": "brew uninstall zls"
+              }
+            ],
+            "documentationURL": "https://zigtools.org/zls/install/"
+          }
+        }
+      }
+    ]
+  }
+}

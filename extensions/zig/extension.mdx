@@ -1,0 +1,168 @@
+---
+title: Zig
+tagline: Zig for Phantom — highlighting for .zig and .zon, and the ZLS language server.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [zig, zls, zon, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Zig support for the Phantom editor. The extension teaches Phantom the language — `.zig` and `.zon` files, keywords, multi-line string literals and comment markers — and connects **ZLS**, the Zig Language Server. Formatting comes from ZLS as well: it advertises formatting and runs `zig fmt` on the buffer, so ⇧⌘F and Format on Save need no second tool.
+
+Highlighting works the moment the extension is installed. The server is optional.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords including `comptime`, `errdefer`, `orelse`, `unreachable` and `usingnamespace`, quoted strings and the `\\` multi-line form, numbers with `_` separators, capitalized types and function calls. Comments with `//`; Zig has no block comment, and the extension does not pretend it does.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Completion with argument placeholders, hover, go to definition, find references, document symbols and inlay hints for parameter names, variable types and struct literal fields.
+    </Feature>
+    <Feature title="Build on save" icon="bolt">
+      ZLS can run the project's `build.zig` on save and report the compiler's own errors, which are stricter and more accurate than anything the server infers on its own.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Zig file open in Phantom with highlighted keywords, types and numbers, and one diagnostic underlined in red" caption="Highlighting and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tool. Install it and the extension detects it on your `PATH`.
+
+<Requirement command="zls" install="brew install zls" url="https://zigtools.org/zls/install/">
+The Zig language server: completion, hover, definitions, references, symbols, inlay hints and formatting. Without it the highlighter still works, and Format does nothing for Zig files.
+</Requirement>
+
+ZLS is versioned against Zig. A release of ZLS targets one release of the compiler, so a `zig` from Homebrew and a `zls` from Homebrew usually match, and a `zig` built from master needs a ZLS built from master.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Zig.
+  </Step>
+  <Step title="Install the server">
+    Run `brew install zls`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Check that it found the compiler">
+    Run `zls env` in a terminal. It prints the configuration file path, the log path and the version it resolved.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.zig`, `.zon` |
+| Language id | `zig` |
+| Language server | `zls` |
+| Editor | Keywords, `//` marker, quoted and `\\` string patterns, number, type and call patterns |
+| Icon | Zig file icon in the sidebar and tabs |
+
+Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. Settings → Language Servers can promote it when you want the manifest to be the one in force.
+
+## Configuration
+
+<Details summary="Server: zls.json">
+
+ZLS reads a `zls.json`, looking in your local configuration directory first and falling back to the global one. `zls env` prints the path it resolved, and `zls --config-path <path>` names one explicitly.
+
+```json
+{
+  "enable_build_on_save": true,
+  "build_on_save_args": ["check"],
+  "semantic_tokens": "full",
+  "enable_argument_placeholders": true,
+  "inlay_hints_show_parameter_name": true,
+  "inlay_hints_show_variable_type_hints": true,
+  "warn_style": true
+}
+```
+
+| Option | Default | What it does |
+|---|---|---|
+| `enable_snippets` | `true` | Offers snippet completions |
+| `enable_argument_placeholders` | `true` | Fills a completed call with its parameters |
+| `completion_label_details` | `true` | Adds detail to completion labels |
+| `enable_build_on_save` | unset | Runs `build.zig` on save and reports the compiler's errors |
+| `build_on_save_args` | `[]` | The build steps to run — a `check` step is the usual choice |
+| `semantic_tokens` | `full` | `none`, `partial` or `full` |
+| `inlay_hints_show_variable_type_hints` | `true` | Inferred variable types shown inline |
+| `inlay_hints_show_parameter_name` | `true` | Parameter names shown at call sites |
+| `inlay_hints_show_struct_literal_field_type` | `true` | Field types shown in struct literals |
+| `inlay_hints_exclude_single_argument` | `true` | Skips the hint for a one-argument call |
+| `inlay_hints_hide_redundant_param_names` | `false` | Skips a hint whose name matches the argument |
+| `warn_style` | `false` | Reports style problems as warnings |
+| `highlight_global_var_declarations` | `false` | Highlights global variable declarations |
+| `skip_std_references` | `false` | Leaves the standard library out of find references |
+| `force_autofix` | `false` | Applies the available fixes without asking |
+| `zig_exe_path` | detected | An explicit path to the `zig` binary |
+| `zig_lib_path` | detected | An explicit path to the Zig standard library |
+| `builtin_path` | unset | Where to write the generated `builtin.zig` |
+| `global_cache_path` | detected | Where ZLS keeps its cache |
+
+</Details>
+
+<Details summary="Project: build.zig and a check step">
+
+Build on save is the sharpest diagnostics ZLS offers, because the answers come from the compiler. It runs the steps in `build_on_save_args`, so the usual arrangement is a step that only analyses and emits nothing.
+
+```zig
+const check = b.step("check", "Analyse without emitting a binary");
+check.dependOn(&exe.step);
+```
+
+With that step in place, `"build_on_save_args": ["check"]` gives compiler diagnostics on every save without producing an artifact.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says zls is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell.
+
+</Details>
+
+<Details summary="ZLS starts and answers nothing useful">
+
+Usually a version mismatch: ZLS targets one Zig release, and a server built for a different compiler cannot parse the standard library. `zls env` reports the version it is; compare it with `zig version`.
+
+</Details>
+
+<Details summary="No diagnostics until I build">
+
+Without build on save, ZLS reports only what it can see from the syntax tree. Turn on `enable_build_on_save` and give it a `check` step to run.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+ZLS is the formatter for Zig, running `zig fmt` on the buffer. If it is not installed, or the server has not finished starting, there is no other tool to fall back to.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.zig` and `.zon`, and ZLS wiring with a Homebrew install and uninstall command.
+
+## License and credits
+
+The extension is released under the MIT License. [ZLS](https://github.com/zigtools/zls) is © the zigtools contributors (MIT). Zig is © the Zig Software Foundation (MIT); this extension is not affiliated with the Zig project.
