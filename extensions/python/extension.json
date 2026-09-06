@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.python",
+  "name": "Python",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Python: highlighting, Pyright and Ruff.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/python",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "python",
+        "name": "Python",
+        "extensions": [
+          "py",
+          "pyi"
+        ],
+        "category": "script",
+        "icon": "icons/python.svg",
+        "lineComment": "#",
+        "keywords": [
+          "False",
+          "None",
+          "True",
+          "and",
+          "as",
+          "assert",
+          "async",
+          "await",
+          "break",
+          "case",
+          "class",
+          "continue",
+          "def",
+          "del",
+          "elif",
+          "else",
+          "except",
+          "finally",
+          "for",
+          "from",
+          "global",
+          "if",
+          "import",
+          "in",
+          "is",
+          "lambda",
+          "match",
+          "nonlocal",
+          "not",
+          "or",
+          "pass",
+          "raise",
+          "return",
+          "try",
+          "type",
+          "while",
+          "with",
+          "yield"
+        ],
+        "syntax": {
+          "string": "(?:[rRbBuUfF]{0,2})(?:\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''|\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*')",
+          "number": "preset:number",
+          "type": "preset:capitalizedType",
+          "function": "preset:callBeforeParen",
+          "attribute": "@[A-Za-z_][A-Za-z0-9_.]*"
+        },
+        "server": {
+          "command": "pyright-langserver",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "brew install pyright",
+          "documentationURL": "https://microsoft.github.io/pyright/",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install pyright",
+                "uninstall": "brew uninstall pyright"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g pyright",
+                "uninstall": "npm rm -g pyright"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g pyright",
+                "uninstall": "pnpm remove -g pyright"
+              }
+            ],
+            "documentationURL": "https://microsoft.github.io/pyright/#/installation"
+          }
+        }
+      }
+    ],
+    "formatters": [
+      {
+        "id": "ruff",
+        "name": "Ruff",
+        "command": "ruff",
+        "args": [
+          "format",
+          "--stdin-filename",
+          "$FILE",
+          "-"
+        ],
+        "extensions": [
+          "py",
+          "pyi"
+        ],
+        "installHint": "brew install ruff",
+        "documentationURL": "https://docs.astral.sh/ruff/formatter/",
+        "install": {
+          "commands": [
+            {
+              "manager": "brew",
+              "command": "brew install ruff",
+              "uninstall": "brew uninstall ruff"
+            },
+            {
+              "manager": "pipx",
+              "command": "pipx install ruff",
+              "uninstall": "pipx uninstall ruff"
+            }
+          ],
+          "documentationURL": "https://docs.astral.sh/ruff/installation/"
+        }
+      }
+    ]
+  }
+}

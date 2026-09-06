@@ -1,0 +1,179 @@
+---
+title: Python
+tagline: Python language support for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [python, language, lsp, formatter, pyright, ruff]
+screenshots:
+  - media/editor.png
+---
+
+Python support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, decorators and every string form Python has — and connects two tools: **Pyright** for diagnostics, hover, completion and navigation, and **Ruff** for formatting. Both are optional: highlighting works the moment the extension is installed.
+
+Pyright has no formatter of its own, by design, so a Python file needs the second tool to be formatted at all. Ruff fills that gap in Black's style.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords, `match` and `case`, triple-quoted strings, f-strings and the `r`, `b` and `u` prefixes, numbers, class names, calls and `@decorators`. Comments with `#`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Type checking as you type, hover documentation, completion for the standard library and your own modules, go to definition, find references and rename. Pyright infers types from annotations and from the code around them.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Ruff reads the buffer on stdin and prints it back. Format on demand or on save; the file name goes in with `--stdin-filename`, so the project's `pyproject.toml` or `ruff.toml` applies.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Python file open in Phantom with highlighted keywords, a decorator, type annotations and one diagnostic from Pyright" caption="Highlighting, a decorator and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tools. Install the ones you want; the extension detects them on your `PATH`.
+
+<Requirement command="pyright-langserver" install="brew install pyright" url="https://microsoft.github.io/pyright/">
+The type checker and language server from Microsoft. Without it the highlighter still works. The Homebrew formula packages the npm release, so both routes install the same build.
+</Requirement>
+
+<Requirement command="ruff" install="brew install ruff" url="https://docs.astral.sh/ruff/formatter/">
+The formatter, from Astral. Without it the Format command and Format on Save do nothing for Python files.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Python.
+  </Step>
+  <Step title="Install the tools">
+    Run the two Homebrew commands above. Phantom picks them up without a restart.
+  </Step>
+  <Step title="Open a Python file">
+    The first time a project needs pyright-langserver, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Point Pyright at your interpreter">
+    Add a `pyrightconfig.json` naming the virtual environment, as shown below. Without one, Pyright resolves imports against the Python it finds on your `PATH`.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.py`, `.pyi` |
+| Language server | `pyright-langserver --stdio` |
+| Formatter | `ruff format --stdin-filename <file> -` |
+| Editor | Keywords including `match`, `case` and `type`, the `#` comment marker, decorator and string patterns |
+| Icon | Python file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Language server: pyrightconfig.json">
+
+Place a `pyrightconfig.json` at the root of your project. Pyright reads it on its own; Phantom passes the project root as the workspace. The same keys work under `[tool.pyright]` in `pyproject.toml`, and `pyrightconfig.json` wins when both exist.
+
+```json
+{
+  "include": ["src", "tests"],
+  "exclude": ["**/__pycache__", "build"],
+  "typeCheckingMode": "standard",
+  "pythonVersion": "3.12",
+  "venvPath": ".",
+  "venv": ".venv",
+  "reportMissingImports": "error"
+}
+```
+
+| Setting | What it does |
+|---|---|
+| `include` | Directories and files that make up the project; wildcards allowed |
+| `exclude` | Paths to leave out, overriding `include` |
+| `typeCheckingMode` | `off`, `basic`, `standard` (the default) or `strict` |
+| `pythonVersion` | The version to check against, as `"3.12"` |
+| `pythonPlatform` | `Windows`, `Darwin`, `Linux`, `iOS`, `Android` or `All` |
+| `venvPath` and `venv` | The directory holding virtual environments, and the one to use |
+| `extraPaths` | Extra module search paths |
+| `stubPath` | Where your own stubs live; `./typings` by default |
+
+Every diagnostic rule, such as `reportMissingImports`, takes `"none"`, `"warning"`, `"information"` or `"error"`. The full list is in the [Pyright configuration reference](https://microsoft.github.io/pyright/#/configuration).
+
+</Details>
+
+<Details summary="Formatter: pyproject.toml or ruff.toml">
+
+Ruff walks up from the file's directory looking for `pyproject.toml`, `ruff.toml` or `.ruff.toml`. In `pyproject.toml` the keys sit under `[tool.ruff]`; in a `ruff.toml` they sit at the top level, without the prefix.
+
+```toml
+[tool.ruff]
+line-length = 100
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+```
+
+| Option | Default | Values |
+|---|---|---|
+| `line-length` | `88` | integer |
+| `indent-width` | `4` | integer |
+| `quote-style` | `"double"` | `double`, `single`, `preserve` |
+| `indent-style` | `"space"` | `space`, `tab` |
+| `skip-magic-trailing-comma` | `false` | boolean |
+| `line-ending` | `"auto"` | `auto`, `lf`, `cr-lf`, `native` |
+| `docstring-code-format` | `false` | boolean |
+| `docstring-code-line-length` | `"dynamic"` | integer or `dynamic` |
+
+</Details>
+
+<Details summary="Sending Pyright your own initializationOptions">
+
+Phantom answers the server's `workspace/configuration` requests with nulls, so Pyright runs on its defaults and on whatever `pyrightconfig.json` says. To send something at startup instead, open Settings → Language Servers, select Pyright and fill in the **initializationOptions (JSON)** field, then press **Restart Server**. The same screen overrides the command and its arguments.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says pyright-langserver or ruff is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the tool must be on the `PATH` of your login shell.
+
+</Details>
+
+<Details summary="Every import is reported as missing">
+
+Pyright is resolving imports against the wrong interpreter. Name the environment in `pyrightconfig.json` with `venvPath` and `venv`, or add the directories to `extraPaths`. A project whose dependencies live in a virtual environment Pyright cannot see reports each of them as unresolved.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Formatting requires `ruff` on the `PATH`. Ruff also skips a file that its own `exclude` or `extend-exclude` list matches, and returns the buffer unchanged.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.py` and `.pyi`, Pyright wiring with install commands for Homebrew, npm and pnpm, and Ruff as the formatter.
+
+## License and credits
+
+The extension is released under the MIT License. [Pyright](https://github.com/microsoft/pyright) is © Microsoft Corporation (MIT). [Ruff](https://github.com/astral-sh/ruff) is © Astral Software Inc. (MIT). Python is a trademark of the Python Software Foundation; this extension is not affiliated with it.
