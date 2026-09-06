@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.vue",
   "name": "Vue",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
   "description": "Vue single-file components: the Vue Language Server and its TypeScript plugin.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/vue",
@@ -36,6 +36,9 @@
           "args": [
             "--stdio"
           ],
+          "resolver": {
+            "kind": "typescriptSDKArgument"
+          },
           "installHint": "npm install -g @vue/language-server @vue/typescript-plugin",
           "documentationURL": "https://github.com/vuejs/language-tools",
           "install": {
@@ -53,6 +56,48 @@
             ],
             "documentationURL": "https://github.com/vuejs/language-tools"
           }
+        }
+      }
+    ],
+    "servers": [
+      {
+        "id": "typescript",
+        "name": "TypeScript for Vue",
+        "command": "typescript-language-server",
+        "args": [
+          "--stdio"
+        ],
+        "languageIds": [
+          "vue"
+        ],
+        "resolver": {
+          "kind": "typescriptPluginHost",
+          "plugin": "@vue/typescript-plugin",
+          "languages": [
+            "vue"
+          ]
+        },
+        "installHint": "npm install -g typescript-language-server typescript",
+        "documentationURL": "https://github.com/typescript-language-server/typescript-language-server",
+        "install": {
+          "commands": [
+            {
+              "manager": "brew",
+              "command": "brew install typescript-language-server",
+              "uninstall": "brew uninstall typescript-language-server"
+            },
+            {
+              "manager": "npm",
+              "command": "npm install -g typescript-language-server typescript",
+              "uninstall": "npm uninstall -g typescript-language-server"
+            },
+            {
+              "manager": "pnpm",
+              "command": "pnpm add -g typescript-language-server typescript",
+              "uninstall": "pnpm remove -g typescript-language-server"
+            }
+          ],
+          "documentationURL": "https://github.com/typescript-language-server/typescript-language-server"
         }
       }
     ],

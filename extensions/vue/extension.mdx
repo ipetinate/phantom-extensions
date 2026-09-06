@@ -1,7 +1,7 @@
 ---
 title: Vue
 tagline: Vue single-file components for Phantom — the Vue Language Server and its TypeScript plugin.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -16,7 +16,7 @@ screenshots:
 
 Vue support for the Phantom editor. The extension teaches Phantom the `.vue` file type and connects **the Vue Language Server** from [vuejs/language-tools](https://github.com/vuejs/language-tools), the successor to Volar. A single-file component is served by two processes, not one: the Vue server handles the `<template>` and `<style>` blocks, and `typescript-language-server` — loading `@vue/typescript-plugin` — handles the `<script>` block.
 
-**Install the [TypeScript extension](https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript) as well.** Its server is the second half of every `.vue` file. Without it the template is served and the script block is silent.
+Both halves are contributed here: the Vue server as the language's own, and `typescript-language-server` as a companion the extension starts beside it for `.vue` files only. Installing the [TypeScript extension](https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript) is still worth it for `.ts` and `.tsx`, but a `.vue` file no longer depends on it.
 
 ## Highlights
 
@@ -31,6 +31,9 @@ Vue support for the Phantom editor. The extension teaches Phantom the `.vue` fil
     <Feature title="Pinned as a pair" icon="package">
       `@vue/language-server` and `@vue/typescript-plugin` are published together out of one repository and their protocol is not versioned separately. Phantom installs and removes both at once, because a mismatched pair fails without either half reporting it.
     </Feature>
+    <Feature title="Resolved, not guessed" icon="plug">
+      The Vue server is handed the project's own TypeScript with `--tsdk`, and the companion is handed the project's `tsserver.js` with `@vue/typescript-plugin` loaded for `vue`. Both paths are resolved per project, so a repository pinned to an older TypeScript is served by that one.
+    </Feature>
   </Features>
   <Screenshot src="media/editor.png" alt="A Vue single-file component open in Phantom, with template tags, a script block and one diagnostic underlined in red" caption="A single-file component in the Phantom editor" />
 </Showcase>
@@ -44,7 +47,7 @@ The Vue server, plus the tsserver plugin it needs. Install both, at the same ver
 </Requirement>
 
 <Requirement command="typescript-language-server" install="brew install typescript-language-server" url="https://github.com/typescript-language-server/typescript-language-server">
-The process that loads the plugin, and therefore the one that serves the `<script>` block. It comes with the TypeScript extension; the requirement is repeated here because a `.vue` file needs it whether or not you edit `.ts` files.
+The process that loads the plugin, and therefore the one that serves the `<script>` block. This extension starts it itself for `.vue` files, so you need the binary whether or not you also install the TypeScript extension.
 </Requirement>
 
 <Requirement command="prettier" install="brew install prettier" url="https://prettier.io/docs/">
@@ -74,7 +77,8 @@ The formatter. Prettier handles `.vue` out of the box, with no plugin. Phantom r
 |---|---|
 | File types | `.vue` |
 | Language id | `vue` |
-| Language server | `vue-language-server --stdio` |
+| Language server | `vue-language-server --stdio`, with `--tsdk` pointed at the project's TypeScript |
+| Companion server | `typescript-language-server --stdio` on `.vue` files, hosting `@vue/typescript-plugin` |
 | Editor | TextMate grammar `text.html.vue` (vuejs/language-tools) with its four injections, each block handed to the extension that owns its `lang`; `<!-- -->` comment markers |
 | Icon | Vue file icon in the sidebar and tabs |
 
@@ -177,6 +181,8 @@ The tools run as your user, with access to your files and network, the same as i
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Carries both halves of a `.vue` file. The Vue server asks for the project's TypeScript directory, and a companion server entry starts `typescript-language-server` beside it with `@vue/typescript-plugin` loaded for `vue`. Phantom 0.17.0 removed the peer-process table these used to come from.
 
 **1.0.6** — Ships the TextMate grammar `text.html.vue` and its four injections, and declares the HTML, CSS, TypeScript, JSON, YAML, TOML and Markdown extensions as dependencies for the blocks a component embeds. A `.vue` file is coloured for the first time; that needs Phantom 0.17.0.
 
