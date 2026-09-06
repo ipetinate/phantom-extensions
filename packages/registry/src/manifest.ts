@@ -3,6 +3,7 @@ import path from "node:path";
 import { fail, isRecord, requireAsset, requireString, type JsonObject, type JsonValue } from "./checks.ts";
 import { quoted } from "./errors.ts";
 import { validateInstall, type Install } from "./install.ts";
+import { suffixOf } from "./suffixes.ts";
 
 export const ID_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
 export const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
@@ -12,7 +13,10 @@ export const FORMATTER_ID_PATTERN = /^[a-z0-9_-]+$/;
 export const CATEGORIES = ["script", "compiled", "markup", "frontendFramework", "styles", "data", "infrastructure"] as const;
 export const CONTRIBUTION_KINDS = ["languages", "formatters", "themes", "iconThemes", "agents"] as const;
 export const SYNTAX_KINDS = ["string", "number", "type", "function", "attribute"] as const;
+export const WORKING_DIRECTORIES = ["marker", "file", "workspace"] as const;
+export const MANIFEST_SUFFIXES = ["json", "yaml", "yml"] as const;
 export const MAX_MANIFEST_BYTES = 512 * 1024;
+export const MAX_PROJECT_MARKERS = 32;
 
 export type ContributionKind = (typeof CONTRIBUTION_KINDS)[number];
 
@@ -91,6 +95,42 @@ function validateLanguage(directory: string, language: JsonValue): void {
   }
 }
 
+function validateProjectPath(directory: string, id: string, what: string, value: JsonValue | undefined): void {
+  if (typeof value !== "string" || !value) {
+    fail(directory, `formatter ${quoted(id)}: ${what} must be a non-empty string`);
+  }
+  const segments = value.split("/");
+  if (value.startsWith("/") || value.startsWith("~") || segments.some((segment) => segment === "" || segment === "." || segment === "..")) {
+    fail(directory, `formatter ${quoted(id)}: ${what} must be relative and must not climb out: ${quoted(value)}`);
+  }
+}
+
+function validateProjectMarkers(directory: string, id: string, markers: JsonValue): void {
+  if (!Array.isArray(markers) || markers.length === 0) {
+    fail(directory, `formatter ${quoted(id)} needs at least one entry in projectMarkers`);
+  }
+  if (markers.length > MAX_PROJECT_MARKERS) {
+    fail(directory, `formatter ${quoted(id)} declares more than ${MAX_PROJECT_MARKERS} projectMarkers`);
+  }
+  for (const marker of markers) {
+    if (typeof marker === "string") {
+      validateProjectPath(directory, id, "a projectMarkers entry", marker);
+      continue;
+    }
+    if (!isRecord(marker)) {
+      fail(directory, `formatter ${quoted(id)}: a projectMarkers entry must be a file name or a {file, containsKey} object`);
+    }
+    validateProjectPath(directory, id, "projectMarkers[].file", marker["file"]);
+    if (typeof marker["containsKey"] !== "string" || !marker["containsKey"]) {
+      fail(directory, `formatter ${quoted(id)}: projectMarkers[].containsKey must be a non-empty string`);
+    }
+    const suffix = suffixOf(marker["file"] as string);
+    if (!MANIFEST_SUFFIXES.includes(suffix as (typeof MANIFEST_SUFFIXES)[number])) {
+      fail(directory, `formatter ${quoted(id)}: containsKey only reads ${MANIFEST_SUFFIXES.join(", ")}, not ${quoted(marker["file"])}`);
+    }
+  }
+}
+
 function validateFormatter(directory: string, formatter: JsonValue): void {
   if (!isRecord(formatter)) fail(directory, "each formatter must be an object");
   const id = requireString(directory, formatter, "id", FORMATTER_ID_PATTERN);
@@ -99,6 +139,20 @@ function validateFormatter(directory: string, formatter: JsonValue): void {
   const extensions = formatter["extensions"];
   if (!Array.isArray(extensions) || extensions.length === 0) {
     fail(directory, `formatter ${quoted(id)} needs at least one file extension`);
+  }
+  for (const extension of extensions) {
+    if (typeof extension !== "string" || !LANGUAGE_ID_PATTERN.test(extension)) {
+      fail(directory, `formatter ${quoted(id)} has a bad file extension ${quoted(extension)}`);
+    }
+  }
+  if (formatter["projectMarkers"] !== undefined) validateProjectMarkers(directory, id, formatter["projectMarkers"]);
+  if (formatter["localBinary"] !== undefined) validateProjectPath(directory, id, "localBinary", formatter["localBinary"]);
+  const workingDirectory = formatter["workingDirectory"];
+  if (workingDirectory !== undefined && !(WORKING_DIRECTORIES as readonly JsonValue[]).includes(workingDirectory)) {
+    fail(directory, `formatter ${quoted(id)}: workingDirectory must be one of ${WORKING_DIRECTORIES.join(", ")}`);
+  }
+  if (workingDirectory === "marker" && formatter["projectMarkers"] === undefined) {
+    fail(directory, `formatter ${quoted(id)}: workingDirectory "marker" needs projectMarkers to find one`);
   }
   validateInstall(directory, `formatter ${quoted(id)}`, formatter["install"]);
 }

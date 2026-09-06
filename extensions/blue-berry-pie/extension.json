@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-blue-berry-pie",
   "name": "Blue Berry Pie",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "The Blue Berry Pie terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/blue-berry-pie",

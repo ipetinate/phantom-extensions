@@ -1,7 +1,7 @@
 ---
 title: Night Owlish Light
 tagline: The Night Owlish Light terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.1
+version: 1.0.2
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Night Owlish Light" background="#ffffff" foreground="#403f53" cursor="#403f53" selection="#f2f2f2" ansi="#011627, #d3423e, #2aa298, #daaa01, #4876d6, #403f53, #08916a, #7a8181, #7a8181, #f76e6e, #49d0c5, #dac26b, #5ca7e4, #697098, #00c990, #989fb1" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#ffffff` |
-| Foreground | `foreground` | `#403f53` |
-| Cursor | `cursor-color` | `#403f53` |
-| Cursor text | `cursor-text` | `#fbfbfb` |
-| Selection background | `selection-background` | `#f2f2f2` |
-| Selection foreground | `selection-foreground` | `#403f53` |
+<Swatches columns="6">
+  <Swatch color="#ffffff" name="Background" />
+  <Swatch color="#403f53" name="Foreground" />
+  <Swatch color="#403f53" name="Cursor" />
+  <Swatch color="#fbfbfb" name="Cursor text" />
+  <Swatch color="#f2f2f2" name="Selection" />
+  <Swatch color="#403f53" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#011627` | 8 | Bright black | `#7a8181` |
-| 1 | Red | `#d3423e` | 9 | Bright red | `#f76e6e` |
-| 2 | Green | `#2aa298` | 10 | Bright green | `#49d0c5` |
-| 3 | Yellow | `#daaa01` | 11 | Bright yellow | `#dac26b` |
-| 4 | Blue | `#4876d6` | 12 | Bright blue | `#5ca7e4` |
-| 5 | Magenta | `#403f53` | 13 | Bright magenta | `#697098` |
-| 6 | Cyan | `#08916a` | 14 | Bright cyan | `#00c990` |
-| 7 | White | `#7a8181` | 15 | Bright white | `#989fb1` |
+<Swatches columns="8">
+  <Swatch color="#011627" name="0 Black" />
+  <Swatch color="#d3423e" name="1 Red" />
+  <Swatch color="#2aa298" name="2 Green" />
+  <Swatch color="#daaa01" name="3 Yellow" />
+  <Swatch color="#4876d6" name="4 Blue" />
+  <Swatch color="#403f53" name="5 Magenta" />
+  <Swatch color="#08916a" name="6 Cyan" />
+  <Swatch color="#7a8181" name="7 White" />
+  <Swatch color="#7a8181" name="8 Bright black" />
+  <Swatch color="#f76e6e" name="9 Bright red" />
+  <Swatch color="#49d0c5" name="10 Bright green" />
+  <Swatch color="#dac26b" name="11 Bright yellow" />
+  <Swatch color="#5ca7e4" name="12 Bright blue" />
+  <Swatch color="#697098" name="13 Bright magenta" />
+  <Swatch color="#00c990" name="14 Bright cyan" />
+  <Swatch color="#989fb1" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -64,3 +81,7 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/night-owlish-light.conf` is a byte-for-byte copy of the
 `Night Owlish Light` file in that collection. This extension packages it and claims no authorship
 of the palette.
+
+## Changelog
+
+**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

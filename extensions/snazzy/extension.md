@@ -1,7 +1,7 @@
 ---
 title: Snazzy
 tagline: The Snazzy terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.1
+version: 1.0.2
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Snazzy" background="#1e1f29" foreground="#ebece6" cursor="#e4e4e4" selection="#81aec6" ansi="#000000, #fc4346, #50fb7c, #f0fb8c, #49baff, #fc4cb4, #8be9fe, #ededec, #555555, #fc4346, #50fb7c, #f0fb8c, #49baff, #fc4cb4, #8be9fe, #ededec" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#1e1f29` |
-| Foreground | `foreground` | `#ebece6` |
-| Cursor | `cursor-color` | `#e4e4e4` |
-| Cursor text | `cursor-text` | `#a9a9a9` |
-| Selection background | `selection-background` | `#81aec6` |
-| Selection foreground | `selection-foreground` | `#000000` |
+<Swatches columns="6">
+  <Swatch color="#1e1f29" name="Background" />
+  <Swatch color="#ebece6" name="Foreground" />
+  <Swatch color="#e4e4e4" name="Cursor" />
+  <Swatch color="#a9a9a9" name="Cursor text" />
+  <Swatch color="#81aec6" name="Selection" />
+  <Swatch color="#000000" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#000000` | 8 | Bright black | `#555555` |
-| 1 | Red | `#fc4346` | 9 | Bright red | `#fc4346` |
-| 2 | Green | `#50fb7c` | 10 | Bright green | `#50fb7c` |
-| 3 | Yellow | `#f0fb8c` | 11 | Bright yellow | `#f0fb8c` |
-| 4 | Blue | `#49baff` | 12 | Bright blue | `#49baff` |
-| 5 | Magenta | `#fc4cb4` | 13 | Bright magenta | `#fc4cb4` |
-| 6 | Cyan | `#8be9fe` | 14 | Bright cyan | `#8be9fe` |
-| 7 | White | `#ededec` | 15 | Bright white | `#ededec` |
+<Swatches columns="8">
+  <Swatch color="#000000" name="0 Black" />
+  <Swatch color="#fc4346" name="1 Red" />
+  <Swatch color="#50fb7c" name="2 Green" />
+  <Swatch color="#f0fb8c" name="3 Yellow" />
+  <Swatch color="#49baff" name="4 Blue" />
+  <Swatch color="#fc4cb4" name="5 Magenta" />
+  <Swatch color="#8be9fe" name="6 Cyan" />
+  <Swatch color="#ededec" name="7 White" />
+  <Swatch color="#555555" name="8 Bright black" />
+  <Swatch color="#fc4346" name="9 Bright red" />
+  <Swatch color="#50fb7c" name="10 Bright green" />
+  <Swatch color="#f0fb8c" name="11 Bright yellow" />
+  <Swatch color="#49baff" name="12 Bright blue" />
+  <Swatch color="#fc4cb4" name="13 Bright magenta" />
+  <Swatch color="#8be9fe" name="14 Bright cyan" />
+  <Swatch color="#ededec" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -64,3 +81,7 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/snazzy.conf` is a byte-for-byte copy of the
 `Snazzy` file in that collection. This extension packages it and claims no authorship
 of the palette.
+
+## Changelog
+
+**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

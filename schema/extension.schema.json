@@ -310,6 +310,32 @@
           },
           "minItems": 1
         },
+        "projectMarkers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectMarker"
+          },
+          "minItems": 1,
+          "maxItems": 32,
+          "description": "Files whose presence means the project adopted this tool, in order of preference. When none is found on the walk up from the file, the formatter does not run on a save."
+        },
+        "localBinary": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/projectRelativePath"
+            }
+          ],
+          "description": "The tool installed into the project, relative to a directory on the walk. Preferred over the PATH lookup when found."
+        },
+        "workingDirectory": {
+          "enum": [
+            "marker",
+            "file",
+            "workspace"
+          ],
+          "default": "file",
+          "description": "Where the tool runs: beside the marker that was found, beside the file, or at the repository root."
+        },
         "installHint": {
           "type": "string"
         },
@@ -321,6 +347,47 @@
           "$ref": "#/$defs/install"
         }
       }
+    },
+    "projectRelativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^(?!/|~|\\./)(?!(.*/)?\\.\\.?(/|$))[^/]+(/[^/]+)*$"
+    },
+    "projectMarker": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/projectRelativePath"
+        },
+        {
+          "type": "object",
+          "required": [
+            "file",
+            "containsKey"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "file": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/projectRelativePath"
+                },
+                {
+                  "type": "string",
+                  "pattern": "\\.(json|ya?ml)$"
+                }
+              ],
+              "description": "A manifest the tool is declared inside. Only JSON and YAML are read."
+            },
+            "containsKey": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "The top-level key whose presence declares the tool. Its value is never read."
+            }
+          }
+        }
+      ]
     },
     "theme": {
       "type": "object",

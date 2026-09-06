@@ -1,7 +1,7 @@
 ---
 title: Aura Dark
 tagline: The Aura Dark terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.1
+version: 1.0.2
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Aura Dark" background="#15141b" foreground="#cdccce" cursor="#a277ff" selection="#cdccce" ansi="#15141b, #ff6767, #61ffca, #ffca85, #a277ff, #61ffca, #a277ff, #cdccce, #464646, #ffca85, #a277ff, #ffca85, #a277ff, #61ffca, #61ffca, #edecee" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#15141b` |
-| Foreground | `foreground` | `#cdccce` |
-| Cursor | `cursor-color` | `#a277ff` |
-| Cursor text | `cursor-text` | `#15141b` |
-| Selection background | `selection-background` | `#cdccce` |
-| Selection foreground | `selection-foreground` | `#15141b` |
+<Swatches columns="6">
+  <Swatch color="#15141b" name="Background" />
+  <Swatch color="#cdccce" name="Foreground" />
+  <Swatch color="#a277ff" name="Cursor" />
+  <Swatch color="#15141b" name="Cursor text" />
+  <Swatch color="#cdccce" name="Selection" />
+  <Swatch color="#15141b" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#15141b` | 8 | Bright black | `#464646` |
-| 1 | Red | `#ff6767` | 9 | Bright red | `#ffca85` |
-| 2 | Green | `#61ffca` | 10 | Bright green | `#a277ff` |
-| 3 | Yellow | `#ffca85` | 11 | Bright yellow | `#ffca85` |
-| 4 | Blue | `#a277ff` | 12 | Bright blue | `#a277ff` |
-| 5 | Magenta | `#61ffca` | 13 | Bright magenta | `#61ffca` |
-| 6 | Cyan | `#a277ff` | 14 | Bright cyan | `#61ffca` |
-| 7 | White | `#cdccce` | 15 | Bright white | `#edecee` |
+<Swatches columns="8">
+  <Swatch color="#15141b" name="0 Black" />
+  <Swatch color="#ff6767" name="1 Red" />
+  <Swatch color="#61ffca" name="2 Green" />
+  <Swatch color="#ffca85" name="3 Yellow" />
+  <Swatch color="#a277ff" name="4 Blue" />
+  <Swatch color="#61ffca" name="5 Magenta" />
+  <Swatch color="#a277ff" name="6 Cyan" />
+  <Swatch color="#cdccce" name="7 White" />
+  <Swatch color="#464646" name="8 Bright black" />
+  <Swatch color="#ffca85" name="9 Bright red" />
+  <Swatch color="#a277ff" name="10 Bright green" />
+  <Swatch color="#ffca85" name="11 Bright yellow" />
+  <Swatch color="#a277ff" name="12 Bright blue" />
+  <Swatch color="#61ffca" name="13 Bright magenta" />
+  <Swatch color="#61ffca" name="14 Bright cyan" />
+  <Swatch color="#edecee" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -64,3 +81,7 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/aura-dark.conf` is a byte-for-byte copy of the
 `Aura Dark` file in that collection. This extension packages it and claims no authorship
 of the palette.
+
+## Changelog
+
+**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

@@ -1,7 +1,7 @@
 ---
 title: Acid Lime
 tagline: The Acid Lime terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.1
+version: 1.0.2
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -17,29 +17,46 @@ The extension holds one file of colour settings and nothing else. It installs no
 program, starts no process and asks for no approval. Install it, pick it in
 Settings, and that is all it does.
 
+## The theme
+
+<ThemePreview title="Acid Lime" background="#080c05" foreground="#d4efbc" cursor="#c2ff33" selection="#1b2a10" ansi="#131d0c, #ff3344, #97e63c, #eeff5c, #4deca0, #a6ff6b, #50ffb4, #bfe0a4, #4a6b36, #ff3344, #97e63c, #dbff45, #4deca0, #a6ff6b, #50ffb4, #d4efbc" />
+
+The window above is painted from the file this extension installs. Press a tab to
+read another language: the editor takes its keyword, string, comment, number,
+type and call colours from the ANSI sixteen, so the preview shows what the
+palette does to code rather than describing it.
+
 ## Terminal colours
 
-| Role | Key | Colour |
-|---|---|---|
-| Background | `background` | `#080c05` |
-| Foreground | `foreground` | `#d4efbc` |
-| Cursor | `cursor-color` | `#c2ff33` |
-| Cursor text | `cursor-text` | `#080c05` |
-| Selection background | `selection-background` | `#1b2a10` |
-| Selection foreground | `selection-foreground` | `#545852` |
+<Swatches columns="6">
+  <Swatch color="#080c05" name="Background" />
+  <Swatch color="#d4efbc" name="Foreground" />
+  <Swatch color="#c2ff33" name="Cursor" />
+  <Swatch color="#080c05" name="Cursor text" />
+  <Swatch color="#1b2a10" name="Selection" />
+  <Swatch color="#545852" name="Selection text" />
+</Swatches>
 
 ## The ANSI 16
 
-| # | Name | Colour | # | Name | Colour |
-|---|---|---|---|---|---|
-| 0 | Black | `#131d0c` | 8 | Bright black | `#4a6b36` |
-| 1 | Red | `#ff3344` | 9 | Bright red | `#ff3344` |
-| 2 | Green | `#97e63c` | 10 | Bright green | `#97e63c` |
-| 3 | Yellow | `#eeff5c` | 11 | Bright yellow | `#dbff45` |
-| 4 | Blue | `#4deca0` | 12 | Bright blue | `#4deca0` |
-| 5 | Magenta | `#a6ff6b` | 13 | Bright magenta | `#a6ff6b` |
-| 6 | Cyan | `#50ffb4` | 14 | Bright cyan | `#50ffb4` |
-| 7 | White | `#bfe0a4` | 15 | Bright white | `#d4efbc` |
+<Swatches columns="8">
+  <Swatch color="#131d0c" name="0 Black" />
+  <Swatch color="#ff3344" name="1 Red" />
+  <Swatch color="#97e63c" name="2 Green" />
+  <Swatch color="#eeff5c" name="3 Yellow" />
+  <Swatch color="#4deca0" name="4 Blue" />
+  <Swatch color="#a6ff6b" name="5 Magenta" />
+  <Swatch color="#50ffb4" name="6 Cyan" />
+  <Swatch color="#bfe0a4" name="7 White" />
+  <Swatch color="#4a6b36" name="8 Bright black" />
+  <Swatch color="#ff3344" name="9 Bright red" />
+  <Swatch color="#97e63c" name="10 Bright green" />
+  <Swatch color="#dbff45" name="11 Bright yellow" />
+  <Swatch color="#4deca0" name="12 Bright blue" />
+  <Swatch color="#a6ff6b" name="13 Bright magenta" />
+  <Swatch color="#50ffb4" name="14 Bright cyan" />
+  <Swatch color="#d4efbc" name="15 Bright white" />
+</Swatches>
 
 ## Installing
 
@@ -64,3 +81,7 @@ which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Colo
 released under the MIT License. `themes/acid-lime.conf` is a byte-for-byte copy of the
 `Acid Lime` file in that collection. This extension packages it and claims no authorship
 of the palette.
+
+## Changelog
+
+**1.0.2** — Shows the palette as swatches and the window as a preview, in place of the colour tables.

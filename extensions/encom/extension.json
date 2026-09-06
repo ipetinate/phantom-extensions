@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-encom",
   "name": "ENCOM",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "The ENCOM terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/encom",

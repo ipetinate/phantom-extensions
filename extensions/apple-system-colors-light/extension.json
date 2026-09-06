@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-apple-system-colors-light",
   "name": "Apple System Colors Light",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Phantom",
   "description": "The Apple System Colors Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/apple-system-colors-light",
