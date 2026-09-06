@@ -1,0 +1,171 @@
+---
+title: C
+tagline: C language support for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [c, language, lsp, clangd, llvm]
+screenshots:
+  - media/editor.png
+---
+
+C support for the Phantom editor. The extension teaches Phantom the language — `.c` and `.h` files, the C23 keyword set, string and character prefixes, `_t` type names and preprocessor directives — and connects **clangd** for diagnostics, hover, completion, navigation and formatting. Highlighting works the moment the extension is installed.
+
+clangd is the one server here you probably already have. It ships with the Xcode Command Line Tools, so there is nothing to install and nothing this extension can uninstall for you.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      The C23 keyword set, including `constexpr`, `nullptr`, `alignas`, `typeof` and the `_Atomic` family; `size_t` and every other `_t` type name, capitalised type names, `u8` and `L` string and character prefixes, numbers, calls, `#include` and the rest of the preprocessor, and `[[attributes]]`. Comments with `//` and `/* */`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics from Clang itself, with fix-its; completion, hover, go to definition, find references, call hierarchy, rename and document symbols. Include-what-you-use warnings and clang-tidy checks are available through the config file.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Format on demand or on save, served by clangd. It formats with clang-format and reads the project's `.clang-format`, so a codebase's existing style applies without a second tool.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A C file open in Phantom with highlighted includes, a struct, a function definition and one diagnostic from clangd" caption="Highlighting, preprocessor directives and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+<Requirement command="clangd" url="https://clangd.llvm.org/installation">
+The Clang language server, part of LLVM. On macOS it arrives with the Xcode Command Line Tools: run `xcode-select --install` once, and the binary is on your `PATH`. This extension declares no install command for it, deliberately — there is no package to add and none to remove, and Phantom's manifest format has no way to say "run the system installer" that would be safe to give an extension.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to C.
+  </Step>
+  <Step title="Make sure the tools are there">
+    Run `xcode-select --install` in a terminal if you have never installed them. If `clangd --version` answers, you are ready.
+  </Step>
+  <Step title="Give clangd a compilation database">
+    clangd needs to know how each file is compiled. Generate a `compile_commands.json`, as described below, and put it where clangd looks.
+  </Step>
+  <Step title="Open a C file">
+    The first time a project needs clangd, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.c`, `.h` |
+| Language server | `clangd` (stdio) |
+| Formatter | clang-format, built into clangd |
+| Editor | The C23 keyword set, `//` and `/* */` comment markers, and patterns for `_t` types, string prefixes, preprocessor directives and `[[attributes]]` |
+| Icon | C file icon in the sidebar and tabs |
+
+C++ files are not claimed by this extension. Phantom routes `.cpp`, `.cc`, `.cxx`, `.hpp` and `.hxx` to its own `cpp` language and starts the same clangd for them, and that keeps working exactly as it did.
+
+## Configuration
+
+<Details summary="The compilation database">
+
+clangd parses each file the way your build does, and it learns how from a `compile_commands.json`. It looks in the file's own directory, in a `build` subdirectory of it, and then upward through the parents, doing the same at each level. Without one it assumes `clang some_file.c` and reports missing includes that are not missing.
+
+With CMake:
+
+```sh
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+ln -s build/compile_commands.json .
+```
+
+For a build that does not generate one, [Bear](https://github.com/rizsotto/Bear) records the compiler calls of any build and writes the file. For Bazel, use [bazel-compile-commands-extractor](https://github.com/hedronvision/bazel-compile-commands-extractor).
+
+A small project can skip the database and list its flags one per line in a `compile_flags.txt` beside the sources. `compile_commands.json` wins when both exist.
+
+</Details>
+
+<Details summary="Project settings: .clangd">
+
+A `.clangd` file configures the server for everything under its directory. clangd reads one in every parent directory of the file being edited, and a user-wide `config.yaml` at `~/Library/Preferences/clangd/config.yaml` on macOS.
+
+```yaml
+CompileFlags:
+  Add: [-Wall, -std=c23]
+  Remove: [-mno-sse]
+  CompilationDatabase: build/
+
+Diagnostics:
+  ClangTidy:
+    Add: [bugprone-*, performance-*]
+    Remove: [bugprone-easily-swappable-parameters]
+  UnusedIncludes: Strict
+
+InlayHints:
+  ParameterNames: true
+  DeducedTypes: true
+```
+
+| Key | What it holds |
+|---|---|
+| `CompileFlags` | `Add`, `Remove`, `Compiler` and `CompilationDatabase` |
+| `Diagnostics` | `ClangTidy` checks, `UnusedIncludes`, and suppressions |
+| `Index` | Background indexing and external index sources |
+| `InlayHints` | Parameter names and deduced types |
+| `Hover`, `Completion`, `Style` | Presentation and insertion behaviour |
+| `If` | `PathMatch` and `PathExclude`, to apply a block to some files only |
+
+A `---` separates one block from the next, so an `If` block can follow the defaults in the same file.
+
+</Details>
+
+<Details summary="Formatting: .clang-format">
+
+clangd formats through clang-format, which reads a `.clang-format` at the root of the project or in any parent directory of the file. Generate a starting point from a named style:
+
+```sh
+clang-format -style=llvm -dump-config > .clang-format
+```
+
+The style names are `LLVM`, `Google`, `Chromium`, `Mozilla`, `WebKit` and `GNU`. Every option in the generated file is documented in the [clang-format style reference](https://clang.llvm.org/docs/ClangFormatStyleOptions.html).
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Every #include is reported as not found">
+
+There is no compilation database, or clangd did not find it. Generate `compile_commands.json` as shown above and put it in the project root or in `build/`. Point clangd at another directory with `CompileFlags.CompilationDatabase` in `.clangd`.
+
+</Details>
+
+<Details summary="The editor says clangd is not installed">
+
+Run `xcode-select --install`. If the tools are already installed and the binary is still not found, `xcode-select -p` will say which developer directory is active; it must be one that contains clangd.
+
+</Details>
+
+<Details summary="A C++ header named .h is highlighted as C">
+
+It is. Phantom resolves a `.h` to C, as most editors do, because the extension cannot say which language is inside. The keyword list here carries the C++ words a header commonly holds — `class`, `namespace`, `template`, `typename`, `virtual`, `override` and the access specifiers — so a C++ header still reads correctly, and clangd itself decides the real language from the compilation database.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.c` and `.h` with the C23 keyword set, and clangd wiring with documentation instead of an install command.
+
+## License and credits
+
+The extension is released under the MIT License. [clangd](https://clangd.llvm.org/) and [clang-format](https://clang.llvm.org/docs/ClangFormat.html) are part of the LLVM Project, © the LLVM contributors, under the Apache License 2.0 with LLVM Exceptions. C is standardised by ISO/IEC JTC1/SC22/WG14; this extension is not affiliated with it.
