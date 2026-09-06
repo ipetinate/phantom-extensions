@@ -1,0 +1,190 @@
+---
+title: TOML
+tagline: TOML support for Phantom — highlighting, Taplo's schema validation and its formatter.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [toml, taplo, data, schema, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+TOML support for the Phantom editor. The extension teaches Phantom the language — table headers, dotted keys, the four bare literals, the string forms and `#` comments — and connects **Taplo**, the TOML toolkit whose language server is one of the things its binary does. Taplo is optional: highlighting works the moment the extension is installed.
+
+Taplo is the part of this page worth reading twice, because its configuration lives in a file it finds by itself. A `.taplo.toml` at the root of your repository changes the formatter and the schemas for everyone who opens the project, with nothing to set in the editor.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Table and array-of-table headers, dotted and quoted keys, basic, literal and multi-line strings, dates and numbers in every TOML spelling, `true`, `false`, `inf` and `nan`, and `#` comments. `Cargo.lock` is painted as TOML, which is what it is.
+    </Feature>
+    <Feature title="Schema intelligence" icon="search">
+      Completion for keys and values, hover with the schema's description, validation against a JSON schema, document symbols and folding. Taplo carries its own catalog of schemas for the files people keep — a `Cargo.toml`, a `pyproject.toml` — and a document can always name its own.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      Taplo's formatter, driven entirely by `.taplo.toml`. Alignment, key ordering, array expansion and line width are project decisions, so they belong to the repository rather than to the editor.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A TOML file open in Phantom with highlighted table headers, keys and values, one value underlined in red and a hover card below it" caption="Highlighting, a schema diagnostic and its hover card in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle Taplo. Install it if you want more than highlighting; the extension finds it on your `PATH`.
+
+<Requirement command="taplo" install="brew install taplo" url="https://taplo.tamasfe.dev/cli/usage/language-server.html">
+Validation, completion, hover, symbols and formatting, started as `taplo lsp stdio` — a subcommand and its transport, not a flag. **The language server is not in every build.** Homebrew's bottle has it. `cargo install taplo-cli --locked` does not: add `--features lsp`. The npm distribution has no language server at all.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to TOML.
+  </Step>
+  <Step title="Install Taplo">
+    Run `brew install taplo`, or open Settings → Languages, select **Taplo** and press **Install**. Phantom picks the binary up without a restart.
+  </Step>
+  <Step title="Open a TOML file">
+    The first time a project needs a server that came from an extension, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.toml` |
+| File names | `Cargo.lock` |
+| Language server | `taplo lsp stdio` |
+| Formatter | Taplo's own, configured by `.taplo.toml` |
+| Editor | Table header, dotted key, string, number and literal patterns, `#` comments |
+| Icon | TOML file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Naming a schema from inside the file">
+
+A header directive on the first line, ahead of everything but other comments:
+
+```toml
+#:schema ./schemas/service.json
+
+name = "billing"
+replicas = 3
+```
+
+A relative path is resolved against the document, and one directive per file is the supported number — more than one is undefined. A root `$schema` key works as well, for the formats that tolerate the extra key. Failing both, Taplo falls back to its own catalog, which already knows the common manifests.
+
+</Details>
+
+<Details summary="Project configuration: .taplo.toml">
+
+Taplo looks for `.taplo.toml`, then `taplo.toml`, in the working directory or the workspace root — the same root Phantom hands the server, so a file at the top of your repository is found without any setting.
+
+```toml
+include = ["**/*.toml", "Cargo.lock"]
+exclude = ["target/**"]
+
+[formatting]
+align_entries = true
+column_width = 100
+indent_tables = true
+reorder_keys = false
+
+[schema]
+path = "./schemas/service.json"
+enabled = true
+
+[[rule]]
+include = ["Cargo.toml"]
+keys = ["dependencies", "dev-dependencies"]
+
+[rule.formatting]
+reorder_keys = true
+```
+
+`include` and `exclude` are glob lists, `exclude` winning over `include`. A `[[rule]]` narrows the settings above it to some files or some keys, and when two rules overlap the last one defined wins.
+
+| Formatter option | Default |
+|---|---|
+| `align_entries` | `false` |
+| `align_comments` | `true` |
+| `array_trailing_comma` | `true` |
+| `array_auto_expand`, `array_auto_collapse` | `true` |
+| `compact_arrays` | `true` |
+| `compact_inline_tables` | `false` |
+| `column_width` | `80` |
+| `indent_tables`, `indent_entries` | `false` |
+| `indent_string` | two spaces |
+| `reorder_keys`, `reorder_arrays` | `false` |
+| `allowed_blank_lines` | `2` |
+| `trailing_newline` | `true` |
+| `crlf` | `false` |
+
+The full list is in the [Taplo formatter options](https://taplo.tamasfe.dev/configuration/formatter-options.html).
+
+</Details>
+
+<Details summary="What Phantom sends the server, and what it does not">
+
+Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`, so none of the `evenBetterToml.*` settings a VS Code user writes reach Taplo here. That costs less than it does for other servers: Taplo's own configuration file carries the formatter and the schemas, and it is read from disk rather than pushed by the client.
+
+Settings → Languages → Taplo still has a **Command**, an **Arguments** and an **initializationOptions (JSON)** box, for a build installed somewhere unusual or a fork that wants options.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Settings shows the language as Shadowed">
+
+Phantom ships its own TOML definition, and the compiled-in registry outranks an extension on purpose: copying a file into a directory must never change a language you already had. The row in Settings → Languages says which claim was taken and by whom, and its Precedence section carries a **Use This Instead of Phantom** button that puts this extension ahead, for this language only, until you say otherwise.
+
+Nothing is broken while the row reads Shadowed. Phantom's own definition already runs `taplo lsp stdio`. Promoting this one adds the `Cargo.lock` file name, which Phantom does not claim.
+
+</Details>
+
+<Details summary="Taplo is installed and the server never starts">
+
+Check that the build has the language server in it:
+
+```sh
+taplo lsp --help
+```
+
+An `unrecognized subcommand` answer is the cargo build without `--features lsp`, or the npm distribution. Reinstall from Homebrew, or with `cargo install taplo-cli --locked --features lsp`.
+
+</Details>
+
+<Details summary="Formatting changed more than expected">
+
+The formatter rewrites the document from its own syntax tree, so a file that was never formatted by Taplo moves in one commit. `align_entries`, `reorder_keys` and `array_auto_expand` are the three that surprise people; set them in `[formatting]` before the first run rather than after.
+
+</Details>
+
+<Details summary="No completion in a file Taplo should know">
+
+Taplo's catalog matches on the file name. A `Cargo.toml` in a workspace member is recognised; a schema-less file of your own is not, until it carries the `#:schema` directive or a `[schema]` table names it.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+Taplo runs as your user, with access to your files and network, the same as if you started it from the terminal. Fetching a schema over https is its own network request, not Phantom's. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.toml` and `Cargo.lock`, and Taplo wiring with install commands for Homebrew and cargo.
+
+## License and credits
+
+The extension is released under the MIT License. [Taplo](https://github.com/tamasfe/taplo) is © tamasfe and contributors (MIT). TOML is a specification of the [TOML project](https://toml.io/); this extension is not affiliated with either.

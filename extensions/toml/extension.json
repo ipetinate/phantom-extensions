@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.toml",
+  "name": "TOML",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "TOML: highlighting and the Taplo language server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/toml",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "toml",
+        "name": "TOML",
+        "extensions": [
+          "toml"
+        ],
+        "fileNames": [
+          "Cargo.lock"
+        ],
+        "category": "data",
+        "icon": "icons/toml.svg",
+        "lineComment": "#",
+        "keywords": [
+          "true",
+          "false",
+          "inf",
+          "nan"
+        ],
+        "syntax": {
+          "string": "\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''|\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*'",
+          "number": "preset:number",
+          "type": "^\\s*\\[\\[?[^\\]\\n]+\\]\\]?",
+          "attribute": "^\\s*(?:[A-Za-z0-9_-]+|\"[^\"\\n]*\")(?:\\s*\\.\\s*(?:[A-Za-z0-9_-]+|\"[^\"\\n]*\"))*(?=\\s*=)"
+        },
+        "server": {
+          "command": "taplo",
+          "args": [
+            "lsp",
+            "stdio"
+          ],
+          "installHint": "brew install taplo",
+          "documentationURL": "https://taplo.tamasfe.dev/cli/usage/language-server.html",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install taplo",
+                "uninstall": "brew uninstall taplo"
+              },
+              {
+                "manager": "cargo",
+                "command": "cargo install taplo-cli --locked --features lsp",
+                "uninstall": "cargo uninstall taplo-cli"
+              }
+            ],
+            "documentationURL": "https://taplo.tamasfe.dev/cli/installation/cargo.html"
+          }
+        }
+      }
+    ]
+  }
+}
