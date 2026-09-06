@@ -19,7 +19,6 @@
         "category": "compiled",
         "icon": "icons/zig.png",
         "lineComment": "//",
-        "blockComment": null,
         "server": {
           "command": "zls",
           "args": [],

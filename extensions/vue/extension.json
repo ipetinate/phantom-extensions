@@ -26,7 +26,6 @@
         ],
         "category": "frontendFramework",
         "icon": "icons/vue.png",
-        "lineComment": null,
         "blockComment": {
           "open": "<!--",
           "close": "-->"
