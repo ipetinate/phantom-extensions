@@ -1,0 +1,184 @@
+---
+title: Shell Script
+tagline: Shell script support for Phantom — highlighting, bash-language-server and shfmt.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [shell, bash, zsh, language, lsp, formatter]
+screenshots:
+  - media/editor.png
+---
+
+Shell script support for the Phantom editor. The extension declares the language — file types, startup file names, keywords, `#` comments and parameter expansions — and connects the two tools the shell ecosystem uses: **bash-language-server** for diagnostics, completion and navigation, and **shfmt** for formatting. Both are optional. Highlighting works without either.
+
+Phantom already ships a shell language, the same server and the same formatter. This extension restates all three as data, and adds file types Phantom does not carry: `.ksh`, `.bats`, `.command`, and the login and logout files of bash, zsh and ksh. Because Phantom already owns `.sh`, the contribution stays inert until you promote it in Settings, which the steps below cover.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords and builtins, single and double quoted strings, `$'ANSI-C'` strings, numbers, function definitions, and every form of parameter expansion — `$name`, `${name:-default}`, `$1` and `$?`. Comments start at `#`.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      bash-language-server gives jump to declaration, find references, document and workspace symbols, completion, hover documentation and rename. It runs ShellCheck when ShellCheck is installed, so lint findings arrive as diagnostics in the editor.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      shfmt parses the script and prints it again, so the result does not depend on how the input was written. The file name travels with the buffer through `--filename`, which is how shfmt finds the `.editorconfig` beside your script and tells bash from POSIX shell.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A shell script open in Phantom with highlighted keywords, a quoted string, a parameter expansion and one diagnostic under a command name" caption="Highlighting, a parameter expansion and a ShellCheck diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tools. Install the ones you want; the extension finds them on your `PATH`.
+
+<Requirement command="bash-language-server" install="brew install bash-language-server" url="https://github.com/bash-lsp/bash-language-server">
+Diagnostics, completion, hover, symbols, references and rename. It needs Node.js 20 or newer. Without it the highlighter still works.
+</Requirement>
+
+<Requirement command="shfmt" install="brew install shfmt" url="https://github.com/mvdan/sh">
+The formatter. It handles POSIX shell, bash, mksh, bats and zsh. Without it the Format command does nothing for shell files.
+</Requirement>
+
+<Requirement command="shellcheck" install="brew install shellcheck" url="https://www.shellcheck.net/">
+Optional, and read only by the language server. bash-language-server calls ShellCheck on its own and turns the findings into diagnostics. Phantom never runs it.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Shell Script.
+  </Step>
+  <Step title="Put the extension ahead of the built-in language">
+    Phantom already claims `.sh`, so the contribution is listed as Shadowed and does nothing yet. Open Settings → Extensions, select Shell Script, and press **Use This Instead of Phantom**. The promotion covers this language only, and you can undo it in the same place.
+  </Step>
+  <Step title="Install the tools">
+    Run the Homebrew commands above. Phantom picks the tools up without a restart.
+  </Step>
+  <Step title="Open a shell script">
+    The first time a project needs bash-language-server, Phantom asks before starting it and remembers your answer for this extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.sh`, `.bash`, `.zsh`, `.ksh`, `.bats`, `.command` |
+| File names | `.bashrc`, `.bash_profile`, `.bash_login`, `.bash_logout`, `.bash_aliases`, `.profile`, `.zshrc`, `.zshenv`, `.zprofile`, `.zlogin`, `.zlogout`, `.kshrc` |
+| Language server | `bash-language-server start` (stdio) |
+| Formatter | `shfmt --filename <file>` |
+| Editor | Keywords and builtins, `#` comments, quoted and ANSI-C strings, parameter expansions |
+| Icon | Shell file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Language server: environment and .editorconfig">
+
+bash-language-server reads its settings from the client or from environment variables. Phantom sends no settings of its own, so the environment your login shell exports is what the server sees.
+
+| Variable | Default | What it does |
+|---|---|---|
+| `GLOB_PATTERN` | `**/*@(.sh\|.inc\|.bash\|.command)` | Which files the background analysis reads |
+| `BACKGROUND_ANALYSIS_MAX_FILES` | `500` | Upper bound on files analysed at startup |
+| `INCLUDE_ALL_WORKSPACE_SYMBOLS` | `false` | Whether workspace symbols cover files nothing sourced |
+| `SHELLCHECK_PATH` | `shellcheck` | The ShellCheck binary the server calls |
+| `SHELLCHECK_ARGUMENTS` | empty | Extra arguments for every ShellCheck run |
+| `SHELLCHECK_EXTERNAL_SOURCES` | `true` | Whether ShellCheck follows `source` into other files |
+| `ENABLE_SOURCE_ERROR_DIAGNOSTICS` | `false` | Whether a `source` that cannot be resolved is reported |
+| `EXPLAINSHELL_ENDPOINT` | empty | An explainshell instance used for hover text |
+| `BASH_IDE_LOG_LEVEL` | server default | How much the server logs |
+
+The server also formats through shfmt when a client asks it to, and `SHFMT_PATH`, `SHFMT_LANGUAGE_DIALECT`, `SHFMT_SIMPLIFY_CODE`, `SHFMT_CASE_INDENT`, `SHFMT_BINARY_NEXT_LINE`, `SHFMT_SPACE_REDIRECTS`, `SHFMT_KEEP_PADDING` and `SHFMT_IGNORE_EDITORCONFIG` steer that path.
+
+</Details>
+
+<Details summary="Formatter: .editorconfig">
+
+shfmt has no configuration file of its own. It reads `.editorconfig` files found from the script's directory upward, which is why the extension passes `--filename`.
+
+```ini
+[*.sh]
+indent_style = space
+indent_size = 2
+shell_variant = bash
+binary_next_line = true
+switch_case_indent = true
+space_redirects = true
+simplify = true
+```
+
+| Property | Values |
+|---|---|
+| `indent_style` | `space`, `tabs` |
+| `indent_size` | a number |
+| `shell_variant` | `bash`, `posix`, `mksh`, `bats`, `zsh` |
+| `simplify` | `true`, `false` |
+| `binary_next_line` | `true`, `false` |
+| `switch_case_indent` | `true`, `false` |
+| `space_redirects` | `true`, `false` |
+| `keep_padding` | `true`, `false` |
+| `function_next_line` | `true`, `false` |
+| `block_next_line` | `true`, `false` |
+| `minify` | `true`, `false` |
+| `ignore` | `true`, `false` |
+
+A file whose section sets `ignore = true` is left as it is.
+
+</Details>
+
+<Details summary="Which tool formats a shell file">
+
+Two things can format the same buffer, and Phantom asks them in a fixed order. The language server goes first, because a server that formats is the project's own answer. bash-language-server advertises formatting and then calls shfmt itself, so on a machine with both tools installed the server is what runs.
+
+A server that cannot find shfmt on its own `PATH` answers with no edits. Phantom then asks shfmt directly, which is what this extension's formatter entry is for.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says bash-language-server or shfmt is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**. The tool must be on the `PATH` of your login shell, not only inside a project environment.
+
+</Details>
+
+<Details summary="The extension is listed as Shadowed">
+
+Phantom's own tables claim `.sh` and the `shellscript` language id, and an extension never takes a language you already had without being asked. Settings → Extensions names the claim and offers **Use This Instead of Phantom**. Until you press it, nothing in the language contribution applies, including the extra file types.
+
+</Details>
+
+<Details summary="No diagnostics from ShellCheck">
+
+ShellCheck is a separate program, and bash-language-server calls it rather than Phantom. Install it, then restart the server from Settings → Languages. If the findings you expect involve a sourced file, `SHELLCHECK_EXTERNAL_SOURCES` decides whether ShellCheck follows `source` at all.
+
+</Details>
+
+<Details summary="Formatting changed the indentation to something unexpected">
+
+shfmt indents with tabs unless something says otherwise, and the only thing that says otherwise is `.editorconfig`. Add an `[*.sh]` section with `indent_style` and `indent_size`. If the file sits outside any project, no `.editorconfig` is found and the defaults apply.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for shell scripts and their startup files, bash-language-server and shfmt wiring, and install commands for both.
+
+## License and credits
+
+The extension is released under the MIT License. [bash-language-server](https://github.com/bash-lsp/bash-language-server) is © the bash-lsp contributors (MIT). [shfmt](https://github.com/mvdan/sh) is © Daniel Martí (BSD-3-Clause). [ShellCheck](https://www.shellcheck.net/) is © Vidar Holen (GPL-3.0) and is neither bundled nor run by Phantom. This extension is not affiliated with any of these projects.

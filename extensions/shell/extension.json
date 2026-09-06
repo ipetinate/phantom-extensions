@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.shell",
+  "name": "Shell Script",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Shell scripts: highlighting, bash-language-server and shfmt.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/shell",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "shellscript",
+        "name": "Shell Script",
+        "extensions": [
+          "sh",
+          "bash",
+          "zsh",
+          "ksh",
+          "bats",
+          "command"
+        ],
+        "fileNames": [
+          ".bashrc",
+          ".bash_profile",
+          ".bash_login",
+          ".bash_logout",
+          ".bash_aliases",
+          ".profile",
+          ".zshrc",
+          ".zshenv",
+          ".zprofile",
+          ".zlogin",
+          ".zlogout",
+          ".kshrc"
+        ],
+        "category": "script",
+        "icon": "icons/shell.svg",
+        "lineComment": "#",
+        "keywords": [
+          "alias",
+          "bg",
+          "break",
+          "builtin",
+          "case",
+          "cd",
+          "command",
+          "continue",
+          "coproc",
+          "declare",
+          "do",
+          "done",
+          "echo",
+          "elif",
+          "else",
+          "esac",
+          "eval",
+          "exec",
+          "exit",
+          "export",
+          "fg",
+          "fi",
+          "for",
+          "function",
+          "getopts",
+          "hash",
+          "if",
+          "in",
+          "jobs",
+          "kill",
+          "local",
+          "printf",
+          "pwd",
+          "read",
+          "readonly",
+          "return",
+          "select",
+          "set",
+          "shift",
+          "shopt",
+          "source",
+          "test",
+          "then",
+          "time",
+          "trap",
+          "type",
+          "typeset",
+          "ulimit",
+          "umask",
+          "unalias",
+          "unset",
+          "until",
+          "wait",
+          "while"
+        ],
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*'|\\$'(?:[^'\\\\]|\\\\.)*'",
+          "number": "preset:number",
+          "function": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\(\\s*\\))",
+          "attribute": "\\$\\{[^}]*\\}|\\$[A-Za-z_][A-Za-z0-9_]*|\\$[0-9@*#?$!-]"
+        },
+        "server": {
+          "command": "bash-language-server",
+          "args": [
+            "start"
+          ],
+          "installHint": "brew install bash-language-server",
+          "documentationURL": "https://github.com/bash-lsp/bash-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install bash-language-server",
+                "uninstall": "brew uninstall bash-language-server"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g bash-language-server",
+                "uninstall": "npm uninstall -g bash-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/bash-lsp/bash-language-server"
+          }
+        }
+      }
+    ],
+    "formatters": [
+      {
+        "id": "shfmt",
+        "name": "shfmt",
+        "command": "shfmt",
+        "args": [
+          "--filename",
+          "$FILE"
+        ],
+        "extensions": [
+          "sh",
+          "bash",
+          "zsh",
+          "ksh",
+          "bats",
+          "command"
+        ],
+        "installHint": "brew install shfmt",
+        "documentationURL": "https://github.com/mvdan/sh",
+        "install": {
+          "commands": [
+            {
+              "manager": "brew",
+              "command": "brew install shfmt",
+              "uninstall": "brew uninstall shfmt"
+            },
+            {
+              "manager": "go",
+              "command": "go install mvdan.cc/sh/v3/cmd/shfmt@latest"
+            }
+          ],
+          "documentationURL": "https://github.com/mvdan/sh"
+        }
+      }
+    ]
+  }
+}
