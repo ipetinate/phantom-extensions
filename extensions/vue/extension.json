@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.vue",
+  "name": "Vue",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Vue single-file components: the Vue Language Server and its TypeScript plugin.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/vue",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "vue",
+        "name": "Vue",
+        "extensions": [
+          "vue"
+        ],
+        "category": "frontendFramework",
+        "icon": "icons/vue.svg",
+        "keywords": [],
+        "lineComment": null,
+        "blockComment": {
+          "open": "<!--",
+          "close": "-->"
+        },
+        "server": {
+          "command": "vue-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm install -g @vue/language-server @vue/typescript-plugin",
+          "documentationURL": "https://github.com/vuejs/language-tools",
+          "install": {
+            "commands": [
+              {
+                "manager": "npm",
+                "command": "npm install -g @vue/language-server @vue/typescript-plugin",
+                "uninstall": "npm uninstall -g @vue/language-server @vue/typescript-plugin"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g @vue/language-server @vue/typescript-plugin",
+                "uninstall": "pnpm remove -g @vue/language-server @vue/typescript-plugin"
+              }
+            ],
+            "documentationURL": "https://github.com/vuejs/language-tools"
+          }
+        }
+      }
+    ]
+  }
+}

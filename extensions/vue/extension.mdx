@@ -1,0 +1,185 @@
+---
+title: Vue
+tagline: Vue single-file components for Phantom — the Vue Language Server and its TypeScript plugin.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [vue, sfc, volar, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Vue support for the Phantom editor. The extension teaches Phantom the `.vue` file type and connects **the Vue Language Server** from [vuejs/language-tools](https://github.com/vuejs/language-tools), the successor to Volar. A single-file component is served by two processes, not one: the Vue server handles the `<template>` and `<style>` blocks, and `typescript-language-server` — loading `@vue/typescript-plugin` — handles the `<script>` block.
+
+**Install the [TypeScript extension](https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript) as well.** Its server is the second half of every `.vue` file. Without it the template is served and the script block is silent.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Template intelligence" icon="search">
+      Completion and diagnostics inside the template: component tags, props, events, directives and slot names, all typed from the component they belong to.
+    </Feature>
+    <Feature title="Script intelligence" icon="code">
+      The `<script setup>` block is served by `tsserver` through `@vue/typescript-plugin`, so hover, go to definition, find references and rename behave the same as in a `.ts` file — across the template boundary as well.
+    </Feature>
+    <Feature title="Pinned as a pair" icon="package">
+      `@vue/language-server` and `@vue/typescript-plugin` are published together out of one repository and their protocol is not versioned separately. Phantom installs and removes both at once, because a mismatched pair fails without either half reporting it.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Vue single-file component open in Phantom, with template tags, a script block and one diagnostic underlined in red" caption="A single-file component in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tools. Install the ones you want; the extension detects them on your `PATH`.
+
+<Requirement command="vue-language-server" install="npm install -g @vue/language-server @vue/typescript-plugin" url="https://github.com/vuejs/language-tools">
+The Vue server, plus the tsserver plugin it needs. Install both, at the same version. The plugin ships no binary of its own, so Phantom looks for it under the global `node_modules` rather than on the `PATH`.
+</Requirement>
+
+<Requirement command="typescript-language-server" install="brew install typescript-language-server" url="https://github.com/typescript-language-server/typescript-language-server">
+The process that loads the plugin, and therefore the one that serves the `<script>` block. It comes with the TypeScript extension; the requirement is repeated here because a `.vue` file needs it whether or not you edit `.ts` files.
+</Requirement>
+
+<Requirement command="prettier" install="brew install prettier" url="https://prettier.io/docs/">
+The formatter. Prettier handles `.vue` out of the box, with no plugin. Phantom runs the project's own Prettier when the project declares one.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install both extensions">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Vue and next to TypeScript.
+  </Step>
+  <Step title="Install the servers">
+    Run `npm install -g @vue/language-server @vue/typescript-plugin`, and `brew install typescript-language-server`. Phantom picks them up without a restart.
+  </Step>
+  <Step title="Open a .vue file">
+    The first time a project needs a server, Phantom asks before starting it and remembers your answer for that extension. Opening a `.vue` file reports which TypeScript the project has and whether the `<script>` block can be served.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.vue` |
+| Language id | `vue` |
+| Language server | `vue-language-server --stdio` |
+| Editor | `<!-- -->` comment markers |
+| Icon | Vue file icon in the sidebar and tabs |
+
+The extension contributes **no highlighting patterns**, and that is deliberate. A single-file component is a container for three languages, and Phantom's own highlighter splits it into markup, script and style, painting each block by its own rules. A manifest describes one language with one keyword list, which is strictly worse for this file type. Promote this contribution over the built-in only if you have a reason to; the language server is what the extension is for.
+
+## Configuration
+
+<Details summary="Compiler: tsconfig.json and vueCompilerOptions">
+
+The Vue server reads the project's `tsconfig.json`. Options for the Vue compiler itself go in a top-level `vueCompilerOptions` key beside `compilerOptions`, and are inherited through `extends`.
+
+```json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "types": ["vite/client"]
+  },
+  "vueCompilerOptions": {
+    "strictTemplates": true,
+    "target": 3.5
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue"]
+}
+```
+
+| Option | Default | What it does |
+|---|---|---|
+| `strictTemplates` | `false` | Turns on the four `checkUnknown*` options and `strictVModel` at once |
+| `target` | detected from the installed `vue` | The Vue version the template is checked against |
+| `lib` | `"vue"` | The package the runtime types come from |
+| `extensions` | `[".vue"]` | Which suffixes are treated as single-file components |
+| `checkUnknownProps` | follows `strictTemplates` | Reports a prop the component does not declare |
+| `checkUnknownEvents` | follows `strictTemplates` | Reports an event the component does not declare |
+| `checkUnknownComponents` | follows `strictTemplates` | Reports a tag that resolves to no component |
+| `checkUnknownDirectives` | follows `strictTemplates` | Reports a directive that resolves to nothing |
+| `strictVModel` | follows `strictTemplates` | Checks the type on both sides of `v-model` |
+| `resolveStyleClassNames` | `"scoped"` | Whether class names from `<style>` are offered in the template |
+| `vapor` | `false` | Turns on Vapor mode support |
+
+</Details>
+
+<Details summary="Formatter: .prettierrc">
+
+Prettier reads the nearest `.prettierrc`, `.prettierrc.json`, `prettier.config.js` or a `prettier` key in `package.json`, walking up from the file.
+
+```json
+{
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "vueIndentScriptAndStyle": false,
+  "htmlWhitespaceSensitivity": "css",
+  "singleAttributePerLine": true
+}
+```
+
+| Option | Default | Values |
+|---|---|---|
+| `vueIndentScriptAndStyle` | `false` | `true`, `false` |
+| `htmlWhitespaceSensitivity` | `"css"` | `css`, `strict`, `ignore` |
+| `singleAttributePerLine` | `false` | `true`, `false` |
+| `printWidth` | `80` | integer |
+| `semi` | `true` | `true`, `false` |
+| `singleQuote` | `false` | `true`, `false` |
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The template works and the script block is silent">
+
+That is the shape of a missing second half. The `<script>` block is served by `typescript-language-server` with `@vue/typescript-plugin` loaded, not by the Vue server. Check that both are installed, and that the plugin's version matches `@vue/language-server` exactly.
+
+</Details>
+
+<Details summary="The two packages are at different versions">
+
+Settings → Language Servers shows the Vue row with a version beside each package, and marks one **outdated** when it is not the version the other expects. Reinstall both in one command so they stay in step.
+
+</Details>
+
+<Details summary="Nothing at all in a .vue file">
+
+Phantom starts the servers for the project containing the file. A file outside any repository is opened without a workspace, so there is no `tsconfig.json` for the server to read and no project types to check the template against.
+
+</Details>
+
+<Details summary="The contribution is listed as Shadowed">
+
+Phantom ships its own definition for `.vue`, and the compiled-in registry outranks an extension that has not been promoted. Settings → Language Servers → the contributed row has **Use This Instead of Phantom**. For this language it is rarely what you want: the built-in entry is what splits the file into three highlighted regions.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for `.vue`, and Vue Language Server wiring that installs and removes the server and its TypeScript plugin together.
+
+## License and credits
+
+The extension is released under the MIT License. [@vue/language-server and @vue/typescript-plugin](https://github.com/vuejs/language-tools) are © the Vue authors (MIT). [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) is licensed under the Apache License 2.0, with parts from Visual Studio Code under MIT. [Prettier](https://github.com/prettier/prettier) is © James Long and contributors (MIT). Vue is © Evan You and contributors (MIT); this extension is not affiliated with the Vue project.
