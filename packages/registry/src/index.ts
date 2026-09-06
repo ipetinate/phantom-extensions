@@ -42,15 +42,19 @@ export {
   checkMedia,
 } from "./media.ts";
 export type { MediaEntry, MediaReport } from "./media.ts";
-export { MAX_PROJECT_MARKERS, validateProjectPath } from "./projectPaths.ts";
+export { CATEGORIES } from "./categories.ts";
+export type { Category } from "./categories.ts";
+export { MANIFEST_SUFFIXES, MAX_PROJECT_MARKERS, validateProjectMarkers, validateProjectPath } from "./projectPaths.ts";
 export {
+  FORMATTER_ONLY_KEYS,
   MAX_JAVA_FEATURE_VERSION,
+  MAX_SERVERS,
   MAX_SERVER_LANGUAGE_IDS,
   MIN_JAVA_FEATURE_VERSION,
   RESOLVER_KINDS,
   SERVER_ID_PATTERN,
-  validateCompanionServer,
   validateServerBlock,
+  validateServers,
 } from "./servers.ts";
 export type { ResolverKind } from "./servers.ts";
 export {

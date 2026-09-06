@@ -1,23 +1,21 @@
 import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
+import { CATEGORIES } from "./categories.ts";
 import { fail, isRecord, requireAsset, requireString, type JsonObject, type JsonValue } from "./checks.ts";
 import { quoted } from "./errors.ts";
 import { grammarEntries, validateGrammars, type GrammarEntry } from "./grammars.ts";
 import { validateInstall, type Install } from "./install.ts";
-import { MAX_PROJECT_MARKERS, validateProjectPath } from "./projectPaths.ts";
-import { validateCompanionServer, validateServerBlock } from "./servers.ts";
-import { suffixOf } from "./suffixes.ts";
+import { validateProjectMarkers, validateProjectPath } from "./projectPaths.ts";
+import { validateServerBlock, validateServers } from "./servers.ts";
 
 export const ID_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
 export const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
 export const LANGUAGE_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const AGENT_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const FORMATTER_ID_PATTERN = /^[a-z0-9_-]+$/;
-export const CATEGORIES = ["script", "compiled", "markup", "frontendFramework", "styles", "data", "infrastructure"] as const;
 export const CONTRIBUTION_KINDS = ["languages", "servers", "formatters", "themes", "iconThemes", "grammars", "agents"] as const;
 export const RETIRED_LANGUAGE_KEYS = ["syntax", "keywords"] as const;
 export const WORKING_DIRECTORIES = ["marker", "file", "workspace"] as const;
-export const MANIFEST_SUFFIXES = ["json", "yaml", "yml"] as const;
 export const MAX_MANIFEST_BYTES = 512 * 1024;
 
 export type ContributionKind = (typeof CONTRIBUTION_KINDS)[number];
@@ -113,32 +111,6 @@ export function manifestGrammars(directory: string, manifest: Manifest): Grammar
   return grammarEntries(directory, rawEntries(manifest.contributes, "grammars"), languageIdsOf(manifest));
 }
 
-function validateProjectMarkers(directory: string, id: string, markers: JsonValue): void {
-  if (!Array.isArray(markers) || markers.length === 0) {
-    fail(directory, `formatter ${quoted(id)} needs at least one entry in projectMarkers`);
-  }
-  if (markers.length > MAX_PROJECT_MARKERS) {
-    fail(directory, `formatter ${quoted(id)} declares more than ${MAX_PROJECT_MARKERS} projectMarkers`);
-  }
-  for (const marker of markers) {
-    if (typeof marker === "string") {
-      validateProjectPath(directory, `formatter ${quoted(id)}`, "a projectMarkers entry", marker);
-      continue;
-    }
-    if (!isRecord(marker)) {
-      fail(directory, `formatter ${quoted(id)}: a projectMarkers entry must be a file name or a {file, containsKey} object`);
-    }
-    validateProjectPath(directory, `formatter ${quoted(id)}`, "projectMarkers[].file", marker["file"]);
-    if (typeof marker["containsKey"] !== "string" || !marker["containsKey"]) {
-      fail(directory, `formatter ${quoted(id)}: projectMarkers[].containsKey must be a non-empty string`);
-    }
-    const suffix = suffixOf(marker["file"] as string);
-    if (!MANIFEST_SUFFIXES.includes(suffix as (typeof MANIFEST_SUFFIXES)[number])) {
-      fail(directory, `formatter ${quoted(id)}: containsKey only reads ${MANIFEST_SUFFIXES.join(", ")}, not ${quoted(marker["file"])}`);
-    }
-  }
-}
-
 function validateFormatter(directory: string, formatter: JsonValue): void {
   if (!isRecord(formatter)) fail(directory, "each formatter must be an object");
   const id = requireString(directory, formatter, "id", FORMATTER_ID_PATTERN);
@@ -153,7 +125,7 @@ function validateFormatter(directory: string, formatter: JsonValue): void {
       fail(directory, `formatter ${quoted(id)} has a bad file extension ${quoted(extension)}`);
     }
   }
-  if (formatter["projectMarkers"] !== undefined) validateProjectMarkers(directory, id, formatter["projectMarkers"]);
+  if (formatter["projectMarkers"] !== undefined) validateProjectMarkers(directory, `formatter ${quoted(id)}`, formatter["projectMarkers"], true);
   if (formatter["localBinary"] !== undefined) validateProjectPath(directory, `formatter ${quoted(id)}`, "localBinary", formatter["localBinary"]);
   const workingDirectory = formatter["workingDirectory"];
   if (workingDirectory !== undefined && !(WORKING_DIRECTORIES as readonly JsonValue[]).includes(workingDirectory)) {
@@ -294,8 +266,7 @@ export function loadManifest(directory: string): Manifest {
     fail(directory, `contributes must hold at least one of ${CONTRIBUTION_KINDS.join(", ")}`);
   }
   const languageIds = new Set(rawEntries(contributes, "languages").map((language) => validateLanguage(directory, language)));
-  const serverIds = new Set<string>();
-  for (const server of rawEntries(contributes, "servers")) validateCompanionServer(directory, server, serverIds);
+  validateServers(directory, rawEntries(contributes, "servers"));
   for (const formatter of rawEntries(contributes, "formatters")) validateFormatter(directory, formatter);
   for (const kind of ["themes", "iconThemes"] as const) {
     for (const entry of rawEntries(contributes, kind)) validatePathed(directory, kind, entry);

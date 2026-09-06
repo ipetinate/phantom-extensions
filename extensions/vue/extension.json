@@ -70,6 +70,7 @@
         "languageIds": [
           "vue"
         ],
+        "category": "frontendFramework",
         "resolver": {
           "kind": "typescriptPluginHost",
           "plugin": "@vue/typescript-plugin",

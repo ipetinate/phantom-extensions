@@ -1,11 +1,14 @@
+import { CATEGORIES } from "./categories.ts";
 import { fail, isHttpsURL, isRecord, requireString, type JsonObject, type JsonValue } from "./checks.ts";
 import { quoted } from "./errors.ts";
 import { validateInstall } from "./install.ts";
-import { MAX_PROJECT_MARKERS, validateProjectPath } from "./projectPaths.ts";
+import { validateProjectMarkers } from "./projectPaths.ts";
 
 export const SERVER_ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 export const RESOLVER_KINDS = ["typescriptSDKArgument", "typescriptPluginHost"] as const;
 export const PLUGIN_HOST_KEYS = ["plugin", "languages"] as const;
+export const FORMATTER_ONLY_KEYS = ["localBinary", "workingDirectory"] as const;
+export const MAX_SERVERS = 16;
 export const MAX_SERVER_LANGUAGE_IDS = 32;
 export const MIN_JAVA_FEATURE_VERSION = 8;
 export const MAX_JAVA_FEATURE_VERSION = 99;
@@ -28,8 +31,8 @@ function validateArguments(directory: string, what: string, value: JsonValue | u
 
 function validateJavaCeiling(directory: string, what: string, value: JsonValue | undefined): void {
   if (value === undefined || value === null) return;
-  const withinRange = typeof value === "number" && Number.isInteger(value);
-  if (!withinRange || value < MIN_JAVA_FEATURE_VERSION || value > MAX_JAVA_FEATURE_VERSION) {
+  const whole = typeof value === "number" && Number.isInteger(value);
+  if (!whole || value < MIN_JAVA_FEATURE_VERSION || value > MAX_JAVA_FEATURE_VERSION) {
     fail(
       directory,
       `${what}: 'maximumJavaFeatureVersion' must be a whole number between ${MIN_JAVA_FEATURE_VERSION} and ${MAX_JAVA_FEATURE_VERSION}`,
@@ -93,22 +96,35 @@ function validateLanguageIds(directory: string, what: string, value: JsonValue |
   }
 }
 
-function validateMarkers(directory: string, what: string, value: JsonValue | undefined): void {
-  if (value === undefined || value === null) return;
-  if (!Array.isArray(value)) fail(directory, `${what}: 'projectMarkers' must be an array`);
-  if (value.length > MAX_PROJECT_MARKERS) fail(directory, `${what} declares more than ${MAX_PROJECT_MARKERS} projectMarkers`);
-  for (const marker of value) validateProjectPath(directory, what, "a projectMarkers entry", marker);
+function validateServer(directory: string, entry: JsonValue, ids: Set<string>, commands: Set<string>): void {
+  if (!isRecord(entry)) fail(directory, "each server must be an object");
+  const id = entry["id"] === undefined ? null : requireString(directory, entry, "id", SERVER_ID_PATTERN);
+  const command = requireString(directory, entry, "command");
+  const what = `server ${quoted(id ?? command)}`;
+  if (id !== null) {
+    if (ids.has(id)) fail(directory, `server ${quoted(id)} is declared twice`);
+    ids.add(id);
+  }
+  if (commands.has(command)) fail(directory, `two servers run ${quoted(command)}, and the editor keeps one of them`);
+  commands.add(command);
+  if (entry["name"] !== undefined) requireString(directory, entry, "name");
+  validateLanguageIds(directory, what, entry["languageIds"]);
+  if (entry["projectMarkers"] !== undefined) validateProjectMarkers(directory, what, entry["projectMarkers"], false);
+  const category = entry["category"];
+  if (category !== undefined && !(CATEGORIES as readonly JsonValue[]).includes(category)) {
+    fail(directory, `${what}: unknown category ${quoted(category)}`);
+  }
+  for (const key of FORMATTER_ONLY_KEYS) {
+    if (entry[key] !== undefined) {
+      fail(directory, `${what}: ${quoted(key)} is a formatter key; a server runs its command from the PATH, at the workspace root`);
+    }
+  }
+  validateServerBlock(directory, what, entry);
 }
 
-export function validateCompanionServer(directory: string, entry: JsonValue, seen: Set<string>): string {
-  if (!isRecord(entry)) fail(directory, "each server must be an object");
-  const id = requireString(directory, entry, "id", SERVER_ID_PATTERN);
-  if (seen.has(id)) fail(directory, `server ${quoted(id)} is declared twice`);
-  seen.add(id);
-  const what = `server ${quoted(id)}`;
-  requireString(directory, entry, "name");
-  validateLanguageIds(directory, what, entry["languageIds"]);
-  validateMarkers(directory, what, entry["projectMarkers"]);
-  validateServerBlock(directory, what, entry);
-  return id;
+export function validateServers(directory: string, entries: JsonValue[]): void {
+  if (entries.length > MAX_SERVERS) fail(directory, `more than ${MAX_SERVERS} servers`);
+  const ids = new Set<string>();
+  const commands = new Set<string>();
+  for (const entry of entries) validateServer(directory, entry, ids, commands);
 }

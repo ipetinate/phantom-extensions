@@ -99,14 +99,23 @@ A language names the server that serves it under `contributes.languages[].server
     "args": ["--stdio"],
     "languageIds": ["html", "vue", "typescriptreact", "javascriptreact", "javascript"],
     "projectMarkers": ["node_modules/tailwindcss"],
+    "category": "styles",
     "installHint": "npm i -g @tailwindcss/language-server"
   }
 ]
 ```
 
-Such a server attaches beside the server of the language being edited rather than replacing it. `languageIds` says which documents it is offered for, by language id, from this extension or from any other. `projectMarkers` says when: Phantom walks up from the edited file to the workspace root and starts the server only where it finds one of them, so a project that never adopted the tool never runs it. An absent or empty list means every project. `id` is kebab-case and unique inside the extension; `name` is what Settings shows. `languageIds` and `projectMarkers` hold at most 32 entries each, and a marker is a path inside the project: no leading `/`, no `..`.
+An entry is flat: the keys of a server block sit beside the keys that make it a companion. Such a server attaches beside the server of the language being edited rather than replacing it.
 
-Both homes read the same server block — `command`, `args`, `initializationOptions`, `installHint`, `documentationURL`, `install`, and the three below.
+`command` and `languageIds` are the two required keys. `languageIds` says which documents the server is offered for, by language id, from this extension or from any other, at most 32 of them. `projectMarkers` says when: Phantom walks up from the edited file to the workspace root and starts the server only where it finds one of them, so a project that never adopted the tool never runs it. An absent or empty list means every file of those languages. Markers are read the way a formatter's are, so a name and a `{ "file": …, "containsKey": … }` object both work, at most 32 of them.
+
+`name` is what Settings shows and falls back to `command`. `category` is one of the values `category` takes on a language and decides how Settings groups the row; it defaults to `script`. An extension ships at most 16 servers.
+
+`id` is kebab-case and unique inside the extension, and Phantom does not read it. A running server is keyed by its `command`: two extensions that attach one command to one language would start the same process twice for a file, and the editor keeps one of them. The build refuses two servers of one extension that name the same command, for the same reason.
+
+`localBinary` and `workingDirectory` are formatter keys and are refused here. A server resolves its command on the login `PATH` and runs at the workspace root, so neither would decide anything.
+
+Both homes read the same server block — `command`, `args`, `initializationOptions`, `installHint`, `documentationURL`, `install`, and the three below. `initializationOptions` is sent verbatim at `initialize`.
 
 `maximumJavaFeatureVersion` is the newest Java feature version the server runs on, from 8 to 99. It is a ceiling, not a requirement: a server that bundles an old compiler dies on a newer JDK, so Phantom hands it an older JVM when the one on the machine is above the ceiling.
 

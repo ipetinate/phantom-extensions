@@ -26,6 +26,7 @@
         "projectMarkers": [
           "node_modules/tailwindcss"
         ],
+        "category": "styles",
         "installHint": "npm i -g @tailwindcss/language-server",
         "documentationURL": "https://github.com/tailwindlabs/tailwindcss-intellisense",
         "install": {

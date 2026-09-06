@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { CATEGORIES } from "../src/categories.ts";
 import { collect } from "../src/collect.ts";
 import { loadManifest } from "../src/manifest.ts";
 import { MAX_PROJECT_MARKERS } from "../src/projectPaths.ts";
-import { MAX_SERVER_LANGUAGE_IDS } from "../src/servers.ts";
+import { FORMATTER_ONLY_KEYS, MAX_SERVERS, MAX_SERVER_LANGUAGE_IDS } from "../src/servers.ts";
 import { ExtensionFixture, companionServer, languageManifest, makeRoot, removeRoot, serversManifest } from "./fixture.ts";
 
 let root: string;
@@ -79,8 +80,9 @@ describe("contributes.servers", () => {
     expect(loadManifest(fixture.directory).id).toBe("tests.servers");
   });
 
-  it("needs an id", () => {
-    expect(loadCompanion({ id: undefined })).toThrow(/'id'/);
+  it("takes a server with no id, since the editor keys one by its command", () => {
+    const fixture = new ExtensionFixture(root, "companion", serversManifest({ id: undefined }));
+    expect(serverOf(fixture.directory)["id"]).toBeUndefined();
   });
 
   it.each(["Tailwind", "tailwind_css", "-tailwind", "tailwind--css"])("holds the id %s to kebab-case", (id) => {
@@ -89,14 +91,41 @@ describe("contributes.servers", () => {
 
   it("refuses two servers with one id", () => {
     const manifest = serversManifest();
-    (manifest["contributes"] as { servers: Record<string, unknown>[] }).servers.push(companionServer({ name: "Again" }));
+    (manifest["contributes"] as { servers: Record<string, unknown>[] }).servers.push(companionServer({ command: "another-server" }));
     const fixture = new ExtensionFixture(root, "companion", manifest);
     expect(() => loadManifest(fixture.directory)).toThrow(/server 'tailwind' is declared twice/);
   });
 
-  it("needs a name and a command", () => {
-    expect(loadCompanion({ name: undefined })).toThrow(/'name'/);
+  it("refuses two servers that run one command, which the editor would collapse into one", () => {
+    const manifest = serversManifest();
+    (manifest["contributes"] as { servers: Record<string, unknown>[] }).servers.push(companionServer({ id: "tailwind-again" }));
+    const fixture = new ExtensionFixture(root, "companion", manifest);
+    expect(() => loadManifest(fixture.directory)).toThrow(/two servers run 'tailwindcss-language-server'/);
+  });
+
+  it("refuses more servers than the editor starts for one file", () => {
+    const servers = Array.from({ length: MAX_SERVERS + 1 }, (_, index) => companionServer({ id: `s${index}`, command: `server${index}` }));
+    const fixture = new ExtensionFixture(root, "companion", serversManifest({}, { contributes: { servers } }));
+    expect(() => loadManifest(fixture.directory)).toThrow(/more than 16 servers/);
+  });
+
+  it("needs a command, and falls back to it when there is no name", () => {
     expect(loadCompanion({ command: undefined })).toThrow(/'command'/);
+    new ExtensionFixture(root, "companion", serversManifest({ name: undefined }));
+    expect(collect(root)[0]?.card.tools[0]?.name).toBe("tailwindcss-language-server");
+  });
+
+  it.each(CATEGORIES)("takes the category %s", (category) => {
+    expect(loadCompanion({ category })).not.toThrow();
+  });
+
+  it("refuses a category the editor cannot draw", () => {
+    expect(loadCompanion({ category: "linter" })).toThrow(/unknown category 'linter'/);
+  });
+
+  it.each(FORMATTER_ONLY_KEYS)("refuses %s, which decides nothing on a server", (key) => {
+    const value = key === "localBinary" ? "node_modules/.bin/tailwindcss-language-server" : "marker";
+    expect(loadCompanion({ [key]: value })).toThrow(new RegExp(`'${key}' is a formatter key`));
   });
 
   it("needs the documents it is offered for", () => {
@@ -132,6 +161,15 @@ describe("contributes.servers", () => {
 
   it("refuses a marker list that is not a list", () => {
     expect(loadCompanion({ projectMarkers: "node_modules/tailwindcss" })).toThrow(/'projectMarkers' must be an array/);
+  });
+
+  it("reads a marker the same way a formatter's is read", () => {
+    const projectMarkers = ["node_modules/tailwindcss", { file: "package.json", containsKey: "tailwindcss" }];
+    const fixture = new ExtensionFixture(root, "companion", serversManifest({ projectMarkers }));
+    expect(serverOf(fixture.directory)["projectMarkers"]).toEqual(projectMarkers);
+    expect(loadCompanion({ projectMarkers: [{ file: "Cargo.toml", containsKey: "tailwindcss" }] })).toThrow(
+      /containsKey only reads json, yaml, yml/,
+    );
   });
 });
 

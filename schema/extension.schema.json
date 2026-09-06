@@ -68,7 +68,8 @@
           "items": {
             "$ref": "#/$defs/companionServer"
           },
-          "description": "Servers that attach beside a language's own server, for several languages, only when the project uses the tool they serve."
+          "description": "Servers that attach beside a language's own server, for several languages, only when the project uses the tool they serve.",
+          "maxItems": 16
         },
         "formatters": {
           "type": "array",
@@ -170,6 +171,17 @@
         }
       }
     },
+    "category": {
+      "enum": [
+        "script",
+        "compiled",
+        "markup",
+        "frontendFramework",
+        "styles",
+        "data",
+        "infrastructure"
+      ]
+    },
     "serverArgument": {
       "type": "string",
       "pattern": "^(?:[^$]|\\$(?!\\{)|\\$\\{HOME\\})*$",
@@ -269,15 +281,13 @@
     },
     "companionServer": {
       "type": "object",
-      "description": "A server that attaches beside the server of the language being edited. Phantom walks up from the file to the workspace root looking for any one of projectMarkers, and starts the server only when it finds one; no markers means always.",
+      "description": "A server that attaches beside the server of the language being edited. Phantom walks up from the file to the workspace root looking for any one of projectMarkers, and starts the server only when it finds one; no markers means always. The editor keys a server by its command, not by its id.",
       "allOf": [
         {
           "$ref": "#/$defs/server"
         }
       ],
       "required": [
-        "id",
-        "name",
         "command",
         "languageIds"
       ],
@@ -285,12 +295,12 @@
         "id": {
           "type": "string",
           "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-          "description": "Names the server inside this extension; no two servers of one extension share it."
+          "description": "Names the server inside this extension, and no two servers of one extension share it. Phantom does not read it: a running server is keyed by its command."
         },
         "name": {
           "type": "string",
           "minLength": 1,
-          "description": "The name Settings shows for the server."
+          "description": "The name Settings shows for the server. Falls back to the command when absent."
         },
         "languageIds": {
           "type": "array",
@@ -306,10 +316,34 @@
           "type": "array",
           "maxItems": 32,
           "items": {
-            "$ref": "#/$defs/projectRelativePath"
+            "$ref": "#/$defs/projectMarker"
           },
-          "description": "Files or directories whose presence means the project uses the tool. Phantom walks up from the edited file to the workspace root; when it finds none, the server does not start. An absent or empty list starts the server for every project."
+          "description": "Files or directories whose presence means the project uses the tool, read the way a formatter's are. Phantom walks up from the edited file to the workspace root; when it finds none, the server does not start. An absent or empty list starts the server for every file of those languages."
+        },
+        "category": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/category"
+            }
+          ],
+          "default": "script",
+          "description": "How Settings groups the server. Defaults to script."
         }
+      },
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "localBinary"
+            ]
+          },
+          {
+            "required": [
+              "workingDirectory"
+            ]
+          }
+        ],
+        "$comment": "localBinary and workingDirectory are formatter keys. A server resolves its command on the login PATH and runs at the workspace root, so neither would decide anything here."
       }
     },
     "language": {
@@ -344,15 +378,7 @@
           }
         },
         "category": {
-          "enum": [
-            "script",
-            "compiled",
-            "markup",
-            "frontendFramework",
-            "styles",
-            "data",
-            "infrastructure"
-          ]
+          "$ref": "#/$defs/category"
         },
         "icon": {
           "$ref": "#/$defs/relativePath"
