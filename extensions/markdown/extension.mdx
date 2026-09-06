@@ -1,0 +1,164 @@
+---
+title: Markdown
+tagline: Markdown support for Phantom — highlighting, and Marksman for links, references and outlines.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [markdown, markup, docs, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Markdown support for the Phantom editor. The extension declares the language — file types, `<!-- -->` comments, headings, code spans and fences, links and emphasis — and connects **Marksman**, the language server that treats a folder of Markdown files as one document graph. Marksman is optional. Highlighting works without it.
+
+Phantom already ships a Markdown language and the same server. This extension restates both as data, and adds the file types Phantom does not carry: `.mdown`, `.mkd`, `.mkdn` and `.mdwn`. Because Phantom already owns `.md`, the contribution stays inert until you promote it in Settings, which the steps below cover.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      ATX and setext headings, fenced and indented code, inline code spans, inline links, reference links, wiki links, images, bold, italic, strikethrough, list markers and block quotes.
+    </Feature>
+    <Feature title="Links that resolve" icon="search">
+      Marksman indexes every Markdown file in the folder and connects them. Completion for `[[wiki links]]` and headings, go to definition, find references, rename across files, and a diagnostic for a link that points at nothing.
+    </Feature>
+    <Feature title="Outline and code actions" icon="book">
+      Document and workspace symbols from the heading tree, so the outline and the symbol search work. Two code actions: build a table of contents, and create the file a broken link names.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A Markdown file open in Phantom with a coloured heading, a link, a fenced code block and a completion list of wiki link targets" caption="Headings, links, a fenced block and wiki link completion in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle Marksman. Install it to get the language intelligence; the extension finds it on your `PATH`.
+
+<Requirement command="marksman" install="brew install marksman" url="https://github.com/artempyanykh/marksman">
+Completion, go to definition, find references, rename, document and workspace symbols, hover, and diagnostics for broken references. Without it the highlighter still works. Marksman offers no formatting at all.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Markdown.
+  </Step>
+  <Step title="Put the extension ahead of the built-in language">
+    Phantom already claims `.md`, so the contribution is listed as Shadowed and does nothing yet. Open Settings → Extensions, select Markdown, and press **Use This Instead of Phantom**. The promotion covers this language only, and you can undo it in the same place.
+  </Step>
+  <Step title="Install Marksman">
+    Run `brew install marksman`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Mark the root of your notes">
+    Marksman treats a folder as one project when the folder is a repository or holds a `.marksman.toml`. In a folder that is neither, it falls back to single file mode and cross-file links stay unresolved.
+  </Step>
+  <Step title="Open a Markdown file">
+    The first time a project needs Marksman, Phantom asks before starting it and remembers your answer for this extension.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn`, `.mdx` |
+| Language server | `marksman server` (stdio) |
+| Formatter | none. Marksman does not format, and Phantom already routes Markdown to Prettier |
+| Editor | `<!-- -->` comments, headings, code spans and fences, links and wiki links, emphasis, list markers, block quotes |
+| Icon | Markdown file icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Marksman: .marksman.toml">
+
+Marksman reads a project file named `.marksman.toml` at the root of the folder, and a user file named `config.toml` in its own configuration directory. A project file wins over the user file, and both win over the defaults. Set only what you want to change.
+
+```toml
+[core]
+markdown.file_extensions = ["md", "markdown", "mdown"]
+title_from_heading = true
+text_sync = "full"
+
+[code_action]
+toc.enable = true
+toc.include = [2, 3]
+create_missing_file.enable = true
+
+[completion]
+candidates = 50
+wiki.style = "title-slug"
+```
+
+| Key | Default | What it does |
+|---|---|---|
+| `core.markdown.file_extensions` | `["md", "markdown"]` | Which files Marksman reads. Add the other suffixes here if you use them |
+| `core.title_from_heading` | `true` | Treat a level 1 heading as the document title |
+| `core.markdown.glfm_heading_ids.enable` | `true` | Disambiguate repeated heading ids the way GitLab does |
+| `core.text_sync` | `"full"` | `full` or `incremental` document sync with the editor |
+| `core.incremental_references` | `false` | Experimental incremental resolution of project-wide references |
+| `code_action.toc.enable` | `true` | Offer the table of contents code action |
+| `code_action.toc.include` | `[1, 2, 3, 4, 5, 6]` | Heading levels that go into the table of contents |
+| `code_action.create_missing_file.enable` | `true` | Offer to create the file a broken link names |
+| `completion.candidates` | `50` | Upper bound on completion results |
+| `completion.wiki.style` | `"title-slug"` | Also `file-stem` or `file-path-stem` |
+
+The extension claims four suffixes Marksman does not read by default. Highlighting applies to all of them; a `.mdown` file only reaches the server once you list it under `core.markdown.file_extensions`.
+
+</Details>
+
+<Details summary="Highlighting differs from Phantom's built-in Markdown">
+
+The manifest format carries five pattern slots and a keyword list, and none of the slots is named "heading". This extension puts headings in the number slot and list markers and block quotes in the function slot, so they are coloured, but by a different colour than Phantom's own Markdown rules use.
+
+If you prefer Phantom's colours, leave the extension unpromoted. The server half is what most readers install this for, and Phantom starts the same Marksman on its own.
+
+</Details>
+
+<Details summary="Formatting a Markdown file">
+
+Marksman advertises no formatting, so ⇧⌘F falls through to Prettier when Prettier can read the file. Phantom does this for Markdown deliberately: a `.md` file in a repository with no Prettier configuration would otherwise answer with a sentence about the language server. This extension contributes no formatter, so nothing about that route changes.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The extension is listed as Shadowed">
+
+Phantom's own tables claim `.md` and the `markdown` language id, and an extension never takes a language you already had without being asked. Settings → Extensions names the claim and offers **Use This Instead of Phantom**. Until you press it, nothing in the language contribution applies, including the extra file types.
+
+</Details>
+
+<Details summary="Links to other files are not resolved">
+
+Marksman needs a project root. Run `git init` in the folder, or put an empty `.marksman.toml` at its root, then reopen the folder. Without one, Marksman works in single file mode and knows nothing about the files beside the one you opened.
+
+</Details>
+
+<Details summary="A .mdown or .mkd file gets no diagnostics">
+
+Marksman reads `.md` and `.markdown` unless told otherwise. Add the suffix to `core.markdown.file_extensions` in `.marksman.toml` and restart the server from Settings → Languages.
+
+</Details>
+
+<Details summary="Wiki link completion suggests file names instead of titles">
+
+`completion.wiki.style` decides this. The default, `title-slug`, completes from the document title, which Marksman reads from the level 1 heading. With `core.title_from_heading = false` the default style changes to a file based one.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+Marksman runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definition for Markdown and four further suffixes, Marksman wiring, and an install command for it.
+
+## License and credits
+
+The extension is released under the MIT License. [Marksman](https://github.com/artempyanykh/marksman) is © Artem Pianykh (MIT). This extension is not affiliated with the Marksman project.

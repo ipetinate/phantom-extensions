@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.markdown",
+  "name": "Markdown",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "Markdown: highlighting and Marksman.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/markdown",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "markdown",
+        "name": "Markdown",
+        "extensions": [
+          "md",
+          "markdown",
+          "mdown",
+          "mkd",
+          "mkdn",
+          "mdwn",
+          "mdx"
+        ],
+        "category": "markup",
+        "icon": "icons/markdown.svg",
+        "blockComment": {
+          "open": "<!--",
+          "close": "-->"
+        },
+        "syntax": {
+          "string": "```[\\s\\S]*?```|~~~[\\s\\S]*?~~~|`[^`\\n]*`",
+          "number": "^[ \\t]{0,3}#{1,6}[ \\t].*$|^[ \\t]{0,3}(?:=+|-{2,})[ \\t]*$",
+          "type": "\\[\\[[^\\]\\n]*\\]\\]|!?\\[[^\\]\\n]*\\]\\([^)\\n]*\\)|!?\\[[^\\]\\n]*\\]\\[[^\\]\\n]*\\]",
+          "attribute": "\\*\\*[^*\\n]+\\*\\*|__[^_\\n]+__|~~[^~\\n]+~~",
+          "function": "^[ \\t]*(?:[-*+]|\\d+[.)])(?=[ \\t])|^[ \\t]{0,3}>+"
+        },
+        "server": {
+          "command": "marksman",
+          "args": [
+            "server"
+          ],
+          "installHint": "brew install marksman",
+          "documentationURL": "https://github.com/artempyanykh/marksman",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install marksman",
+                "uninstall": "brew uninstall marksman"
+              }
+            ],
+            "documentationURL": "https://github.com/artempyanykh/marksman/blob/main/docs/configuration.md"
+          }
+        }
+      }
+    ]
+  }
+}
