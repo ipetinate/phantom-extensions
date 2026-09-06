@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "phantom.c",
-  "name": "C",
-  "version": "1.0.6",
+  "name": "C and C++",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
-  "description": "C: highlighting and clangd.",
+  "description": "C and C++: highlighting and clangd.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/c",
   "phantom": "0.17.0",
   "contributes": {
@@ -31,6 +31,32 @@
             "documentationURL": "https://clangd.llvm.org/installation"
           }
         }
+      },
+      {
+        "languageId": "cpp",
+        "name": "C++",
+        "extensions": [
+          "cpp",
+          "cc",
+          "cxx",
+          "hpp",
+          "hxx"
+        ],
+        "category": "compiled",
+        "icon": "icons/cpp.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "server": {
+          "command": "clangd",
+          "installHint": "Ships with the Xcode Command Line Tools — run: xcode-select --install",
+          "documentationURL": "https://clangd.llvm.org/",
+          "install": {
+            "documentationURL": "https://clangd.llvm.org/installation"
+          }
+        }
       }
     ],
     "grammars": [
@@ -40,6 +66,19 @@
         "languageId": "c",
         "license": "MIT",
         "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/cpp/syntaxes/c.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.cpp",
+        "path": "syntaxes/cpp.tmLanguage.json",
+        "languageId": "cpp",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/cpp/syntaxes/cpp.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.cpp.embedded.macro",
+        "path": "syntaxes/cpp.embedded.macro.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/cpp/syntaxes/cpp.embedded.macro.tmLanguage.json"
       }
     ]
   }

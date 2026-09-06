@@ -1,7 +1,7 @@
 ---
-title: C
-tagline: C language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.6
+title: C and C++
+tagline: C and C++ for Phantom — highlighting, diagnostics, completion and formatting, all from clangd.
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -9,21 +9,21 @@ license: MIT
 created: 2026-09-06
 updated: 2026-09-06
 icon: media/icon.png
-tags: [c, language, lsp, clangd, llvm]
+tags: [c, cpp, language, lsp, clangd, llvm]
 screenshots:
   - media/editor.png
 ---
 
-C support for the Phantom editor. The extension teaches Phantom the language — `.c` and `.h` files, the C23 keyword set, string and character prefixes, `_t` type names and preprocessor directives — and connects **clangd** for diagnostics, hover, completion, navigation and formatting. Highlighting works the moment the extension is installed.
+C and C++ support for the Phantom editor. The extension teaches Phantom both languages — `.c` and `.h` for C, `.cpp`, `.cc`, `.cxx`, `.hpp` and `.hxx` for C++ — and connects **clangd** to each of them for diagnostics, hover, completion, navigation and formatting. Highlighting works the moment the extension is installed.
 
-clangd is the one server here you probably already have. It ships with the Xcode Command Line Tools, so there is nothing to install and nothing this extension can uninstall for you.
+One binary serves both languages, which is why they ship as one extension: the same install, the same compilation database, the same `.clangd`. clangd is the one server here you probably already have. It ships with the Xcode Command Line Tools, so there is nothing to install and nothing this extension can uninstall for you.
 
 ## Highlights
 
 <Showcase>
   <Features>
     <Feature title="Syntax highlighting" icon="brush">
-      The C23 keyword set, including `constexpr`, `nullptr`, `alignas`, `typeof` and the `_Atomic` family; `size_t` and every other `_t` type name, capitalised type names, `u8` and `L` string and character prefixes, numbers, calls, `#include` and the rest of the preprocessor, and `[[attributes]]`. Comments with `//` and `/* */`.
+      The C23 keyword set, including `constexpr`, `nullptr`, `alignas`, `typeof` and the `_Atomic` family; `size_t` and every other `_t` type name, `u8` and `L` string and character prefixes, `#include` and the rest of the preprocessor, and `[[attributes]]`. C++ adds templates, namespaces, lambdas, concepts, structured bindings and the scope resolution operator, and the body of a macro is coloured as code rather than as one string.
     </Feature>
     <Feature title="Language intelligence" icon="search">
       Diagnostics from Clang itself, with fix-its; completion, hover, go to definition, find references, call hierarchy, rename and document symbols. Include-what-you-use warnings and clang-tidy checks are available through the config file.
@@ -65,13 +65,13 @@ The Clang language server, part of LLVM. On macOS it arrives with the Xcode Comm
 
 | Area | Contribution |
 |---|---|
-| File types | `.c`, `.h` |
-| Language server | `clangd` (stdio) |
+| File types | `.c` and `.h` as C; `.cpp`, `.cc`, `.cxx`, `.hpp` and `.hxx` as C++ |
+| Language server | `clangd` (stdio), started for both languages |
 | Formatter | clang-format, built into clangd |
-| Editor | TextMate grammar `source.c` (better-c-syntax), `//` and `/* */` comment markers |
-| Icon | C file icon in the sidebar and tabs |
+| Editor | TextMate grammars `source.c` and `source.cpp` (better-c-syntax, better-cpp-syntax), with `source.cpp.embedded.macro` for macro bodies; `//` and `/* */` comment markers |
+| Icon | C and C++ file icons in the sidebar and tabs |
 
-C++ files are not claimed by this extension. Phantom routes `.cpp`, `.cc`, `.cxx`, `.hpp` and `.hxx` to its own `cpp` language and starts the same clangd for them, and that keeps working exactly as it did.
+Both languages are here because one server answers for both. Installing C++ separately would mean a second copy of the same clangd wiring, the same install documentation and the same `.clangd` reference, kept in step by hand.
 
 ## Configuration
 
@@ -154,7 +154,7 @@ Run `xcode-select --install`. If the tools are already installed and the binary 
 
 <Details summary="A C++ header named .h is highlighted as C">
 
-It is. Phantom resolves a `.h` to C, as most editors do, because the extension cannot say which language is inside. The keyword list here carries the C++ words a header commonly holds — `class`, `namespace`, `template`, `typename`, `virtual`, `override` and the access specifiers — so a C++ header still reads correctly, and clangd itself decides the real language from the compilation database.
+It is. Phantom resolves a `.h` to C, as most editors do, because the extension cannot say which language is inside. Name the header `.hpp` or `.hxx` to have it read as C++. Either way clangd decides the real language from the compilation database, so the diagnostics are the ones your build produces.
 
 </Details>
 
@@ -163,6 +163,8 @@ The tools run as your user, with access to your files and network, the same as i
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Claims C++ as well: `.cpp`, `.cc`, `.cxx`, `.hpp` and `.hxx` become the `cpp` language, served by the same clangd and coloured by the `source.cpp` grammar. Phantom 0.17.0 stopped shipping a `cpp` language of its own, so without this the files were plain text.
 
 **1.0.6** — Ships the TextMate grammar `source.c` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
 
@@ -180,4 +182,4 @@ The tools run as your user, with access to your files and network, the same as i
 
 ## License and credits
 
-The extension is released under the MIT License. [clangd](https://clangd.llvm.org/) and [clang-format](https://clang.llvm.org/docs/ClangFormat.html) are part of the LLVM Project, © the LLVM contributors, under the Apache License 2.0 with LLVM Exceptions. C is standardised by ISO/IEC JTC1/SC22/WG14; this extension is not affiliated with it. The grammar is [better-c-syntax](https://github.com/jeff-hykin/better-c-syntax) by Jeff Hykin (MIT), in the JSON form Visual Studio Code ships.
+The extension is released under the MIT License. [clangd](https://clangd.llvm.org/) and [clang-format](https://clang.llvm.org/docs/ClangFormat.html) are part of the LLVM Project, © the LLVM contributors, under the Apache License 2.0 with LLVM Exceptions. C is standardised by ISO/IEC JTC1/SC22/WG14; this extension is not affiliated with it. C++ is standardised by ISO/IEC JTC1/SC22/WG21. The grammars are [better-c-syntax](https://github.com/jeff-hykin/better-c-syntax) and [better-cpp-syntax](https://github.com/jeff-hykin/better-cpp-syntax) by Jeff Hykin (MIT), in the JSON form Visual Studio Code ships. The C++ icon is the ISO C++ logo by Jeremy Kratz, released into the public domain.
