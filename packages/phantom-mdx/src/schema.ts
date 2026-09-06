@@ -1,4 +1,4 @@
-export type PropKind = "text" | "image" | "video" | "url";
+export type PropKind = "text" | "image" | "video" | "url" | "color" | "palette";
 
 export interface PropSpec {
   readonly name: string;
@@ -53,6 +53,7 @@ export const FEATURE_COLUMNS = ["2", "3"] as const;
 export const SCREENSHOT_WIDTHS = ["full", "wide", "narrow"] as const;
 export const BADGE_TONES = ["neutral", "accent", "success", "warning"] as const;
 export const SHOWCASE_MEDIA = ["start", "end"] as const;
+export const SWATCH_COLUMNS = ["2", "3", "4", "5", "6", "7", "8"] as const;
 
 const markdown: ChildrenRule = { kind: "markdown" };
 const none: ChildrenRule = { kind: "none" };
@@ -137,6 +138,32 @@ export const components: Readonly<Record<string, ComponentSpec>> = {
     name: "Details",
     props: [{ name: "summary", kind: "text", required: true }],
     children: markdown,
+  },
+  ThemePreview: {
+    name: "ThemePreview",
+    props: [
+      { name: "background", kind: "color", required: true },
+      { name: "foreground", kind: "color", required: true },
+      { name: "ansi", kind: "palette", required: true },
+      { name: "cursor", kind: "color" },
+      { name: "selection", kind: "color" },
+      { name: "title", kind: "text" },
+    ],
+    children: none,
+  },
+  Swatches: {
+    name: "Swatches",
+    props: [{ name: "columns", kind: "text", values: SWATCH_COLUMNS }],
+    children: { kind: "only", names: ["Swatch"] },
+  },
+  Swatch: {
+    name: "Swatch",
+    props: [
+      { name: "color", kind: "color", required: true },
+      { name: "name", kind: "text", required: true },
+    ],
+    children: none,
+    parent: "Swatches",
   },
 };
 

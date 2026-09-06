@@ -2,6 +2,7 @@ import type { Root } from "mdast";
 import type { MdxJsxAttribute, MdxJsxExpressionAttribute, MdxJsxFlowElement, MdxJsxTextElement } from "mdast-util-mdx-jsx";
 import type { Node, Parent } from "unist";
 import { visit } from "unist-util-visit";
+import { isHexColor, isPalette, PALETTE_LENGTH, paletteEntries } from "./colors.ts";
 import { isAllowedLink, isMediaPath } from "./media.ts";
 import { parseDocument, toParseError } from "./parse.ts";
 import { componentNames, components, IMAGE_SUFFIXES, VIDEO_SUFFIXES, type ComponentSpec, type PropSpec } from "./schema.ts";
@@ -54,6 +55,16 @@ function checkPropValue(element: JsxElement, attribute: MdxJsxAttribute, spec: P
   }
   if (spec.kind === "url" && !/^https:\/\/[^/\s]+/i.test(value)) {
     report(attribute, "link", `${label} must be an https URL; got "${value}"`);
+  }
+  if (spec.kind === "color" && !isHexColor(value)) {
+    report(attribute, "color", `${label} must be a hex colour such as #2e3440; got "${value}"`);
+  }
+  if (spec.kind === "palette" && !isPalette(value)) {
+    const entries = paletteEntries(value);
+    const stray = entries.find((entry) => !isHexColor(entry));
+    const detail =
+      entries.length === PALETTE_LENGTH ? `entry ${entries.indexOf(stray as string)} is "${stray}"` : `got ${entries.length}`;
+    report(attribute, "palette", `${label} must list ${PALETTE_LENGTH} hex colours separated by commas, in order 0 to 15; ${detail}`);
   }
 }
 

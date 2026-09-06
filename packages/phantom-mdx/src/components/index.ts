@@ -9,10 +9,12 @@ import { Requirement } from "./Requirement.tsx";
 import { Gallery, Screenshot } from "./Screenshot.tsx";
 import { Showcase } from "./Showcase.tsx";
 import { Step, Steps } from "./Steps.tsx";
+import { Swatch, Swatches } from "./Swatches.tsx";
 import { Table } from "./Table.tsx";
+import { ThemePreview } from "./ThemePreview.tsx";
 import { Video } from "./Video.tsx";
 
-export { Badge, Callout, Details, Feature, Features, Gallery, Kbd, Link, Requirement, Screenshot, Showcase, Step, Steps, Table, Video };
+export { Badge, Callout, Details, Feature, Features, Gallery, Kbd, Link, Requirement, Screenshot, Showcase, Step, Steps, Swatch, Swatches, Table, ThemePreview, Video };
 export { GlyphIcon } from "./glyphs.tsx";
 
 export const componentMap: Readonly<Record<string, ComponentType<any>>> = {
@@ -29,6 +31,9 @@ export const componentMap: Readonly<Record<string, ComponentType<any>>> = {
   Badge,
   Requirement,
   Details,
+  ThemePreview,
+  Swatches,
+  Swatch,
   a: Link,
   table: Table,
 };

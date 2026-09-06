@@ -31,8 +31,11 @@ export {
   FEATURE_COLUMNS,
   SCREENSHOT_WIDTHS,
   BADGE_TONES,
+  SHOWCASE_MEDIA,
+  SWATCH_COLUMNS,
 } from "./schema.ts";
 export type { ComponentSpec, PropSpec, PropKind, ChildrenRule, Glyph } from "./schema.ts";
+export { isHexColor, isPalette, paletteEntries, luminance, contrast, PALETTE_LENGTH } from "./colors.ts";
 export { componentMap } from "./components/index.ts";
 export { DocumentContext, useDocumentContext } from "./context.ts";
 export type { DocumentContextValue } from "./context.ts";

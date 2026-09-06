@@ -53,8 +53,15 @@ Props take quoted strings only. A block component starts on its own line; its co
 | `Badge` | `label` required; `tone` neutral, accent, success or warning | none |
 | `Requirement` | `command` required; `install`; `url` https | Markdown |
 | `Details` | `summary` required | Markdown |
+| `ThemePreview` | `background`, `foreground` and `ansi` required; `cursor`; `selection`; `title` | none |
+| `Swatches` | `columns` 2 to 8 | `Swatch` only |
+| `Swatch` | `color` required; `name` required | none |
 
 `Requirement` describes a program the extension needs in prose. The manifest says the same thing as data: an `install` block on a language `server`, on a formatter or on an agent, holding one command per package manager (`brew`, `npm`, `pnpm`, `yarn`, `cargo`, `gem`, `pipx`, `go`, `dotnet`, `nix`), an optional `uninstall` beside each, and an https `documentationURL`. Phantom installs from that block; the registry README carries the rules. Keep the two in step when you write both.
+
+`ThemePreview` draws a miniature of the Phantom window in the theme's own colours: a file explorer, a tab bar and a code area the reader clicks through, with four samples highlighted from the palette. `background`, `foreground`, `cursor` and `selection` are `#rgb` or `#rrggbb`; `ansi` is the sixteen palette entries separated by commas, in order 0 to 15. Everything else — the borders, the sidebar's ground, the inactive tab — is mixed from those. The token colours follow the editor's own mapping: keyword takes ANSI 5, string 2, comment and punctuation 8, number 3, type 6, function 4, attribute 1, and plain text 7.
+
+`Swatches` lays a row of `Swatch` blocks out, wrapping unless `columns` fixes the count. Each swatch draws the colour, its hex and the role it fills; one that would vanish into the page gets a hairline of its own.
 
 Glyphs for `Feature icon`: `bolt`, `book`, `brush`, `bug`, `check`, `code`, `gear`, `globe`, `keyboard`, `lock`, `package`, `plug`, `search`, `sparkles`, `star`, `terminal`.
 
@@ -62,6 +69,7 @@ Glyphs for `Feature icon`: `bolt`, `book`, `brush`, `bug`, `check`, `code`, `gea
 
 - No `import` or `export`, no `{expressions}`, no `prop={value}`, no raw HTML elements, no fragments.
 - Only the components above, only their props, every required prop present, enum values from the list.
+- Colours are `#rgb` or `#rrggbb`; `ThemePreview ansi` is exactly sixteen of them, separated by commas.
 - Images are `media/….png|jpg|jpeg|webp|gif`, videos `media/….mp4|webm`; a path may not leave `media/` and the file must exist.
 - Links use `https:` or `mailto:`. Markdown images are rejected: use `Screenshot`.
 - One level 1 heading is one too many.
