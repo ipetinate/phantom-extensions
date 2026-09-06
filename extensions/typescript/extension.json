@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.typescript",
+  "name": "TypeScript",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "TypeScript and JavaScript: highlighting and typescript-language-server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "typescript",
+        "name": "TypeScript",
+        "extensions": [
+          "ts",
+          "mts",
+          "cts"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.svg",
+        "keywords": [
+          "abstract",
+          "as",
+          "async",
+          "await",
+          "break",
+          "case",
+          "catch",
+          "class",
+          "const",
+          "continue",
+          "debugger",
+          "declare",
+          "default",
+          "delete",
+          "do",
+          "else",
+          "enum",
+          "export",
+          "extends",
+          "finally",
+          "for",
+          "from",
+          "function",
+          "get",
+          "if",
+          "implements",
+          "import",
+          "in",
+          "instanceof",
+          "interface",
+          "is",
+          "keyof",
+          "let",
+          "namespace",
+          "new",
+          "of",
+          "private",
+          "protected",
+          "public",
+          "readonly",
+          "return",
+          "satisfies",
+          "set",
+          "static",
+          "super",
+          "switch",
+          "this",
+          "throw",
+          "try",
+          "type",
+          "typeof",
+          "var",
+          "void",
+          "while",
+          "yield",
+          "true",
+          "false",
+          "null",
+          "undefined"
+        ],
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "syntax": {
+          "string": "preset:cStyleString",
+          "number": "preset:number",
+          "type": "\\b[A-Z][A-Za-z0-9_]*\\b|\\b(?:any|bigint|boolean|never|number|object|string|symbol|unknown)\\b",
+          "function": "preset:callBeforeParenOrGeneric",
+          "attribute": "@[A-Za-z_][A-Za-z0-9_]*|^[ \\t]*(?!default\\b|case\\b)[A-Za-z_$][A-Za-z0-9_$]*\\??(?=\\s*:)"
+        },
+        "server": {
+          "command": "typescript-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript-language-server typescript",
+          "documentationURL": "https://github.com/typescript-language-server/typescript-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript-language-server",
+                "uninstall": "brew uninstall typescript-language-server"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript-language-server typescript",
+                "uninstall": "npm uninstall -g typescript-language-server"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript-language-server typescript",
+                "uninstall": "pnpm remove -g typescript-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/typescript-language-server/typescript-language-server"
+          }
+        }
+      },
+      {
+        "languageId": "typescriptreact",
+        "name": "TypeScript JSX",
+        "extensions": [
+          "tsx"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.svg",
+        "keywords": [
+          "abstract",
+          "as",
+          "async",
+          "await",
+          "break",
+          "case",
+          "catch",
+          "class",
+          "const",
+          "continue",
+          "debugger",
+          "declare",
+          "default",
+          "delete",
+          "do",
+          "else",
+          "enum",
+          "export",
+          "extends",
+          "finally",
+          "for",
+          "from",
+          "function",
+          "get",
+          "if",
+          "implements",
+          "import",
+          "in",
+          "instanceof",
+          "interface",
+          "is",
+          "keyof",
+          "let",
+          "namespace",
+          "new",
+          "of",
+          "private",
+          "protected",
+          "public",
+          "readonly",
+          "return",
+          "satisfies",
+          "set",
+          "static",
+          "super",
+          "switch",
+          "this",
+          "throw",
+          "try",
+          "type",
+          "typeof",
+          "var",
+          "void",
+          "while",
+          "yield",
+          "true",
+          "false",
+          "null",
+          "undefined"
+        ],
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "syntax": {
+          "string": "preset:cStyleString",
+          "number": "preset:number",
+          "type": "\\b[A-Z][A-Za-z0-9_]*\\b|\\b(?:any|bigint|boolean|never|number|object|string|symbol|unknown)\\b",
+          "function": "preset:callBeforeParenOrGeneric",
+          "attribute": "@[A-Za-z_][A-Za-z0-9_]*|^[ \\t]*(?!default\\b|case\\b)[A-Za-z_$][A-Za-z0-9_$]*\\??(?=\\s*:)"
+        },
+        "server": {
+          "command": "typescript-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript-language-server typescript",
+          "documentationURL": "https://github.com/typescript-language-server/typescript-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript-language-server",
+                "uninstall": "brew uninstall typescript-language-server"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript-language-server typescript",
+                "uninstall": "npm uninstall -g typescript-language-server"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript-language-server typescript",
+                "uninstall": "pnpm remove -g typescript-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/typescript-language-server/typescript-language-server"
+          }
+        }
+      },
+      {
+        "languageId": "javascript",
+        "name": "JavaScript",
+        "extensions": [
+          "js",
+          "mjs",
+          "cjs"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.svg",
+        "keywords": [
+          "abstract",
+          "as",
+          "async",
+          "await",
+          "break",
+          "case",
+          "catch",
+          "class",
+          "const",
+          "continue",
+          "debugger",
+          "declare",
+          "default",
+          "delete",
+          "do",
+          "else",
+          "enum",
+          "export",
+          "extends",
+          "finally",
+          "for",
+          "from",
+          "function",
+          "get",
+          "if",
+          "implements",
+          "import",
+          "in",
+          "instanceof",
+          "interface",
+          "is",
+          "keyof",
+          "let",
+          "namespace",
+          "new",
+          "of",
+          "private",
+          "protected",
+          "public",
+          "readonly",
+          "return",
+          "satisfies",
+          "set",
+          "static",
+          "super",
+          "switch",
+          "this",
+          "throw",
+          "try",
+          "type",
+          "typeof",
+          "var",
+          "void",
+          "while",
+          "yield",
+          "true",
+          "false",
+          "null",
+          "undefined"
+        ],
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "syntax": {
+          "string": "preset:cStyleString",
+          "number": "preset:number",
+          "type": "\\b[A-Z][A-Za-z0-9_]*\\b|\\b(?:any|bigint|boolean|never|number|object|string|symbol|unknown)\\b",
+          "function": "preset:callBeforeParenOrGeneric",
+          "attribute": "@[A-Za-z_][A-Za-z0-9_]*|^[ \\t]*(?!default\\b|case\\b)[A-Za-z_$][A-Za-z0-9_$]*\\??(?=\\s*:)"
+        },
+        "server": {
+          "command": "typescript-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript-language-server typescript",
+          "documentationURL": "https://github.com/typescript-language-server/typescript-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript-language-server",
+                "uninstall": "brew uninstall typescript-language-server"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript-language-server typescript",
+                "uninstall": "npm uninstall -g typescript-language-server"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript-language-server typescript",
+                "uninstall": "pnpm remove -g typescript-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/typescript-language-server/typescript-language-server"
+          }
+        }
+      },
+      {
+        "languageId": "javascriptreact",
+        "name": "JavaScript JSX",
+        "extensions": [
+          "jsx"
+        ],
+        "category": "script",
+        "icon": "icons/typescript.svg",
+        "keywords": [
+          "abstract",
+          "as",
+          "async",
+          "await",
+          "break",
+          "case",
+          "catch",
+          "class",
+          "const",
+          "continue",
+          "debugger",
+          "declare",
+          "default",
+          "delete",
+          "do",
+          "else",
+          "enum",
+          "export",
+          "extends",
+          "finally",
+          "for",
+          "from",
+          "function",
+          "get",
+          "if",
+          "implements",
+          "import",
+          "in",
+          "instanceof",
+          "interface",
+          "is",
+          "keyof",
+          "let",
+          "namespace",
+          "new",
+          "of",
+          "private",
+          "protected",
+          "public",
+          "readonly",
+          "return",
+          "satisfies",
+          "set",
+          "static",
+          "super",
+          "switch",
+          "this",
+          "throw",
+          "try",
+          "type",
+          "typeof",
+          "var",
+          "void",
+          "while",
+          "yield",
+          "true",
+          "false",
+          "null",
+          "undefined"
+        ],
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "syntax": {
+          "string": "preset:cStyleString",
+          "number": "preset:number",
+          "type": "\\b[A-Z][A-Za-z0-9_]*\\b|\\b(?:any|bigint|boolean|never|number|object|string|symbol|unknown)\\b",
+          "function": "preset:callBeforeParenOrGeneric",
+          "attribute": "@[A-Za-z_][A-Za-z0-9_]*|^[ \\t]*(?!default\\b|case\\b)[A-Za-z_$][A-Za-z0-9_$]*\\??(?=\\s*:)"
+        },
+        "server": {
+          "command": "typescript-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm install -g typescript-language-server typescript",
+          "documentationURL": "https://github.com/typescript-language-server/typescript-language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "brew",
+                "command": "brew install typescript-language-server",
+                "uninstall": "brew uninstall typescript-language-server"
+              },
+              {
+                "manager": "npm",
+                "command": "npm install -g typescript-language-server typescript",
+                "uninstall": "npm uninstall -g typescript-language-server"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g typescript-language-server typescript",
+                "uninstall": "pnpm remove -g typescript-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/typescript-language-server/typescript-language-server"
+          }
+        }
+      }
+    ]
+  }
+}

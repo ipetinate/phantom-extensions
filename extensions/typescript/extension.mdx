@@ -1,0 +1,203 @@
+---
+title: TypeScript
+tagline: TypeScript and JavaScript for Phantom — highlighting, diagnostics, completion and navigation.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+updated: 2026-09-06
+icon: media/icon.svg
+tags: [typescript, javascript, jsx, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+TypeScript and JavaScript support for the Phantom editor. The extension teaches Phantom the four language ids the ecosystem uses — `typescript`, `typescriptreact`, `javascript`, `javascriptreact` — with their file types, keywords, comment markers and token patterns, and connects **typescript-language-server**, the wrapper that drives `tsserver` over the Language Server Protocol. Formatting comes from **Prettier**, which Phantom resolves from the project itself; the extension does not contribute a formatter, and the section below explains why.
+
+Highlighting works the moment the extension is installed. The server is optional.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Keywords, template literals, decorators, object keys, numbers with `_` separators, capitalized types and the lowercase primitives `string`, `number`, `boolean`, `never`, `unknown`. Calls are painted before `(` and before a type argument, so `useState<Foo>()` reads as a call.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Diagnostics, hover, completion, go to definition, find references, rename and code actions from `tsserver`. Inlay hints for parameter names, variable types and return types are available through the server's own settings.
+    </Feature>
+    <Feature title="Two toolchains" icon="package">
+      Phantom picks the server for the project. A workspace with `node_modules/typescript` gets `typescript-language-server` driving its `tsserver.js`; a workspace without one gets `tsc --lsp --stdio`, the native TypeScript server, which needs no wrapper.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A TypeScript file open in Phantom with highlighted keywords, types and strings, and one diagnostic underlined in red" caption="Highlighting and a diagnostic in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the tools. Install the ones you want; the extension detects them on your `PATH`.
+
+<Requirement command="typescript-language-server" install="brew install typescript-language-server" url="https://github.com/typescript-language-server/typescript-language-server">
+The wrapper around `tsserver`: diagnostics, hover, completion, definitions, references, rename and code actions. It needs a TypeScript to drive — the project's own, or a global one. Without it the highlighter still works.
+</Requirement>
+
+<Requirement command="prettier" install="brew install prettier" url="https://prettier.io/docs/">
+The formatter. Phantom runs the project's own `node_modules/.bin/prettier` when the project declares Prettier, and a Prettier from your `PATH` only on ⇧⌘F. Without either, Format does nothing for these files.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to TypeScript.
+  </Step>
+  <Step title="Install the server">
+    Run the Homebrew command above, or `npm install -g typescript-language-server typescript`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a TypeScript file">
+    The first time a project needs the server, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.ts`, `.mts`, `.cts`, `.tsx`, `.js`, `.mjs`, `.cjs`, `.jsx` |
+| Language ids | `typescript`, `typescriptreact`, `javascript`, `javascriptreact` |
+| Language server | `typescript-language-server --stdio` |
+| Editor | Keywords, `//` and `/* */` markers, string, number, type, call and decorator patterns |
+| Icon | TypeScript file icon in the sidebar and tabs |
+
+Phantom already ships all of this, so a fresh install lists the contribution as **Shadowed** — the compiled-in tables win. The extension is what makes the pieces installable, removable and readable in one place, and Settings → Language Servers can promote it over the built-in definition when you want the manifest to be the one in force.
+
+Prettier is deliberately absent from the manifest. Phantom does not treat Prettier as one command for one language: `PrettierProject` walks up from the file looking for a config, an ignore file and a local binary, and hands the buffer to that Prettier with `--stdin-filepath`. Declaring a formatter here would put a global `prettier` from your `PATH` ahead of that resolution and run it on every save, including in repositories formatted by something else.
+
+## Configuration
+
+<Details summary="Compiler: tsconfig.json">
+
+The server reads the project's own `tsconfig.json` — or `jsconfig.json` for a JavaScript project — from the directory of the file upwards. Phantom passes the project root as the workspace; nothing about the compiler is configured in the editor.
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "jsx": "react-jsx",
+    "types": ["node"]
+  },
+  "include": ["src"]
+}
+```
+
+A project that has no `tsconfig.json` is still served: the server falls back to inferred project settings, which is why a loose `.js` file gets completion at all.
+
+</Details>
+
+<Details summary="Server: initializationOptions">
+
+Settings → Language Servers has an **initializationOptions (JSON)** field per server. It is where the server's own options go, because `typescript-language-server` takes them there rather than from a file of its own.
+
+```json
+{
+  "preferences": {
+    "includeInlayParameterNameHints": "all",
+    "includeInlayParameterNameHintsWhenArgumentMatchesName": false,
+    "includeInlayFunctionParameterTypeHints": true,
+    "includeInlayVariableTypeHints": true,
+    "includeInlayPropertyDeclarationTypeHints": true,
+    "includeInlayFunctionLikeReturnTypeHints": true,
+    "includeInlayEnumMemberValueHints": true
+  }
+}
+```
+
+| Option | What it does |
+|---|---|
+| `tsserver.path` | An explicit path to the `tsserver.js` the wrapper should drive |
+| `preferences.includeInlayParameterNameHints` | `none`, `literals` or `all` |
+| `implementationsCodeLens` | Turns the implementations code lens on |
+| `referencesCodeLens` | Turns the references code lens on |
+| `plugins` | tsserver plugins to load, each with a `name` and a `location` |
+
+</Details>
+
+<Details summary="Formatter: .prettierrc">
+
+Prettier reads the nearest `.prettierrc`, `.prettierrc.json`, `.prettierrc.yaml`, `prettier.config.js` or a `prettier` key in `package.json`, walking up from the file. It honours `overrides`, `extends`, `.editorconfig` and `.prettierignore` on the way.
+
+```json
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "avoid"
+}
+```
+
+| Option | Default | Values |
+|---|---|---|
+| `printWidth` | `80` | integer |
+| `tabWidth` | `2` | integer |
+| `useTabs` | `false` | `true`, `false` |
+| `semi` | `true` | `true`, `false` |
+| `singleQuote` | `false` | `true`, `false` |
+| `quoteProps` | `"as-needed"` | `as-needed`, `consistent`, `preserve` |
+| `jsxSingleQuote` | `false` | `true`, `false` |
+| `trailingComma` | `"all"` | `all`, `es5`, `none` |
+| `bracketSpacing` | `true` | `true`, `false` |
+| `bracketSameLine` | `false` | `true`, `false` |
+| `arrowParens` | `"always"` | `always`, `avoid` |
+| `endOfLine` | `"lf"` | `lf`, `crlf`, `cr`, `auto` |
+| `singleAttributePerLine` | `false` | `true`, `false` |
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The editor says typescript-language-server is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell.
+
+</Details>
+
+<Details summary="The contribution is listed as Shadowed">
+
+Phantom ships its own definitions for these languages, and the compiled-in registry outranks an extension that has not been promoted. That order exists so copying a file into the extensions directory can never change a language you already had. Settings → Language Servers → the contributed row has **Use This Instead of Phantom**, which puts the manifest ahead for that one language id until you turn it back.
+
+</Details>
+
+<Details summary="No diagnostics in a project with no node_modules">
+
+A workspace without `node_modules/typescript` is served by `tsc --lsp --stdio` instead of the wrapper, so `npm i -g typescript` is what that project needs rather than the wrapper. The native server accepts `.ts`, `.tsx`, `.js`, `.jsx`, `.mts`, `.cts` and `.json` only.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Format on Save runs the project's own Prettier and only when the project declares one — a config file or `node_modules/.bin/prettier`. A Prettier from your `PATH` is used on ⇧⌘F alone, so that a stray global install cannot claim files in a repository formatted by another tool.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definitions for the four TypeScript and JavaScript language ids, and typescript-language-server wiring with install and uninstall commands.
+
+## License and credits
+
+The extension is released under the MIT License. [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) is licensed under the Apache License 2.0, with the parts copied from [Visual Studio Code](https://github.com/microsoft/vscode) under the MIT License. [Prettier](https://github.com/prettier/prettier) is © James Long and contributors (MIT). TypeScript is © Microsoft (Apache-2.0); this extension is not affiliated with Microsoft.
