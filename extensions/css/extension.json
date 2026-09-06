@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.css",
+  "name": "CSS",
+  "version": "1.0.0",
+  "publisher": "Phantom",
+  "description": "CSS, SCSS and Less: highlighting and vscode-css-language-server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/css",
+  "phantom": "0.16.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "css",
+        "name": "CSS",
+        "extensions": [
+          "css"
+        ],
+        "category": "styles",
+        "icon": "icons/css.svg",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "keywords": [
+          "absolute",
+          "auto",
+          "baseline",
+          "block",
+          "bold",
+          "both",
+          "bottom",
+          "center",
+          "column",
+          "contain",
+          "cover",
+          "dashed",
+          "dotted",
+          "ellipsis",
+          "end",
+          "fixed",
+          "flex",
+          "grid",
+          "hidden",
+          "inherit",
+          "initial",
+          "inline",
+          "italic",
+          "left",
+          "middle",
+          "none",
+          "normal",
+          "nowrap",
+          "pointer",
+          "relative",
+          "right",
+          "row",
+          "solid",
+          "start",
+          "static",
+          "sticky",
+          "top",
+          "transparent",
+          "underline",
+          "unset",
+          "uppercase",
+          "visible",
+          "wrap"
+        ],
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
+          "number": "\\b\\d[\\d_]*(?:\\.\\d+)?(?:px|em|rem|fr|ch|vmin|vmax|%|vh|vw|s|ms|deg)?\\b",
+          "type": "@[A-Za-z-]+|&[-A-Za-z0-9_]*|\\.[A-Za-z_][-A-Za-z0-9_]*|#[A-Za-z_][-A-Za-z0-9_]*|--[A-Za-z0-9_-]+|\\$[A-Za-z_][-A-Za-z0-9_]*",
+          "function": "\\b[a-z-]+(?=\\()",
+          "attribute": "\\b[a-z-]+(?=\\s*:)"
+        },
+        "server": {
+          "command": "vscode-css-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm i -g vscode-langservers-extracted",
+          "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
+          "install": {
+            "commands": [
+              {
+                "manager": "npm",
+                "command": "npm install -g vscode-langservers-extracted",
+                "uninstall": "npm rm -g vscode-langservers-extracted"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g vscode-langservers-extracted",
+                "uninstall": "pnpm remove -g vscode-langservers-extracted"
+              },
+              {
+                "manager": "yarn",
+                "command": "yarn global add vscode-langservers-extracted",
+                "uninstall": "yarn global remove vscode-langservers-extracted"
+              }
+            ],
+            "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
+          }
+        }
+      },
+      {
+        "languageId": "scss",
+        "name": "SCSS",
+        "extensions": [
+          "scss"
+        ],
+        "category": "styles",
+        "icon": "icons/css.svg",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "keywords": [
+          "absolute",
+          "auto",
+          "baseline",
+          "block",
+          "bold",
+          "both",
+          "bottom",
+          "center",
+          "column",
+          "contain",
+          "cover",
+          "dashed",
+          "dotted",
+          "ellipsis",
+          "end",
+          "fixed",
+          "flex",
+          "grid",
+          "hidden",
+          "inherit",
+          "initial",
+          "inline",
+          "italic",
+          "left",
+          "middle",
+          "none",
+          "normal",
+          "nowrap",
+          "pointer",
+          "relative",
+          "right",
+          "row",
+          "solid",
+          "start",
+          "static",
+          "sticky",
+          "top",
+          "transparent",
+          "underline",
+          "unset",
+          "uppercase",
+          "visible",
+          "wrap"
+        ],
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
+          "number": "\\b\\d[\\d_]*(?:\\.\\d+)?(?:px|em|rem|fr|ch|vmin|vmax|%|vh|vw|s|ms|deg)?\\b",
+          "type": "@[A-Za-z-]+|&[-A-Za-z0-9_]*|\\.[A-Za-z_][-A-Za-z0-9_]*|#[A-Za-z_][-A-Za-z0-9_]*|--[A-Za-z0-9_-]+|\\$[A-Za-z_][-A-Za-z0-9_]*",
+          "function": "\\b[a-z-]+(?=\\()",
+          "attribute": "\\b[a-z-]+(?=\\s*:)"
+        },
+        "server": {
+          "command": "vscode-css-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm i -g vscode-langservers-extracted",
+          "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
+          "install": {
+            "commands": [
+              {
+                "manager": "npm",
+                "command": "npm install -g vscode-langservers-extracted",
+                "uninstall": "npm rm -g vscode-langservers-extracted"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g vscode-langservers-extracted",
+                "uninstall": "pnpm remove -g vscode-langservers-extracted"
+              },
+              {
+                "manager": "yarn",
+                "command": "yarn global add vscode-langservers-extracted",
+                "uninstall": "yarn global remove vscode-langservers-extracted"
+              }
+            ],
+            "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
+          }
+        }
+      },
+      {
+        "languageId": "less",
+        "name": "Less",
+        "extensions": [
+          "less"
+        ],
+        "category": "styles",
+        "icon": "icons/css.svg",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        },
+        "keywords": [
+          "absolute",
+          "auto",
+          "baseline",
+          "block",
+          "bold",
+          "both",
+          "bottom",
+          "center",
+          "column",
+          "contain",
+          "cover",
+          "dashed",
+          "dotted",
+          "ellipsis",
+          "end",
+          "fixed",
+          "flex",
+          "grid",
+          "hidden",
+          "inherit",
+          "initial",
+          "inline",
+          "italic",
+          "left",
+          "middle",
+          "none",
+          "normal",
+          "nowrap",
+          "pointer",
+          "relative",
+          "right",
+          "row",
+          "solid",
+          "start",
+          "static",
+          "sticky",
+          "top",
+          "transparent",
+          "underline",
+          "unset",
+          "uppercase",
+          "visible",
+          "wrap"
+        ],
+        "syntax": {
+          "string": "\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'",
+          "number": "\\b\\d[\\d_]*(?:\\.\\d+)?(?:px|em|rem|fr|ch|vmin|vmax|%|vh|vw|s|ms|deg)?\\b",
+          "type": "@[A-Za-z-]+|&[-A-Za-z0-9_]*|\\.[A-Za-z_][-A-Za-z0-9_]*|#[A-Za-z_][-A-Za-z0-9_]*|--[A-Za-z0-9_-]+|\\$[A-Za-z_][-A-Za-z0-9_]*",
+          "function": "\\b[a-z-]+(?=\\()",
+          "attribute": "\\b[a-z-]+(?=\\s*:)"
+        },
+        "server": {
+          "command": "vscode-css-language-server",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm i -g vscode-langservers-extracted",
+          "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
+          "install": {
+            "commands": [
+              {
+                "manager": "npm",
+                "command": "npm install -g vscode-langservers-extracted",
+                "uninstall": "npm rm -g vscode-langservers-extracted"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g vscode-langservers-extracted",
+                "uninstall": "pnpm remove -g vscode-langservers-extracted"
+              },
+              {
+                "manager": "yarn",
+                "command": "yarn global add vscode-langservers-extracted",
+                "uninstall": "yarn global remove vscode-langservers-extracted"
+              }
+            ],
+            "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
+          }
+        }
+      }
+    ]
+  }
+}

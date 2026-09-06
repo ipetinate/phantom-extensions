@@ -1,0 +1,179 @@
+---
+title: CSS
+tagline: CSS, SCSS and Less for Phantom — highlighting, diagnostics, completion and formatting.
+version: 1.0.0
+author:
+  name: Phantom
+  url: https://github.com/ipetinate/phantom
+license: MIT
+created: 2026-09-06
+icon: media/icon.svg
+tags: [css, scss, less, styles, language, lsp]
+screenshots:
+  - media/editor.png
+---
+
+Stylesheet support for the Phantom editor. The extension teaches Phantom three languages — CSS, SCSS and Less — and connects **vscode-css-language-server**, the server Microsoft writes for VS Code and [hrsh7th/vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) publishes to npm as a standalone binary. The server is optional: highlighting works the moment the extension is installed.
+
+Three languages rather than one, because the server behaves as the document says it is: a `.scss` file announced as `css` loses nesting, variables and every rule that comes with the dialect. One binary serves all three; Phantom starts one process per language and workspace.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Syntax highlighting" icon="brush">
+      Selectors including the SCSS `&` parent, at-rules, custom properties, SCSS variables, property names, functions, numbers with their units, strings and comments. SCSS and Less also get the `//` line comment.
+    </Feature>
+    <Feature title="Language intelligence" icon="search">
+      Completion for properties, values, at-rules and `@media` features, hover with the MDN description of a property, colour information, document symbols, folding, go to definition inside a stylesheet and find references. Lint rules cover empty rulesets, unknown properties, invalid hex colours, duplicate properties and vendor prefixes.
+    </Feature>
+    <Feature title="Formatting" icon="sparkles">
+      The server ships a formatter and Phantom switches it on at startup, so Format works with nothing else installed.
+    </Feature>
+  </Features>
+  <Screenshot src="media/editor.png" alt="A stylesheet open in Phantom with highlighted selectors, property names and values, one diagnostic underlined in red and a hover card below it" caption="Highlighting, a diagnostic and its hover card in the Phantom editor" />
+</Showcase>
+
+## Requirements
+
+Phantom does not bundle the server. Install it if you want more than highlighting; the extension finds it on your `PATH`.
+
+<Requirement command="vscode-css-language-server" install="npm install -g vscode-langservers-extracted" url="https://github.com/hrsh7th/vscode-langservers-extracted">
+Completion, hover, colours, symbols, lint diagnostics and formatting for CSS, SCSS and Less. Without it the highlighter still works. The package also installs `vscode-html-language-server` and `vscode-json-language-server`; removing any one of the three removes the package, and so the other two with it.
+</Requirement>
+
+<Requirement command="tailwindcss-language-server" install="npm install -g @tailwindcss/language-server" url="https://github.com/tailwindlabs/tailwindcss-intellisense">
+Optional, and a companion rather than a replacement: Tailwind CSS IntelliSense completes class names, previews the CSS a class expands to and lints your markup. Phantom runs it as a **second** server for HTML, Vue, TSX, JSX and JavaScript files — the files where class names are written — and not for `.css` itself. Install it only if you use Tailwind.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to CSS.
+  </Step>
+  <Step title="Install the server">
+    Run the npm command above, or open Settings → Languages, select **CSS Language Server** and press **Install**. Phantom picks the binary up without a restart.
+  </Step>
+  <Step title="Open a stylesheet">
+    The first time a project needs a server that came from an extension, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.css`, `.scss`, `.less` |
+| Language ids | `css`, `scss`, `less` — one server process each |
+| Language server | `vscode-css-language-server --stdio` |
+| Formatter | The server's own |
+| Editor | Selector, at-rule, property, function, unit-aware number, string and comment patterns |
+| Icon | Stylesheet icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="What Phantom sends the server, and what it does not">
+
+Phantom answers the server's `workspace/configuration` request with one null per item and never sends `workspace/didChangeConfiguration`. Every `css.*`, `scss.*` and `less.*` setting VS Code exposes arrives through exactly those two channels, so in Phantom the server runs on its own defaults — which are the defaults below.
+
+| Lint rule | Default |
+|---|---|
+| `hexColorLength`, `argumentsInColorFunction` | error |
+| `emptyRules`, `vendorPrefix`, `unknownProperties` | warning |
+| `fontFaceProperties`, `propertyIgnoredDueToDisplay` | warning |
+| `duplicateProperties`, `zeroUnits`, `important`, `float` | ignore |
+| `boxModel`, `universalSelector`, `idSelector`, `ieHack` | ignore |
+| `compatibleVendorPrefixes`, `importStatement` | ignore |
+| `unknownVendorSpecificProperties` | ignore |
+
+`css.validate`, `scss.validate` and `less.validate` all default to on. The full list is in the [VS Code CSS documentation](https://code.visualstudio.com/docs/languages/css).
+
+What does reach the server is `initializationOptions`, sent once at startup. Phantom sends this on its own:
+
+```json
+{ "provideFormatter": true }
+```
+
+The server answers `initialize` with `documentFormattingProvider: initializationOptions?.provideFormatter === true`, so without the flag it can format and reports that it cannot.
+
+</Details>
+
+<Details summary="Overriding initializationOptions">
+
+Settings → Languages → CSS Language Server has an **initializationOptions (JSON)** box. Leave it blank and Phantom sends the flag above. Fill it in and your JSON is sent **instead of** Phantom's, so repeat the flag or you lose formatting:
+
+```json
+{
+  "provideFormatter": true,
+  "handledSchemas": ["file"]
+}
+```
+
+There is no `settings` key here: unlike some servers, this one reads its lint and validation settings only from the two configuration channels above. Custom data is the same story — the server takes it through a `css/customDataChanged` notification, which no Phantom release sends today.
+
+The box takes effect the next time the server starts; the **Restart Server** button beside it is quicker than reopening the project.
+
+</Details>
+
+<Details summary="Tailwind CSS in a project">
+
+Tailwind IntelliSense resolves the project by itself from the workspace root Phantom hands it, with no options to set:
+
+- **v4 and later** — a `.css` file that imports Tailwind. The theme lives in CSS, and the server reads it there.
+- **v3 and earlier** — a `tailwind.config.js`, `.cjs`, `.mjs`, `.ts`, `.cts` or `.mts`, or a stylesheet with an `@config` rule.
+
+Completion appears in the files Phantom registers the server for: HTML, Vue, TSX, JSX and JavaScript. In a `.css` file you get the CSS server, so `@apply` and `@theme` are highlighted and linted as CSS, not completed as Tailwind.
+
+</Details>
+
+<Details summary="Sass indented syntax">
+
+`.sass` is deliberately absent. The indented syntax is not SCSS, and the server has no dialect for it — a `.sass` file announced as `scss` reports an error on every line. Phantom's own highlighter still paints those files.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Settings shows a language as Shadowed">
+
+Phantom ships its own CSS, SCSS and Less definitions, and the compiled-in registry outranks an extension on purpose: copying a file into a directory must never change a language you already had. The row in Settings → Languages says which claim was taken and by whom, and its Precedence section carries a **Use This Instead of Phantom** button that puts this extension ahead, for that one language, until you say otherwise.
+
+Nothing is broken while a row reads Shadowed. Phantom's own definitions already run `vscode-css-language-server` for all three languages, so the server, the diagnostics and the formatting are the same either way.
+
+</Details>
+
+<Details summary="The editor says vscode-css-language-server is not installed">
+
+The bar above the file shows the install command. After installing, press **Check Again**; the binary must be on the `PATH` of your login shell. Phantom resolves that `PATH` once per run, so a version manager that moved the npm bin directory after the app started needs a restart.
+
+</Details>
+
+<Details summary="An unknown property or at-rule is flagged">
+
+`unknownProperties` is a warning by default and the setting that silences it cannot be reached from Phantom today. A custom property (`--brand-blue`) is never flagged; a framework's own at-rule may be, because the server validates against the CSS data it ships with.
+
+</Details>
+
+<Details summary="Formatting did nothing">
+
+Formatting is the server's, so a stylesheet cannot be formatted without it. If you filled the **initializationOptions (JSON)** box and left `provideFormatter` out, the server was told to keep the formatter off; add it and restart the server.
+
+A project with a Prettier setup is a different route: Phantom resolves Prettier from the project itself and prefers it for the files it owns.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The servers run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: language definitions for `.css`, `.scss` and `.less`, vscode-css-language-server wiring with install commands for npm, pnpm and Yarn, and notes on Tailwind CSS IntelliSense as a companion server.
+
+## License and credits
+
+The extension is released under the MIT License. [vscode-css-language-server](https://github.com/microsoft/vscode) is © Microsoft (MIT), extracted and published as [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted). [Tailwind CSS IntelliSense](https://github.com/tailwindlabs/tailwindcss-intellisense) is © Tailwind Labs (MIT). CSS is a specification of the [W3C](https://www.w3.org/Style/CSS/); this extension is not affiliated with any of these projects.
