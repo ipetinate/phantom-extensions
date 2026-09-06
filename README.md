@@ -16,6 +16,7 @@ extensions/
     extension.json      the manifest
     extension.mdx       the document Phantom shows in the store (or extension.md)
     icons/lua.svg       assets, referenced from the manifest by relative path
+    syntaxes/           the TextMate grammars contributes.grammars[] names
     media/              images and videos the document uses
 schema/
   extension.schema.json
@@ -46,19 +47,43 @@ An index entry carries `download` for the version in this repository, and `versi
 | Key | Read by Phantom |
 |---|---|
 | `id`, `name`, `version`, `publisher`, `description` | 0.5.0 |
-| `contributes.languages[]` — `languageId`, `name`, `extensions`, `fileNames`, `category`, `icon`, `keywords`, `lineComment`, `blockComment`, `server` | 0.5.0 |
-| `contributes.languages[].syntax` — one pattern per token kind | planned, 0.16.0 |
-| `contributes.formatters[]` | planned, 0.16.0 |
-| `contributes.themes[]`, `contributes.iconThemes[]` | planned, 0.16.0 |
-| `contributes.agents[]` | planned, 0.16.0 |
-| `install` on a language `server`, on a formatter or on an agent | planned, 0.16.0 |
-| `extension.mdx` or `extension.md`, and the `card` it produces in the index | planned, 0.16.0 |
+| `contributes.languages[]` — `languageId`, `name`, `extensions`, `fileNames`, `category`, `icon`, `lineComment`, `blockComment`, `server` | 0.5.0 |
+| `contributes.formatters[]` | 0.16.0 |
+| `contributes.themes[]`, `contributes.iconThemes[]` | 0.16.0 |
+| `contributes.agents[]` | 0.16.0 |
+| `install` on a language `server`, on a formatter or on an agent | 0.16.0 |
+| `extension.mdx` or `extension.md`, and the `card` it produces in the index | 0.16.0 |
+| `contributes.grammars[]` and `dependencies` | 0.17.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
 
 A theme file may set colour keys only (`background`, `foreground`, `palette`, `cursor-color`, the selection and split colours and the like) and must stay under 64 KB; a manifest that names a theme setting anything else loses that theme. Formatter `args` are capped at 32 entries.
 
-`syntax` takes the token kinds `string`, `number`, `type`, `function`, `attribute`. Each value is a regular expression, or a preset by name: `preset:number`, `preset:cStyleString`, `preset:capitalizedType`, `preset:callBeforeParen`, `preset:callBeforeParenOrGeneric`. Comments come from `lineComment` and `blockComment`, keywords from `keywords`; neither takes a pattern. Patterns are combined into one expression by the highlighter, so use `(?:…)` for grouping and no backreferences.
+Comments come from `lineComment` and `blockComment`. Everything else about colouring comes from a grammar: the `syntax` and `keywords` keys a language used to carry are refused, and the build says so.
+
+## Grammars
+
+A language is coloured by a TextMate grammar, the same format VS Code, Sublime Text and GitHub read. `contributes.grammars[]` names each grammar file the extension ships:
+
+```json
+"grammars": [
+  {
+    "scopeName": "source.lua",
+    "path": "syntaxes/lua.tmLanguage.json",
+    "languageId": "lua",
+    "license": "MIT",
+    "grammarSource": "https://github.com/sumneko/lua.tmbundle/blob/master/Syntaxes/Lua.plist",
+    "embeddedLanguages": { "source.c": "c" },
+    "injectTo": ["text.html.markdown"]
+  }
+]
+```
+
+`scopeName`, `path`, `license` and `grammarSource` are required. `path` is a `.json` grammar inside the extension, under 4 MiB, whose own `scopeName` equals the manifest's. `languageId` names a language the same extension contributes and is what connects a file type to the grammar; a grammar that exists only to be included by others, or to be injected into them, has none. `license` is the licence the grammar file carries and `grammarSource` is the https URL it was taken from, so attribution travels with the bytes. `embeddedLanguages` maps a scope to the language id its regions are lexed as, and `injectTo` lists the scopes the grammar's rules are injected into. An extension ships at most 32 grammars.
+
+The build compiles every `match`, `begin`, `end` and `while` pattern with Oniguruma, through `vscode-oniguruma`, which is the engine Phantom runs them with. A pattern that does not compile fails the build naming its rule, such as `repository.strings.patterns[2].begin`. A `\1` in an `end` or `while` pattern refers to what `begin` captured and is compiled with a placeholder, the way the editor does it at match time.
+
+An `include` may name `#rule`, `$self`, `$base`, another grammar's scope, or `scope#rule`. When the scope belongs to a grammar in another extension of this registry, that extension must be listed in the manifest's top-level `dependencies`, an array of extension ids; the build refuses an include that reaches an undeclared extension and a dependency that names no extension. A scope no extension in the registry provides is allowed, because grammars written for other editors include languages this registry does not carry, and the editor leaves such a region uncoloured rather than failing the grammar.
 
 ## Installing what an extension needs
 

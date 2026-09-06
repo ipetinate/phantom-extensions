@@ -18,6 +18,18 @@ export { FrontMatterError, ManifestError } from "./errors.ts";
 export { extensionFiles } from "./files.ts";
 export { parseFrontMatter } from "./frontMatter.ts";
 export type { FrontMatter, FrontMatterValue } from "./frontMatter.ts";
+export {
+  MAX_EMBEDDED_LANGUAGES,
+  MAX_GRAMMARS,
+  MAX_GRAMMAR_BYTES,
+  MAX_INJECT_TO,
+  SCOPE_NAME_PATTERN,
+  checkGrammarDependencies,
+  isScopeName,
+  validateGrammars,
+  withoutBackReferences,
+} from "./grammars.ts";
+export type { GrammarEntry, GrammarInclude, GrammarOwner } from "./grammars.ts";
 export { INSTALL_MANAGERS, validateInstall } from "./install.ts";
 export type { Install, InstallCommand, InstallManager } from "./install.ts";
 export { checkLayout } from "./layout.ts";
@@ -32,7 +44,10 @@ export {
 export type { MediaEntry, MediaReport } from "./media.ts";
 export {
   CONTRIBUTION_KINDS,
+  RETIRED_LANGUAGE_KEYS,
+  languageIdsOf,
   loadManifest,
+  manifestGrammars,
   manifestIcons,
   manifestTools,
   referencedPaths,

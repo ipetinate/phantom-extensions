@@ -2,6 +2,7 @@ import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fail, isRecord, requireAsset, requireString, type JsonObject, type JsonValue } from "./checks.ts";
 import { quoted } from "./errors.ts";
+import { grammarEntries, validateGrammars, type GrammarEntry } from "./grammars.ts";
 import { validateInstall, type Install } from "./install.ts";
 import { suffixOf } from "./suffixes.ts";
 
@@ -11,8 +12,8 @@ export const LANGUAGE_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const AGENT_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const FORMATTER_ID_PATTERN = /^[a-z0-9_-]+$/;
 export const CATEGORIES = ["script", "compiled", "markup", "frontendFramework", "styles", "data", "infrastructure"] as const;
-export const CONTRIBUTION_KINDS = ["languages", "formatters", "themes", "iconThemes", "agents"] as const;
-export const SYNTAX_KINDS = ["string", "number", "type", "function", "attribute"] as const;
+export const CONTRIBUTION_KINDS = ["languages", "formatters", "themes", "iconThemes", "grammars", "agents"] as const;
+export const RETIRED_LANGUAGE_KEYS = ["syntax", "keywords"] as const;
 export const WORKING_DIRECTORIES = ["marker", "file", "workspace"] as const;
 export const MANIFEST_SUFFIXES = ["json", "yaml", "yml"] as const;
 export const MAX_MANIFEST_BYTES = 512 * 1024;
@@ -28,6 +29,7 @@ export interface Manifest {
   readonly description?: string;
   readonly homepage?: string;
   readonly phantom?: string;
+  readonly dependencies?: string[];
   readonly contributes: JsonObject;
 }
 
@@ -50,9 +52,14 @@ function rawEntries(contributes: JsonObject, kind: ContributionKind): JsonValue[
   return Array.isArray(entries) ? entries : [];
 }
 
-function validateLanguage(directory: string, language: JsonValue): void {
+function validateLanguage(directory: string, language: JsonValue): string {
   if (!isRecord(language)) fail(directory, "each language must be an object");
   const languageId = requireString(directory, language, "languageId", LANGUAGE_ID_PATTERN);
+  for (const key of RETIRED_LANGUAGE_KEYS) {
+    if (language[key] !== undefined) {
+      fail(directory, `language ${quoted(languageId)} carries ${quoted(key)}, which a grammar replaced; ship one under contributes.grammars`);
+    }
+  }
   requireString(directory, language, "name");
   const extensions = language["extensions"];
   if (!Array.isArray(extensions) || extensions.length === 0) {
@@ -72,27 +79,38 @@ function validateLanguage(directory: string, language: JsonValue): void {
   if (block !== undefined && block !== null) {
     if (!isRecord(block) || !block["open"] || !block["close"]) fail(directory, "blockComment needs 'open' and 'close'");
   }
-  const syntax = language["syntax"];
-  if (syntax !== undefined && syntax !== null) {
-    if (!isRecord(syntax)) fail(directory, "syntax must be an object");
-    for (const [kind, pattern] of Object.entries(syntax)) {
-      if (!(SYNTAX_KINDS as readonly string[]).includes(kind)) fail(directory, `syntax has no token kind ${quoted(kind)}`);
-      if (typeof pattern !== "string" || !pattern) fail(directory, `syntax.${kind} must be a non-empty string`);
-      if (pattern.startsWith("preset:")) continue;
-      try {
-        new RegExp(pattern);
-      } catch (error) {
-        fail(directory, `syntax.${kind} is not a valid pattern: ${error instanceof Error ? error.message : String(error)}`);
-      }
-      if (/(?<!\\)\\[1-9]/.test(pattern)) fail(directory, `syntax.${kind} uses a backreference`);
-    }
-  }
   const server = language["server"];
   if (server !== undefined && server !== null) {
     if (!isRecord(server)) fail(directory, "server must be an object");
     requireString(directory, server, "command");
     validateInstall(directory, `language ${quoted(languageId)} server`, server["install"]);
   }
+  return languageId;
+}
+
+function validateDependencies(directory: string, id: string, raw: JsonValue | undefined): string[] {
+  if (raw === undefined) return [];
+  if (!Array.isArray(raw)) fail(directory, "dependencies must be an array of extension ids");
+  const seen = new Set<string>();
+  for (const dependency of raw) {
+    if (typeof dependency !== "string" || !ID_PATTERN.test(dependency)) fail(directory, `bad dependency ${quoted(dependency)}`);
+    if (dependency === id) fail(directory, "an extension cannot depend on itself");
+    if (seen.has(dependency)) fail(directory, `dependency ${quoted(dependency)} is listed twice`);
+    seen.add(dependency);
+  }
+  return [...seen];
+}
+
+export function languageIdsOf(manifest: Manifest): Set<string> {
+  return new Set(
+    entriesOf(manifest, "languages")
+      .map((language) => language["languageId"])
+      .filter((languageId): languageId is string => typeof languageId === "string"),
+  );
+}
+
+export function manifestGrammars(directory: string, manifest: Manifest): GrammarEntry[] {
+  return grammarEntries(directory, rawEntries(manifest.contributes, "grammars"), languageIdsOf(manifest));
 }
 
 function validateProjectPath(directory: string, id: string, what: string, value: JsonValue | undefined): void {
@@ -183,7 +201,7 @@ export function referencedPaths(manifest: Manifest): Set<string> {
   for (const language of entriesOf(manifest, "languages")) {
     if (typeof language["icon"] === "string") paths.add(language["icon"]);
   }
-  for (const kind of ["themes", "iconThemes"] as const) {
+  for (const kind of ["themes", "iconThemes", "grammars"] as const) {
     for (const entry of entriesOf(manifest, kind)) {
       if (typeof entry["path"] === "string") paths.add(entry["path"]);
     }
@@ -260,11 +278,12 @@ export function loadManifest(directory: string): Manifest {
   }
   if (!isRecord(parsed)) fail(directory, "extension.json must hold an object");
   if (parsed["schemaVersion"] !== 1) fail(directory, "schemaVersion must be 1");
-  requireString(directory, parsed, "id", ID_PATTERN);
+  const id = requireString(directory, parsed, "id", ID_PATTERN);
   requireString(directory, parsed, "name");
   requireString(directory, parsed, "version", VERSION_PATTERN);
   requireString(directory, parsed, "publisher");
   if (parsed["phantom"] !== undefined) requireString(directory, parsed, "phantom", VERSION_PATTERN);
+  validateDependencies(directory, id, parsed["dependencies"]);
   const contributes = parsed["contributes"];
   if (!isRecord(contributes)) fail(directory, `contributes must hold at least one of ${CONTRIBUTION_KINDS.join(", ")}`);
   for (const kind of CONTRIBUTION_KINDS) {
@@ -274,11 +293,12 @@ export function loadManifest(directory: string): Manifest {
   if (!CONTRIBUTION_KINDS.some((kind) => rawEntries(contributes, kind).length > 0)) {
     fail(directory, `contributes must hold at least one of ${CONTRIBUTION_KINDS.join(", ")}`);
   }
-  for (const language of rawEntries(contributes, "languages")) validateLanguage(directory, language);
+  const languageIds = new Set(rawEntries(contributes, "languages").map((language) => validateLanguage(directory, language)));
   for (const formatter of rawEntries(contributes, "formatters")) validateFormatter(directory, formatter);
   for (const kind of ["themes", "iconThemes"] as const) {
     for (const entry of rawEntries(contributes, kind)) validatePathed(directory, kind, entry);
   }
+  validateGrammars(directory, rawEntries(contributes, "grammars"), languageIds);
   for (const agent of rawEntries(contributes, "agents")) validateAgent(directory, agent);
   return parsed as unknown as Manifest;
 }

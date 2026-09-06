@@ -7,7 +7,8 @@ import { inlineIcon } from "./icon.ts";
 import { isDirectory } from "./files.ts";
 import { checkLayout } from "./layout.ts";
 import { checkMedia, type MediaEntry } from "./media.ts";
-import { loadManifest, manifestIcons, manifestTools, type Manifest, type Tool } from "./manifest.ts";
+import { checkGrammarDependencies } from "./grammars.ts";
+import { loadManifest, manifestGrammars, manifestIcons, manifestTools, type Manifest, type Tool } from "./manifest.ts";
 import { describe, EXTENSIONS } from "./paths.ts";
 
 export interface Card extends DocumentCard {
@@ -61,5 +62,13 @@ export function collect(extensionsRoot: string = EXTENSIONS): Collected[] {
     });
   }
   if (collected.length === 0) throw new ManifestError("no extensions found");
+  checkGrammarDependencies(
+    collected.map(({ directory, manifest }) => ({
+      directory,
+      id: manifest.id,
+      dependencies: manifest.dependencies ?? [],
+      grammars: manifestGrammars(directory, manifest),
+    })),
+  );
   return collected;
 }

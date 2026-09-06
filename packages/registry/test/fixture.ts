@@ -45,6 +45,55 @@ export function languageManifest(overrides: Record<string, unknown> = {}): Recor
   };
 }
 
+export const SAMPLE_GRAMMAR: Record<string, unknown> = {
+  scopeName: "source.sample",
+  patterns: [{ include: "#comment" }, { include: "#string" }],
+  repository: {
+    comment: { match: "#.*$", name: "comment.line.sample" },
+    string: {
+      begin: "(=*)\\[",
+      end: "\\]\\1",
+      name: "string.quoted.sample",
+      patterns: [{ include: "$self" }],
+    },
+  },
+};
+
+export const SAMPLE_GRAMMAR_PATH = "syntaxes/sample.tmLanguage.json";
+
+export function grammarEntry(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    scopeName: "source.sample",
+    path: SAMPLE_GRAMMAR_PATH,
+    languageId: "sample",
+    license: "MIT",
+    grammarSource: "https://example.com/sample/sample.tmLanguage.json",
+    ...overrides,
+  };
+}
+
+export function grammarManifest(entry: Record<string, unknown> = {}, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return languageManifest({
+    contributes: {
+      languages: [{ languageId: "sample", name: "Sample", extensions: ["smp"], icon: "icons/sample.svg" }],
+      grammars: [grammarEntry(entry)],
+    },
+    ...overrides,
+  });
+}
+
+export function grammarFixture(
+  root: string,
+  name: string,
+  grammar: Record<string, unknown> = SAMPLE_GRAMMAR,
+  manifest: Record<string, unknown> = grammarManifest(),
+  relative = SAMPLE_GRAMMAR_PATH,
+): ExtensionFixture {
+  const fixture = new ExtensionFixture(root, name, manifest);
+  fixture.write(relative, JSON.stringify(grammar));
+  return fixture;
+}
+
 export function agentsManifest(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
     schemaVersion: 1,

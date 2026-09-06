@@ -44,6 +44,15 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "description": "Lowest Phantom version that reads every key in this manifest."
     },
+    "dependencies": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]*$"
+      },
+      "description": "Ids of the extensions whose grammars this extension's grammars include. Every scope an include names must belong to this extension or to one listed here, when an extension in the registry provides it."
+    },
     "contributes": {
       "type": "object",
       "additionalProperties": true,
@@ -70,6 +79,13 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/iconTheme"
+          }
+        },
+        "grammars": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/grammar"
           }
         },
         "agents": {
@@ -192,13 +208,6 @@
         "icon": {
           "$ref": "#/$defs/relativePath"
         },
-        "keywords": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
         "lineComment": {
           "type": "string",
           "minLength": 1
@@ -217,27 +226,6 @@
             "close": {
               "type": "string",
               "minLength": 1
-            }
-          }
-        },
-        "syntax": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "string": {
-              "type": "string"
-            },
-            "number": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            },
-            "function": {
-              "type": "string"
-            },
-            "attribute": {
-              "type": "string"
             }
           }
         },
@@ -426,6 +414,75 @@
         "path": {
           "$ref": "#/$defs/relativePath",
           "description": "Directory holding a VS Code style *icon-theme.json and its SVGs."
+        }
+      }
+    },
+    "scopeName": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_+-]+(\\.[A-Za-z0-9_+-]+)+$",
+      "description": "A dotted TextMate scope such as source.lua or text.html.basic."
+    },
+    "grammar": {
+      "type": "object",
+      "required": [
+        "scopeName",
+        "path",
+        "license",
+        "grammarSource"
+      ],
+      "properties": {
+        "scopeName": {
+          "$ref": "#/$defs/scopeName",
+          "description": "The scope the grammar file declares. Another grammar includes this one by naming it."
+        },
+        "path": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/relativePath"
+            },
+            {
+              "type": "string",
+              "pattern": "\\.json$"
+            }
+          ],
+          "description": "A TextMate grammar in its JSON form, under 4 MiB. Every pattern in it must compile with Oniguruma."
+        },
+        "languageId": {
+          "type": "string",
+          "pattern": "^[a-z0-9_+-]+$",
+          "description": "The language this grammar colours, declared under contributes.languages of the same extension. A grammar that exists only to be included or injected has none."
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "The licence the grammar is distributed under, as an SPDX identifier where one exists."
+        },
+        "grammarSource": {
+          "type": "string",
+          "format": "uri",
+          "description": "The https URL of the file this grammar was taken from."
+        },
+        "embeddedLanguages": {
+          "type": "object",
+          "maxProperties": 64,
+          "propertyNames": {
+            "$ref": "#/$defs/scopeName"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9_+-]+$"
+          },
+          "description": "Scope name to language id, for the regions of another language this grammar embeds."
+        },
+        "injectTo": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/scopeName"
+          },
+          "description": "Scopes this grammar injects its rules into."
         }
       }
     },

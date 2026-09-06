@@ -17,8 +17,10 @@ export interface IndexEntry {
   description: string;
   homepage: string | null;
   phantom: string | null;
+  dependencies: string[];
   contributes: ContributionKind[];
   languages: string[];
+  grammars: string[];
   categories: string[];
   download: Download;
   versions: VersionEntry[];
@@ -58,10 +60,14 @@ export async function build(out: string, repo: string, options: BuildOptions = {
       description: manifest.description ?? "",
       homepage: manifest.homepage ?? null,
       phantom: manifest.phantom ?? null,
+      dependencies: manifest.dependencies ?? [],
       contributes: CONTRIBUTION_KINDS.filter((kind) => entriesOf(manifest, kind).length > 0),
       languages: entriesOf(manifest, "languages")
         .map((language) => language["languageId"])
         .filter((languageId): languageId is string => typeof languageId === "string"),
+      grammars: entriesOf(manifest, "grammars")
+        .map((grammar) => grammar["scopeName"])
+        .filter((scopeName): scopeName is string => typeof scopeName === "string"),
       categories: [
         ...new Set(
           entriesOf(manifest, "languages")
