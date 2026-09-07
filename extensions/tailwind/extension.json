@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "id": "phantom.tailwind",
-  "name": "Tailwind CSS",
+  "name": "Tailwind CSS IntelliSense",
   "version": "1.0.0",
   "publisher": "Isac Petinate",
-  "description": "Tailwind CSS: class name completion, colour previews and diagnostics, in the projects that installed Tailwind.",
+  "description": "Tailwind CSS IntelliSense: class name completion, colour previews and diagnostics, in the projects that installed Tailwind.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/tailwind",
   "phantom": "0.17.0",
   "contributes": {
     "servers": [
       {
         "id": "tailwind",
-        "name": "Tailwind CSS",
+        "name": "Tailwind CSS IntelliSense",
         "command": "tailwindcss-language-server",
         "args": [
           "--stdio"

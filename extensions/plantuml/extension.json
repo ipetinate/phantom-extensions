@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.plantuml",
+  "name": "PlantUML",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "PlantUML: highlighting for diagram sources.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/plantuml",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "plantuml",
+        "name": "PlantUML",
+        "extensions": [
+          "puml",
+          "plantuml",
+          "pu",
+          "iuml",
+          "wsd"
+        ],
+        "category": "markup",
+        "icon": "icons/plantuml.png",
+        "lineComment": "'",
+        "blockComment": {
+          "open": "/'",
+          "close": "'/"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.wsd",
+        "path": "syntaxes/plantuml.tmLanguage.json",
+        "languageId": "plantuml",
+        "license": "MIT",
+        "grammarSource": "https://github.com/qjebbs/vscode-plantuml/blob/5f122113a73bed8f84768d47dc749b4d502f0fb1/syntaxes/plantuml.yaml-tmLanguage"
+      }
+    ]
+  }
+}

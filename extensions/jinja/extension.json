@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.jinja",
+  "name": "Jinja2",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Jinja2: highlighting for template tags, whatever language the template writes.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/jinja",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "jinja",
+        "name": "Jinja2",
+        "extensions": [
+          "j2",
+          "jinja",
+          "jinja2"
+        ],
+        "category": "markup",
+        "icon": "icons/jinja.png",
+        "blockComment": {
+          "open": "{#",
+          "close": "#}"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.jinja",
+        "path": "syntaxes/jinja.tmLanguage.json",
+        "languageId": "jinja",
+        "license": "MIT",
+        "grammarSource": "https://github.com/samuelcolvin/jinjahtml-vscode/blob/be729c88f723602e7b5df2e9dc5e8c016c31c38f/syntaxes/jinja.tmLanguage.json"
+      }
+    ]
+  }
+}

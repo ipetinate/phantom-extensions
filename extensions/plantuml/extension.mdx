@@ -1,0 +1,81 @@
+---
+title: PlantUML
+tagline: PlantUML support for Phantom — highlighting for diagram sources.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [plantuml, uml, diagrams, markup]
+---
+
+PlantUML support for the Phantom editor. The extension declares the language — five suffixes, the `'` and `/' '/` comment markers — and ships the TextMate grammar the PlantUML editor plugin maintains. There is no language server here, and nothing is rendered. Highlighting is the whole contribution.
+
+## Highlights
+
+<Features>
+  <Feature title="Syntax highlighting" icon="brush">
+    `@startuml` … `@enduml` and the other `@start`/`@end` pairs. Class, object, activity, sequence and state elements, the `skinparam` and style keywords, quoted names, arrows, and `'` line and `/' '/` block comments.
+  </Feature>
+  <Feature title="Five suffixes" icon="package">
+    `.puml`, `.plantuml`, `.pu`, `.iuml` and `.wsd`, which is every name the PlantUML tooling reads.
+  </Feature>
+  <Feature title="No server to install" icon="check">
+    Nothing runs. The grammar is data the editor reads, so the extension needs no binary on your `PATH` and asks for no permission.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to PlantUML.
+  </Step>
+  <Step title="Open a .puml file">
+    Colour appears at once. Phantom claims no file type of its own, so there is nothing to promote and no conflict to resolve.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.puml`, `.plantuml`, `.pu`, `.iuml`, `.wsd` |
+| Language server | none |
+| Formatter | none |
+| Editor | TextMate grammar `source.wsd`, `'` and `/' '/` comment markers |
+| Icon | PlantUML file icon in the sidebar and tabs |
+
+## Measured coverage
+
+<Details summary="How much of a real diagram this colours">
+
+Measured over the 125 PlantUML files in the owner's checkouts, 301,514 non-whitespace characters: **43.1%** land on a scope Phantom paints.
+
+That is a real limit rather than a measuring artefact. The grammar tags message labels as `meta.comment.message.link` and participant names as `support.variable`; Phantom's parity map paints `comment`, not `meta.comment`, and `support.type` and `support.function`, not `support.variable`. So the grammar recognises that text and the editor still draws it plain. Keywords, strings and real comments do colour: 10.3%, 24.8% and 4.4% of the whole respectively.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Sequence diagram labels stay plain">
+
+Known, and explained under Measured coverage. The grammar names those spans with scopes outside the nine kinds Phantom paints. Arrows, keywords and quoted names still colour.
+
+</Details>
+
+<Details summary="No diagram preview">
+
+This extension colours text. It renders nothing and calls no `plantuml` binary.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `plantuml` language over five suffixes, its comment markers, and the `source.wsd` grammar from `qjebbs/vscode-plantuml`.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [qjebbs/vscode-plantuml](https://github.com/qjebbs/vscode-plantuml), © jebbs (MIT). Upstream authors it in YAML; this extension ships the same grammar converted to the JSON form Phantom reads, with no rule changed. PlantUML is a trademark of its authors; this extension is not affiliated with or endorsed by the PlantUML project.
