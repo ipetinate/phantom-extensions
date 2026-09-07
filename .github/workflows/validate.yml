@@ -42,4 +42,4 @@ jobs:
         working-directory: packages/phantom-mdx
       - run: npm run build
         working-directory: packages/phantom-mdx
-      - run: node packages/phantom-mdx/dist/cli.js check extensions/*
+      - run: node packages/phantom-mdx/dist/cli.js check extensions/* themes/*

@@ -17,7 +17,7 @@ afterEach(() => {
 function run() {
   return build(path.join(root, "dist"), "tests/registry", {
     offline: true,
-    extensionsRoot: path.join(root, "extensions"),
+    roots: [path.join(root, "extensions")],
   });
 }
 

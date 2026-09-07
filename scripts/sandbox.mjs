@@ -4,7 +4,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const REPOSITORY = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const EXTENSIONS = path.join(REPOSITORY, "extensions");
+const REGISTRY_DIRECTORIES = ["extensions", "themes"];
+const EXTENSION_ROOTS = REGISTRY_DIRECTORIES.map((directory) => path.join(REPOSITORY, directory));
 const CONFIG = path.join(homedir(), ".config");
 const SANDBOX = path.join(CONFIG, "phantom-debug", "extensions");
 const RELEASE = path.join(CONFIG, "phantom");
@@ -57,23 +58,37 @@ function readManifest(directory) {
   return parsed;
 }
 
-function sourceDirectory(name) {
-  if (name.includes("/") || name.includes("\\") || name === "." || name === "..") {
-    throw new SandboxError(`not an extension directory name: ${name}`);
+function isDirectoryName(name) {
+  return !name.includes("/") && !name.includes("\\") && name !== "." && name !== "..";
+}
+
+function findDirectory(name) {
+  if (!isDirectoryName(name)) return null;
+  for (const root of EXTENSION_ROOTS) {
+    const directory = path.join(root, name);
+    if (existsSync(directory) && statSync(directory).isDirectory()) return directory;
   }
-  const directory = path.join(EXTENSIONS, name);
-  if (!existsSync(directory) || !statSync(directory).isDirectory()) {
-    throw new SandboxError(`no extension directory named ${name} under extensions/`);
+  return null;
+}
+
+function sourceDirectory(name) {
+  if (!isDirectoryName(name)) throw new SandboxError(`not an extension directory name: ${name}`);
+  const directory = findDirectory(name);
+  if (directory === null) {
+    throw new SandboxError(`no extension directory named ${name} under ${REGISTRY_DIRECTORIES.join("/ or ")}/`);
   }
   return directory;
 }
 
 function everyExtensionName() {
-  return readdirSync(EXTENSIONS, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .filter((name) => existsSync(path.join(EXTENSIONS, name, "extension.json")))
-    .sort();
+  const names = new Set();
+  for (const root of EXTENSION_ROOTS) {
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      if (existsSync(path.join(root, entry.name, "extension.json"))) names.add(entry.name);
+    }
+  }
+  return [...names].sort();
 }
 
 function installedEntries() {
@@ -114,7 +129,7 @@ function install(names) {
     if (replaced) rmSync(target, { recursive: true, force: true });
     cpSync(source, target, { recursive: true });
     const verb = replaced ? "replaced" : "installed";
-    process.stdout.write(`${verb}  ${manifest.id} ${manifest.version ?? "?"}  from extensions/${name}\n`);
+    process.stdout.write(`${verb}  ${manifest.id} ${manifest.version ?? "?"}  from ${path.relative(REPOSITORY, source)}\n`);
   }
 
   process.stdout.write(`${chosen.length} extension${chosen.length === 1 ? "" : "s"} in ${SANDBOX}\n`);
@@ -144,8 +159,8 @@ function remove(names) {
     identifiers = installedEntries().map((entry) => entry.id);
   } else {
     identifiers = names.map((name) => {
-      const directory = path.join(EXTENSIONS, name);
-      if (existsSync(path.join(directory, "extension.json"))) return readManifest(directory).id;
+      const directory = findDirectory(name);
+      if (directory !== null && existsSync(path.join(directory, "extension.json"))) return readManifest(directory).id;
       return name;
     });
   }

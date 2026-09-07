@@ -61,7 +61,7 @@ function load(manifest: Record<string, unknown>) {
 describe("install on a language server", () => {
   it("carries the commands and the documentation on the card", () => {
     new ExtensionFixture(root, "sample", serverManifest({ commands: [BREW], documentationURL: "https://luals.github.io/wiki/" }));
-    const tools = collect(root)[0]?.card.tools;
+    const tools = collect([root])[0]?.card.tools;
     expect(tools).toEqual([
       {
         kind: "server",
@@ -75,7 +75,7 @@ describe("install on a language server", () => {
 
   it("keeps installHint when there is no install block", () => {
     new ExtensionFixture(root, "sample", serverManifest(undefined, { installHint: "brew install lua-language-server" }));
-    expect(collect(root)[0]?.card.tools[0]).toEqual({
+    expect(collect([root])[0]?.card.tools[0]).toEqual({
       kind: "server",
       name: "Sample",
       command: "lua-language-server",
@@ -86,7 +86,7 @@ describe("install on a language server", () => {
 
   it("leaves uninstall and documentation null when they are absent", () => {
     new ExtensionFixture(root, "sample", serverManifest({ commands: [{ manager: "npm", command: "npm install -g x" }] }));
-    expect(collect(root)[0]?.card.tools[0]?.install).toEqual({
+    expect(collect([root])[0]?.card.tools[0]?.install).toEqual({
       commands: [{ manager: "npm", command: "npm install -g x", uninstall: null }],
       documentationURL: null,
     });
@@ -96,7 +96,7 @@ describe("install on a language server", () => {
 describe("install on a formatter and on an agent", () => {
   it("reads a formatter install block", () => {
     new ExtensionFixture(root, "sample", formatterManifest({ commands: [{ manager: "cargo", command: "cargo install stylua" }] }));
-    const tools = collect(root)[0]?.card.tools ?? [];
+    const tools = collect([root])[0]?.card.tools ?? [];
     expect(tools.map((tool) => tool.kind)).toEqual(["formatter"]);
     expect(tools[0]?.install?.commands[0]?.manager).toBe("cargo");
   });
