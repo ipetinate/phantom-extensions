@@ -1,7 +1,7 @@
 ---
 title: JSON
-tagline: JSON and JSON with Comments for Phantom — schema completion, diagnostics and formatting.
-version: 1.0.6
+tagline: JSON, JSON with Comments and JSON Lines for Phantom — schema completion, diagnostics and formatting.
+version: 1.0.7
 updated: 2026-09-06
 author:
   name: Isac Petinate
@@ -9,12 +9,12 @@ author:
 license: MIT
 created: 2026-09-06
 icon: media/icon.png
-tags: [json, jsonc, data, schema, language, lsp]
+tags: [json, jsonc, jsonl, data, schema, language, lsp]
 screenshots:
   - media/editor.png
 ---
 
-JSON support for the Phantom editor. The extension teaches Phantom two languages — JSON and JSON with Comments — and connects **vscode-json-language-server**, the server Microsoft writes for VS Code and [hrsh7th/vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) publishes to npm as a standalone binary. The server is optional: highlighting works the moment the extension is installed.
+JSON support for the Phantom editor. The extension teaches Phantom three languages — JSON, JSON with Comments and JSON Lines — and connects **vscode-json-language-server**, the server Microsoft writes for VS Code and [hrsh7th/vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) publishes to npm as a standalone binary. The server is optional: highlighting works the moment the extension is installed.
 
 Most of what the server is worth comes from a schema. Without one it is a brace matcher that reports trailing commas; with one it completes keys, describes them on hover and marks the values that do not fit.
 
@@ -23,7 +23,7 @@ Most of what the server is worth comes from a schema. Without one it is a brace 
 <Showcase>
   <Features>
     <Feature title="Syntax highlighting" icon="brush">
-      Keys told apart from string values, numbers, `true`, `false` and `null`. The JSON with Comments entry adds `//` and `/* */`, which plain JSON does not have.
+      Keys told apart from string values, numbers, `true`, `false` and `null`. The JSON with Comments entry adds `//` and `/* */`, which plain JSON does not have. JSON Lines colours each line as its own document.
     </Feature>
     <Feature title="Schema intelligence" icon="search">
       Completion for keys and enumerated values, hover with the schema's own description, diagnostics for a missing required key or a value of the wrong type, document symbols, folding, and quick fixes for the mistakes the parser can name.
@@ -64,7 +64,7 @@ Schema completion, hover, validation, symbols, folding and formatting. Without i
 
 | Area | Contribution |
 |---|---|
-| File types | `.json`, `.jsonc` |
+| File types | `.json`, `.jsonc`, `.jsonl`, `.ndjson` |
 | File names | `.babelrc`, `.eslintrc`, `.jscsrc`, `.jshintrc`, `.prettierrc`, `.swcrc` |
 | Language ids | `json`, `jsonc` — the id decides how comments are judged |
 | Language server | `vscode-json-language-server --stdio` |
@@ -161,11 +161,19 @@ A project with a Prettier setup is a different route: Phantom resolves Prettier 
 
 </Details>
 
+<Details summary="Why JSON Lines has no language server">
+
+A `.jsonl` file holds one complete JSON document per line, so the file as a whole is not valid JSON. Handing it to vscode-json-language-server would report every line after the first as text past the end of the document. The language therefore contributes highlighting and nothing else.
+
+</Details>
+
 <Callout kind="note" title="Permissions">
 The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Fetching a schema is its own network request, not Phantom's. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Adds JSON Lines for `.jsonl` and `.ndjson`, with its own grammar and no language server, so a file of one object per line is coloured without being reported as a broken JSON document.
 
 **1.0.6** — Asks for the formatter itself, through `initializationOptions` in the manifest. Phantom 0.17.0 no longer knows this server, so the flag travels with the extension or not at all.
 

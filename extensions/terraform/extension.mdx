@@ -1,19 +1,19 @@
 ---
 title: Terraform
-tagline: Terraform support for Phantom — highlighting, and terraform-ls for completion, validation and navigation.
-version: 1.0.6
+tagline: Terraform and HCL for Phantom — highlighting, and terraform-ls for completion, validation and navigation.
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
 license: MIT
 created: 2026-09-06
 icon: media/icon.png
-tags: [terraform, hcl, infrastructure, language, lsp]
+tags: [terraform, hcl, terragrunt, infrastructure, language, lsp]
 screenshots:
   - media/editor.png
 ---
 
-Terraform support for the Phantom editor. The extension declares the language — `.tf` and `.tfvars`, top level block keywords, HCL strings and heredocs, type constraints and interpolations — and connects **terraform-ls**, HashiCorp's language server. terraform-ls is optional. Highlighting works without it.
+Terraform support for the Phantom editor. The extension declares two languages. **Terraform** covers `.tf` and `.tfvars` — top level block keywords, HCL strings and heredocs, type constraints and interpolations — and connects **terraform-ls**, HashiCorp's language server. **HCL** covers `.hcl` and `.tftpl` with the general HCL grammar and no server, so Terragrunt and template files are coloured without being handed to a server that rejects them. terraform-ls is optional. Highlighting works without it.
 
 Phantom already ships a Terraform language and the same server. This extension restates both as data, so Phantom can install and remove terraform-ls for you, and it corrects three things in the highlighting: HCL has no single quoted strings and no backticks, it has heredocs, and its type constraints are lowercase words rather than capitalised names. Because Phantom already owns `.tf`, the contribution stays inert until you promote it in Settings, which the steps below cover.
 
@@ -29,6 +29,9 @@ Phantom already ships a Terraform language and the same server. This extension r
     </Feature>
     <Feature title="Formatting through the server" icon="sparkles">
       terraform-ls answers `textDocument/formatting`, so ⇧⌘F and Format on Save reformat the file with Terraform's own rules. This extension contributes no separate formatter, because the server already covers it.
+    </Feature>
+    <Feature title="Terragrunt and templates" icon="package">
+      `.hcl` and `.tftpl` get the general HCL grammar: blocks and their labels, attributes, functions, heredocs, `${…}` interpolations and `#` comments. No server starts for them.
     </Feature>
   </Features>
   <Screenshot src="media/editor.png" alt="A Terraform file open in Phantom with a resource block, quoted arguments, a nested dynamic block and a completion list" caption="Blocks, arguments and completion in the Phantom editor" />
@@ -66,10 +69,10 @@ Completion, hover, navigation, symbols, code actions, formatting and validation.
 
 | Area | Contribution |
 |---|---|
-| File types | `.tf`, `.tfvars` |
+| File types | `.tf`, `.tfvars` (Terraform); `.hcl`, `.tftpl` (HCL) |
 | Language server | `terraform-ls serve` (stdio) |
 | Formatter | none. terraform-ls formats through the server itself |
-| Editor | TextMate grammar `source.hcl.terraform` (hashicorp/syntax), `#`, `//` and `/* */` comment markers |
+| Editor | TextMate grammars `source.hcl.terraform` and `source.hcl` (hashicorp/syntax), `#`, `//` and `/* */` comment markers |
 | Icon | Terraform file icon in the sidebar and tabs |
 
 ## Configuration
@@ -96,9 +99,19 @@ terraform-ls takes its settings from the client. Phantom sends none of its own, 
 
 <Details summary="Which files terraform-ls accepts">
 
-The server handles `*.tf` for configuration and `*.tfvars` for variable files, and it separately handles the stacks, deploy, search and policy file types that use compound suffixes such as `*.tfdeploy.hcl`. The manifest format takes a single suffix per entry, so this extension claims `tf` and `tfvars` only.
+The server handles `*.tf` for configuration and `*.tfvars` for variable files, and it separately handles the stacks, deploy, search and policy file types that use compound suffixes such as `*.tfdeploy.hcl`. The manifest format takes a single suffix per entry, so the Terraform language claims `tf` and `tfvars` only.
 
-The server deliberately does not accept `*.tf.json`, `*.tfvars.json`, Packer HCL, or other HCL files, so the extension does not claim `.hcl` either. A `.hcl` file that is not Terraform would otherwise be handed to a server that cannot read it.
+The server deliberately does not accept `*.tf.json`, `*.tfvars.json`, Packer HCL, or other HCL files. That is why `.hcl` and `.tftpl` are a **separate language with no server** rather than two more suffixes on the Terraform one. A Terragrunt file gets the HCL grammar and nothing else; it is never handed to a server that cannot read it.
+
+</Details>
+
+<Details summary="Terragrunt, Packer and other HCL">
+
+`.hcl` is the general HashiCorp Configuration Language, not Terraform. Terragrunt is by far the most common writer of it — a repository can hold hundreds of `terragrunt.hcl` files — and Packer, Consul, Nomad, Vault, Waypoint and Atlas all use it too.
+
+The HCL language uses `source.hcl` from the same hashicorp/syntax repository as the Terraform grammar. It colours blocks and their labels, attributes, functions, heredocs, `${…}` interpolations and comments, but it knows nothing about `resource`, `data` or the Terraform type constraints, because a Terragrunt file does not use them.
+
+`.tftpl` is a Terraform template: a file that a `templatefile()` call renders into configuration. It reads as HCL with placeholders, so it shares this language.
 
 </Details>
 
@@ -140,6 +153,8 @@ terraform-ls runs as your user, with access to your files and network, the same 
 
 ## Changelog
 
+**1.0.7** — Adds an HCL language for `.hcl` and `.tftpl`, with the general `source.hcl` grammar and no language server, so Terragrunt and template files are coloured without starting terraform-ls for them.
+
 **1.0.6** — Ships the TextMate grammar `source.hcl.terraform` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
 
 **1.0.5** — Published under Isac Petinate.
@@ -156,4 +171,4 @@ terraform-ls runs as your user, with access to your files and network, the same 
 
 ## License and credits
 
-The extension is released under the MIT License. [terraform-ls](https://github.com/hashicorp/terraform-ls) is © HashiCorp (MPL-2.0). Terraform is a registered trademark of HashiCorp; this extension is not affiliated with or endorsed by HashiCorp. The grammar is [hashicorp/syntax](https://github.com/hashicorp/syntax), © HashiCorp, Inc. (MPL-2.0), shipped unmodified.
+The extension is released under the MIT License. [terraform-ls](https://github.com/hashicorp/terraform-ls) is © HashiCorp (MPL-2.0). Terraform is a registered trademark of HashiCorp; this extension is not affiliated with or endorsed by HashiCorp. The grammars are [hashicorp/syntax](https://github.com/hashicorp/syntax), © HashiCorp, Inc. (MPL-2.0), shipped unmodified.

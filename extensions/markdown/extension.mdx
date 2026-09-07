@@ -1,21 +1,21 @@
 ---
 title: Markdown
 tagline: Markdown support for Phantom — highlighting, and Marksman for links, references and outlines.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
 license: MIT
 created: 2026-09-06
 icon: media/icon.png
-tags: [markdown, markup, docs, language, lsp]
+tags: [markdown, mdx, mdc, markup, docs, language, lsp]
 screenshots:
   - media/editor.png
 ---
 
 Markdown support for the Phantom editor. The extension declares the language — file types, `<!-- -->` comments, headings, code spans and fences, links and emphasis — and connects **Marksman**, the language server that treats a folder of Markdown files as one document graph. Marksman is optional. Highlighting works without it.
 
-Phantom already ships a Markdown language and the same server. This extension restates both as data, and adds the file types Phantom does not carry: `.mdown`, `.mkd`, `.mkdn` and `.mdwn`. Because Phantom already owns `.md`, the contribution stays inert until you promote it in Settings, which the steps below cover.
+Phantom already ships a Markdown language and the same server. This extension restates both as data, and adds the file types Phantom does not carry: `.mdown`, `.mkd`, `.mkdn`, `.mdwn` and `.mdc`. Because Phantom already owns `.md`, the contribution stays inert until you promote it in Settings, which the steps below cover.
 
 ## Highlights
 
@@ -66,7 +66,7 @@ Completion, go to definition, find references, rename, document and workspace sy
 
 | Area | Contribution |
 |---|---|
-| File types | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn`, `.mdx` |
+| File types | `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`, `.mdwn`, `.mdx`, `.mdc` |
 | Language server | `marksman server` (stdio) |
 | Formatter | none. Marksman does not format, and Phantom already routes Markdown to Prettier |
 | Editor | TextMate grammar `text.html.markdown` (vscode-markdown-tm-grammar), with fenced code handed to the extension that owns the language; `<!-- -->` comment markers |
@@ -151,11 +151,21 @@ Marksman reads `.md` and `.markdown` unless told otherwise. Add the suffix to `c
 
 </Details>
 
+<Details summary="What .mdc is">
+
+`.mdc` is the rule file Cursor reads, and the format other agent tools have copied: Markdown with a YAML front matter block that carries `description`, `globs` and `alwaysApply`. It is not a separate syntax. The Markdown grammar already colours a `---` front matter block as embedded YAML, so the file only needed claiming.
+
+Marksman indexes it with the rest of the folder, which is usually what you want: a rule file that links to a document gets the same completion and go to definition.
+
+</Details>
+
 <Callout kind="note" title="Permissions">
 Marksman runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Claims `.mdc`, the rule files Cursor and other agent tools write. They are Markdown with YAML front matter, which this grammar already reads.
 
 **1.0.6** — Ships the TextMate grammar `text.html.markdown` in place of the manifest's token patterns, and declares every extension in the registry whose language a fence can embed as a dependency. Colouring now needs Phantom 0.17.0.
 

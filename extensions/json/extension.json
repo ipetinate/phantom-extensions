@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "id": "phantom.json",
   "name": "JSON",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
-  "description": "JSON and JSON with Comments: highlighting, vscode-json-language-server and schema completion.",
+  "description": "JSON, JSON with Comments and JSON Lines: highlighting, vscode-json-language-server and schema completion.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/json",
   "phantom": "0.17.0",
   "contributes": {
@@ -101,6 +101,16 @@
             "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
           }
         }
+      },
+      {
+        "languageId": "jsonl",
+        "name": "JSON Lines",
+        "extensions": [
+          "jsonl",
+          "ndjson"
+        ],
+        "category": "data",
+        "icon": "icons/json.png"
       }
     ],
     "grammars": [
@@ -117,6 +127,13 @@
         "languageId": "jsonc",
         "license": "MIT",
         "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/json/syntaxes/JSONC.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.json.lines",
+        "path": "syntaxes/jsonl.tmLanguage.json",
+        "languageId": "jsonl",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/json/syntaxes/JSONL.tmLanguage.json"
       }
     ]
   }
