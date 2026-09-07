@@ -65,19 +65,21 @@ Bruno bodies borrow other grammars. A `body:json` block is coloured by the **JSO
 
 <Details summary="How much of a real file each grammar colours">
 
-Measured over the owner's files, under the scope map Phantom's editor uses.
+Measured over files the owner wrote, under the scope map Phantom's editor uses. Vendored copies inside a dependency cache are excluded, because they say more about the projects they came from than about this one.
 
 | Language | Files | Non-whitespace characters | Coloured |
 |---|---|---|---|
-| Nix | 35 | 47,695 | **99.7%** |
-| CMake | 41 | 255,851 | **60.5%** |
+| Nix | 32 | 45,826 | **99.7%** |
+| CMake | 4 | 14,248 | **74.6%** |
 | Bruno | 16 | 7,494 | **46.2%** |
 
 For scale, the Microsoft TypeScript grammar measures 67% on this repository's own TypeScript sources under the same method.
 
-Nix is as complete as a TextMate grammar gets: attribute names alone account for 36.8% of the file, strings 43.5%, comments 6.6%.
+Nix is as complete as a TextMate grammar gets: attribute names alone account for 36.5% of the file, strings 44.0%, comments 6.5%.
 
-CMake leaves plain what a CMake script is mostly made of — path and target arguments. Of the characters it does give a scope to, 94.6% are painted: comments 23.4% of the file, keywords 20.5%, strings 16.7%.
+CMake leaves plain what a CMake script is mostly made of — path and target arguments. Of the characters it does give a scope to, 94.3% are painted: comments 36.9% of the file, strings 26.0%, keywords 11.7%. The four files are one large `CMakeLists.txt` and three short example ones, and the short ones score lowest, because a fourteen-line file is almost all arguments.
+
+Two further CMake corpora, measured and then left out of the table: the 37 vendored CMake files in the same checkout score 59.7%, and the 11 `configure_file` templates named `*.cmake.in` score 61.7%.
 
 Bruno's remainder is two things. Block names such as `get` and `headers` are scoped `entity.name.tag`, which Phantom's parity map does not paint, and `docs` blocks are Markdown prose, which it does not paint either.
 
@@ -97,9 +99,11 @@ It is. Phantom lowercases a file name before matching, so `CMakeLists.txt`, `CMA
 
 </Details>
 
-<Details summary="A CMake module included by path stays plain">
+<Details summary="A .cmake.in template stays plain">
 
-The extension claims `.cmake` and `CMakeLists.txt`. A module kept under another suffix, `.txt.in` for instance, is not recognised, because Phantom matches the last suffix only.
+The extension claims `.cmake` and the name `CMakeLists.txt`. Phantom matches the last suffix, so `onig-config.cmake.in` is an `.in` file and gets nothing.
+
+The manifest could claim it: `fileNamePatterns` takes globs, and `*.cmake.in` is one entry. It is left out because the 11 such files in the checkout this extension was measured against all sit inside a Zig dependency cache, and none is authored here. The grammar reads them correctly — 61.7% coloured — so ask for the pattern if you write them.
 
 </Details>
 
