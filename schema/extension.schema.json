@@ -385,9 +385,9 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 64,
-            "pattern": "^[^/\\\\\\[\\]{}]+$"
+            "pattern": "^[^/\\\\\\[\\]]+$"
           },
-          "description": "Globs matched against a file's name and never its path, for a language whose set of names is open: '.env.*'. The dialect is '*' (any run of characters) and '?' (exactly one); every other character is a literal. Write one pattern per alternative — there is no '{a,b}' and no '[abc]'. Phantom ranks a whole file name above a pattern and a pattern above an extension."
+          "description": "Globs matched against a file's name and never its path, for a language whose set of names is open: '.env.*', '.env.*.local', '*.{tf,tfvars,hcl}'. The dialect is '*' (any run of characters, never a '/'), '**' (any run, '/' included), '?' (exactly one character, never a '/') and '{a,b}' (any one alternative); every other character is a literal. Brace lists do not nest, may not expand to more than 16 alternatives, and replace '[abc]', which is refused. Phantom ranks a whole file name above a pattern and a pattern above an extension."
         },
         "category": {
           "$ref": "#/$defs/category"

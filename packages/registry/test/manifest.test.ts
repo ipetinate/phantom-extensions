@@ -71,8 +71,8 @@ describe("fileNamePatterns", () => {
     return () => loadManifest(fixture.directory);
   }
 
-  it("takes the pattern the field exists for", () => {
-    expect(load("dotenv", withPatterns([".env.*"]))()).toBeTruthy();
+  it("takes the patterns the field exists for", () => {
+    expect(load("dotenv", withPatterns([".env.*", ".env.*.local", "*.{tf,tfvars,hcl}"]))()).toBeTruthy();
   });
 
   it("refuses a pattern that reaches out of the file's name", () => {
@@ -83,12 +83,24 @@ describe("fileNamePatterns", () => {
     expect(load("backslash", withPatterns(["src\\*.env"]))).toThrow(/never its path/);
   });
 
-  it("refuses alternation, and says to write one pattern per alternative", () => {
-    expect(load("braces", withPatterns(["*.{js,ts}"]))).toThrow(/one pattern per alternative/);
+  it("refuses a character class, and says to use a brace list", () => {
+    expect(load("class", withPatterns(["[abc].env"]))).toThrow(/use a brace list rather than/);
   });
 
-  it("refuses a character class", () => {
-    expect(load("class", withPatterns(["[abc].env"]))).toThrow(/Phantom drops/);
+  it("refuses a nested brace list", () => {
+    expect(load("nested", withPatterns(["*.{js,{ts,tsx}}"]))).toThrow(/do not nest one/);
+  });
+
+  it("refuses an unclosed brace list", () => {
+    expect(load("unclosed", withPatterns(["*.{js,ts"]))).toThrow(/Phantom drops/);
+  });
+
+  it("refuses an empty alternative", () => {
+    expect(load("empty", withPatterns(["*.{js,}"]))).toThrow(/Phantom drops/);
+  });
+
+  it("refuses a brace list that expands past the branch cap", () => {
+    expect(load("wide", withPatterns(["{a,b}{c,d}{e,f}{g,h}{i,j}"]))).toThrow(/under 16 alternatives/);
   });
 
   it("refuses a pattern longer than Phantom reads", () => {

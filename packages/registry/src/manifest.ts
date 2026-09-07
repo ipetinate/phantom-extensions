@@ -5,7 +5,7 @@ import { fail, isRecord, requireAsset, requireString, type JsonObject, type Json
 import { quoted } from "./errors.ts";
 import { grammarEntries, validateGrammars, type GrammarEntry } from "./grammars.ts";
 import { validateInstall, type Install } from "./install.ts";
-import { MAX_PATTERNS, MAX_PATTERN_LENGTH, canonicalPattern } from "./patterns.ts";
+import { MAX_BRANCHES, MAX_PATTERNS_PER_LANGUAGE, MAX_SOURCE_LENGTH, fileNamePattern } from "./patterns.ts";
 import { validateProjectMarkers, validateProjectPath } from "./projectPaths.ts";
 import { validateServerBlock, validateServers } from "./servers.ts";
 
@@ -75,24 +75,25 @@ function validateFileNamePatterns(directory: string, languageId: string, languag
   const patterns = language["fileNamePatterns"];
   if (patterns === undefined) return;
   if (!Array.isArray(patterns)) fail(directory, `${subject}: fileNamePatterns must be an array of globs`);
-  if (patterns.length > MAX_PATTERNS) {
-    fail(directory, `${subject} declares ${patterns.length} file name patterns, more than the ${MAX_PATTERNS} Phantom reads`);
+  if (patterns.length > MAX_PATTERNS_PER_LANGUAGE) {
+    fail(directory, `${subject} declares ${patterns.length} file name patterns, more than the ${MAX_PATTERNS_PER_LANGUAGE} Phantom reads`);
   }
 
   const seen = new Set<string>();
   for (const pattern of patterns) {
     if (typeof pattern !== "string") fail(directory, `${subject} has a file name pattern that is not a string: ${quoted(pattern)}`);
-    const canonical = canonicalPattern(pattern);
-    if (canonical === null) {
+    const compiled = fileNamePattern(pattern);
+    if (compiled === null) {
       fail(
         directory,
         `${subject} has a file name pattern Phantom drops: ${quoted(pattern)}. ` +
-          `A pattern matches a file's name and never its path, so it holds no '/' or '\\'; it is at most ${MAX_PATTERN_LENGTH} characters; ` +
-          "and the dialect is '*' and '?' only, so write one pattern per alternative instead of '{a,b}' or '[abc]'.",
+          `A pattern matches a file's name and never its path, so it holds no '/' and no '\\'; it is at most ${MAX_SOURCE_LENGTH} characters; ` +
+          "and the dialect is '*', '**', '?' and '{a,b}', so use a brace list rather than '[abc]', do not nest one, and keep what it " +
+          `expands to under ${MAX_BRANCHES} alternatives.`,
       );
     }
-    if (seen.has(canonical)) fail(directory, `${subject} declares the file name pattern ${quoted(canonical)} twice`);
-    seen.add(canonical);
+    if (seen.has(compiled.source)) fail(directory, `${subject} declares the file name pattern ${quoted(compiled.source)} twice`);
+    seen.add(compiled.source);
   }
 }
 
