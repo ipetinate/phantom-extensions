@@ -306,6 +306,18 @@ describe("resolving includes across the registry", () => {
     );
   });
 
+  it("sees an include nested in a capture", () => {
+    const grammar = {
+      scopeName: "source.other",
+      patterns: [{ match: "^(exec)\\s+(.*)$", captures: { "2": { patterns: [{ include: "source.sample" }] } } }],
+    };
+    grammarFixture(root, "sample");
+    grammarFixture(root, "other", grammar, otherManifest(), "syntaxes/other.tmLanguage.json");
+    expect(() => collect(root)).toThrow(
+      /patterns\[0\].captures.2.patterns\[0\].include includes 'source.sample', which tests.sample provides; add it to dependencies/,
+    );
+  });
+
   it("lets a grammar include its own extension's scopes without a dependency", () => {
     const grammar = {
       ...SAMPLE_GRAMMAR,
