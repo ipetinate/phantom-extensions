@@ -3,7 +3,6 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fail } from "./checks.ts";
 import { collect, iconPath, type Card } from "./collect.ts";
-import { downloadsFor, fetchDownloadCounts, type DownloadCounts, type DownloadTally } from "./downloads.ts";
 import { CONTRIBUTION_KINDS, entriesOf, type ContributionKind } from "./manifest.ts";
 import { fetchPublishedIndex, mergeVersions, publishedVersions, type Download, type VersionEntry } from "./versions.ts";
 import { buildPreviewZip, buildZip } from "./zip.ts";
@@ -13,8 +12,9 @@ export const MAX_ZIP_BYTES = 32 * 1024 * 1024;
 /**
  * The suffix that tells the installable asset from the preview one.
  *
- * Read in two other places and worth keeping in one: `downloads.ts` counts
- * only the installable asset, and Phantom's store shows that count.
+ * Exported rather than inlined because anything that has to tell the two
+ * assets of a release apart must spell the suffix the same way this builder
+ * named them.
  */
 export const PREVIEW_SUFFIX = "-preview";
 
@@ -34,7 +34,6 @@ export interface IndexEntry {
   download: Download;
   preview: Download;
   versions: VersionEntry[];
-  downloads?: DownloadCounts;
   card: Card;
 }
 
@@ -42,7 +41,6 @@ export interface BuildOptions {
   offline?: boolean;
   extensionsRoot?: string;
   maxZipBytes?: number;
-  downloads?: DownloadTally | null;
 }
 
 function asset(repo: string, tag: string, name: string, data: Uint8Array): Download {
@@ -53,17 +51,11 @@ function asset(repo: string, tag: string, name: string, data: Uint8Array): Downl
   };
 }
 
-function countsOf(tally: DownloadTally | null, id: string, version: string): { downloads?: DownloadCounts } {
-  const counts = downloadsFor(tally, id, version);
-  return counts === null ? {} : { downloads: counts };
-}
-
 export async function build(out: string, repo: string, options: BuildOptions = {}): Promise<IndexEntry[]> {
   const maxZipBytes = options.maxZipBytes ?? MAX_ZIP_BYTES;
   const collected = collect(options.extensionsRoot);
   mkdirSync(out, { recursive: true });
   const published = options.offline === true ? null : await fetchPublishedIndex(repo);
-  const tally = options.downloads !== undefined ? options.downloads : options.offline === true ? null : await fetchDownloadCounts(repo);
   const entries: IndexEntry[] = [];
   const releases: string[] = [];
   for (const { directory, manifest, card } of collected) {
@@ -110,7 +102,6 @@ export async function build(out: string, repo: string, options: BuildOptions = {
       download,
       preview,
       versions: mergeVersions({ version: manifest.version, download }, publishedVersions(published, manifest.id)),
-      ...countsOf(tally, manifest.id, manifest.version),
       card,
     });
     releases.push(`${tag}\t${archive}\t${previewArchive}\t${manifest.name} ${manifest.version}\n`);

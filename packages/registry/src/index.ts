@@ -4,8 +4,6 @@ export { checkIcon, collect } from "./collect.ts";
 export type { Card, Collected } from "./collect.ts";
 export { fail, isRecord, requireAsset, requireString } from "./checks.ts";
 export type { JsonObject, JsonValue } from "./checks.ts";
-export { downloadsFor, fetchDownloadCounts, tallyReleases } from "./downloads.ts";
-export type { DownloadCounts, DownloadTally } from "./downloads.ts";
 export {
   DOCUMENT_NAMES,
   MAX_DOCUMENT_BYTES,
