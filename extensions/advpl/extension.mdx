@@ -1,0 +1,112 @@
+---
+title: AdvPL and TLPP
+tagline: The two TOTVS Protheus languages in Phantom — highlighting for .tlpp, .prw, .ch and the rest of the family.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [advpl, tlpp, totvs, protheus, erp, language]
+---
+
+AdvPL and TLPP support for the Phantom editor. AdvPL is the language TOTVS Protheus has been written in for decades; TLPP is its newer, class-and-namespace form. They are one language family with one compiler and one grammar, so this extension declares one language, `advpl`, and gives it every suffix that family uses.
+
+There is no language server here. TOTVS ships its language intelligence inside its own IDE, tied to a Protheus server and a compiled RPO, and none of that fits a manifest. Highlighting is the whole contribution, and it needs nothing installed.
+
+## Highlights
+
+<Features>
+  <Feature title="One language, every suffix" icon="package">
+    `.tlpp`, `.prw`, `.prx`, `.prg`, `.ch`, `.th`, `.ppx`, `.ppp`, `.apl`, `.apw` and `.ahu`. Case does not matter: Phantom lowercases a file name before it matches, so `PLSA010.PRW` is found by the `prw` claim.
+  </Feature>
+  <Feature title="Syntax highlighting" icon="brush">
+    Statement keywords, `#include` and the other preprocessor directives, `Local`/`Static`/`Private`/`Public` declarations, function, class and method headings, `WsMethod` and `WsRestful` web-service structures, strings, numbers, and both `//` and `/* */` comments.
+  </Feature>
+  <Feature title="SQL inside the source" icon="search">
+    Protheus code writes queries in `BeginSql Alias … EndSql` blocks. A second grammar injects SQL colouring into exactly those blocks, so the query reads as a query and the surrounding AdvPL does not change.
+  </Feature>
+  <Feature title="Embedded languages" icon="code">
+    The grammar also colours the `BeginContent` blocks that hold JavaScript, TypeScript, HTML, CSS, JSON or XML. Those regions borrow the grammars of the extensions listed under Requirements.
+  </Feature>
+</Features>
+
+## Requirements
+
+Nothing to install. The embedded-language colouring, and nothing else, needs four other extensions from this registry: **JSON**, **XML**, **HTML** and **CSS**, plus **TypeScript** for the JavaScript and TypeScript blocks. Install them if your sources use `BeginContent`. Without them a `BeginContent` block stays plain and every other part of the file still colours.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to AdvPL and TLPP.
+  </Step>
+  <Step title="Open a source file">
+    Colour appears at once. Phantom claims none of these suffixes itself, so there is nothing to promote.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.tlpp`, `.prw`, `.prx`, `.prg`, `.ch`, `.th`, `.ppx`, `.ppp`, `.apl`, `.apw`, `.ahu` |
+| Language server | none |
+| Formatter | none |
+| Editor | TextMate grammar `source.advpl`, the injection `sql.advpl` for `BeginSql` blocks, `//` and `/* */` comment markers |
+| Icon | AdvPL file icon in the sidebar and tabs |
+
+## Measured coverage
+
+<Details summary="How much of real Protheus source this colours">
+
+Colour was measured over the owner's `erp` repository under the scope map Phantom's editor uses.
+
+| Files | Count | Non-whitespace characters | Coloured |
+|---|---|---|---|
+| `.tlpp` | 549 | 8,836,992 | **81.2%** |
+| `.prw` | 53 | 449,606 | **70.0%** |
+| `.ch`, text only | 35 | 50,202 | **59.0%** |
+
+For scale, the Microsoft TypeScript grammar measures 67% on this repository's own TypeScript sources under the same method.
+
+By kind on the `.tlpp` set: strings 52.7%, comments 11.5%, function names 9.0%, keywords 4.9%, numbers 1.9%, types 1.3%. What stays plain is variable and field names, which is what plain means.
+
+Headers score lowest because a header is mostly `#define` and `#xtranslate` bodies. The grammar colours the directive word and leaves the body as text.
+
+</Details>
+
+<Details summary="111 of the 146 header files were not measured">
+
+They are not text. TOTVS ships much of `Includes/` compressed: the file begins with `#zip` and the rest is binary. Nothing can colour them, and no editor should try. The `.ch` figure above covers the 35 headers that are real source.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="A BeginContent block stays plain">
+
+That block is another language, and its grammar comes from another extension. Install JSON, XML, HTML, CSS or TypeScript, whichever the block holds. Restart is not needed.
+
+</Details>
+
+<Details summary="A .ch file shows no colour at all">
+
+Check the first bytes. A header that starts with `#zip` is a compressed TOTVS include, not source. Open it in the TDS IDE, which can expand it.
+
+</Details>
+
+<Details summary="Why one language and not two">
+
+AdvPL and TLPP share a compiler, a preprocessor and a grammar. TOTVS declares them as one language in its own editor plugin, and a second language id here would need a second grammar to attach to, which does not exist. A `.tlpp` file and a `.prw` file therefore report the same language in the status bar.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `advpl` language over the eleven suffixes of the family, the `source.advpl` grammar, and the `sql.advpl` injection for `BeginSql` blocks.
+
+## License and credits
+
+The extension is released under the MIT License. Both grammars are [totvs/tds-vscode](https://github.com/totvs/tds-vscode), © TOTVS S.A. (Apache-2.0), shipped unmodified. TOTVS, Protheus, AdvPL and TLPP are trademarks of TOTVS S.A.; this extension is not affiliated with or endorsed by TOTVS.

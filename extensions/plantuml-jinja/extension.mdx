@@ -1,0 +1,120 @@
+---
+title: PlantUML and Jinja2
+tagline: Two small languages, one extension — PlantUML diagram sources and Jinja2 templates.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [plantuml, jinja, jinja2, diagrams, templates, markup]
+---
+
+This is a bundle, and it is worth saying so plainly. PlantUML and Jinja2 have nothing in common. One describes diagrams, the other fills in templates. They share no syntax, no tooling and no history.
+
+They ship together for one reason: each is too small to earn an extension of its own, and both are text people write by hand that no other extension in this registry claims. If you want only one of the two, install this and ignore the other. Nothing is started, so the half you do not use costs nothing.
+
+Neither language declares a server. Highlighting is the whole contribution.
+
+## Highlights
+
+<Features>
+  <Feature title="PlantUML" icon="brush">
+    `@startuml` … `@enduml` blocks and the other `@start`/`@end` pairs. Class, object, activity, sequence and state elements, the `skinparam` and style keywords, quoted names, arrows, and `'` line and `/' '/` block comments. Claims `.puml`, `.plantuml`, `.pu`, `.iuml` and `.wsd`.
+  </Feature>
+  <Feature title="Jinja2" icon="code">
+    The three delimiters — `{% … %}` statements, `{{ … }}` expressions and `{# … #}` comments. Inside them Phantom colours the tag keywords, the operators, quoted strings with their escapes, `true`, `false` and `none`, and the punctuation. Variable, filter and test names are recognised and left in the foreground colour. Claims `.j2`, `.jinja` and `.jinja2`.
+  </Feature>
+  <Feature title="Nothing to install" icon="check">
+    Both grammars are data the editor reads. No binary, no `PATH` lookup, no permission prompt.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to PlantUML and Jinja2.
+  </Step>
+  <Step title="Open a .puml or a .j2 file">
+    Colour appears at once. Phantom claims neither suffix itself, so there is nothing to promote.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.puml`, `.plantuml`, `.pu`, `.iuml`, `.wsd`, `.j2`, `.jinja`, `.jinja2` |
+| Language servers | none |
+| Formatters | none |
+| Editor | TextMate grammars `source.wsd` and `source.jinja`; PlantUML comments `'` and `/' '/`, Jinja2 comments `{# #}` |
+| Icons | Separate sidebar icons for the two languages |
+
+## Why Jinja2 does not colour the host language
+
+<Details summary="The decision, and the measurement behind it">
+
+A Jinja2 template is two languages at once: the Jinja2 tags, and whatever the template writes — HTML, YAML, Markdown, a shell script, prose. The upstream plugin handles this by mapping the suffix to a host: bare `.j2` means HTML there, `.md.j2` means Markdown, `.yaml.j2` means YAML.
+
+This extension does not follow that, for two reasons.
+
+Bare `.j2` says nothing about the host, so mapping it to HTML is a guess. A compound suffix is a different matter, and it is expressible: a language's `extensions` list holds single suffixes, but `fileNamePatterns` takes globs, so `*.md.j2` and `*.{yml,yaml}.j2` are one manifest entry each. What is missing is a file that needs them. Of the 31 `.j2` files measured here, 30 carry no suffix before `.j2` at all, and the one that does is `pritunl.conf.j2`, whose `.conf` host has no grammar in this registry. A pattern for `*.md.j2` would claim nothing.
+
+The measurement then said the host buys almost nothing anyway. Over the owner's 31 `.j2` files, which are Markdown and prose templates, colour reached 10.0% of non-whitespace with Jinja2 alone, 10.1% with the HTML host and 13.9% with the Markdown host. Phantom's nine token kinds do not paint Markdown prose or HTML text, so the host grammar mostly adds scopes nothing draws — while a wrong guess would mis-colour a template whose host is a shell script or a JSON file.
+
+So the plain Jinja2 grammar ships. It colours the tags and leaves the surrounding text alone, whatever that text is.
+
+</Details>
+
+## Measured coverage
+
+<Details summary="How much of a real file each grammar colours">
+
+Measured over the owner's files, under the scope map Phantom's editor uses.
+
+| Language | Files | Non-whitespace characters | Coloured |
+|---|---|---|---|
+| PlantUML | 125 | 301,514 | **43.1%** |
+| Jinja2 | 31 | 19,562 | **10.0%** |
+
+The Jinja2 figure counts the whole file, and 80% of these files is Markdown prose that Jinja2 has no claim on. Of the 3,964 characters that are Jinja2 syntax, **49.3%** are painted.
+
+PlantUML's 43.1% is a real limit rather than a measuring artefact. The grammar tags message labels as `meta.comment.message.link`, and participant names as `support.variable`. Phantom's parity map paints `comment`, not `meta.comment`, and `support.type` and `support.function`, not `support.variable`. So the grammar recognises that text and the editor still draws it plain. Keywords, strings and real comments do colour: 10.3%, 24.8% and 4.4% of the whole respectively.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Sequence diagram labels stay plain">
+
+Known, and explained under Measured coverage. The grammar names those spans with scopes outside the nine kinds Phantom paints. Arrows, keywords and quoted names still colour.
+
+</Details>
+
+<Details summary="A .md.j2 or .yaml.j2 file gets no Markdown or YAML colour">
+
+It is recognised, as a `.j2` file: Phantom matches the last suffix, so the Jinja2 tags colour and the Markdown or YAML underneath stays plain text.
+
+A future version could claim those names separately with `fileNamePatterns` and hand them a host grammar. Ask for it if you write such templates. It is left out today because no file in the repositories this extension was measured against has a suffix before `.j2`.
+
+</Details>
+
+<Details summary="PlantUML shows no diagram preview">
+
+This extension colours text. It renders nothing and calls no `plantuml` binary.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `plantuml` language over five suffixes with the `source.wsd` grammar, and the `jinja` language over three suffixes with the `source.jinja` grammar.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The PlantUML grammar is [qjebbs/vscode-plantuml](https://github.com/qjebbs/vscode-plantuml), © jebbs (MIT). Upstream authors it in YAML; this extension ships the same grammar converted to the JSON form Phantom reads, with no rule changed. PlantUML is a trademark of its authors; this extension is not affiliated with or endorsed by the PlantUML project.
+
+The Jinja2 grammar is [samuelcolvin/jinjahtml-vscode](https://github.com/samuelcolvin/jinjahtml-vscode), © Samuel Colvin (MIT), shipped unmodified. Jinja is a project of the Pallets organisation; this extension is not affiliated with or endorsed by it.

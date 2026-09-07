@@ -1,0 +1,85 @@
+---
+title: Rego
+tagline: Rego support for Phantom — highlighting for the policy language Open Policy Agent evaluates.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [rego, opa, policy, language, infrastructure]
+---
+
+Rego support for the Phantom editor. The extension declares the language — `.rego`, the `#` comment marker — and ships the TextMate grammar Open Policy Agent maintains for its own editor plugin. There is no language server here. Highlighting is the whole contribution.
+
+Rego reads badly without colour. A policy is one long chain of dotted references, and the words that carry the logic — `package`, `import`, `if`, `some`, `every`, `with`, `not` — look exactly like the identifiers around them. Colour separates them.
+
+## Highlights
+
+<Features>
+  <Feature title="Syntax highlighting" icon="brush">
+    The declaration keywords `package`, `import`, `as`, `default` and `else`; the logic words `if`, `some`, `every`, `in`, `with`, `not` and `contains`; every name followed by `(`, so built-in and local calls alike; double-quoted strings, backtick raw strings and `$` template strings; numbers; `true`, `false` and `null`; and `#` comments.
+  </Feature>
+  <Feature title="No server to install" icon="check">
+    Nothing runs. The grammar is data the editor reads, so the extension needs no binary on your `PATH` and asks for no permission.
+  </Feature>
+  <Feature title="The grammar OPA ships" icon="book">
+    The file comes from `open-policy-agent/vscode-opa`, the plugin the OPA project publishes for VS Code, so the language it knows is the language OPA evaluates.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Rego.
+  </Step>
+  <Step title="Open a .rego file">
+    Colour appears at once. Phantom claims no file type of its own, so there is nothing to promote and no conflict to resolve.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.rego` |
+| Language server | none |
+| Formatter | none. Run `opa fmt` from a terminal |
+| Editor | TextMate grammar `source.rego`, `#` comment marker |
+| Icon | Rego file icon in the sidebar and tabs |
+
+## Measured coverage
+
+<Details summary="How much of a real policy this colours">
+
+Colour was measured over all 225 `.rego` files in the owner's `data-layer-core` policy tree, 1,299,731 non-whitespace characters in total. **64.4%** of those characters land on a scope Phantom paints. The rest are identifiers, which stay in the foreground colour, as they do in every language.
+
+By kind, over the same characters: strings 48.5%, punctuation 11.1%, keywords 3.3%, numbers 1.1%, comments 0.3%. The comment share is low because these policies carry almost no comments, not because comments are missed.
+
+For scale, the Microsoft TypeScript grammar measures 67% on this repository's own TypeScript sources under the same method. Rego sits in the same band.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Identifiers are not coloured">
+
+They are not meant to be. `data.app.billing.allow` is a reference, and a reference is foreground text. What the grammar colours is the frame around it: the keyword, the string, the number, the comment.
+
+</Details>
+
+<Details summary="A policy file with another suffix stays plain">
+
+The extension claims `.rego` and nothing else. A policy kept in a file named otherwise is not recognised. Rename it, or open Settings → Languages to see which extension claims the suffix you use.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `rego` language for `.rego`, the `#` comment marker, and the `source.rego` grammar from `open-policy-agent/vscode-opa`.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [open-policy-agent/vscode-opa](https://github.com/open-policy-agent/vscode-opa), © The OPA Authors (Apache-2.0). Upstream ships it as an XML property list; this extension ships the same grammar converted to the JSON form Phantom reads, with no rule changed. Open Policy Agent is a project of the Cloud Native Computing Foundation; this extension is not affiliated with or endorsed by either.

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.rego",
+  "name": "Rego",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Rego: highlighting for Open Policy Agent policies.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rego",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "rego",
+        "name": "Rego",
+        "extensions": [
+          "rego"
+        ],
+        "category": "infrastructure",
+        "icon": "icons/rego.png",
+        "lineComment": "#"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.rego",
+        "path": "syntaxes/rego.tmLanguage.json",
+        "languageId": "rego",
+        "license": "Apache-2.0",
+        "grammarSource": "https://github.com/open-policy-agent/vscode-opa/blob/9291e7c81d3656b1005e5a323834d837a321f979/syntaxes/Rego.tmLanguage"
+      }
+    ]
+  }
+}
