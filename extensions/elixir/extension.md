@@ -1,7 +1,7 @@
 ---
 title: Elixir
 tagline: Elixir, EEx and HEEx for Phantom — highlighting from a grammar, diagnostics and completion from ElixirLS.
-version: 1.1.0
+version: 1.1.1
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
