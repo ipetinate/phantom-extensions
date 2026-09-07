@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-dracula-official",
   "name": "Dracula",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Dracula terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dracula-official",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/dracula-official",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

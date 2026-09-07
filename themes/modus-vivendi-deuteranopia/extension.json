@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-modus-vivendi-deuteranopia",
   "name": "Modus Vivendi Deuteranopia",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Modus Vivendi Deuteranopia terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/modus-vivendi-deuteranopia",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/modus-vivendi-deuteranopia",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

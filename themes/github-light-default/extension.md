@@ -1,7 +1,7 @@
 ---
 title: GitHub Light Default
 tagline: The GitHub Light Default terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.4
+version: 1.0.5
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -83,6 +83,8 @@ released under the MIT License. `themes/github-light-default.conf` is a byte-for
 of the palette.
 
 ## Changelog
+
+**1.0.5** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
 
 **1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 

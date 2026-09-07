@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-acid-lime",
   "name": "Acid Lime",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Acid Lime terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/acid-lime",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/acid-lime",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-rose-pine-dawn",
   "name": "Rose Pine Dawn",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Isac Petinate",
   "description": "The Rose Pine Dawn terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rose-pine-dawn",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/rose-pine-dawn",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-modus-operandi-tritanopia",
   "name": "Modus Operandi Tritanopia",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "Isac Petinate",
   "description": "The Modus Operandi Tritanopia terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/modus-operandi-tritanopia",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/modus-operandi-tritanopia",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

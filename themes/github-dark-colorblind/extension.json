@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-github-dark-colorblind",
   "name": "GitHub Dark Colorblind",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The GitHub Dark Colorblind terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/github-dark-colorblind",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/github-dark-colorblind",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

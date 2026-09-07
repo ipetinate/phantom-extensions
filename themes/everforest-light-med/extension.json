@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-everforest-light-med",
   "name": "Everforest Light Med",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Everforest Light Med terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/everforest-light-med",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/everforest-light-med",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

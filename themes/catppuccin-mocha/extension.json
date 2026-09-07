@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-catppuccin-mocha",
   "name": "Catppuccin Mocha",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Catppuccin Mocha terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/catppuccin-mocha",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/catppuccin-mocha",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-dark-pastel",
   "name": "Dark Pastel",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Dark Pastel terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dark-pastel",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/dark-pastel",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

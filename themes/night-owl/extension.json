@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-night-owl",
   "name": "Night Owl",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Night Owl terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/night-owl",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/night-owl",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

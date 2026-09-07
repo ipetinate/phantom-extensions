@@ -1,7 +1,7 @@
 ---
 title: Everforest Light Hard
 tagline: The Everforest Light Hard terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.3
+version: 1.0.4
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -83,6 +83,8 @@ released under the MIT License. `themes/everforest-light-hard.conf` is a byte-fo
 of the palette.
 
 ## Changelog
+
+**1.0.4** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
 
 **1.0.3** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
 

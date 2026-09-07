@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-adwaita",
   "name": "Adwaita",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Adwaita terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/adwaita",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/adwaita",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

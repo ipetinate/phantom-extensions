@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-cyberpunk",
   "name": "Cyberpunk",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Cyberpunk terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/cyberpunk",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/cyberpunk",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [

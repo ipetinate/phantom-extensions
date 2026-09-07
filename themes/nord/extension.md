@@ -1,7 +1,7 @@
 ---
 title: Nord
 tagline: The Nord terminal palette, packaged on its own so it can be installed without the rest.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Phantom
   url: https://github.com/ipetinate/phantom
@@ -77,6 +77,8 @@ under **Extension Themes**. Press its card to apply it to every window at once.
 | Programs | none |
 
 ## Changelog
+
+**1.0.7** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
 
 **1.0.6** — Shows the palette as swatches and the window as a preview.
 

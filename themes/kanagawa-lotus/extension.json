@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "phantom.theme-kanagawa-lotus",
   "name": "Kanagawa Lotus",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "Isac Petinate",
   "description": "The Kanagawa Lotus terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
-  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/kanagawa-lotus",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/kanagawa-lotus",
   "phantom": "0.16.0",
   "contributes": {
     "themes": [
