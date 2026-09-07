@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fail } from "./checks.ts";
 import { collect, type Card } from "./collect.ts";
+import { downloadsFor, fetchDownloadCounts, type DownloadCounts, type DownloadTally } from "./downloads.ts";
 import { CONTRIBUTION_KINDS, entriesOf, type ContributionKind } from "./manifest.ts";
 import { fetchPublishedIndex, mergeVersions, publishedVersions, type Download, type VersionEntry } from "./versions.ts";
 import { buildZip } from "./zip.ts";
@@ -24,6 +25,7 @@ export interface IndexEntry {
   categories: string[];
   download: Download;
   versions: VersionEntry[];
+  downloads?: DownloadCounts;
   card: Card;
 }
 
@@ -31,6 +33,12 @@ export interface BuildOptions {
   offline?: boolean;
   extensionsRoot?: string;
   maxZipBytes?: number;
+  downloads?: DownloadTally | null;
+}
+
+function countsOf(tally: DownloadTally | null, id: string, version: string): { downloads?: DownloadCounts } {
+  const counts = downloadsFor(tally, id, version);
+  return counts === null ? {} : { downloads: counts };
 }
 
 export async function build(out: string, repo: string, options: BuildOptions = {}): Promise<IndexEntry[]> {
@@ -38,6 +46,7 @@ export async function build(out: string, repo: string, options: BuildOptions = {
   const collected = collect(options.extensionsRoot);
   mkdirSync(out, { recursive: true });
   const published = options.offline === true ? null : await fetchPublishedIndex(repo);
+  const tally = options.downloads !== undefined ? options.downloads : options.offline === true ? null : await fetchDownloadCounts(repo);
   const entries: IndexEntry[] = [];
   const releases: string[] = [];
   for (const { directory, manifest, card } of collected) {
@@ -81,6 +90,7 @@ export async function build(out: string, repo: string, options: BuildOptions = {
       ],
       download,
       versions: mergeVersions({ version: manifest.version, download }, publishedVersions(published, manifest.id)),
+      ...countsOf(tally, manifest.id, manifest.version),
       card,
     });
     releases.push(`${tag}\t${archive}\t${manifest.name} ${manifest.version}\n`);

@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { build } from "../src/build.ts";
+import { tallyReleases } from "../src/downloads.ts";
 import { ExtensionFixture, MINIMAL_PNG, SVG, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
 
 let root: string;
@@ -14,7 +15,7 @@ afterEach(() => {
   removeRoot(root);
 });
 
-function run(options: { maxZipBytes?: number } = {}) {
+function run(options: Parameters<typeof build>[2] = {}) {
   return build(path.join(root, "dist"), "tests/registry", {
     offline: true,
     extensionsRoot: path.join(root, "extensions"),
@@ -57,5 +58,26 @@ describe("build", () => {
   it("holds the zip to its size limit", async () => {
     new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
     await expect(run({ maxZipBytes: 16 })).rejects.toThrow(/the zip is larger than 16 bytes/);
+  });
+
+  it("folds the release download counts into the entry", async () => {
+    new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
+    const downloads = tallyReleases([
+      { tag_name: "tests.sample-v1.0.0", assets: [{ download_count: 12 }] },
+      { tag_name: "tests.sample-v0.9.0", assets: [{ download_count: 30 }] },
+    ]);
+    const entries = await run({ downloads });
+    expect(entries[0]?.downloads).toEqual({ total: 42, current: 12 });
+    const index = JSON.parse(readFileSync(path.join(root, "dist", "index.json"), "utf8")) as {
+      extensions: { downloads?: unknown }[];
+    };
+    expect(index.extensions[0]?.downloads).toEqual({ total: 42, current: 12 });
+  });
+
+  it("writes no download count when there is none to write", async () => {
+    new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
+    const entries = await run();
+    expect(entries[0]?.downloads).toBeUndefined();
+    expect(readFileSync(path.join(root, "dist", "index.json"), "utf8")).not.toContain("downloads");
   });
 });

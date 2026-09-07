@@ -40,6 +40,8 @@ Directory names are for humans. Identity is `id` in the manifest, and the zip is
 
 An index entry carries `download` for the version in this repository, and `versions`: the ten newest published versions, newest first, each with its own URL, digest and size. The builder reads the published index to find them, so a version it no longer lists drops off. `download` keeps the shape it has always had, so an older Phantom reads the index as before.
 
+An entry also carries `downloads`, the count GitHub keeps for the release assets: `total` over every published version of that extension, and `current` for the version this index names. The builder reads it from the public releases API, which needs no token, and sends `GH_TOKEN` when the environment has one so a run inside Actions is not held to the anonymous rate limit. A build that cannot reach the API, and an `--offline` build, write no `downloads` key at all; Phantom shows nothing rather than a zero.
+
 ## The manifest
 
 `schemaVersion` is `1`. Phantom ignores keys it does not know inside `contributes`, so a manifest written for a newer Phantom still installs the parts an older one understands.
