@@ -10,6 +10,7 @@ export const MAX_GRAMMARS = 32;
 export const MAX_GRAMMAR_BYTES = 4 * 1024 * 1024;
 export const MAX_EMBEDDED_LANGUAGES = 64;
 export const MAX_INJECT_TO = 16;
+export const MAX_OPTIONAL_INCLUDES = 128;
 export const MAX_LICENSE_LENGTH = 64;
 
 const PATTERN_KEYS = ["match", "begin", "end", "while"] as const;
@@ -31,6 +32,7 @@ export interface GrammarEntry {
   embeddedLanguages: Record<string, string>;
   injectTo: string[];
   includes: GrammarInclude[];
+  optionalIncludes: Set<string>;
 }
 
 export function isScopeName(value: unknown): value is string {
@@ -167,6 +169,44 @@ function injectToOf(directory: string, file: string, raw: JsonValue | undefined)
   return raw.map((scope) => requireScopeName(directory, scope, `${file}: an injectTo entry`));
 }
 
+/**
+ * The scopes this grammar includes but does not need, declared by the
+ * manifest and never guessed at.
+ *
+ * An include of a foreign scope is dropped silently when nothing provides it:
+ * the rule around it still matches, and the region inside loses a colour. For
+ * most grammars that is a defect — a `.vue` whose `<script lang="ts">` is not
+ * TypeScript is the reason the dependency check exists — and for some it is
+ * the whole design. A fenced code block in Markdown names a language the
+ * author happened to type, and Markdown promises nothing about which of the
+ * fifty-nine it can colour.
+ *
+ * The two cases cannot be told apart by looking at the grammar. Markdown's
+ * fence and Vue's script tag are the same shape: a `begin`/`while` rule that
+ * carries its own scope name, with the foreign include as its only child
+ * pattern. They cannot be told apart by `embeddedLanguages` either, which Vue
+ * declares `source.ts` in. Only the manifest knows, so only the manifest says.
+ *
+ * Each entry has to be an include the grammar actually makes, so a scope that
+ * leaves the grammar cannot leave a permanent excuse behind in the manifest.
+ */
+function optionalIncludesOf(directory: string, file: string, raw: JsonValue | undefined, includes: readonly GrammarInclude[]): Set<string> {
+  if (raw === undefined || raw === null) return new Set();
+  if (!Array.isArray(raw)) fail(directory, `${file}: optionalIncludes must be an array of scope names`);
+  if (raw.length > MAX_OPTIONAL_INCLUDES) fail(directory, `${file}: more than ${MAX_OPTIONAL_INCLUDES} optionalIncludes`);
+  const included = new Set(includes.map((include) => include.scope));
+  const result = new Set<string>();
+  for (const entry of raw) {
+    const scope = requireScopeName(directory, entry, `${file}: an optionalIncludes entry`);
+    if (result.has(scope)) fail(directory, `${file}: optionalIncludes lists ${quoted(scope)} twice`);
+    if (!included.has(scope)) {
+      fail(directory, `${file}: optionalIncludes names ${quoted(scope)}, which this grammar does not include; drop it`);
+    }
+    result.add(scope);
+  }
+  return result;
+}
+
 function collectIncludes(directory: string, file: string, grammar: JsonObject, compile: boolean): GrammarInclude[] {
   const includes: GrammarInclude[] = [];
   for (const rule of rulesOf(grammar)) {
@@ -204,6 +244,7 @@ function readEntry(directory: string, raw: JsonValue, languageIds: ReadonlySet<s
   if (grammar["scopeName"] !== scopeName) {
     fail(directory, `${file} declares scopeName ${quoted(grammar["scopeName"])}, the manifest says ${quoted(scopeName)}`);
   }
+  const includes = collectIncludes(directory, file, grammar, compile);
   return {
     scopeName,
     path: file,
@@ -212,7 +253,8 @@ function readEntry(directory: string, raw: JsonValue, languageIds: ReadonlySet<s
     grammarSource,
     embeddedLanguages: embeddedLanguagesOf(directory, file, raw["embeddedLanguages"]),
     injectTo: injectToOf(directory, file, raw["injectTo"]),
-    includes: collectIncludes(directory, file, grammar, compile),
+    includes,
+    optionalIncludes: optionalIncludesOf(directory, file, raw["optionalIncludes"], includes),
   };
 }
 
@@ -265,6 +307,7 @@ export function checkGrammarDependencies(owners: readonly GrammarOwner[]): void 
     const declared = new Set(owner.dependencies);
     for (const grammar of owner.grammars) {
       for (const include of grammar.includes) {
+        if (grammar.optionalIncludes.has(include.scope)) continue;
         const providers = providersOfScope.get(include.scope);
         if (providers === undefined) continue;
         if (providers.some((provider) => provider === owner.id || declared.has(provider))) continue;

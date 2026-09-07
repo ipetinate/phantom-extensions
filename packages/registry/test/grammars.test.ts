@@ -3,7 +3,7 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { build } from "../src/build.ts";
 import { collect } from "../src/collect.ts";
-import { MAX_GRAMMARS, withoutBackReferences } from "../src/grammars.ts";
+import { MAX_GRAMMARS, MAX_OPTIONAL_INCLUDES, withoutBackReferences } from "../src/grammars.ts";
 import { checkLayout } from "../src/layout.ts";
 import { loadManifest, referencedPaths, type Manifest } from "../src/manifest.ts";
 import {
@@ -348,5 +348,88 @@ describe("the index", () => {
     };
     const fixture = grammarFixture(root, "sample", SAMPLE_GRAMMAR, manifest as unknown as Record<string, unknown>);
     expect(loadManifest(fixture.directory).contributes["languages"]).toBeUndefined();
+  });
+});
+
+function optionalManifest(optionalIncludes: unknown, dependencies?: string[]): Record<string, unknown> {
+  return {
+    ...languageManifest({ id: "tests.other", name: "Other" }),
+    ...(dependencies === undefined ? {} : { dependencies }),
+    contributes: {
+      languages: [{ languageId: "other", name: "Other", extensions: ["oth"], icon: "icons/other.svg" }],
+      grammars: [
+        grammarEntry({ scopeName: "source.other", path: "syntaxes/other.tmLanguage.json", languageId: "other", optionalIncludes }),
+      ],
+    },
+  };
+}
+
+describe("an optional include", () => {
+  it("needs no dependency on the extension providing it", () => {
+    grammarFixture(root, "sample");
+    grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(["source.sample"]), "syntaxes/other.tmLanguage.json");
+    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+  });
+
+  it("covers every site including the scope, whether or not a rule is named", () => {
+    const grammar = { scopeName: "source.other", patterns: [{ include: "source.sample#string" }] };
+    grammarFixture(root, "sample");
+    grammarFixture(root, "other", grammar, optionalManifest(["source.sample"]), "syntaxes/other.tmLanguage.json");
+    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+  });
+
+  it("excuses only the scope it names", () => {
+    const grammar = { scopeName: "source.other", patterns: [{ include: "source.sample" }, { include: "source.twin" }] };
+    const twin = {
+      ...languageManifest({ id: "tests.twin", name: "Twin" }),
+      contributes: {
+        languages: [{ languageId: "twin", name: "Twin", extensions: ["twn"], icon: "icons/twin.svg" }],
+        grammars: [grammarEntry({ scopeName: "source.twin", languageId: "twin" })],
+      },
+    };
+    grammarFixture(root, "sample");
+    grammarFixture(root, "twin", { ...SAMPLE_GRAMMAR, scopeName: "source.twin" }, twin);
+    grammarFixture(root, "other", grammar, optionalManifest(["source.sample"]), "syntaxes/other.tmLanguage.json");
+    expect(() => collect(root)).toThrow(/includes 'source.twin', which tests.twin provides; add it to dependencies/);
+  });
+
+  it("leaves a grammar that declares none exactly as strict", () => {
+    grammarFixture(root, "sample");
+    grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(undefined), "syntaxes/other.tmLanguage.json");
+    expect(() => collect(root)).toThrow(/includes 'source.sample', which tests.sample provides; add it to dependencies/);
+  });
+
+  it("may name a scope the extension also depends on", () => {
+    grammarFixture(root, "sample");
+    grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(["source.sample"], ["tests.sample"]), "syntaxes/other.tmLanguage.json");
+    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+  });
+
+  it("must be an array", () => {
+    const fixture = grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest("source.sample"), "syntaxes/other.tmLanguage.json");
+    expect(() => loadManifest(fixture.directory)).toThrow(/optionalIncludes must be an array of scope names/);
+  });
+
+  it("refuses a scope the grammar does not include", () => {
+    const fixture = grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(["source.absent"]), "syntaxes/other.tmLanguage.json");
+    expect(() => loadManifest(fixture.directory)).toThrow(/optionalIncludes names 'source.absent', which this grammar does not include/);
+  });
+
+  it("refuses the same scope twice", () => {
+    const manifest = optionalManifest(["source.sample", "source.sample"]);
+    const fixture = grammarFixture(root, "other", OTHER_GRAMMAR, manifest, "syntaxes/other.tmLanguage.json");
+    expect(() => loadManifest(fixture.directory)).toThrow(/optionalIncludes lists 'source.sample' twice/);
+  });
+
+  it("refuses a scope that is not dotted", () => {
+    const fixture = grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(["sample"]), "syntaxes/other.tmLanguage.json");
+    expect(() => loadManifest(fixture.directory)).toThrow(/an optionalIncludes entry must be a dotted scope name/);
+  });
+
+  it("refuses more than the cap", () => {
+    const scopes = Array.from({ length: MAX_OPTIONAL_INCLUDES + 1 }, (_, index) => `source.s${index}`);
+    const grammar = { scopeName: "source.other", patterns: scopes.map((scope) => ({ include: scope })) };
+    const fixture = grammarFixture(root, "other", grammar, optionalManifest(scopes), "syntaxes/other.tmLanguage.json");
+    expect(() => loadManifest(fixture.directory)).toThrow(new RegExp(`more than ${MAX_OPTIONAL_INCLUDES} optionalIncludes`));
   });
 });
