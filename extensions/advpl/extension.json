@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.advpl",
+  "name": "AdvPL and TLPP",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "AdvPL and TLPP, the TOTVS Protheus languages: highlighting for .tlpp, .prw and .ch.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/advpl",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.css",
+    "phantom.html",
+    "phantom.json",
+    "phantom.typescript",
+    "phantom.xml"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "advpl",
+        "name": "AdvPL",
+        "extensions": [
+          "tlpp",
+          "prw",
+          "prx",
+          "prg",
+          "ch",
+          "th",
+          "ppx",
+          "ppp",
+          "apl",
+          "apw",
+          "ahu"
+        ],
+        "category": "compiled",
+        "icon": "icons/advpl.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.advpl",
+        "path": "syntaxes/advpl.tmLanguage.json",
+        "languageId": "advpl",
+        "license": "Apache-2.0",
+        "grammarSource": "https://github.com/totvs/tds-vscode/blob/0ec3796f03e59d0e70a3d6bfed66667d4f2169ec/syntaxes/advpl_language.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.js": "javascript",
+          "source.ts": "typescript",
+          "text.html.basic": "html",
+          "source.css": "css",
+          "source.json": "json",
+          "text.xml": "xml"
+        }
+      },
+      {
+        "scopeName": "sql.advpl",
+        "path": "syntaxes/advpl-sql.tmLanguage.json",
+        "license": "Apache-2.0",
+        "grammarSource": "https://github.com/totvs/tds-vscode/blob/0ec3796f03e59d0e70a3d6bfed66667d4f2169ec/syntaxes/advpl_sql.tmLanguage.json",
+        "injectTo": [
+          "source.advpl"
+        ]
+      }
+    ]
+  }
+}
