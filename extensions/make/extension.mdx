@@ -1,0 +1,92 @@
+---
+title: Make
+tagline: Makefile support for Phantom — targets, prerequisites, the four assignment operators, functions and recipes.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [make, makefile, build, gnu-make, automake, script]
+---
+
+Make has an awkward syntax and a long memory. A target and a variable assignment are told apart by a colon. There are four assignment operators and they do four different things. A recipe line is shell, but only because it starts with a tab, and a space there is a build error you cannot see. Opened as plain text, a Makefile hides all of it.
+
+This extension teaches Phantom the language: targets and their prerequisites, `=`, `:=`, `?=` and `!=` each coloured as itself, automatic variables, the built-in functions, `ifeq`/`ifdef`/`else`/`endif`, `define` blocks, the special targets such as `.PHONY`, and the `@` and `-` prefixes a recipe line can carry.
+
+Nothing is installed and nothing is run. Make is not invoked, and no language server is declared.
+
+## Highlights
+
+<Features>
+  <Feature title="Targets and prerequisites" icon="check">
+    The target name, the colon and the prerequisite list are three different things, and pattern rules like `%.o: %.c` keep the `%` apart from the suffix. Order-only prerequisites after the `|` are part of the list. `.PHONY`, `.DEFAULT_GOAL` and the other special targets are recognised by name.
+  </Feature>
+  <Feature title="Four assignment operators" icon="code">
+    `=` recursive, `:=` simple, `?=` conditional and `!=` shell, each coloured as the operator it is, so the difference between a variable evaluated once and one evaluated every time it is read is visible in the file.
+  </Feature>
+  <Feature title="Variables and functions" icon="gear">
+    `$(VAR)` and `${VAR}`, the automatic variables `$@`, `$<`, `$^`, `$?` and `$*`, the `$$` that escapes a dollar into the shell, and the built-in functions — `shell`, `wildcard`, `patsubst`, `foreach`, `call`, `if`, `info`, `error` and the rest — named inside their call.
+  </Feature>
+  <Feature title="Conditionals and recipes" icon="terminal">
+    `ifeq`, `ifneq`, `ifdef`, `ifndef`, `else ifdef`, `endif`, and `define`/`endef` blocks. A recipe is its own scope, with the `@` and `-` prefixes and the backslash continuation coloured, and make's variables still resolved inside it.
+  </Feature>
+</Features>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File names | `Makefile`, `GNUmakefile`, `BSDmakefile`, `Makefile.am`, `Makefile.in`, `Makefile.inc`, `Kbuild` |
+| Suffixes | `.mk`, `.mak`, `.make` |
+| Editor | TextMate grammar `source.makefile`, `#` comment marker |
+| Icon | Makefile icon in the sidebar and tabs |
+
+Names are matched without regard to case, so `Makefile` claims `makefile` too, and `GNUmakefile` claims `gnumakefile`.
+
+## Notes
+
+<Details summary="Why these names, and why not the pattern makefile.*">
+
+`Makefile`, `makefile` and `GNUmakefile` are the three names GNU Make looks for on its own, in that order, and `BSDmakefile` is the one BSD make prefers. `.mk` is what an included fragment is called by convention, and `.mak` and `.make` are the same fragment under two older spellings. `Makefile.am` and `Makefile.in` are the automake input and the configure output, both Make syntax with extra conventions on top that simply go uncoloured. `Makefile.inc` is the shared fragment BSD ports keep, and `Kbuild` is the Linux kernel's.
+
+The manifest can claim a shape rather than a list — `makefile.*` is a legal pattern here — and this extension deliberately does not. Two measurements decided it. Across 26 repositories every Makefile on disk is named exactly `Makefile`: 17 files in 11 repositories, and not one `makefile`, `GNUmakefile`, `.mk` or `Makefile.<anything>`. So the pattern would claim nothing that a name does not already claim.
+
+Against that it would claim one thing it should not. `Makefile.PL` is Perl — an ExtUtils script full of `use strict` and `WriteMakefile(...)` — and `makefile.*` matches it. The dialect has `*` and `?` and no way to say "except this one", so the pattern cannot be narrowed. A pattern that adds no coverage and one wrong claim is worse than the three literals.
+
+`Makefile.local` and `Makefile.config` stay unclaimed as a result. Phantom's language menu sets the language by hand for that buffer.
+
+</Details>
+
+<Details summary="Every Makefile measured was GNU make">
+
+All 17 use GNU constructs and no BSD ones: `:=` and `?=`, `-include`, `export`, `.PHONY`, `$(shell …)` and `ifeq`/`endif`. Not one `.for`, `.if` or `.endif` in the BSD spelling.
+
+That settles the dialect question. The grammar is the GNU one, and a BSD makefile opened with it keeps its comments, variables and targets while a `.for` loop reads as an ordinary line.
+
+</Details>
+
+<Details summary="Why justfile is not claimed">
+
+[just](https://github.com/casey/just) looks like Make from across the room and is a different language up close. It has one assignment operator rather than four. Its recipes are indented with spaces, and a tab is not special. It has `set` statements, `[attribute]` annotations, typed parameters with defaults, and `{{…}}` interpolation that Make would read as two nested variable references.
+
+Colouring a `justfile` with the Make grammar would mark its interpolations as variables that are not there and miss every construct just added. It deserves its own extension with the `just` grammar, and this one leaves it alone.
+
+</Details>
+
+<Details summary="Recipes hold shell, and it is not coloured as shell">
+
+A recipe line is handed to `/bin/sh`. The grammar knows the line is a recipe — it colours the tab, the `@` and `-` prefixes, the backslash continuation and every make variable inside it — but the shell in between stays one plain run of text. A `for` loop in a recipe gets no keyword colour and a quoted string in a recipe gets no string colour.
+
+That is a limit of the grammar rather than of this extension. No maintained TextMate grammar for Make embeds shell inside recipes: not the one Visual Studio Code ships, not the one it was converted from. Editors that do colour recipe shell use a Sublime `.sublime-syntax` or a tree-sitter parser, neither of which Phantom reads.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `makefile` language for the names Make looks for, the automake and kernel files, and the `.mk`, `.mak` and `.make` fragments, with the GNU grammar Visual Studio Code ships.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [Visual Studio Code](https://github.com/microsoft/vscode)'s `make.tmLanguage.json`, © Microsoft Corporation (MIT), shipped unmodified; VS Code converted it from [fadeevab/make.tmbundle](https://github.com/fadeevab/make.tmbundle), © Alexander Fadeev (MIT). GNU Make is a program of the [GNU Project](https://www.gnu.org/software/make/); this extension is not affiliated with it.

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.make",
+  "name": "Make",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Makefiles: targets, prerequisites, the four assignment operators, functions, conditionals and recipes.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/make",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "makefile",
+        "name": "Makefile",
+        "extensions": [
+          "mk",
+          "mak",
+          "make"
+        ],
+        "fileNames": [
+          "Makefile",
+          "GNUmakefile",
+          "BSDmakefile",
+          "Makefile.am",
+          "Makefile.in",
+          "Makefile.inc",
+          "Kbuild"
+        ],
+        "category": "script",
+        "icon": "icons/make.png",
+        "lineComment": "#"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.makefile",
+        "path": "syntaxes/make.tmLanguage.json",
+        "languageId": "makefile",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/make/syntaxes/make.tmLanguage.json"
+      }
+    ]
+  }
+}
