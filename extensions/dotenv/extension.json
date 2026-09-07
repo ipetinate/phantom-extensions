@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.dotenv",
+  "name": "Environment Files",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Environment files: highlighting for .env and its variants, quoted values, escapes and ${…} interpolation.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dotenv",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "dotenv",
+        "name": "Environment File",
+        "extensions": [
+          "env"
+        ],
+        "fileNames": [
+          ".env",
+          ".flaskenv"
+        ],
+        "fileNamePatterns": [
+          ".env.*",
+          ".env-*"
+        ],
+        "category": "data",
+        "icon": "icons/dotenv.png",
+        "lineComment": "#"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.confetti.env",
+        "path": "syntaxes/dotenv.tmLanguage.json",
+        "languageId": "dotenv",
+        "license": "MIT",
+        "grammarSource": "https://github.com/rhevorn/confetti/blob/3f9c0c474b5044b0b3436b14c3b6b9432b48f063/syntaxes/env.tmLanguage.json"
+      }
+    ]
+  }
+}

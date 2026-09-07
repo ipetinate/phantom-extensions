@@ -1,0 +1,95 @@
+---
+title: Environment Files
+tagline: .env support for Phantom — keys, quoted values with escapes, export, comments and ${…} interpolation.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [dotenv, env, environment, config, secrets, data]
+---
+
+An environment file is four lines of grammar and a whole class of mistakes. A quote that never closes swallows the rest of the file. A `#` inside a value is a comment or is not, depending on the quoting. A `${OTHER}` is expanded by one loader and left literal by another. Opened as plain text, none of that is visible.
+
+This extension teaches Phantom the syntax: `KEY=value`, the `export` prefix, single and double quoted values, the escapes a double quoted value accepts, `#` comments both on their own line and after a value, `${OTHER}` interpolation, and a quoted value that runs over several lines — which is how a private key or a certificate ends up in a `.env`.
+
+Nothing is installed and nothing is run. No language server exists for this format, and this extension declares none.
+
+## Highlights
+
+<Features>
+  <Feature title="Every variant, by pattern" icon="check">
+    `.env.local`, `.env.production.local`, `.env.dev1`, `.env.staging-eu` — the pattern `.env.*` claims all of them, whatever comes after the dot and however many dots follow. No list to keep and no variant to miss.
+  </Feature>
+  <Feature title="Quoting that survives a newline" icon="lock">
+    A double quoted value that runs to the next line stays a string all the way to its closing quote, so a pasted PEM block reads as one value instead of turning the rest of the file into nonsense. A single quoted value is literal: `${THIS}` inside it is not interpolation, and is not coloured as any.
+  </Feature>
+  <Feature title="Interpolation and escapes" icon="code">
+    `${OTHER}` and `$OTHER` inside an unquoted or double quoted value, and `\n`, `\"` and the rest of the escapes inside a double quoted one.
+  </Feature>
+  <Feature title="Comments where they really are" icon="book">
+    A `#` at the start of a line is a comment. A `#` after whitespace at the end of a value is a comment. A `#` inside quotes is part of the value.
+  </Feature>
+</Features>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Patterns | `.env.*` and `.env-*` |
+| Names | `.env`, `.flaskenv` |
+| Suffix | `.env`, which claims every name ending in it — `dev.env`, `.dev.env`, `production.env` |
+| Editor | TextMate grammar `source.confetti.env`, `#` comment marker |
+| Icon | Environment file icon in the sidebar and tabs |
+
+## Notes
+
+<Details summary="The two shapes of a variant, and which claim reaches which">
+
+Environment files come in two shapes, and each one needs a different key.
+
+**The extension comes first** — `.env.local`, `.env.production`, `.env.development.local`. The last dotted segment here is `local`, `production` or `local` again, so a suffix match cannot see them, and claiming `local` would claim every `settings.local` and `docker-compose.local` in the world. The pattern `.env.*` claims exactly this family and nothing else: `*` matches any run of characters, dots included, so one pattern covers `.env.local` and `.env.production.local` alike.
+
+**The extension comes last** — `dev.env`, `.dev.env`, `production.env`. The suffix `.env` claims every one of them, whatever the prefix.
+
+`.env` itself is a whole name, because a pattern that ends in `.` would not match it, and `.flaskenv` is a name too — it ends in `env` with no dot in front, so neither the pattern nor the suffix reaches it.
+
+The reason for a pattern rather than a list is a measurement. Across 26 repositories the environment files on disk were `.env.example` five times, `.env.prod` and `.env.staging` twice each, `.env.dev1`, `.env.dev2` and `.env.dev3` twice each, `.env.test` and `.env.development` once. Half of those are names no framework defines and no enumeration would ever have held.
+
+</Details>
+
+<Details summary="What a pattern still cannot reach">
+
+A pattern is matched against a file's name and never its path, and the dialect is `*` and `?` with no negation. So:
+
+- A file named for its environment with no `.env` in it at all — `config/staging.secrets`, `deploy/vars.prod` — is outside any pattern this format can write.
+- `.env` in a directory that means something, such as `environments/eu-west-1/values`, cannot be claimed by the directory.
+- A pattern cannot exclude. `.env.*` claims the whole family, and there is no way to say "all of it except this one".
+
+For the first two, Phantom's language menu sets the language by hand for that buffer.
+
+</Details>
+
+<Details summary="What is deliberately not claimed">
+
+`.envrc` belongs to [direnv](https://direnv.net/) and is a shell script, not an environment file. It is executed by bash: it has `if`, `source_up`, `PATH_add` and command substitution in it. The Shell extension colours it correctly, and claiming it here would replace a working shell grammar with one that only knows `KEY=value`. The pattern `.env.*` requires the dot, so `.envrc` falls outside it by construction rather than by luck.
+
+</Details>
+
+<Callout kind="warning" title="Colour is not concealment">
+Highlighting a `.env` makes its secrets easier to read, not harder. Phantom draws what the file holds, the same as any other editor. Keep the real values out of the repository and commit an `.env.example` instead.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: the `dotenv` language, claimed by the patterns `.env.*` and `.env-*`, the names `.env` and `.flaskenv`, and every name ending in `.env`. The grammar handles quoted values across lines, escapes, `export` and `${…}` interpolation.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [Confetti](https://github.com/rhevorn/confetti)'s `env.tmLanguage.json`, © the Confetti authors (MIT), shipped unmodified — including the `source.confetti.env` scope name its author gave it, because a grammar is shipped byte for byte or its licence no longer describes it.
+
+Two other grammars were measured against it on the same files and both lose a quoted value that runs past a newline, which is the case this format most needs to get right: the one from [dotenv-vscode](https://github.com/dotenv-org/dotenv-vscode) (MIT) and the one from [vscode-env](https://github.com/IronGeek/vscode-env) (MIT), which also breaks `HOST=0.0.0.0` in half.
+
+`dotenv` is a convention rather than a specification; this extension is not affiliated with any of the loaders that read these files.
