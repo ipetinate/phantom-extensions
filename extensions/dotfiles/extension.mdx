@@ -1,0 +1,104 @@
+---
+title: Project Dotfiles
+tagline: The small configuration files at the root of a project — INI dotfiles, version pins and Browserslist.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [ini, editorconfig, npmrc, nvmrc, browserslist, config, dotfiles]
+---
+
+Every repository has a handful of files that configure the tools around the code rather than the code itself. `.editorconfig` sets the indentation, `.npmrc` points at a registry, `.nvmrc` pins a Node version, `.browserslistrc` decides what the bundler targets. They are short, they are edited by hand, and until now Phantom showed all of them as plain text.
+
+This extension claims them. It contributes three languages, one grammar and no language server: nothing is installed, nothing is started, and nothing runs.
+
+## Highlights
+
+<Showcase>
+  <Features columns="3">
+    <Feature title="INI and key=value" icon="brush">
+      `.editorconfig`, `.npmrc`, `.yarnrc`, `.shellcheckrc` and the `.ini` and `.cfg` family. Section headers such as `[*.{kt,kts}]`, the key before the `=`, and `#` and `;` comments.
+    </Feature>
+    <Feature title="Version pins" icon="package">
+      `.nvmrc`, `.node-version`, `.ruby-version`, `.python-version`, `.terraform-version`, `.java-version` and `.tool-versions`. One version per file, so there is nothing to colour — but the file gets a name, an icon and a comment marker.
+    </Feature>
+    <Feature title="Browserslist" icon="globe">
+      `.browserslistrc`, the query list Autoprefixer, Babel and every bundler read to decide which browsers to support.
+    </Feature>
+  </Features>
+</Showcase>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Project Dotfiles.
+  </Step>
+  <Step title="Open a dotfile">
+    That is the whole setup. There is no server to install and no permission to grant, because the extension runs no program.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| INI | `.editorconfig`, `.npmrc`, `npmrc`, `.yarnrc`, `.shellcheckrc`, `.inputrc`, `.coveragerc`, `.flake8`, `setup.cfg`, `tox.ini`, `pytest.ini`, `mypy.ini`, and any `.ini` or `.cfg` |
+| Version pins | `.nvmrc`, `.node-version`, `.ruby-version`, `.python-version`, `.terraform-version`, `.java-version`, `.go-version`, `.tool-versions`, `.sdkmanrc`, `VERSION` |
+| Browserslist | `.browserslistrc`, `browserslist` |
+| Editor | TextMate grammar `source.ini` (Visual Studio Code), `#` comment marker on all three languages |
+| Language server | none |
+| Icon | a settings-list icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Why the version pins have no grammar">
+
+A `.nvmrc` holds one line and that line is a version number. There is nothing in it to tell apart, so the language ships no grammar and the file stays the colour of plain text.
+
+It is still worth claiming. The file gets a name in the status bar, an icon in the explorer that separates it from the source beside it, and a `#` comment marker, which `.tool-versions` and `.sdkmanrc` actually use.
+
+</Details>
+
+<Details summary="Why .browserslistrc has no grammar either">
+
+A Browserslist file is a list of queries — `> 0.5%`, `last 2 versions`, `not dead` — with `#` comments and blank lines. No TextMate grammar for it is maintained anywhere worth shipping from, and the queries are close enough to prose that colouring them by guesswork would read worse than leaving them alone.
+
+The language exists for the name, the icon and the comment marker. If a good grammar appears, it drops into this extension without changing what the file is called.
+
+</Details>
+
+<Details summary="EditorConfig section headers">
+
+`source.ini` colours a section header as a whole — `[*.{kt,kts}]` and `[{*Test.kt,*Tests.kt,*Spec.kt}]` both come out as one `entity.name.section` — rather than picking the glob apart inside the brackets. That is what Visual Studio Code does with the same file, and it is the useful half: the header stands away from the properties under it.
+
+Keys that are not EditorConfig's own, such as the `ktlint_` and `ij_kotlin_` settings a Kotlin project puts in the same file, are coloured like any other key. The grammar reads the shape of the file, not a list of allowed properties.
+
+</Details>
+
+<Details summary="What this extension does not claim">
+
+`.gitignore`, `.gitattributes`, `.gitmodules` and `CODEOWNERS` belong to the **Git** extension, which handles the whole family together — the ignore syntax is shared by `.prettierignore`, `.dockerignore` and six others, and splitting it would ship the same grammar twice.
+
+`.env` and its variants belong to the **Environment Files** extension.
+
+`.properties` and `.conf` belong to **JVM Config**. A `.properties` file is INI in shape, but it travels with the Gradle and Ktor files around it, not with the dotfiles at a repository root.
+
+`.prettierrc`, `.babelrc` and the other JSON dotfiles are already claimed by the **JSON** extension.
+
+</Details>
+
+<Callout kind="note" title="Nothing runs">
+This extension contributes a grammar and three language definitions. It declares no language server, no formatter and no agent, so Phantom never starts a program on its behalf and never asks you to allow one.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: INI for the `.editorconfig` and `.npmrc` family, a version pin language for `.nvmrc` and its siblings, and Browserslist.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [the INI grammar Visual Studio Code ships](https://github.com/microsoft/vscode/blob/main/extensions/ini/syntaxes/ini.tmLanguage.json), © Microsoft (MIT), taken from [textmate/ini.tmbundle](https://github.com/textmate/ini.tmbundle) and shipped unmodified. EditorConfig, npm, nvm and Browserslist are the projects whose files this extension reads; it is not affiliated with any of them.

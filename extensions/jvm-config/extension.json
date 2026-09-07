@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.jvm-config",
+  "name": "JVM Config",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "The two configuration formats a JVM service is written in: Java properties and HOCON.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/jvm-config",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "java-properties",
+        "name": "Java Properties",
+        "extensions": [
+          "properties"
+        ],
+        "category": "data",
+        "icon": "icons/jvm-config.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "hocon",
+        "name": "HOCON",
+        "extensions": [
+          "conf",
+          "hocon"
+        ],
+        "fileNames": [
+          "application.conf",
+          "reference.conf"
+        ],
+        "category": "data",
+        "icon": "icons/jvm-config.png",
+        "lineComment": "#",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.ini",
+        "path": "syntaxes/ini.tmLanguage.json",
+        "languageId": "java-properties",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/ini/syntaxes/ini.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.hocon",
+        "path": "syntaxes/hocon.tmLanguage.json",
+        "languageId": "hocon",
+        "license": "MIT",
+        "grammarSource": "https://github.com/Keraune/hocon-toolkit/blob/7cd0a8440c8dd7faa420aa48530d68d721ef1376/syntaxes/hocon.tmLanguage.json"
+      }
+    ]
+  }
+}

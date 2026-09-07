@@ -54,15 +54,11 @@
         "extensions": [
           "pip"
         ],
-        "fileNames": [
-          "requirements.txt",
-          "requirements.in",
-          "requirements-dev.txt",
-          "requirements-test.txt",
-          "requirements-local.txt",
-          "dev-requirements.txt",
-          "test-requirements.txt",
-          "constraints.txt"
+        "fileNamePatterns": [
+          "requirements*.txt",
+          "requirements*.in",
+          "*-requirements.txt",
+          "constraints*.txt"
         ],
         "category": "data",
         "icon": "icons/python.png",

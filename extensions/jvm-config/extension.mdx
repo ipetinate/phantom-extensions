@@ -1,0 +1,98 @@
+---
+title: JVM Config
+tagline: Java properties and HOCON for Phantom — the two formats a Gradle build and a Ktor service are configured in.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [properties, hocon, gradle, ktor, jvm, config]
+---
+
+A JVM service carries two kinds of configuration file and Phantom coloured neither. `gradle.properties`, `sonar-project.properties` and the message bundles are Java properties: flat `key=value` lines. `application.conf` is HOCON, the format Typesafe Config reads and Ktor is configured in: nested blocks, `${?ENV}` substitutions and includes.
+
+They are different syntaxes with one audience, so they travel in one extension. It contributes two languages, two grammars and no language server: nothing is installed and nothing runs.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Java properties" icon="brush">
+      The key before the `=` or `:`, and `#` and `!` comments. `gradle.properties`, `gradle-wrapper.properties`, `sonar-project.properties`, `junit-platform.properties` and the `messages.properties` bundles.
+    </Feature>
+    <Feature title="HOCON" icon="code">
+      Keys that open a block and keys that take a value, quoted and unquoted strings, numbers, `${ENV}` and `${?ENV}` substitutions, `include`, and both `#` and `//` comments.
+    </Feature>
+  </Features>
+</Showcase>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to JVM Config.
+  </Step>
+  <Step title="Open a .properties or .conf file">
+    That is the whole setup. There is no server to install and no permission to grant, because the extension runs no program.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Java properties | any `.properties` file |
+| HOCON | any `.conf` or `.hocon` file, and the names `application.conf` and `reference.conf` |
+| Editor | TextMate grammars `source.ini` (Visual Studio Code) and `source.hocon` (hocon-toolkit), `#` comment markers, `/* */` on HOCON |
+| Language server | none |
+| Icon | a nested-key icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Why .conf is HOCON and not a Phantom theme file">
+
+`.conf` is claimed by two things in this owner's own repositories, and only one of them can have it.
+
+A Phantom theme is a `.conf` file too, and the registry holds ninety of them. They lose, for three reasons. They are **generated** rather than authored — converted from upstream theme sets, read to check a colour and rarely edited. They are **flat** `key = value` and stay perfectly legible as plain text, so the cost of not colouring them is close to nothing. And Phantom's theme picker **resolves them by path**, not through the language catalogue, so nothing about the theme feature depends on this claim.
+
+HOCON is the opposite on all three counts. `application.conf` appears seventy-nine times in one repository here, it is edited during normal work, and it nests braces, substitutes environment variables and includes other files — the things that are hard to read unhighlighted.
+
+The outcome worse than either choice would be a `.conf` claim that applied theme rules to `application.conf`. That is the case this decision exists to rule out.
+
+</Details>
+
+<Details summary="Java properties uses the INI grammar, deliberately">
+
+There is no separately maintained TextMate grammar for Java properties. Visual Studio Code maps its `properties` language to `source.ini`, and so does Shiki. The two formats agree on everything a grammar can see: a key, a separator, a value to the end of the line, and a comment introduced by `#`.
+
+Where they differ, the difference is invisible to a highlighter. Java properties also accepts `!` as a comment marker and a bare space as a separator, and it continues a line with a trailing backslash. Neither the shape of the file nor the colouring changes.
+
+The same `source.ini` grammar ships in the **Project Dotfiles** extension for `.editorconfig` and `.npmrc`. Both copies are the same bytes from the same source, which is a state Phantom resolves by keeping one of them; an include is satisfied by either.
+
+</Details>
+
+<Details summary="Latin-1 message bundles">
+
+A `messages.properties` written before UTF-8 was assumed may be Latin-1, and a Portuguese message bundle in Latin-1 shows a replacement character where an accent should be. That is the file's encoding, not the grammar; the highlighting is unaffected either way.
+
+</Details>
+
+<Details summary="No language server">
+
+Neither format has a language server worth wiring. HOCON has none at all. Java properties is served by the Java language server only as part of a full Java workspace, which is the Java extension's business and not this one's. Both languages here contribute highlighting and comment markers, and nothing else.
+
+</Details>
+
+<Callout kind="note" title="Nothing runs">
+This extension contributes two grammars and two language definitions. It declares no language server, no formatter and no agent, so Phantom never starts a program on its behalf and never asks you to allow one.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: Java properties for `.properties`, and HOCON for `.conf` and `.hocon`.
+
+## License and credits
+
+The extension is released under the MIT License. The properties grammar is [the INI grammar Visual Studio Code ships](https://github.com/microsoft/vscode/blob/main/extensions/ini/syntaxes/ini.tmLanguage.json), © Microsoft (MIT), taken from [textmate/ini.tmbundle](https://github.com/textmate/ini.tmbundle). The HOCON grammar is [hocon-toolkit](https://github.com/Keraune/hocon-toolkit) (MIT). Both are shipped unmodified. HOCON is a format of [Typesafe Config](https://github.com/lightbend/config); this extension is not affiliated with Lightbend, Gradle or SonarSource.

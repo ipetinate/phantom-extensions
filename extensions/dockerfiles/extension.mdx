@@ -1,0 +1,94 @@
+---
+title: Dockerfiles
+tagline: Dockerfile highlighting for Phantom — the base image, every instruction, and the suffixed and Containerfile variants.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [docker, dockerfile, containerfile, oci, infrastructure]
+---
+
+A Dockerfile has no extension, so Phantom had nothing to match it on and showed it as plain text. This extension claims the name, its suffixed variants such as `Dockerfile.dev`, the `*.dockerfile` form, and Podman's `Containerfile`.
+
+It contributes one language, one grammar and no language server: nothing is installed and nothing runs.
+
+## Highlights
+
+<Showcase>
+  <Features>
+    <Feature title="Instructions" icon="brush">
+      `FROM`, `RUN`, `COPY`, `ADD`, `ENV`, `ARG`, `WORKDIR`, `EXPOSE`, `USER`, `VOLUME`, `ENTRYPOINT`, `CMD`, `HEALTHCHECK`, `LABEL`, `ONBUILD`, `SHELL` and `STOPSIGNAL`, in either case, with `AS` on a named stage. Quoted strings, and `#` comments including the `# syntax=` directive.
+    </Feature>
+    <Feature title="Every name a Dockerfile is given" icon="package">
+      `Dockerfile` and `dockerfile`, `Dockerfile.dev` and any other suffix, `api.dockerfile` and any other prefix, and `Containerfile` with the same three shapes.
+    </Feature>
+  </Features>
+</Showcase>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Dockerfiles.
+  </Step>
+  <Step title="Open a Dockerfile">
+    That is the whole setup. There is no server to install and no permission to grant, because the extension runs no program.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File names | `Dockerfile`, `Containerfile` |
+| Name patterns | `Dockerfile.*`, `Containerfile.*`, `*.dockerfile`, `*.containerfile` |
+| Editor | TextMate grammar `source.dockerfile` (Visual Studio Code), `#` comment marker |
+| Language server | none |
+| Icon | a stacked-layers icon in the sidebar and tabs |
+
+## Configuration
+
+<Details summary="Why it is called Dockerfiles and not Docker">
+
+The extension colours a file type. It does not build an image, talk to a daemon, or know anything about Docker itself — a `docker-compose.yml` is YAML and already claimed, and `.dockerignore` belongs with the ignore syntax in the **Git** extension.
+
+Calling it *Docker* would promise all of that. **Dockerfiles** names exactly what you get, in the word the ecosystem already uses for the file, and it reads correctly beside the other names in the store: Environment Files, Project Dotfiles, Make, Git.
+
+</Details>
+
+<Details summary="What the shell inside a RUN looks like">
+
+A long `RUN` is a shell script wrapped in backslash continuations, and the grammar leaves it plain: the `RUN` is coloured, the package names and `&&` under it are not. Visual Studio Code behaves the same way with the same grammar, because injecting the shell grammar into a continued line means tracking a line break inside a command, and getting that wrong is worse than leaving it alone.
+
+Measured against the Dockerfiles in this owner's repositories, that is the difference between a short file and a long one: a nineteen-line Dockerfile has a scope on three quarters of its lines, and a thirty-two-line one built around a single `RUN` with fourteen continuations has one on fewer than half.
+
+</Details>
+
+<Details summary="Suffixed names and how they are matched">
+
+Phantom matches a whole file name first, then a name pattern, then an extension. `Dockerfile` and `Containerfile` are claimed as names. `Dockerfile.dev`, `Dockerfile.prod` and anything else after the dot are claimed by the pattern `Dockerfile.*`, so no list of environments has to be guessed at. `api.dockerfile` is claimed by `*.dockerfile` and, for a file whose name is only the extension, by the extension itself.
+
+The pattern dialect is `*` and `?` only, and it is matched against the file's name and never its path.
+
+</Details>
+
+<Details summary="No language server">
+
+There is a Dockerfile language server, `dockerfile-langserver` from rcjsuen, and it is not wired here. It offers completion for instruction names and a handful of lint diagnostics, which is thin next to the cost of asking to run a program for a file most people edit a few lines of. If that trade changes, the server drops into this extension without changing what the file is called.
+
+</Details>
+
+<Callout kind="note" title="Nothing runs">
+This extension contributes one grammar and one language definition. It declares no language server, no formatter and no agent, so Phantom never starts a program on its behalf and never asks you to allow one.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: `Dockerfile`, `Containerfile`, their suffixed and prefixed forms, and the `source.dockerfile` grammar.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [the Dockerfile grammar Visual Studio Code ships](https://github.com/microsoft/vscode/blob/main/extensions/docker/syntaxes/docker.tmLanguage.json), © Microsoft (MIT), taken from [moby/moby](https://github.com/moby/moby) and shipped unmodified. Docker is a trademark of Docker, Inc.; this extension is not affiliated with or endorsed by Docker.

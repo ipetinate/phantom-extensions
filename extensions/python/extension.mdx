@@ -74,7 +74,7 @@ The formatter, from Astral. Without it the Format command and Format on Save do 
 
 | Area | Contribution |
 |---|---|
-| File types | `.py`, `.pyi` (Python); `requirements.txt`, `requirements.in`, `constraints.txt` and their common variants (pip requirements) |
+| File types | `.py`, `.pyi` (Python); the name patterns `requirements*.txt`, `requirements*.in`, `*-requirements.txt` and `constraints*.txt` (pip requirements) |
 | Language server | `pyright-langserver --stdio` |
 | Formatter | `ruff format --stdin-filename <file> -` |
 | Editor | TextMate grammar `source.python` (MagicPython), `#` comment marker |
@@ -171,9 +171,9 @@ Formatting requires `ruff` on the `PATH`. Ruff also skips a file that its own `e
 
 <Details summary="Which requirements files are claimed, and why not every .txt">
 
-Phantom matches an exact file name first, then the last suffix. A requirements file is a `.txt`, and `.txt` belongs to no language, so the extension lists the names instead: `requirements.txt`, `requirements.in`, `requirements-dev.txt`, `requirements-test.txt`, `requirements-local.txt`, `dev-requirements.txt`, `test-requirements.txt` and `constraints.txt`.
+A requirements file is a `.txt`, and claiming `txt` outright would colour every plain text file in the repository as a requirements file. So the language claims name patterns instead: `requirements*.txt`, `requirements*.in`, `*-requirements.txt` and `constraints*.txt`.
 
-A name outside that list — `requirements-ci.txt`, say — stays plain text. The manifest cannot express a pattern today, and claiming `txt` outright would colour every plain text file in the repository as a requirements file.
+That covers `requirements.txt`, `requirements.in`, `requirements-dev.txt`, `requirements-test.txt`, `dev-requirements.txt`, `constraints.txt` and anything else built the same way, without a list of environment names to keep guessing at. The pattern dialect is `*` and `?` only, and it is matched against the file's name and never its path.
 
 Pyright is never started for these. They are a separate language and carry no server.
 
