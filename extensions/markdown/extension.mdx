@@ -1,7 +1,7 @@
 ---
 title: Markdown
 tagline: Markdown support for Phantom — highlighting, and Marksman for links, references and outlines.
-version: 1.0.7
+version: 1.0.8
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -71,6 +71,7 @@ Completion, go to definition, find references, rename, document and workspace sy
 | Formatter | none. Marksman does not format, and Phantom already routes Markdown to Prettier |
 | Editor | TextMate grammar `text.html.markdown` (vscode-markdown-tm-grammar), with fenced code handed to the extension that owns the language; `<!-- -->` comment markers |
 | Icon | Markdown file icon in the sidebar and tabs |
+| Dependencies | HTML and YAML, for the inline HTML in a paragraph and the YAML in a front matter block |
 
 ## Configuration
 
@@ -159,11 +160,25 @@ Marksman indexes it with the rest of the folder, which is usually what you want:
 
 </Details>
 
+<Details summary="Which extensions this one depends on, and which it does not">
+
+A fenced code block colours its body with the grammar of whatever language the author typed after the backticks. This grammar knows fifty-nine of them, from `abap` to `xsl`.
+
+It does not depend on fifty-nine extensions. A fence whose language is not installed keeps the fence itself coloured and leaves the body plain — one colour less, nothing broken — so the manifest lists those fifty-nine scopes as optional includes and declares no dependency for any of them. Install Go and a `go` fence starts colouring; do nothing and it stays plain text.
+
+Two includes are not optional and are declared. **HTML** colours the inline HTML that Markdown allows in a heading, a paragraph or a strikethrough. **YAML** colours a front matter block, which is what makes a `.mdc` rule file readable.
+
+Earlier releases declared all twenty extensions whose grammars a fence can reach. That made installing Markdown install most of the store, for colours inside code fences that nobody had asked for.
+
+</Details>
+
 <Callout kind="note" title="Permissions">
 Marksman runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
 </Callout>
 
 ## Changelog
+
+**1.0.8** — Declares the fifty-nine fenced code block scopes as optional includes, and drops the dependency on every extension that existed only to satisfy one. Installing Markdown now installs HTML and YAML, which it does need, and nothing else.
 
 **1.0.7** — Claims `.mdc`, the rule files Cursor and other agent tools write. They are Markdown with YAML front matter, which this grammar already reads.
 

@@ -82,16 +82,21 @@ A language is coloured by a TextMate grammar, the same format VS Code, Sublime T
     "license": "MIT",
     "grammarSource": "https://github.com/sumneko/lua.tmbundle/blob/master/Syntaxes/Lua.plist",
     "embeddedLanguages": { "source.c": "c" },
+    "optionalIncludes": ["source.c"],
     "injectTo": ["text.html.markdown"]
   }
 ]
 ```
 
-`scopeName`, `path`, `license` and `grammarSource` are required. `path` is a `.json` grammar inside the extension, under 4 MiB, whose own `scopeName` equals the manifest's. `languageId` names a language the same extension contributes and is what connects a file type to the grammar; a grammar that exists only to be included by others, or to be injected into them, has none. `license` is the licence the grammar file carries and `grammarSource` is the https URL it was taken from, so attribution travels with the bytes. `embeddedLanguages` maps a scope to the language id its regions are lexed as, and `injectTo` lists the scopes the grammar's rules are injected into. An extension ships at most 32 grammars.
+`scopeName`, `path`, `license` and `grammarSource` are required. `path` is a `.json` grammar inside the extension, under 4 MiB, whose own `scopeName` equals the manifest's. `languageId` names a language the same extension contributes and is what connects a file type to the grammar; a grammar that exists only to be included by others, or to be injected into them, has none. `license` is the licence the grammar file carries and `grammarSource` is the https URL it was taken from, so attribution travels with the bytes. `embeddedLanguages` maps a scope to the language id its regions are lexed as, and `injectTo` lists the scopes the grammar's rules are injected into. `optionalIncludes` is read by the dependency rule below. An extension ships at most 32 grammars.
 
 The build compiles every `match`, `begin`, `end` and `while` pattern with Oniguruma, through `vscode-oniguruma`, which is the engine Phantom runs them with. A pattern that does not compile fails the build naming its rule, such as `repository.strings.patterns[2].begin`. A `\1` in an `end` or `while` pattern refers to what `begin` captured and is compiled with a placeholder, the way the editor does it at match time.
 
 An `include` may name `#rule`, `$self`, `$base`, another grammar's scope, or `scope#rule`. When the scope belongs to a grammar in another extension of this registry, that extension must be listed in the manifest's top-level `dependencies`, an array of extension ids; the build refuses an include that reaches an undeclared extension and a dependency that names no extension. Two extensions may provide one scope — the editor keeps the higher-ranked grammar and both carry the same bytes — and naming either of them in `dependencies` satisfies the include. A scope no extension in the registry provides is allowed, because grammars written for other editors include languages this registry does not carry, and the editor leaves such a region uncoloured rather than failing the grammar.
+
+Some includes are not worth a dependency. A grammar reaches a foreign scope for two different reasons, and the difference decides whether the include has to be declared. The `<script lang="ts">` block in a Vue file **must** be TypeScript, so `phantom.vue` depends on the extension providing `source.ts`. A fenced code block in Markdown names whatever language the author typed, and the grammar knows fifty-nine of them; none is promised, and a fence whose language is absent keeps its own colour and leaves the body plain. Declaring all fifty-nine would make installing Markdown install most of the registry.
+
+The two cannot be told apart from the grammar. Markdown's fence and Vue's script tag are the same shape — a `begin`/`while` rule carrying its own scope name, with the foreign include as its only child pattern — and `embeddedLanguages` does not separate them either, because Vue declares `source.ts` in it. So the manifest says which: `optionalIncludes` on a grammar entry lists the scopes that grammar includes and does not need, and the dependency rule skips them. Every entry has to be a scope the grammar actually includes, so a scope that leaves the grammar cannot leave an excuse behind. Everything not listed stays exactly as strict as before. At most 128 entries.
 
 ## Servers
 
