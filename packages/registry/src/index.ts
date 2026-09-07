@@ -68,7 +68,7 @@ export {
   referencedPaths,
 } from "./manifest.ts";
 export type { ContributionKind, Manifest, Tool } from "./manifest.ts";
-export { EXTENSIONS, ROOT, describe } from "./paths.ts";
+export { EXTENSION_ROOTS, REGISTRY_DIRECTORIES, ROOT, describe } from "./paths.ts";
 export { ReleaseCheckError, checkReleases, publishedAssets, readRows } from "./releases.ts";
 export { MEDIA_SUFFIXES, suffixOf } from "./suffixes.ts";
 export { MAX_VERSIONS, compareVersions, fetchPublishedIndex, indexURL, mergeVersions, publishedVersions } from "./versions.ts";

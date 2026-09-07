@@ -9,7 +9,7 @@ import { checkLayout } from "./layout.ts";
 import { checkMedia, type MediaEntry } from "./media.ts";
 import { checkGrammarDependencies } from "./grammars.ts";
 import { loadManifest, manifestGrammars, manifestIcons, manifestTools, type Manifest, type Tool } from "./manifest.ts";
-import { describe, EXTENSIONS } from "./paths.ts";
+import { describe, EXTENSION_ROOTS } from "./paths.ts";
 
 export interface Card extends DocumentCard {
   iconData: string | null;
@@ -33,13 +33,22 @@ export function checkIcon(directory: string, manifest: Manifest, card: DocumentC
   fail(directory, "needs an icon: 'icon' in the document's front matter, or 'icon' on a language or agent in extension.json");
 }
 
-export function collect(extensionsRoot: string = EXTENSIONS): Collected[] {
+function compare(left: string, right: string): number {
+  if (left < right) return -1;
+  return left > right ? 1 : 0;
+}
+
+function byDirectoryName(left: string, right: string): number {
+  return compare(path.basename(left), path.basename(right)) || compare(left, right);
+}
+
+export function collect(roots: readonly string[] = EXTENSION_ROOTS): Collected[] {
   const collected: Collected[] = [];
   const seen = new Map<string, string>();
-  const directories = readdirSync(extensionsRoot, { withFileTypes: true })
-    .map((entry) => path.join(extensionsRoot, entry.name))
+  const directories = roots
+    .flatMap((root) => readdirSync(root, { withFileTypes: true }).map((entry) => path.join(root, entry.name)))
     .filter(isDirectory)
-    .sort();
+    .sort(byDirectoryName);
   for (const directory of directories) {
     const manifest = loadManifest(directory);
     const owner = seen.get(manifest.id);

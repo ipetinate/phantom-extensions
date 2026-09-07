@@ -39,7 +39,7 @@ export interface IndexEntry {
 
 export interface BuildOptions {
   offline?: boolean;
-  extensionsRoot?: string;
+  roots?: readonly string[];
   maxZipBytes?: number;
 }
 
@@ -53,7 +53,7 @@ function asset(repo: string, tag: string, name: string, data: Uint8Array): Downl
 
 export async function build(out: string, repo: string, options: BuildOptions = {}): Promise<IndexEntry[]> {
   const maxZipBytes = options.maxZipBytes ?? MAX_ZIP_BYTES;
-  const collected = collect(options.extensionsRoot);
+  const collected = collect(options.roots);
   mkdirSync(out, { recursive: true });
   const published = options.offline === true ? null : await fetchPublishedIndex(repo);
   const entries: IndexEntry[] = [];

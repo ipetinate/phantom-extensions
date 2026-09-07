@@ -150,13 +150,29 @@ describe("collect", () => {
   it("refuses two extensions with one id", () => {
     new ExtensionFixture(root, "one", languageManifest());
     new ExtensionFixture(root, "two", languageManifest());
-    expect(() => collect(root)).toThrow(/already used by/);
+    expect(() => collect([root])).toThrow(/already used by/);
+  });
+
+  it("orders two roots as one registry", () => {
+    const extensions = path.join(root, "extensions");
+    const themes = path.join(root, "themes");
+    new ExtensionFixture(extensions, "two", languageManifest());
+    new ExtensionFixture(themes, "one", agentsManifest());
+    expect(collect([extensions, themes]).map((entry) => entry.manifest.id)).toEqual(["tests.agent", "tests.sample"]);
+  });
+
+  it("refuses one id used in two roots", () => {
+    const extensions = path.join(root, "extensions");
+    const themes = path.join(root, "themes");
+    new ExtensionFixture(extensions, "one", languageManifest());
+    new ExtensionFixture(themes, "two", languageManifest());
+    expect(() => collect([extensions, themes])).toThrow(/already used by/);
   });
 
   it("returns the directory, the manifest and the card", () => {
     new ExtensionFixture(root, "one", languageManifest());
     new ExtensionFixture(root, "two", agentsManifest());
-    const collected = collect(root);
+    const collected = collect([root]);
     expect(collected.map((entry) => entry.manifest.id)).toEqual(["tests.sample", "tests.agent"]);
     expect(collected.map((entry) => entry.card.title)).toEqual(["Sample", "Sample"]);
     expect(collected[0]?.card.media[0]?.path).toBe("media/cover.png");
@@ -164,7 +180,7 @@ describe("collect", () => {
 
   it("requires a document", () => {
     new ExtensionFixture(root, "one", languageManifest(), false);
-    expect(() => collect(root)).toThrow(/needs a document: extension.mdx or extension.md/);
+    expect(() => collect([root])).toThrow(/needs a document: extension.mdx or extension.md/);
   });
 
   it("requires an icon", () => {
@@ -172,7 +188,7 @@ describe("collect", () => {
     delete (manifest["contributes"] as { languages: Record<string, unknown>[] }).languages[0]?.["icon"];
     const fixture = new ExtensionFixture(root, "one", manifest, false);
     fixture.writeDocument(FRONT_MATTER.replace("icon: media/icon.svg\n", ""));
-    expect(() => collect(root)).toThrow(/needs an icon/);
+    expect(() => collect([root])).toThrow(/needs an icon/);
   });
 
   it("accepts a manifest icon in place of the document one", () => {
@@ -180,7 +196,7 @@ describe("collect", () => {
     one.writeDocument(FRONT_MATTER.replace("icon: media/icon.svg\n", ""));
     const two = new ExtensionFixture(root, "two", agentsManifest(), false);
     two.writeDocument(FRONT_MATTER.replace("icon: media/icon.svg\n", ""));
-    expect(collect(root).map((entry) => entry.card.icon)).toEqual([null, null]);
+    expect(collect([root]).map((entry) => entry.card.icon)).toEqual([null, null]);
   });
 });
 

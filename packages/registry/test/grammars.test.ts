@@ -268,13 +268,13 @@ describe("resolving includes across the registry", () => {
   it("passes when the providing extension is a dependency", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(["tests.sample"]), "syntaxes/other.tmLanguage.json");
-    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+    expect(collect([root]).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
   });
 
   it("fails when the providing extension is not a dependency", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(), "syntaxes/other.tmLanguage.json");
-    expect(() => collect(root)).toThrow(
+    expect(() => collect([root])).toThrow(
       /syntaxes\/other.tmLanguage.json: patterns\[0\].include includes 'source.sample', which tests.sample provides; add it to dependencies/,
     );
   });
@@ -282,26 +282,26 @@ describe("resolving includes across the registry", () => {
   it("fails when a dependency names no extension", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(["tests.sample", "tests.missing"]), "syntaxes/other.tmLanguage.json");
-    expect(() => collect(root)).toThrow(/dependency 'tests.missing' is not an extension in this registry/);
+    expect(() => collect([root])).toThrow(/dependency 'tests.missing' is not an extension in this registry/);
   });
 
   it("lets an include name a scope nobody in the registry provides", () => {
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(), "syntaxes/other.tmLanguage.json");
-    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other"]);
+    expect(collect([root]).map((entry) => entry.manifest.id)).toEqual(["tests.other"]);
   });
 
   it("passes when one of two extensions providing the scope is a dependency", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "sample-twin", SAMPLE_GRAMMAR, twinManifest());
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(["tests.sample"]), "syntaxes/other.tmLanguage.json");
-    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample", "tests.sample-twin"]);
+    expect(collect([root]).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample", "tests.sample-twin"]);
   });
 
   it("names both providers when neither is a dependency", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "sample-twin", SAMPLE_GRAMMAR, twinManifest());
     grammarFixture(root, "other", OTHER_GRAMMAR, otherManifest(), "syntaxes/other.tmLanguage.json");
-    expect(() => collect(root)).toThrow(
+    expect(() => collect([root])).toThrow(
       /includes 'source.sample', which tests.sample and tests.sample-twin provide; add one of them to dependencies/,
     );
   });
@@ -313,7 +313,7 @@ describe("resolving includes across the registry", () => {
     };
     grammarFixture(root, "sample");
     grammarFixture(root, "other", grammar, otherManifest(), "syntaxes/other.tmLanguage.json");
-    expect(() => collect(root)).toThrow(
+    expect(() => collect([root])).toThrow(
       /patterns\[0\].captures.2.patterns\[0\].include includes 'source.sample', which tests.sample provides; add it to dependencies/,
     );
   });
@@ -324,7 +324,7 @@ describe("resolving includes across the registry", () => {
       patterns: [{ include: "source.sample#comment" }, { include: "$base" }],
     };
     grammarFixture(root, "sample", grammar);
-    expect(() => collect(root)).not.toThrow();
+    expect(() => collect([root])).not.toThrow();
   });
 });
 
@@ -333,7 +333,7 @@ describe("the index", () => {
     const extensions = path.join(root, "extensions");
     grammarFixture(extensions, "sample");
     grammarFixture(extensions, "other", OTHER_GRAMMAR, otherManifest(["tests.sample"]), "syntaxes/other.tmLanguage.json");
-    const entries = await build(path.join(root, "dist"), "tests/registry", { offline: true, extensionsRoot: extensions });
+    const entries = await build(path.join(root, "dist"), "tests/registry", { offline: true, roots: [extensions] });
     const other = entries.find((entry) => entry.id === "tests.other");
     expect(other?.contributes).toEqual(["languages", "grammars"]);
     expect(other?.grammars).toEqual(["source.other"]);
@@ -368,14 +368,14 @@ describe("an optional include", () => {
   it("needs no dependency on the extension providing it", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(["source.sample"]), "syntaxes/other.tmLanguage.json");
-    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+    expect(collect([root]).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
   });
 
   it("covers every site including the scope, whether or not a rule is named", () => {
     const grammar = { scopeName: "source.other", patterns: [{ include: "source.sample#string" }] };
     grammarFixture(root, "sample");
     grammarFixture(root, "other", grammar, optionalManifest(["source.sample"]), "syntaxes/other.tmLanguage.json");
-    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+    expect(collect([root]).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
   });
 
   it("excuses only the scope it names", () => {
@@ -390,19 +390,19 @@ describe("an optional include", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "twin", { ...SAMPLE_GRAMMAR, scopeName: "source.twin" }, twin);
     grammarFixture(root, "other", grammar, optionalManifest(["source.sample"]), "syntaxes/other.tmLanguage.json");
-    expect(() => collect(root)).toThrow(/includes 'source.twin', which tests.twin provides; add it to dependencies/);
+    expect(() => collect([root])).toThrow(/includes 'source.twin', which tests.twin provides; add it to dependencies/);
   });
 
   it("leaves a grammar that declares none exactly as strict", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(undefined), "syntaxes/other.tmLanguage.json");
-    expect(() => collect(root)).toThrow(/includes 'source.sample', which tests.sample provides; add it to dependencies/);
+    expect(() => collect([root])).toThrow(/includes 'source.sample', which tests.sample provides; add it to dependencies/);
   });
 
   it("may name a scope the extension also depends on", () => {
     grammarFixture(root, "sample");
     grammarFixture(root, "other", OTHER_GRAMMAR, optionalManifest(["source.sample"], ["tests.sample"]), "syntaxes/other.tmLanguage.json");
-    expect(collect(root).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
+    expect(collect([root]).map((entry) => entry.manifest.id)).toEqual(["tests.other", "tests.sample"]);
   });
 
   it("must be an array", () => {

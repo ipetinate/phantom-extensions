@@ -10,6 +10,8 @@ https://github.com/ipetinate/phantom-extensions/releases/download/index/index.js
 
 One directory per extension, whatever it contributes. A language, its formatter, its icon and a theme that go together live in one directory and ship as one zip; the manifest says what is inside.
 
+Two top-level directories hold those extension directories. An extension whose `contributes` is nothing but `themes` goes under `themes/`; everything else — a language, a grammar, a formatter, a server, an icon theme — goes under `extensions/`. Colour themes outnumber the rest four to one, and reading either directory should tell you what the registry offers.
+
 ```
 extensions/
   lua/
@@ -18,6 +20,8 @@ extensions/
     icons/lua.svg       assets, referenced from the manifest by relative path
     syntaxes/           the TextMate grammars contributes.grammars[] names
     media/              images and videos the document uses
+themes/
+  dracula/              the same layout, for an extension that only contributes themes
 schema/
   extension.schema.json
 packages/
@@ -27,14 +31,16 @@ packages/
 
 A directory holds `extension.json`, the document, `LICENSE*`, `README*`, the paths the manifest references and `media/`. Any other file fails the build.
 
+The two directories are one registry. The builder reads both, orders every extension by its directory name whichever one holds it, and writes one `index.json`. Which directory an extension sits in changes nothing an extension carries: no id, no version, no release tag, no asset name. Moving one from `extensions/` to `themes/` therefore needs no version bump — but its `homepage`, if it names a path in this repository, has to name the new one.
+
 Directory names are for humans. Identity is `id` in the manifest, and the zip is `<id>-<version>.zip`.
 
 ## Publishing an extension
 
-1. Add `extensions/<name>/extension.json` and its assets. `id` is `<publisher>.<name>`, lowercase, using `[a-z0-9._-]`.
+1. Add `extensions/<name>/extension.json` and its assets, or `themes/<name>/extension.json` when the extension contributes nothing but `themes`. `id` is `<publisher>.<name>`, lowercase, using `[a-z0-9._-]`.
 2. Add the document: exactly one of `extension.mdx` or `extension.md` beside the manifest, with the front matter described under "The document". An extension without a document does not build.
 3. Give the extension an icon: `icon` in the document's front matter, or `icon` on a language or agent in the manifest. An extension without an icon does not build. Screenshots, GIFs and videos are optional.
-4. Run `node packages/registry/dist/cli.js check` and `node packages/phantom-mdx/dist/cli.js check extensions/<name>`. Each package builds its own command line with `npm ci && npm run build`. Pull requests run both.
+4. Run `node packages/registry/dist/cli.js check` and `node packages/phantom-mdx/dist/cli.js check <directory>`, where `<directory>` is `extensions/<name>` or `themes/<name>`. Each package builds its own command line with `npm ci && npm run build`. Pull requests run both.
 5. Open a pull request. On merge, the publish workflow creates a release `<id>-v<version>` with the zip, then rebuilds `index.json` and uploads it to the `index` release.
 6. To ship a change, raise `version`. A version that already has a release is never rebuilt. Any change under an extension directory needs a version bump, and CI refuses a build whose zip differs from the bytes already released under that version.
 
@@ -223,7 +229,8 @@ A manifest can name a program to run: a language server, a formatter. Phantom as
 
 ```sh
 node scripts/sandbox.mjs install typescript vue   # copy those two in
-node scripts/sandbox.mjs install --all            # copy every extension in
+node scripts/sandbox.mjs install dracula          # a theme, named the same way
+node scripts/sandbox.mjs install --all            # copy every extension in, from both directories
 node scripts/sandbox.mjs list                     # what is installed, with versions
 node scripts/sandbox.mjs remove typescript        # take one out
 node scripts/sandbox.mjs remove --all             # empty the directory
@@ -231,6 +238,6 @@ node scripts/sandbox.mjs remove --all             # empty the directory
 
 The directory is `~/.config/phantom-debug/extensions/`, one subdirectory per extension named by the manifest's `id`. That is where a debug build of Phantom looks: the release build reads `~/.config/phantom/extensions/`, which this script never writes to, never reads and never deletes. Installing over an extension that is already there replaces it whole.
 
-`install` and `remove` take **directory names** — `typescript`, not `phantom.typescript` — and derive the id from `extension.json`. `remove` also accepts an id, for something installed from a directory this checkout no longer has. A name that is not a directory under `extensions/`, or an id that is not one path segment, is refused rather than resolved.
+`install` and `remove` take **directory names** — `typescript`, not `phantom.typescript` — and derive the id from `extension.json`. `remove` also accepts an id, for something installed from a directory this checkout no longer has. A name is looked up under `extensions/` and then under `themes/`, so it never says which of the two holds the extension. A name that is a directory under neither, or an id that is not one path segment, is refused rather than resolved.
 
 Phantom rereads the directory when it starts, so restart the debug build after an install. An extension installed this way is a user-scope contribution, which sits below the compiled-in registry: a language Phantom already ships is listed as shadowed until you promote it in Settings → Language Servers.

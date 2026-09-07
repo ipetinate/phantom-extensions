@@ -64,7 +64,7 @@ describe("contributes.servers", () => {
 
   it("carries the server on the card, as a program the extension needs", () => {
     new ExtensionFixture(root, "companion", serversManifest({ installHint: "npm i -g @tailwindcss/language-server" }));
-    expect(collect(root)[0]?.card.tools).toEqual([
+    expect(collect([root])[0]?.card.tools).toEqual([
       {
         kind: "server",
         name: "Tailwind CSS",
@@ -112,7 +112,7 @@ describe("contributes.servers", () => {
   it("needs a command, and falls back to it when there is no name", () => {
     expect(loadCompanion({ command: undefined })).toThrow(/'command'/);
     new ExtensionFixture(root, "companion", serversManifest({ name: undefined }));
-    expect(collect(root)[0]?.card.tools[0]?.name).toBe("tailwindcss-language-server");
+    expect(collect([root])[0]?.card.tools[0]?.name).toBe("tailwindcss-language-server");
   });
 
   it.each(CATEGORIES)("takes the category %s", (category) => {
