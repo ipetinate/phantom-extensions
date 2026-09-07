@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.dockerfiles",
+  "name": "Dockerfiles",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Dockerfiles: highlighting for Dockerfile, its suffixed variants and Containerfile.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dockerfiles",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "dockerfile",
+        "name": "Dockerfile",
+        "extensions": [
+          "dockerfile",
+          "containerfile"
+        ],
+        "fileNames": [
+          "dockerfile",
+          "containerfile"
+        ],
+        "fileNamePatterns": [
+          "dockerfile.*",
+          "containerfile.*",
+          "*.dockerfile",
+          "*.containerfile"
+        ],
+        "category": "infrastructure",
+        "icon": "icons/dockerfile.png",
+        "lineComment": "#"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.dockerfile",
+        "path": "syntaxes/docker.tmLanguage.json",
+        "languageId": "dockerfile",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/docker/syntaxes/docker.tmLanguage.json"
+      }
+    ]
+  }
+}

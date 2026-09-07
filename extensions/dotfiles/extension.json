@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.dotfiles",
+  "name": "Project Dotfiles",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "The small configuration files at the root of a project: INI and key=value dotfiles, version pins and Browserslist.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dotfiles",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "ini",
+        "name": "INI",
+        "extensions": [
+          "ini",
+          "cfg",
+          "npmrc",
+          "yarnrc",
+          "editorconfig",
+          "shellcheckrc"
+        ],
+        "fileNames": [
+          ".editorconfig",
+          ".npmrc",
+          "npmrc",
+          ".yarnrc",
+          ".shellcheckrc",
+          ".inputrc",
+          ".coveragerc",
+          ".flake8",
+          "setup.cfg",
+          "tox.ini",
+          "pytest.ini",
+          "mypy.ini"
+        ],
+        "category": "data",
+        "icon": "icons/dotfiles.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "version-pin",
+        "name": "Version Pin",
+        "extensions": [
+          "nvmrc",
+          "node-version",
+          "ruby-version",
+          "python-version",
+          "terraform-version",
+          "java-version",
+          "tool-versions"
+        ],
+        "fileNames": [
+          ".nvmrc",
+          ".node-version",
+          ".ruby-version",
+          ".python-version",
+          ".terraform-version",
+          ".java-version",
+          ".go-version",
+          ".tool-versions",
+          ".sdkmanrc",
+          "version"
+        ],
+        "category": "data",
+        "icon": "icons/dotfiles.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "browserslist",
+        "name": "Browserslist",
+        "extensions": [
+          "browserslistrc"
+        ],
+        "fileNames": [
+          ".browserslistrc",
+          "browserslist"
+        ],
+        "category": "data",
+        "icon": "icons/dotfiles.png",
+        "lineComment": "#"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.ini",
+        "path": "syntaxes/ini.tmLanguage.json",
+        "languageId": "ini",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/ini/syntaxes/ini.tmLanguage.json"
+      }
+    ]
+  }
+}

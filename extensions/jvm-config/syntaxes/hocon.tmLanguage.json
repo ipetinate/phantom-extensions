@@ -1,0 +1,246 @@
+{
+  "name": "HOCON",
+  "scopeName": "source.hocon",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#tripleStrings"
+    },
+    {
+      "include": "#quotedKeys"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#requiredIncludes"
+    },
+    {
+      "include": "#includes"
+    },
+    {
+      "include": "#substitutions"
+    },
+    {
+      "include": "#booleans"
+    },
+    {
+      "include": "#nulls"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#punctuation"
+    },
+    {
+      "include": "#keys"
+    },
+    {
+      "include": "#unquotedValues"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.hocon",
+          "match": "#.*$"
+        },
+        {
+          "name": "comment.line.double-slash.hocon",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "tripleStrings": {
+      "patterns": [
+        {
+          "name": "string.quoted.triple.hocon",
+          "begin": "\"\"\"",
+          "end": "\"\"\""
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.hocon",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.hocon",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "requiredIncludes": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.include.hocon"
+            },
+            "2": {
+              "name": "support.function.include.required.hocon"
+            },
+            "3": {
+              "name": "support.function.include.hocon"
+            },
+            "4": {
+              "name": "string.quoted.double.hocon"
+            }
+          },
+          "match": "\\b(include)\\b\\s+\\b(required)\\b\\s*\\(\\s*\\b(file|url|classpath)\\b\\s*\\(\\s*(\"[^\"]+\")\\s*\\)\\s*\\)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.include.hocon"
+            },
+            "2": {
+              "name": "support.function.include.required.hocon"
+            },
+            "3": {
+              "name": "string.quoted.double.hocon"
+            }
+          },
+          "match": "\\b(include)\\b\\s+\\b(required)\\b\\s*\\(\\s*(\"[^\"]+\")\\s*\\)"
+        }
+      ]
+    },
+    "includes": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.include.hocon"
+            },
+            "2": {
+              "name": "support.function.include.hocon"
+            },
+            "3": {
+              "name": "string.quoted.double.hocon"
+            }
+          },
+          "match": "\\b(include)\\b\\s+\\b(file|url|classpath)\\b\\s*\\(\\s*(\"[^\"]+\")\\s*\\)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.include.hocon"
+            },
+            "2": {
+              "name": "string.quoted.double.hocon"
+            }
+          },
+          "match": "\\b(include)\\b\\s+(\"[^\"]+\")"
+        }
+      ]
+    },
+    "substitutions": {
+      "patterns": [
+        {
+          "name": "entity.name.tag.hocon",
+          "match": "\\$\\{\\?[^}]+\\}"
+        },
+        {
+          "name": "entity.name.tag.hocon",
+          "match": "\\$\\{[^}]+\\}"
+        }
+      ]
+    },
+    "booleans": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.hocon",
+          "match": "\\b(true|false|yes|no|on|off)\\b"
+        }
+      ]
+    },
+    "nulls": {
+      "patterns": [
+        {
+          "name": "constant.language.null.hocon",
+          "match": "\\bnull\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hocon",
+          "match": "\\b-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.hocon",
+          "match": "\\+=|=|:"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.section.braces.begin.hocon",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.section.braces.end.hocon",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.section.brackets.begin.hocon",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.section.brackets.end.hocon",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.section.parens.begin.hocon",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.section.parens.end.hocon",
+          "match": "\\)"
+        }
+      ]
+    },
+    "keys": {
+      "patterns": [
+        {
+          "name": "storage.type.hocon",
+          "match": "\\b[a-zA-Z_][\\w.-]*(?:\\s+[a-zA-Z_][\\w.-]*)*(?=\\s*(?:\\+=|=|:|\\{))"
+        }
+      ]
+    },
+    "unquotedValues": {
+      "patterns": [
+        {
+          "name": "string.unquoted.hocon",
+          "match": "(?<=[=:]\\s)(?!true\\b|false\\b|yes\\b|no\\b|on\\b|off\\b|null\\b|-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b|\\$\\{)[^\\s\\],}#][^\\],}#]*"
+        }
+      ]
+    },
+    "quotedKeys": {
+      "patterns": [
+        {
+          "name": "storage.type.hocon",
+          "match": "\"(?:\\\\.|[^\"\\\\])+\"(?=\\s*(?:\\+=|=|:|\\{))"
+        }
+      ]
+    }
+  }
+}
