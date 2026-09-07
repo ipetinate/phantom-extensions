@@ -20,6 +20,7 @@ export interface CodeSample {
   readonly lines: readonly string[];
   readonly caret: number;
   readonly selected: string;
+  readonly dirty?: boolean;
 }
 
 const IDENTIFIER_START = /[A-Za-z_$@]/;
@@ -214,6 +215,7 @@ export const SAMPLES: readonly CodeSample[] = [
   {
     file: "index.ts",
     slot: 4,
+    dirty: true,
     grammar: TYPESCRIPT,
     caret: 12,
     selected: "MAX_COLORS",
@@ -285,11 +287,3 @@ export const SAMPLES: readonly CodeSample[] = [
   },
 ];
 
-export const EXPLORER_ROWS: readonly { readonly name: string; readonly depth: number; readonly file: string | null; readonly slot: number }[] = [
-  { name: "phantom", depth: 0, file: null, slot: -1 },
-  { name: "src", depth: 1, file: null, slot: -1 },
-  { name: "Main.kt", depth: 2, file: "Main.kt", slot: 5 },
-  { name: "index.ts", depth: 2, file: "index.ts", slot: 4 },
-  { name: "app.rb", depth: 2, file: "app.rb", slot: 1 },
-  { name: "package.json", depth: 1, file: "package.json", slot: 3 },
-];
