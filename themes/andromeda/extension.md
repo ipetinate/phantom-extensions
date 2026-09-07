@@ -19,44 +19,10 @@ Settings, and that is all it does.
 
 ## The theme
 
-<ThemePreview title="Andromeda" background="#262a33" foreground="#e5e5e5" cursor="#f8f8f0" selection="#5a5c62" ansi="#000000, #cd3131, #05bc79, #e5e512, #2472c8, #bc3fbc, #0fa8cd, #e5e5e5, #666666, #cd3131, #05bc79, #e5e512, #2472c8, #bc3fbc, #0fa8cd, #e5e5e5" />
+<ThemePreview title="Andromeda" background="#262a33" foreground="#e5e5e5" cursor="#f8f8f0" selection="#5a5c62" ansi="#000000, #cd3131, #05bc79, #e5e512, #2472c8, #bc3fbc, #0fa8cd, #e5e5e5, #666666, #cd3131, #05bc79, #e5e512, #2472c8, #bc3fbc, #0fa8cd, #e5e5e5" cursorText="#b5b5a8" selectionText="#ece7e7" />
 
-The window above is painted from the file this extension installs. Press a tab to
-read another language: the editor takes its keyword, string, comment, number,
-type and call colours from the ANSI sixteen, so the preview shows what the
-palette does to code rather than describing it.
-
-## Terminal colours
-
-<Swatches columns="6">
-  <Swatch color="#262a33" name="Background" />
-  <Swatch color="#e5e5e5" name="Foreground" />
-  <Swatch color="#f8f8f0" name="Cursor" />
-  <Swatch color="#b5b5a8" name="Cursor text" />
-  <Swatch color="#5a5c62" name="Selection" />
-  <Swatch color="#ece7e7" name="Selection text" />
-</Swatches>
-
-## The ANSI 16
-
-<Swatches columns="8">
-  <Swatch color="#000000" name="0 Black" />
-  <Swatch color="#cd3131" name="1 Red" />
-  <Swatch color="#05bc79" name="2 Green" />
-  <Swatch color="#e5e512" name="3 Yellow" />
-  <Swatch color="#2472c8" name="4 Blue" />
-  <Swatch color="#bc3fbc" name="5 Magenta" />
-  <Swatch color="#0fa8cd" name="6 Cyan" />
-  <Swatch color="#e5e5e5" name="7 White" />
-  <Swatch color="#666666" name="8 Bright black" />
-  <Swatch color="#cd3131" name="9 Bright red" />
-  <Swatch color="#05bc79" name="10 Bright green" />
-  <Swatch color="#e5e512" name="11 Bright yellow" />
-  <Swatch color="#2472c8" name="12 Bright blue" />
-  <Swatch color="#bc3fbc" name="13 Bright magenta" />
-  <Swatch color="#0fa8cd" name="14 Bright cyan" />
-  <Swatch color="#e5e5e5" name="15 Bright white" />
-</Swatches>
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
 
 ## Installing
 
