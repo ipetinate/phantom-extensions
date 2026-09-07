@@ -4,7 +4,7 @@
   "name": "Git",
   "version": "1.0.0",
   "publisher": "Isac Petinate",
-  "description": "Git's own files: ignore lists, config, attributes, mailmap, commit messages and the rebase todo.",
+  "description": "Git's own files: ignore lists, config, attributes, CODEOWNERS, mailmap, commit messages and the rebase todo.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/git",
   "phantom": "0.17.0",
   "dependencies": [
@@ -22,21 +22,17 @@
           "eslintignore",
           "prettierignore",
           "stylelintignore",
+          "nxignore",
+          "augmentignore",
           "helmignore",
           "vercelignore",
           "gcloudignore"
         ],
         "fileNames": [
-          ".gitignore",
-          ".gitignore_global",
-          ".dockerignore",
-          ".npmignore",
-          ".eslintignore",
-          ".prettierignore",
-          ".stylelintignore",
-          ".helmignore",
-          ".vercelignore",
-          ".gcloudignore"
+          ".gitignore_global"
+        ],
+        "fileNamePatterns": [
+          ".*ignore"
         ],
         "category": "data",
         "icon": "icons/git.png",
@@ -114,6 +110,19 @@
         "category": "data",
         "icon": "icons/git.png",
         "lineComment": "#"
+      },
+      {
+        "languageId": "codeowners",
+        "name": "CODEOWNERS",
+        "extensions": [
+          "codeowners"
+        ],
+        "fileNames": [
+          "CODEOWNERS"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
       }
     ],
     "grammars": [
@@ -161,6 +170,13 @@
         "languageId": "git-mailmap",
         "license": "Apache-2.0",
         "grammarSource": "https://github.com/claui/vscode-email-addresses/blob/26add93c12e0e2172ac2ad074d958cc14dc09802/extension/share/syntaxes/gitMailmap.tmLanguage.json"
+      },
+      {
+        "scopeName": "text.codeowners",
+        "path": "syntaxes/codeowners.tmLanguage.json",
+        "languageId": "codeowners",
+        "license": "MIT",
+        "grammarSource": "https://github.com/jasonnutter/vscode-codeowners/blob/219dee0ab25c1bfad0b9de84180117e71221a653/syntaxes/codeowners.tmLanguage.json"
       },
       {
         "scopeName": "source.diff",

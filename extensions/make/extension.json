@@ -19,14 +19,10 @@
         ],
         "fileNames": [
           "Makefile",
-          "makefile",
           "GNUmakefile",
-          "gnumakefile",
           "BSDmakefile",
           "Makefile.am",
-          "makefile.am",
           "Makefile.in",
-          "makefile.in",
           "Makefile.inc",
           "Kbuild"
         ],

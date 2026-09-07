@@ -38,20 +38,32 @@ Nothing is installed and nothing is run. Make is not invoked, and no language se
 
 | Area | Contribution |
 |---|---|
-| File names | `Makefile`, `makefile`, `GNUmakefile`, `gnumakefile`, `BSDmakefile`, `Makefile.am`, `makefile.am`, `Makefile.in`, `makefile.in`, `Makefile.inc`, `Kbuild` |
+| File names | `Makefile`, `GNUmakefile`, `BSDmakefile`, `Makefile.am`, `Makefile.in`, `Makefile.inc`, `Kbuild` |
 | Suffixes | `.mk`, `.mak`, `.make` |
 | Editor | TextMate grammar `source.makefile`, `#` comment marker |
 | Icon | Makefile icon in the sidebar and tabs |
 
+Names are matched without regard to case, so `Makefile` claims `makefile` too, and `GNUmakefile` claims `gnumakefile`.
+
 ## Notes
 
-<Details summary="Why these names and not a pattern">
+<Details summary="Why these names, and why not the pattern makefile.*">
 
-`Makefile`, `makefile` and `GNUmakefile` are the three names GNU Make looks for on its own, in that order, and `BSDmakefile` is the one BSD make prefers. Those four are not negotiable. `.mk` is what an included fragment is called by convention, and `.mak` and `.make` are the same fragment under two older spellings.
+`Makefile`, `makefile` and `GNUmakefile` are the three names GNU Make looks for on its own, in that order, and `BSDmakefile` is the one BSD make prefers. `.mk` is what an included fragment is called by convention, and `.mak` and `.make` are the same fragment under two older spellings. `Makefile.am` and `Makefile.in` are the automake input and the configure output, both Make syntax with extra conventions on top that simply go uncoloured. `Makefile.inc` is the shared fragment BSD ports keep, and `Kbuild` is the Linux kernel's.
 
-`Makefile.am` and `Makefile.in` are the automake input and the configure output. Both are Make syntax with extra conventions on top, so the grammar reads them correctly and the extra conventions simply go uncoloured. `Makefile.inc` is the shared fragment BSD ports keep. `Kbuild` is the Linux kernel's, and it is Make.
+The manifest can claim a shape rather than a list — `makefile.*` is a legal pattern here — and this extension deliberately does not. Two measurements decided it. Across 26 repositories every Makefile on disk is named exactly `Makefile`: 17 files in 11 repositories, and not one `makefile`, `GNUmakefile`, `.mk` or `Makefile.<anything>`. So the pattern would claim nothing that a name does not already claim.
 
-What is missing is the shape rather than the names. `Makefile.*` is a pattern, and a manifest holds names and suffixes, not globs: `Makefile.am` is claimed because it is spelled out, and `Makefile.local` is not claimed at all, because its last dotted segment is `local` and no list can hold every word a team puts after the dot.
+Against that it would claim one thing it should not. `Makefile.PL` is Perl — an ExtUtils script full of `use strict` and `WriteMakefile(...)` — and `makefile.*` matches it. The dialect has `*` and `?` and no way to say "except this one", so the pattern cannot be narrowed. A pattern that adds no coverage and one wrong claim is worse than the three literals.
+
+`Makefile.local` and `Makefile.config` stay unclaimed as a result. Phantom's language menu sets the language by hand for that buffer.
+
+</Details>
+
+<Details summary="Every Makefile measured was GNU make">
+
+All 17 use GNU constructs and no BSD ones: `:=` and `?=`, `-include`, `export`, `.PHONY`, `$(shell …)` and `ifeq`/`endif`. Not one `.for`, `.if` or `.endif` in the BSD spelling.
+
+That settles the dialect question. The grammar is the GNU one, and a BSD makefile opened with it keeps its comments, variables and targets while a `.for` loop reads as an ordinary line.
 
 </Details>
 
@@ -73,7 +85,7 @@ That is a limit of the grammar rather than of this extension. No maintained Text
 
 ## Changelog
 
-**1.0.0** — Initial release: the `makefile` language for the four names Make looks for, the automake and kernel files, and the `.mk`, `.mak` and `.make` fragments, with the grammar Visual Studio Code ships.
+**1.0.0** — Initial release: the `makefile` language for the names Make looks for, the automake and kernel files, and the `.mk`, `.mak` and `.make` fragments, with the GNU grammar Visual Studio Code ships.
 
 ## License and credits
 
