@@ -42,12 +42,38 @@ describe("build", () => {
     expect(index.extensions[0]?.versions).toEqual([{ version: "1.0.0", download: entries[0]?.download }]);
   });
 
-  it("writes the release row and the zip", async () => {
+  it("writes the release row and both zips", async () => {
     new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
     const entries = await run();
     const archive = path.join(root, "dist", "tests.sample-1.0.0.zip");
-    expect(readFileSync(path.join(root, "dist", "releases.tsv"), "utf8")).toBe(`tests.sample-v1.0.0\t${archive}\tSample 1.0.0\n`);
+    const preview = path.join(root, "dist", "tests.sample-1.0.0-preview.zip");
+    expect(readFileSync(path.join(root, "dist", "releases.tsv"), "utf8")).toBe(
+      `tests.sample-v1.0.0\t${archive}\t${preview}\tSample 1.0.0\n`,
+    );
     expect(readFileSync(archive).length).toBe(entries[0]?.download.bytes);
+    expect(readFileSync(preview).length).toBe(entries[0]?.preview.bytes);
+  });
+
+  /**
+   * The point of the second asset: the store fetches this one, so its
+   * download count means "read the page" and the zip's means "installed it".
+   */
+  it("names the preview asset beside the installable one", async () => {
+    new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
+    const entry = (await run())[0];
+    expect(entry?.download.url).toBe(
+      "https://github.com/tests/registry/releases/download/tests.sample-v1.0.0/tests.sample-1.0.0.zip",
+    );
+    expect(entry?.preview.url).toBe(
+      "https://github.com/tests/registry/releases/download/tests.sample-v1.0.0/tests.sample-1.0.0-preview.zip",
+    );
+    expect(entry?.preview.sha256).not.toBe(entry?.download.sha256);
+    expect(entry?.preview.bytes).toBeLessThan(entry?.download.bytes as number);
+
+    const index = JSON.parse(readFileSync(path.join(root, "dist", "index.json"), "utf8")) as {
+      extensions: { preview: { url: string; sha256: string; bytes: number } }[];
+    };
+    expect(index.extensions[0]?.preview).toEqual(entry?.preview);
   });
 
   it("refuses an extension without a document", async () => {
@@ -72,6 +98,26 @@ describe("build", () => {
       extensions: { downloads?: unknown }[];
     };
     expect(index.extensions[0]?.downloads).toEqual({ total: 42, current: 12 });
+  });
+
+  /**
+   * The count the store shows must mean installs. Every release now carries
+   * a second asset that a store page fetches, so counting both would move
+   * the inflation rather than remove it.
+   */
+  it("counts the installable asset and not the preview one", async () => {
+    new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
+    const downloads = tallyReleases([
+      {
+        tag_name: "tests.sample-v1.0.0",
+        assets: [
+          { name: "tests.sample-1.0.0.zip", download_count: 12 },
+          { name: "tests.sample-1.0.0-preview.zip", download_count: 900 },
+        ],
+      },
+    ]);
+    const entries = await run({ downloads });
+    expect(entries[0]?.downloads).toEqual({ total: 12, current: 12 });
   });
 
   it("writes no download count when there is none to write", async () => {

@@ -4,6 +4,22 @@ const MAX_PAGES = 50;
 
 const TAG_PATTERN = /^(.+)-v(\d+\.\d+\.\d+)$/;
 
+/**
+ * The asset that is not an install.
+ *
+ * Phantom's store shows this tally as an extension's download count, so the
+ * document bundle a store page fetches must not be in it — counting it would
+ * put "looked at it" back into a number that is supposed to mean
+ * "installed it". Any further asset kind added to a release has to be
+ * excluded here too, for the same reason.
+ */
+const PREVIEW_ASSET_SUFFIX = "-preview.zip";
+
+function isPreview(asset: Record<string, unknown>): boolean {
+  const name = asset["name"];
+  return typeof name === "string" && name.endsWith(PREVIEW_ASSET_SUFFIX);
+}
+
 export interface DownloadCounts {
   total: number;
   current: number;
@@ -16,6 +32,7 @@ function assetDownloads(assets: unknown): number {
   let count = 0;
   for (const asset of assets) {
     if (typeof asset !== "object" || asset === null) continue;
+    if (isPreview(asset as Record<string, unknown>)) continue;
     const downloads = (asset as Record<string, unknown>)["download_count"];
     if (typeof downloads !== "number" || !Number.isFinite(downloads) || downloads < 0) continue;
     count += Math.trunc(downloads);

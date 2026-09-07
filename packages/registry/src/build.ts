@@ -2,13 +2,21 @@ import { createHash } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fail } from "./checks.ts";
-import { collect, type Card } from "./collect.ts";
+import { collect, iconPath, type Card } from "./collect.ts";
 import { downloadsFor, fetchDownloadCounts, type DownloadCounts, type DownloadTally } from "./downloads.ts";
 import { CONTRIBUTION_KINDS, entriesOf, type ContributionKind } from "./manifest.ts";
 import { fetchPublishedIndex, mergeVersions, publishedVersions, type Download, type VersionEntry } from "./versions.ts";
-import { buildZip } from "./zip.ts";
+import { buildPreviewZip, buildZip } from "./zip.ts";
 
 export const MAX_ZIP_BYTES = 32 * 1024 * 1024;
+
+/**
+ * The suffix that tells the installable asset from the preview one.
+ *
+ * Read in two other places and worth keeping in one: `downloads.ts` counts
+ * only the installable asset, and Phantom's store shows that count.
+ */
+export const PREVIEW_SUFFIX = "-preview";
 
 export interface IndexEntry {
   id: string;
@@ -24,6 +32,7 @@ export interface IndexEntry {
   grammars: string[];
   categories: string[];
   download: Download;
+  preview: Download;
   versions: VersionEntry[];
   downloads?: DownloadCounts;
   card: Card;
@@ -34,6 +43,14 @@ export interface BuildOptions {
   extensionsRoot?: string;
   maxZipBytes?: number;
   downloads?: DownloadTally | null;
+}
+
+function asset(repo: string, tag: string, name: string, data: Uint8Array): Download {
+  return {
+    url: `https://github.com/${repo}/releases/download/${tag}/${name}`,
+    sha256: createHash("sha256").update(data).digest("hex"),
+    bytes: data.length,
+  };
 }
 
 function countsOf(tally: DownloadTally | null, id: string, version: string): { downloads?: DownloadCounts } {
@@ -56,11 +73,13 @@ export async function build(out: string, repo: string, options: BuildOptions = {
     const data = buildZip(directory);
     if (data.length > maxZipBytes) fail(directory, `the zip is larger than ${maxZipBytes} bytes`);
     writeFileSync(archive, data);
-    const download: Download = {
-      url: `https://github.com/${repo}/releases/download/${tag}/${name}.zip`,
-      sha256: createHash("sha256").update(data).digest("hex"),
-      bytes: data.length,
-    };
+    const download = asset(repo, tag, `${name}.zip`, data);
+
+    const previewName = `${name}${PREVIEW_SUFFIX}.zip`;
+    const previewArchive = path.join(out, previewName);
+    const previewData = buildPreviewZip(directory, card.document, iconPath(manifest, card));
+    writeFileSync(previewArchive, previewData);
+    const preview = asset(repo, tag, previewName, previewData);
     entries.push({
       id: manifest.id,
       name: manifest.name,
@@ -89,11 +108,12 @@ export async function build(out: string, repo: string, options: BuildOptions = {
         ),
       ],
       download,
+      preview,
       versions: mergeVersions({ version: manifest.version, download }, publishedVersions(published, manifest.id)),
       ...countsOf(tally, manifest.id, manifest.version),
       card,
     });
-    releases.push(`${tag}\t${archive}\t${manifest.name} ${manifest.version}\n`);
+    releases.push(`${tag}\t${archive}\t${previewArchive}\t${manifest.name} ${manifest.version}\n`);
   }
   const index = {
     schemaVersion: 1,
