@@ -30,17 +30,27 @@ jobs:
       - run: npm run build
         working-directory: packages/registry
       - run: node packages/registry/dist/cli.js --out dist --repo "${GH_REPO}"
+      # Two assets per release. The zip is the install; the -preview.zip is
+      # the document and its media, which the store fetches to draw an
+      # extension's page. GitHub counts asset downloads, and splitting them
+      # is what makes the count the store shows mean installs.
+      #
+      # The preview asset is uploaded to releases that already exist as well,
+      # because index.json names it for every version and the store would
+      # otherwise be pointed at a URL that answers 404. Adding an asset does
+      # not touch the zip, so the `releases` check below still passes.
       - name: Release new extension versions
         run: |
           set -euo pipefail
-          while IFS=$'\t' read -r tag zip title; do
+          while IFS=$'\t' read -r tag zip preview title; do
             if gh release view "$tag" >/dev/null 2>&1; then
               echo "exists  $tag"
-              continue
+            else
+              gh release create "$tag" "$zip" --title "$title" --latest=false \
+                --notes "Install from Phantom > Settings > Extensions, or unzip into ~/.config/phantom/extensions/."
+              echo "created $tag"
             fi
-            gh release create "$tag" "$zip" --title "$title" --latest=false \
-              --notes "Install from Phantom > Settings > Extensions, or unzip into ~/.config/phantom/extensions/."
-            echo "created $tag"
+            gh release upload "$tag" "$preview" --clobber
           done < dist/releases.tsv
       - run: node packages/registry/dist/cli.js releases
       - name: Publish the index

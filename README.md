@@ -61,7 +61,18 @@ An entry also carries `downloads`, the count GitHub keeps for the release assets
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
 
-`fileNamePatterns` claims a file whose name follows a shape rather than a list — `.env.*`, for the repository whose `.env.staging-eu` no enumeration was ever going to reach. A pattern is matched against the file's **name** and never its path, so it holds no `/` and no `\`. The dialect is two characters wide: `*` matches any run of characters including none, `?` matches exactly one, and every other character is a literal, `.` included. There is no `{a,b}` and no `[abc]` — write one pattern per alternative. At most 32 patterns to a language, 64 characters to a pattern.
+`fileNamePatterns` claims a file whose name follows a shape rather than a list — `.env.*`, `.env.*.local`, `*.{tf,tfvars,hcl}`. A pattern is matched against the file's **name** and never its path, so it holds no `/` and no `\`.
+
+The dialect:
+
+| | |
+|---|---|
+| `*` | any run of characters, including none, but never a `/` |
+| `**` | any run of characters, including none, `/` included |
+| `?` | exactly one character, and never a `/` |
+| `{a,b,c}` | any one of the alternatives, each of which may hold `*`, `**` and `?` |
+
+Every other character is a literal, `.` included, and the whole name has to match. `[abc]` is refused rather than matched literally: write `{a,b,c}`. Brace lists do not nest, and one may not expand to more than 16 alternatives. At most 32 patterns to a language, 64 characters to a pattern.
 
 Phantom ranks the three ways of claiming a file by how much each one commits to: a whole `fileNames` entry beats a pattern, and a pattern beats an `extensions` suffix. VS Code spells the key `filenamePatterns`; this format spells it the way it spells `fileNames`, and the registry refuses the VS Code spelling by name rather than let an extension publish claiming files Phantom never hands it.
 

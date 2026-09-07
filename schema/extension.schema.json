@@ -385,9 +385,9 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 64,
-            "pattern": "^[^/\\\\\\[\\]{}]+$"
+            "pattern": "^[^/\\\\\\[\\]]+$"
           },
-          "description": "Globs matched against a file's name and never its path, for a language whose set of names is open: '.env.*'. The dialect is '*' (any run of characters) and '?' (exactly one); every other character is a literal. Write one pattern per alternative \u2014 there is no '{a,b}' and no '[abc]'. Phantom ranks a whole file name above a pattern and a pattern above an extension."
+          "description": "Globs matched against a file's name and never its path, for a language whose set of names is open: '.env.*', '.env.*.local', '*.{tf,tfvars,hcl}'. The dialect is '*' (any run of characters, never a '/'), '**' (any run, '/' included), '?' (exactly one character, never a '/') and '{a,b}' (any one alternative); every other character is a literal. Brace lists do not nest, may not expand to more than 16 alternatives, and replace '[abc]', which is refused. Phantom ranks a whole file name above a pattern and a pattern above an extension."
         },
         "category": {
           "$ref": "#/$defs/category"
@@ -635,15 +635,6 @@
           },
           "description": "Scope name to language id, for the regions of another language this grammar embeds."
         },
-        "optionalIncludes": {
-          "type": "array",
-          "maxItems": 128,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/scopeName"
-          },
-          "description": "Scopes this grammar includes and does not need, so the dependency check leaves them alone. An include nothing provides is dropped silently and the region inside loses a colour; for a fenced code block in Markdown that is the design, and for the script tag in a Vue file it is a defect. The grammar cannot say which, so the manifest does. Every entry must be a scope this grammar actually includes."
-        },
         "injectTo": {
           "type": "array",
           "maxItems": 16,
@@ -655,7 +646,7 @@
       }
     },
     "configDirectory": {
-      "description": "ConfigPath candidates: a $VAR candidate wins when the variable is set, a middle one only if it exists on disk, the last is the default. Only ~, ~/\u2026 and $VAR\u2026 forms; no absolute paths, no ..",
+      "description": "ConfigPath candidates: a $VAR candidate wins when the variable is set, a middle one only if it exists on disk, the last is the default. Only ~, ~/… and $VAR… forms; no absolute paths, no ..",
       "oneOf": [
         {
           "type": "string",

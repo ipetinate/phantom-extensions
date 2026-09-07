@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { buildZip } from "../src/zip.ts";
+import { buildPreviewZip, buildZip } from "../src/zip.ts";
 import { ExtensionFixture, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
 
 interface CentralEntry {
@@ -80,6 +80,53 @@ describe("buildZip", () => {
       expect(entry.flags).toBe(0);
       expect(entry.versionMadeBy).toBe(0x0314);
       expect(entry.versionNeeded).toBe(20);
+      expect(entry.externalAttributes).toBe(0o644 << 16);
+    }
+  });
+});
+
+describe("buildPreviewZip", () => {
+  /**
+   * The document, its media and the icon it shows. No `extension.json` and
+   * no code: this is the asset a store page fetches, and it exists so that
+   * reading a page is not recorded as installing an extension.
+   */
+  it("holds the document, the media and the icon", () => {
+    const archive = buildPreviewZip(fixture.directory, "extension.mdx", "icons/sample.svg");
+    expect(centralDirectory(archive).map((entry) => entry.name)).toEqual([
+      "extension.mdx",
+      "icons/sample.svg",
+      "media/cover.png",
+      "media/icon.svg",
+      "media/shot.png",
+    ]);
+  });
+
+  it("leaves out the manifest and everything else the extension ships", () => {
+    fixture.write("syntaxes/sample.tmLanguage.json", "{}");
+    fixture.write("LICENSE", "MIT");
+    const names = centralDirectory(buildPreviewZip(fixture.directory, "extension.mdx", null)).map((entry) => entry.name);
+    expect(names).not.toContain("extension.json");
+    expect(names).not.toContain("syntaxes/sample.tmLanguage.json");
+    expect(names).not.toContain("LICENSE");
+    expect(names).toContain("extension.mdx");
+  });
+
+  it("is smaller than the installable zip, which is the reason it exists", () => {
+    const preview = buildPreviewZip(fixture.directory, "extension.mdx", "icons/sample.svg");
+    expect(preview.length).toBeLessThan(buildZip(fixture.directory).length);
+  });
+
+  it("writes the same bytes for the same directory", () => {
+    const digest = createHash("sha256").update(buildPreviewZip(fixture.directory, "extension.mdx", null)).digest("hex");
+    expect(createHash("sha256").update(buildPreviewZip(fixture.directory, "extension.mdx", null)).digest("hex")).toBe(digest);
+  });
+
+  it("stamps its entries the same way", () => {
+    for (const entry of centralDirectory(buildPreviewZip(fixture.directory, "extension.mdx", null))) {
+      expect(entry.time).toBe(0);
+      expect(entry.date).toBe(0x0021);
+      expect(entry.method).toBe(8);
       expect(entry.externalAttributes).toBe(0o644 << 16);
     }
   });
