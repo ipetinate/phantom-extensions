@@ -203,12 +203,18 @@ export function ThemePreview({ background, foreground, ansi, cursor, cursorText,
   return (
     <figure className="ph-theme-preview" style={style}>
       <div className="ph-tp-panel">
-        <div className="ph-tp-roles">
-          <BlockList title="Interface" blocks={interfaceBlocks} />
-          <BlockList title="ANSI 0 to 15" blocks={ansiBlocks} />
+        <div className="ph-tp-half">
+          <p className="ph-tp-half-title">Colours</p>
+          <div className="ph-tp-roles">
+            <BlockList title="Interface" blocks={interfaceBlocks} />
+            <BlockList title="ANSI 0 to 15" blocks={ansiBlocks} />
+          </div>
         </div>
 
-        <div className="ph-tp-window">
+        <div className="ph-tp-half">
+          <p className="ph-tp-half-title">Preview</p>
+          <p className="ph-tp-half-subtitle">{CAPTION}</p>
+          <div className="ph-tp-window">
           <div className="ph-tp-titlebar">
             <span className="ph-tp-lights">
               <span className="ph-tp-light ph-tp-light-close" />
@@ -355,10 +361,9 @@ export function ThemePreview({ background, foreground, ansi, cursor, cursorText,
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
-
-      <figcaption className="ph-tp-caption">{CAPTION}</figcaption>
     </figure>
   );
 }

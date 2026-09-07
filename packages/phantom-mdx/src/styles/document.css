@@ -603,6 +603,32 @@
   color: var(--ph-muted);
 }
 
+.ph-tp-half {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ph-document .ph-tp-half-title {
+  margin: 0 0 0.5em;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ph-fg);
+}
+
+.ph-document .ph-tp-half-subtitle {
+  margin: -0.2em 0 0.6em;
+  font-size: 0.8em;
+  line-height: 1.45;
+  color: var(--ph-muted);
+}
+
+.ph-tp-half > .ph-tp-window {
+  flex: 1;
+}
+
 .ph-tp-roles {
   display: flex;
   flex-direction: column;

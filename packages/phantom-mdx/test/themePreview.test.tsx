@@ -52,13 +52,22 @@ describe("ThemePreview", () => {
     expect(validate(source(' cursorText="#2e3440" selectionText="#2e3440"'))).toEqual([]);
   });
 
-  it("puts the blocks beside the window, in one panel, over one caption", () => {
+  it("puts the colours beside the preview, one heading over each half", () => {
     const { container } = draw();
     const figure = container.querySelector(".ph-theme-preview")!;
     expect(figure.tagName).toBe("FIGURE");
-    expect([...figure.children].map((child) => child.className)).toEqual(["ph-tp-panel", "ph-tp-caption"]);
+    expect([...figure.children].map((child) => child.className)).toEqual(["ph-tp-panel"]);
     const panel = figure.querySelector(".ph-tp-panel")!;
-    expect([...panel.children].map((child) => child.className)).toEqual(["ph-tp-roles", "ph-tp-window"]);
+    expect([...panel.children].map((child) => child.className)).toEqual(["ph-tp-half", "ph-tp-half"]);
+    const halves = [...panel.children];
+    expect([...halves[0]!.children].map((child) => child.className)).toEqual(["ph-tp-half-title", "ph-tp-roles"]);
+    expect([...halves[1]!.children].map((child) => child.className)).toEqual([
+      "ph-tp-half-title",
+      "ph-tp-half-subtitle",
+      "ph-tp-window",
+    ]);
+    expect(halves[0]!.querySelector(".ph-tp-half-title")!.textContent).toBe("Colours");
+    expect(halves[1]!.querySelector(".ph-tp-half-title")!.textContent).toBe("Preview");
   });
 
   it("gives the two halves the same width", () => {
@@ -71,11 +80,10 @@ describe("ThemePreview", () => {
     expect(narrow, "the panel must fall to one column under 52em").toBe(true);
   });
 
-  it("invites the reader to press the tabs and the terminal", () => {
+  it("invites the reader to press the tabs and the terminal, under the preview heading", () => {
     const { container } = draw();
-    const caption = container.querySelector(".ph-tp-caption")!;
-    expect(caption.tagName).toBe("FIGCAPTION");
-    expect(caption.textContent).toBe(
+    const subtitle = container.querySelector(".ph-tp-half-subtitle")!;
+    expect(subtitle.textContent).toBe(
       "Press the editor tabs and the terminal tabs to see the theme applied to another language and another session.",
     );
     expect(texts(container, '[role="tablist"]').length).toBe(2);
