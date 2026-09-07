@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.git",
+  "name": "Git",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Git's own files: ignore lists, config, attributes, CODEOWNERS, mailmap, commit messages and the rebase todo.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/git",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.shell"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "ignore",
+        "name": "Ignore List",
+        "extensions": [
+          "gitignore",
+          "dockerignore",
+          "npmignore",
+          "eslintignore",
+          "prettierignore",
+          "stylelintignore",
+          "nxignore",
+          "augmentignore",
+          "helmignore",
+          "vercelignore",
+          "gcloudignore"
+        ],
+        "fileNames": [
+          ".gitignore_global"
+        ],
+        "fileNamePatterns": [
+          ".*ignore"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "git-config",
+        "name": "Git Config",
+        "extensions": [
+          "gitconfig",
+          "gitmodules"
+        ],
+        "fileNames": [
+          ".gitconfig",
+          "gitconfig",
+          ".gitmodules"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "git-attributes",
+        "name": "Git Attributes",
+        "extensions": [
+          "gitattributes"
+        ],
+        "fileNames": [
+          ".gitattributes",
+          "gitattributes"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "git-commit",
+        "name": "Git Commit Message",
+        "extensions": [
+          "gitcommit"
+        ],
+        "fileNames": [
+          "COMMIT_EDITMSG",
+          "MERGE_MSG",
+          "SQUASH_MSG",
+          "TAG_EDITMSG",
+          "NOTES_EDITMSG"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "git-rebase",
+        "name": "Git Rebase Todo",
+        "extensions": [
+          "gitrebase"
+        ],
+        "fileNames": [
+          "git-rebase-todo"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "git-mailmap",
+        "name": "Git Mailmap",
+        "extensions": [
+          "mailmap"
+        ],
+        "fileNames": [
+          ".mailmap"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      },
+      {
+        "languageId": "codeowners",
+        "name": "CODEOWNERS",
+        "extensions": [
+          "codeowners"
+        ],
+        "fileNames": [
+          "CODEOWNERS"
+        ],
+        "category": "data",
+        "icon": "icons/git.png",
+        "lineComment": "#"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.confetti.ignore",
+        "path": "syntaxes/ignore.tmLanguage.json",
+        "languageId": "ignore",
+        "license": "MIT",
+        "grammarSource": "https://github.com/rhevorn/confetti/blob/3f9c0c474b5044b0b3436b14c3b6b9432b48f063/syntaxes/ignore.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.confetti.gitconfig",
+        "path": "syntaxes/gitconfig.tmLanguage.json",
+        "languageId": "git-config",
+        "license": "MIT",
+        "grammarSource": "https://github.com/rhevorn/confetti/blob/3f9c0c474b5044b0b3436b14c3b6b9432b48f063/syntaxes/gitconfig.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.confetti.gitattributes",
+        "path": "syntaxes/gitattributes.tmLanguage.json",
+        "languageId": "git-attributes",
+        "license": "MIT",
+        "grammarSource": "https://github.com/rhevorn/confetti/blob/3f9c0c474b5044b0b3436b14c3b6b9432b48f063/syntaxes/gitattributes.tmLanguage.json"
+      },
+      {
+        "scopeName": "text.git-commit",
+        "path": "syntaxes/git-commit.tmLanguage.json",
+        "languageId": "git-commit",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/git-base/syntaxes/git-commit.tmLanguage.json"
+      },
+      {
+        "scopeName": "text.git-rebase",
+        "path": "syntaxes/git-rebase.tmLanguage.json",
+        "languageId": "git-rebase",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/git-base/syntaxes/git-rebase.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.shell": "shellscript"
+        }
+      },
+      {
+        "scopeName": "text.git-mailmap",
+        "path": "syntaxes/git-mailmap.tmLanguage.json",
+        "languageId": "git-mailmap",
+        "license": "Apache-2.0",
+        "grammarSource": "https://github.com/claui/vscode-email-addresses/blob/26add93c12e0e2172ac2ad074d958cc14dc09802/extension/share/syntaxes/gitMailmap.tmLanguage.json"
+      },
+      {
+        "scopeName": "text.codeowners",
+        "path": "syntaxes/codeowners.tmLanguage.json",
+        "languageId": "codeowners",
+        "license": "MIT",
+        "grammarSource": "https://github.com/jasonnutter/vscode-codeowners/blob/219dee0ab25c1bfad0b9de84180117e71221a653/syntaxes/codeowners.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.diff",
+        "path": "syntaxes/diff.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/diff/syntaxes/diff.tmLanguage.json"
+      }
+    ]
+  }
+}

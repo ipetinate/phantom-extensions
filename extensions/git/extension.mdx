@@ -1,0 +1,138 @@
+---
+title: Git
+tagline: Git's own files in Phantom — ignore lists, config, attributes, CODEOWNERS, mailmap, commit messages and the rebase todo.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [git, gitignore, codeowners, gitconfig, commit, rebase, mailmap, data]
+---
+
+Every repository is full of files Git asks a person to write, and Phantom opened all of them as plain text. This extension teaches Phantom the seven that carry a syntax: the ignore list, the config file, the attributes file, `CODEOWNERS`, the mailmap, the commit message buffer and the interactive rebase todo.
+
+They are seven languages, not one, because they share nothing but the `#` comment. An ignore list is a line of globs. A config file is INI with quoted subsections. A commit message is prose above a block of Git's own comments, with a diff underneath when you commit with `-v`. Each one gets its own grammar.
+
+Nothing is installed and nothing is run. Git itself is never invoked: the extension is a set of grammars and file claims.
+
+## Highlights
+
+<Features>
+  <Feature title="Ignore lists" icon="search">
+    Globs, `**`, `?`, character classes, the `!` negation at the start of a line, escaped `\#` and `\ `, and path separators. One language covers every ignore file, not only Git's, because they are the same syntax.
+  </Feature>
+  <Feature title="CODEOWNERS" icon="check">
+    The path pattern, and each `@user` or `@org/team` after it as its own token, so a line with four owners reads as four owners. `#` comments throughout.
+  </Feature>
+  <Feature title="Config and attributes" icon="gear">
+    `[section]` and `[section "subsection"]` headers told apart, keys, booleans in all six spellings Git accepts, sizes with their `k`, `m` and `g` suffix, paths, and both the `#` and the `;` comment. In `.gitattributes`, the pattern, each attribute, its `=value` and the `-` that unsets it.
+  </Feature>
+  <Feature title="Commit and rebase buffers" icon="book">
+    A subject line over 50 characters is marked, and over 72 marked harder. Git's `#` block below it colours new, modified, renamed and deleted paths differently. Commit with `-v` and the diff at the bottom is coloured as a diff. In the rebase todo, every command from `pick` to `break`, its hash and its message.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Git.
+  </Step>
+  <Step title="Open any of the files below">
+    There is nothing to configure and nothing to install. A `.gitignore` is coloured the moment the extension is there.
+  </Step>
+  <Step title="Set Git's editor to Phantom, if you want the commit buffer">
+    `git config --global core.editor "phantom --wait"`. Git writes `COMMIT_EDITMSG`, Phantom opens it coloured, and `git commit -v` puts the diff under the message.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Language | Claimed by |
+|---|---|
+| Ignore List | pattern `.*ignore`; name `.gitignore_global`; suffixes `.gitignore`, `.dockerignore`, `.npmignore`, `.eslintignore`, `.prettierignore`, `.stylelintignore`, `.nxignore`, `.augmentignore`, `.helmignore`, `.vercelignore`, `.gcloudignore` |
+| CODEOWNERS | name `CODEOWNERS`; suffix `.codeowners` |
+| Git Config | names `.gitconfig`, `gitconfig`, `.gitmodules`; suffixes `.gitconfig`, `.gitmodules` |
+| Git Attributes | names `.gitattributes`, `gitattributes`; suffix `.gitattributes` |
+| Git Commit Message | names `COMMIT_EDITMSG`, `MERGE_MSG`, `SQUASH_MSG`, `TAG_EDITMSG`, `NOTES_EDITMSG`; suffix `.gitcommit` |
+| Git Rebase Todo | name `git-rebase-todo`; suffix `.gitrebase` |
+| Git Mailmap | name `.mailmap`; suffix `.mailmap` |
+
+The three ways of claiming a file rank against each other. A whole **name** wins, a **pattern** comes next, a **suffix** last. A name is matched without regard to case, so `CODEOWNERS` also claims a file somebody called `codeowners`, and a pattern holds `*` and `?` and nothing else.
+
+Eight grammars ship: one per language, plus `source.diff`, which exists only so the commit grammar can colour the diff a `-v` commit puts below the message.
+
+## Notes
+
+<Details summary="One ignore language, one pattern, every ignore file">
+
+A survey of 26 repositories found ignore-file syntax spread across nine names and 103 files in 23 of them: `.gitignore` 92 times, `.prettierignore` 5, `.eslintignore` 2, and `.dockerignore`, `.npmignore`, `.stylelintignore`, `.nxignore`, `.augmentignore` and `.openapi-generator-ignore` once each.
+
+They are the same syntax. A glob per line, `#` for a comment, `!` to bring something back. Docker's builder, npm, ESLint, Prettier, Stylelint, Nx and the OpenAPI generator each reimplemented Git's pattern language rather than inventing one. So they are one language with one grammar, and leaving `.prettierignore` to a future Prettier extension would ship the same grammar twice for five files.
+
+The claim is the pattern `.*ignore` rather than the list of nine. The nine were the names in one owner's repositories on one day; `.terraformignore`, `.cursorignore` and `.hgignore` are the same syntax and are not on it, and any list would keep needing another entry. A pattern needs none.
+
+`.gitignore_global` is the one that stays a literal name: it ends in `_global`, so no pattern that ends in `ignore` reaches it.
+
+</Details>
+
+<Details summary="Why CODEOWNERS is here">
+
+It is Git's file in every sense that matters — GitHub, GitLab, Gitea and Bitbucket all read it, and it sits next to `.gitattributes` in the same repository — and it was the second widest unclaimed file type in the survey: 16 files in 15 of 26 repositories.
+
+The syntax is its own: a path pattern, then one or more owners, each an `@user` or an `@org/team`, with `#` comments. It is not an ignore list, despite the patterns looking alike, because the rest of the line means something.
+
+</Details>
+
+<Details summary="The hook scripts are not here">
+
+`pre-commit`, `commit-msg`, `pre-push`, `prepare-commit-msg`, `post-merge` and `post-checkout` live in `.git/hooks` and in `husky` directories, and the survey found 29 of them across 8 repositories. Every single one begins `#!/usr/bin/env sh`.
+
+They are shell scripts. They belong to the Shell extension, and reaching them needs a first line read rather than a file name matched, which is not something a manifest can ask for. Claiming them here would put a Git grammar on a bash script.
+
+</Details>
+
+<Details summary="Why .pre-commit-config.yaml is not claimed">
+
+It is YAML. Its last dotted segment is `yaml`, so the YAML extension already claims it, already colours it, and already validates it against a schema through `yaml-language-server`. Claiming it here would take a correctly coloured file and hand it to a grammar that is not YAML.
+
+The `pre-commit` framework is also not Git. It installs a Git hook, which makes it a Git *client*, the way `husky` and `lefthook` are. If its manifest ever deserves more than YAML — key completion, hook id validation — that belongs in a `pre-commit` extension with the schema to back it, not in this one.
+
+</Details>
+
+<Details summary="Files this extension cannot claim">
+
+A name and a pattern are both matched against a file's name and never its path. A file identified only by the directory it sits in cannot be claimed at all:
+
+| File | Why not |
+|---|---|
+| `.git/config` | The name is `config`. Claiming it would also claim `~/.ssh/config`, `~/.kube/config` and every unrelated file called `config`. |
+| `.git/info/exclude` | The name is `exclude`. Same problem, and the syntax is an ignore list. |
+| `.git/info/attributes` | The name is `attributes`. Same problem. |
+| `.git/rebase-merge/message` | The name is `message`. Same problem. |
+| `~/.config/git/config`, `~/.config/git/ignore` | Git's XDG paths. Both names are too generic to claim. |
+| `.git-blame-ignore-revs` | Claimable, but no grammar reads it: it is a list of hashes with `#` comments, and colouring hashes as globs would be worse than plain text. |
+
+Open one of these and it stays plain text. Phantom's language menu can still set the language by hand for that buffer.
+
+</Details>
+
+<Details summary="The Shell dependency">
+
+The manifest depends on `phantom.shell`. The rebase grammar hands the body of an `exec` line to `source.shell`, which the Shell extension provides, and the registry refuses a grammar that reaches into another extension without declaring it.
+
+Installing Git without Shell still colours everything else. The `exec` command keeps the rebase scope instead of shell colours.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: seven languages and eight grammars for Git's ignore lists, config, attributes, `CODEOWNERS`, mailmap, commit messages and rebase todo. Ignore files are claimed by the pattern `.*ignore`, which covers Git's own and those of Docker, npm, ESLint, Prettier, Stylelint, Nx, Helm, Vercel, gcloud and the OpenAPI generator.
+
+## License and credits
+
+The extension is released under the MIT License. Git is a trademark of Software Freedom Conservancy; this extension is not affiliated with or endorsed by the Git project.
+
+The grammars ship unmodified from their sources. `source.confetti.ignore`, `source.confetti.gitconfig` and `source.confetti.gitattributes` are from [Confetti](https://github.com/rhevorn/confetti), © the Confetti authors (MIT) — they keep the vendor prefix their author gave them, because a grammar is shipped byte for byte or its licence no longer describes it. `text.git-commit`, `text.git-rebase` and `source.diff` are from [Visual Studio Code](https://github.com/microsoft/vscode), © Microsoft Corporation (MIT); the commit grammar came to VS Code from [git-commit-message-plus](https://github.com/walles/git-commit-message-plus) and the rebase grammar from [textmate/git.tmbundle](https://github.com/textmate/git.tmbundle). `text.codeowners` is from [vscode-codeowners](https://github.com/jasonnutter/vscode-codeowners), © Jason Nutter (MIT). `text.git-mailmap` is from [vscode-email-addresses](https://github.com/claui/vscode-email-addresses), © Claudia Pellegrino (Apache-2.0).
