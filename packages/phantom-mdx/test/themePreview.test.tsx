@@ -1,8 +1,12 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { fireEvent, render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Document } from "../src/render.tsx";
 import { validate } from "../src/validate.ts";
 import { tokenize } from "../src/components/codeSamples.ts";
+import { ANSI_NAMES, ANSI_USES, SYNTAX_SLOTS, TERMINAL_ONLY, type SyntaxKind } from "../src/components/paletteRoles.ts";
+import { OPEN_TERMINALS, SESSION_GROUPS } from "../src/components/workspaceSample.ts";
 
 const ANSI = [
   "#3b4252",
@@ -33,9 +37,48 @@ function draw(extra = "") {
   return view;
 }
 
+function texts(container: Element, selector: string): (string | null)[] {
+  return [...container.querySelectorAll(selector)].map((node) => node.textContent);
+}
+
+const stylesheet = readFileSync(path.join(import.meta.dirname, "../src/styles/document.css"), "utf8");
+
 describe("ThemePreview", () => {
   it("accepts the palette a theme conf carries", () => {
     expect(validate(source())).toEqual([]);
+  });
+
+  it("accepts the cursor text and the selection text a conf may also carry", () => {
+    expect(validate(source(' cursorText="#2e3440" selectionText="#2e3440"'))).toEqual([]);
+  });
+
+  it("puts the blocks beside the window, in one panel, over one caption", () => {
+    const { container } = draw();
+    const figure = container.querySelector(".ph-theme-preview")!;
+    expect(figure.tagName).toBe("FIGURE");
+    expect([...figure.children].map((child) => child.className)).toEqual(["ph-tp-panel", "ph-tp-caption"]);
+    const panel = figure.querySelector(".ph-tp-panel")!;
+    expect([...panel.children].map((child) => child.className)).toEqual(["ph-tp-roles", "ph-tp-window"]);
+  });
+
+  it("gives the two halves the same width", () => {
+    const columns = /\.ph-tp-panel \{[^}]*grid-template-columns: ([^;]+);/.exec(stylesheet)?.[1];
+    expect(columns).toBe("minmax(0, 1fr) minmax(0, 1fr)");
+  });
+
+  it("stacks the two halves, colours first, on a narrow page", () => {
+    const narrow = /@media \(max-width: 52em\) \{\s*\.ph-tp-panel \{\s*grid-template-columns: minmax\(0, 1fr\);/.test(stylesheet);
+    expect(narrow, "the panel must fall to one column under 52em").toBe(true);
+  });
+
+  it("invites the reader to press the tabs and the terminal", () => {
+    const { container } = draw();
+    const caption = container.querySelector(".ph-tp-caption")!;
+    expect(caption.tagName).toBe("FIGCAPTION");
+    expect(caption.textContent).toBe(
+      "Press the editor tabs and the terminal tabs to see the theme applied to another language and another session.",
+    );
+    expect(texts(container, '[role="tablist"]').length).toBe(2);
   });
 
   it("paints the window from the props and the palette", () => {
@@ -43,10 +86,16 @@ describe("ThemePreview", () => {
     const root = container.querySelector<HTMLElement>(".ph-theme-preview")!;
     expect(root.style.getPropertyValue("--ph-tp-bg")).toBe("#2e3440");
     expect(root.style.getPropertyValue("--ph-tp-fg")).toBe("#d8dee9");
-    expect(root.style.getPropertyValue("--ph-tp-accent")).toBe("#eceff4");
+    expect(root.style.getPropertyValue("--ph-tp-cursor")).toBe("#eceff4");
     expect(root.style.getPropertyValue("--ph-tp-ansi-5")).toBe("#b48ead");
     expect(root.style.getPropertyValue("--ph-tp-ansi-15")).toBe("#eceff4");
     expect(container.querySelector(".ph-tp-title")!.textContent).toBe("Nord");
+  });
+
+  it("takes the interface accent from ANSI 4, the way the app does, not from the cursor", () => {
+    const { container } = draw();
+    const root = container.querySelector<HTMLElement>(".ph-theme-preview")!;
+    expect(root.style.getPropertyValue("--ph-tp-accent")).toBe("#81a1c1");
   });
 
   it("reads the selection text off whichever of the two colours contrasts with it", () => {
@@ -55,11 +104,116 @@ describe("ThemePreview", () => {
     expect(root.style.getPropertyValue("--ph-tp-selection-fg")).toBe("#2e3440");
   });
 
-  it("lists the workspace beside the editor and marks the open file", () => {
+  it("draws the cursor cell in the background until a conf says otherwise", () => {
+    const plain = draw().container.querySelector<HTMLElement>(".ph-theme-preview")!;
+    expect(plain.style.getPropertyValue("--ph-tp-cursor-fg")).toBe("#2e3440");
+
+    const given = draw(' cursorText="#a3be8c" selectionText="#bf616a"').container.querySelector<HTMLElement>(".ph-theme-preview")!;
+    expect(given.style.getPropertyValue("--ph-tp-cursor-fg")).toBe("#a3be8c");
+    expect(given.style.getPropertyValue("--ph-tp-selection-fg")).toBe("#bf616a");
+  });
+
+  it("marks a colour the theme never declared as derived, and only that one", () => {
+    const { container } = render(
+      <Document source={`<ThemePreview background="#2e3440" foreground="#d8dee9" selection="#eceff4" ansi="${ANSI}" />\n`} baseURL="file:///tmp/x/" />,
+    );
+    expect(container.querySelector(".ph-failure")).toBeNull();
+    const blocks = [...container.querySelectorAll(".ph-tp-role-group")[0]!.querySelectorAll(".ph-tp-block")];
+    expect(blocks.map((block) => block.querySelector(".ph-tp-block-derived") !== null)).toEqual([false, false, true, true, false, true]);
+    expect(blocks[2]!.querySelector(".ph-tp-block-hex")!.textContent).toBe("#d8dee9");
+    expect(blocks[3]!.querySelector(".ph-tp-block-hex")!.textContent).toBe("#2e3440");
+  });
+
+  it("marks nothing as derived once the document gives every key", () => {
+    const { container } = draw(' cursorText="#2e3440" selectionText="#2e3440"');
+    expect(container.querySelector(".ph-tp-block-derived")).toBeNull();
+  });
+
+  it("names every interface colour, its conf key and where it lands", () => {
     const { container } = draw();
-    const rows = [...container.querySelectorAll(".ph-tp-row")].map((row) => row.textContent);
-    expect(rows).toEqual(["phantom", "src", "Main.kt", "index.ts", "app.rb", "package.json"]);
-    expect(container.querySelector(".ph-tp-row.is-open")!.textContent).toBe("Main.kt");
+    const group = container.querySelectorAll(".ph-tp-role-group")[0]!;
+    expect(group.querySelector(".ph-tp-role-title")!.textContent).toBe("Interface");
+    expect(texts(group, ".ph-tp-block-role")).toEqual([
+      "Backgroundbackground",
+      "Foregroundforeground",
+      "Cursorcursor-color",
+      "Cursor textcursor-text",
+      "Selectionselection-background",
+      "Selection textselection-foreground",
+    ]);
+    expect(texts(group, ".ph-tp-block-hex")).toEqual(["#2e3440", "#d8dee9", "#eceff4", "#2e3440", "#eceff4", "#2e3440"]);
+    expect(group.querySelector(".ph-tp-block-use")!.textContent).toBe("window, sidebar, editor ground");
+  });
+
+  it("lists the sixteen ANSI entries as a set, each with its slot, its name and its use", () => {
+    const { container } = draw();
+    const group = container.querySelectorAll(".ph-tp-role-group")[1]!;
+    expect(group.querySelector(".ph-tp-role-title")!.textContent).toBe("ANSI 0 to 15");
+    const blocks = [...group.querySelectorAll<HTMLElement>(".ph-tp-block")];
+    expect(blocks.length).toBe(16);
+    expect(blocks[5]!.querySelector(".ph-tp-block-role")!.textContent).toBe("ANSI 5Magenta");
+    expect(blocks[5]!.querySelector(".ph-tp-block-hex")!.textContent).toBe("#b48ead");
+    expect(blocks[5]!.querySelector(".ph-tp-block-use")!.textContent).toBe("keywords");
+    expect(blocks[8]!.querySelector(".ph-tp-block-use")!.textContent).toBe("comments, punctuation, line numbers");
+    expect(blocks[15]!.querySelector(".ph-tp-block-use")!.textContent).toBe(TERMINAL_ONLY);
+    expect(blocks[15]!.style.getPropertyValue("--ph-tp-block")).toBe("#eceff4");
+  });
+
+  it("edges only a block that would vanish into the page it is read on", () => {
+    const { container } = draw();
+    const edged = [...container.querySelectorAll(".ph-tp-block")]
+      .filter((block) => block.classList.contains("has-edge"))
+      .map((block) => block.querySelector(".ph-tp-block-hex")!.textContent);
+    expect(edged).toContain("#2e3440");
+    expect(edged).not.toContain("#bf616a");
+  });
+
+  it("stands the five panes SidebarPane declares down the far left, and nothing else", () => {
+    const { container } = draw();
+    const panes = [...container.querySelectorAll(".ph-tp-pane")].map((pane) => pane.getAttribute("title"));
+    expect(panes).toEqual(["Terminals", "Files", "Git", "Worktrees", "Extensions"]);
+    expect(container.querySelector(".ph-tp-pane.is-active")!.getAttribute("title")).toBe("Terminals");
+  });
+
+  it("closes the window on the body, because the app draws no status bar", () => {
+    const { container } = draw();
+    const window = container.querySelector(".ph-tp-window")!;
+    expect([...window.children].map((child) => child.className)).toEqual(["ph-tp-titlebar", "ph-tp-body"]);
+  });
+
+  it("groups the terminal sessions in the sidebar, with a count and a subtitle", () => {
+    const { container } = draw();
+    expect(texts(container, ".ph-tp-group-name")).toEqual(["phantom", "phantom-extensions", "notes"]);
+    expect(texts(container, ".ph-tp-group-details")).toEqual([
+      "~/Projects/phantom",
+      "~/Projects/phantom-extensions",
+      "~/Documents/Cortex",
+    ]);
+    expect(texts(container, ".ph-tp-count")).toEqual(["2", "1", "1"]);
+  });
+
+  it("colours each group from the palette", () => {
+    const { container } = draw();
+    const groups = [...container.querySelectorAll<HTMLElement>(".ph-tp-group")];
+    expect(groups.map((group) => group.style.getPropertyValue("--ph-tp-group"))).toEqual(["#81a1c1", "#b48ead", "#a3be8c"]);
+  });
+
+  it("draws no rows under a collapsed group", () => {
+    const { container } = draw();
+    const collapsed = container.querySelector(".ph-tp-group.is-collapsed")!;
+    expect(collapsed.querySelector(".ph-tp-session")).toBeNull();
+    expect(collapsed.querySelector(".ph-tp-chevron.is-open")).toBeNull();
+    expect(container.querySelectorAll(".ph-tp-session").length).toBe(3);
+  });
+
+  it("gives a session row a title, the workspace and the branch, and marks the open one", () => {
+    const { container } = draw();
+    const row = container.querySelector(".ph-tp-session.is-selected")!;
+    expect(container.querySelectorAll(".ph-tp-session.is-selected").length).toBe(1);
+    expect(row.querySelector(".ph-tp-session-title")!.textContent).toBe("claude — editor colours");
+    expect(texts(row, ".ph-tp-chip")).toEqual(["phantom", "feat/0.17.0"]);
+    expect(row.querySelector(".ph-tp-chip-dot")).not.toBeNull();
+    expect(row.querySelector(".ph-tp-session-rail")).not.toBeNull();
   });
 
   it("opens the first sample with its tab selected", () => {
@@ -68,7 +222,15 @@ describe("ThemePreview", () => {
     expect(tabs.map((tab) => tab.textContent)).toEqual(["Main.kt", "index.ts", "app.rb", "package.json"]);
     expect(tabs.map((tab) => tab.getAttribute("aria-selected"))).toEqual(["true", "false", "false", "false"]);
     expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1, -1, -1]);
+    expect(tabs[0]!.style.getPropertyValue("--ph-tp-dot")).toBe("#b48ead");
     expect(container.querySelector(".ph-tp-code")!.textContent).toContain("package com.phantom.sample");
+  });
+
+  it("gives every tab a close control, and the unsaved one a dot instead", () => {
+    const { container } = draw();
+    const tabs = [...container.querySelectorAll(".ph-tp-tab")];
+    expect(tabs.map((tab) => tab.querySelector(".ph-tp-tab-close") !== null)).toEqual([true, false, true, true]);
+    expect(tabs[1]!.querySelector(".ph-tp-tab-dirty")).not.toBeNull();
   });
 
   it("switches the sample when a tab is pressed", () => {
@@ -80,7 +242,6 @@ describe("ThemePreview", () => {
     expect(code.textContent).not.toContain("package com.phantom.sample");
     expect(tabs[2]!.getAttribute("aria-selected")).toBe("true");
     expect(tabs[0]!.getAttribute("aria-selected")).toBe("false");
-    expect(container.querySelector(".ph-tp-row.is-open")!.textContent).toBe("app.rb");
   });
 
   it("moves between tabs with the arrow keys and wraps at both ends", () => {
@@ -126,6 +287,116 @@ describe("ThemePreview", () => {
     expect(container.querySelectorAll(".ph-tp-line.is-current").length).toBe(1);
   });
 
+  it("stands a terminal under the editor, inside the same window", () => {
+    const { container } = draw();
+    const main = container.querySelector(".ph-tp-main")!;
+    expect([...main.children].map((child) => child.className)).toEqual(["ph-tp-editor", "ph-tp-terminal"]);
+    expect(container.querySelector(".ph-tp-terminal .ph-tp-term-body")).not.toBeNull();
+  });
+
+  it("names one terminal tab per open session, with an icon and no close control", () => {
+    const { container } = draw();
+    const tabs = [...container.querySelectorAll<HTMLButtonElement>(".ph-tp-term-tab")];
+    expect(tabs.map((tab) => tab.textContent)).toEqual(["claude", "zig build", "npm test"]);
+    expect(tabs.map((tab) => tab.getAttribute("aria-selected"))).toEqual(["true", "false", "false"]);
+    expect(tabs.map((tab) => tab.tabIndex)).toEqual([0, -1, -1]);
+    expect(tabs.every((tab) => tab.querySelector(".ph-tp-glyph") !== null)).toBe(true);
+    expect(container.querySelector(".ph-tp-term-tab .ph-tp-tab-close")).toBeNull();
+  });
+
+  it("opens the shell on a prompt, a command and its output", () => {
+    const { container } = draw();
+    const body = container.querySelector(".ph-tp-term-body")!;
+    expect(body.textContent).toContain("phantom feat/0.17.0 ❯ claude");
+    expect(body.textContent).toContain("GrammarHighlighter.swift");
+    expect(body.querySelectorAll(".ph-tp-term-line").length).toBe(6);
+  });
+
+  it("paints the terminal output from several of the ANSI sixteen", () => {
+    const { container } = draw();
+    const body = container.querySelector(".ph-tp-term-body")!;
+    const slots = new Set(
+      [...body.querySelectorAll("span")].flatMap((span) => {
+        const slot = /^ph-tp-term-s(\d+)$/.exec(span.className.split(" ")[0] ?? "");
+        return slot === null ? [] : [Number(slot[1])];
+      }),
+    );
+    expect(slots.size).toBeGreaterThanOrEqual(5);
+    expect(slots).toContain(2);
+    expect(slots).toContain(4);
+    expect(slots).toContain(5);
+    expect(slots).toContain(6);
+    expect(slots).toContain(8);
+  });
+
+  it("closes the transcript with a block cursor in the cursor colour", () => {
+    const { container } = draw();
+    const live = container.querySelector(".ph-tp-term-live")!;
+    expect(live.querySelector(".ph-tp-term-cursor")).not.toBeNull();
+    expect(container.querySelectorAll(".ph-tp-term-cursor").length).toBe(1);
+    expect(stylesheet).toMatch(/\.ph-tp-term-cursor \{[^}]*background: var\(--ph-tp-cursor\);/);
+    expect(stylesheet).toMatch(/\.ph-tp-term-cursor \{[^}]*color: var\(--ph-tp-cursor-fg\);/);
+  });
+
+  it("switches the terminal when its own tab is pressed", () => {
+    const { container } = draw();
+    const tabs = [...container.querySelectorAll<HTMLButtonElement>(".ph-tp-term-tab")];
+    fireEvent.click(tabs[1]!);
+    const body = container.querySelector(".ph-tp-term-body")!;
+    expect(body.textContent).toContain("zig build -Demit-macos-app=false");
+    expect(body.textContent).not.toContain("GrammarHighlighter.swift");
+    expect(tabs[1]!.getAttribute("aria-selected")).toBe("true");
+    expect(tabs[0]!.getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("shows the cursor over the character it covers, and the rest of the suggestion dimmed", () => {
+    const { container } = draw();
+    fireEvent.click(container.querySelectorAll<HTMLButtonElement>(".ph-tp-term-tab")[1]!);
+    const live = container.querySelector(".ph-tp-term-live")!;
+    expect(live.textContent).toBe("phantom feat/0.17.0 ❯ zig build test -Dtest-filter=grammar");
+    expect(live.querySelector(".ph-tp-term-cursor")!.textContent).toBe("t");
+  });
+
+  it("moves between terminal tabs with the arrow keys and wraps at both ends", () => {
+    const { container } = draw();
+    const tabs = [...container.querySelectorAll<HTMLButtonElement>(".ph-tp-term-tab")];
+    fireEvent.keyDown(tabs[0]!, { key: "ArrowLeft" });
+    expect(tabs[2]!.getAttribute("aria-selected")).toBe("true");
+    expect(document.activeElement).toBe(tabs[2]);
+    fireEvent.keyDown(tabs[2]!, { key: "ArrowRight" });
+    expect(tabs[0]!.getAttribute("aria-selected")).toBe("true");
+    fireEvent.keyDown(tabs[0]!, { key: "End" });
+    expect(tabs[2]!.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("ties the terminal panel to the tab that opened it", () => {
+    const { container } = draw();
+    const body = container.querySelector(".ph-tp-term-body")!;
+    const tab = container.querySelector(".ph-tp-term-tab")!;
+    expect(body.getAttribute("role")).toBe("tabpanel");
+    expect(body.getAttribute("aria-labelledby")).toBe(tab.id);
+    expect(tab.getAttribute("aria-controls")).toBe(body.id);
+  });
+
+  it("switches the terminal from the sidebar too, the way the app does", () => {
+    const { container } = draw();
+    const rows = [...container.querySelectorAll<HTMLButtonElement>(".ph-tp-session")];
+    expect(rows.every((row) => row.tagName === "BUTTON")).toBe(true);
+    fireEvent.click(rows[2]!);
+    expect(container.querySelector(".ph-tp-term-body")!.textContent).toContain("npm test");
+    expect(rows[2]!.classList.contains("is-selected")).toBe(true);
+    expect(rows[0]!.classList.contains("is-selected")).toBe(false);
+    expect(container.querySelectorAll<HTMLButtonElement>(".ph-tp-term-tab")[2]!.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("leaves the editor alone when the terminal changes, and the terminal alone when the editor does", () => {
+    const { container } = draw();
+    fireEvent.click(container.querySelectorAll<HTMLButtonElement>(".ph-tp-term-tab")[1]!);
+    expect(container.querySelector(".ph-tp-code")!.textContent).toContain("package com.phantom.sample");
+    fireEvent.click(container.querySelectorAll<HTMLButtonElement>(".ph-tp-tab")[2]!);
+    expect(container.querySelector(".ph-tp-term-body")!.textContent).toContain("zig build -Demit-macos-app=false");
+  });
+
   it("falls back to Phantom when no title is given", () => {
     const { container } = render(
       <Document source={`<ThemePreview background="#2e3440" foreground="#d8dee9" ansi="${ANSI}" />\n`} baseURL="file:///tmp/x/" />,
@@ -161,6 +432,40 @@ describe("ThemePreview", () => {
       "<ThemePreview> needs foreground",
       "<ThemePreview> needs ansi",
     ]);
+  });
+});
+
+describe("the sample workspace", () => {
+  it("opens only terminals the sidebar lists under a group that is not collapsed", () => {
+    const listed = SESSION_GROUPS.filter((group) => group.collapsed !== true).flatMap((group) => group.sessions);
+    expect(OPEN_TERMINALS.length).toBe(3);
+    for (const entry of OPEN_TERMINALS) expect(listed).toContain(entry.session);
+    expect(OPEN_TERMINALS.map((entry) => entry.session.title)).toEqual(listed.map((session) => session.title));
+  });
+
+  it("gives every group the count of the sessions it holds", () => {
+    for (const group of SESSION_GROUPS) expect(group.count, group.name).toBe(group.sessions.length);
+  });
+});
+
+describe("the palette a syntax role borrows", () => {
+  const css = stylesheet;
+
+  it("draws every token kind from the slot EditorTheme gives it", () => {
+    for (const [kind, slot] of Object.entries(SYNTAX_SLOTS) as [SyntaxKind, number][]) {
+      const rule = new RegExp(`\\.ph-tp-t-${kind} \\{\\s*color: var\\(--ph-tp-ansi-${slot}\\);`);
+      expect(css, `.ph-tp-t-${kind} must take ANSI ${slot}`).toMatch(rule);
+    }
+  });
+
+  it("names a use for every slot a syntax role borrows, and claims none for the rest", () => {
+    const borrowed = new Set(Object.values(SYNTAX_SLOTS));
+    ANSI_USES.forEach((use, slot) => {
+      expect(use.length, `ANSI ${slot} needs a use`).toBeGreaterThan(0);
+      if (!borrowed.has(slot) && slot !== 7) expect(use, `ANSI ${slot} borrows nothing`).toBe(TERMINAL_ONLY);
+      else expect(use, `ANSI ${slot} is used`).not.toBe(TERMINAL_ONLY);
+    });
+    expect(ANSI_NAMES.length).toBe(16);
   });
 });
 
