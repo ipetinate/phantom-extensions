@@ -40,6 +40,8 @@ Directory names are for humans. Identity is `id` in the manifest, and the zip is
 
 An index entry carries `download` for the version in this repository, and `versions`: the ten newest published versions, newest first, each with its own URL, digest and size. The builder reads the published index to find them, so a version it no longer lists drops off. `download` keeps the shape it has always had, so an older Phantom reads the index as before.
 
+An entry also carries `downloads`, the count GitHub keeps for the release assets: `total` over every published version of that extension, and `current` for the version this index names. The builder reads it from the public releases API, which needs no token, and sends `GH_TOKEN` when the environment has one so a run inside Actions is not held to the anonymous rate limit. A build that cannot reach the API, and an `--offline` build, write no `downloads` key at all; Phantom shows nothing rather than a zero.
+
 ## The manifest
 
 `schemaVersion` is `1`. Phantom ignores keys it does not know inside `contributes`, so a manifest written for a newer Phantom still installs the parts an older one understands.
@@ -55,8 +57,13 @@ An index entry carries `download` for the version in this repository, and `versi
 | `extension.mdx` or `extension.md`, and the `card` it produces in the index | 0.16.0 |
 | `contributes.grammars[]` and `dependencies` | 0.17.0 |
 | `contributes.servers[]`, and `resolver`, `maximumJavaFeatureVersion` and `${HOME}` on any server | 0.17.0 |
+| `fileNamePatterns` on a language | 0.17.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
+
+`fileNamePatterns` claims a file whose name follows a shape rather than a list — `.env.*`, for the repository whose `.env.staging-eu` no enumeration was ever going to reach. A pattern is matched against the file's **name** and never its path, so it holds no `/` and no `\`. The dialect is two characters wide: `*` matches any run of characters including none, `?` matches exactly one, and every other character is a literal, `.` included. There is no `{a,b}` and no `[abc]` — write one pattern per alternative. At most 32 patterns to a language, 64 characters to a pattern.
+
+Phantom ranks the three ways of claiming a file by how much each one commits to: a whole `fileNames` entry beats a pattern, and a pattern beats an `extensions` suffix. VS Code spells the key `filenamePatterns`; this format spells it the way it spells `fileNames`, and the registry refuses the VS Code spelling by name rather than let an extension publish claiming files Phantom never hands it.
 
 A theme file may set colour keys only (`background`, `foreground`, `palette`, `cursor-color`, the selection and split colours and the like) and must stay under 64 KB; a manifest that names a theme setting anything else loses that theme. Formatter `args` are capped at 32 entries.
 

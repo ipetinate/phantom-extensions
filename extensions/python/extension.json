@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "id": "phantom.python",
   "name": "Python",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
-  "description": "Python: highlighting, Pyright and Ruff.",
+  "description": "Python: highlighting, Pyright, Ruff, and pip requirements files.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/python",
   "phantom": "0.17.0",
   "contributes": {
@@ -47,6 +47,26 @@
             "documentationURL": "https://microsoft.github.io/pyright/#/installation"
           }
         }
+      },
+      {
+        "languageId": "pip-requirements",
+        "name": "pip requirements",
+        "extensions": [
+          "pip"
+        ],
+        "fileNames": [
+          "requirements.txt",
+          "requirements.in",
+          "requirements-dev.txt",
+          "requirements-test.txt",
+          "requirements-local.txt",
+          "dev-requirements.txt",
+          "test-requirements.txt",
+          "constraints.txt"
+        ],
+        "category": "data",
+        "icon": "icons/python.png",
+        "lineComment": "#"
       }
     ],
     "formatters": [
@@ -90,6 +110,13 @@
         "languageId": "python",
         "license": "MIT",
         "grammarSource": "https://github.com/microsoft/vscode/blob/3d7cfab6d77dce362755ac573a7a350e8f64528f/extensions/python/syntaxes/MagicPython.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.pip-requirements",
+        "path": "syntaxes/pip-requirements.tmLanguage.json",
+        "languageId": "pip-requirements",
+        "license": "MIT",
+        "grammarSource": "https://github.com/microsoft/vscode-python/blob/0f3ddf5879162e8fc465eccd7292f7e9fa8dbdf8/syntaxes/pip-requirements.tmLanguage.json"
       }
     ]
   }

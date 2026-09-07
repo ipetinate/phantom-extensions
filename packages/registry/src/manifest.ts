@@ -5,6 +5,7 @@ import { fail, isRecord, requireAsset, requireString, type JsonObject, type Json
 import { quoted } from "./errors.ts";
 import { grammarEntries, validateGrammars, type GrammarEntry } from "./grammars.ts";
 import { validateInstall, type Install } from "./install.ts";
+import { MAX_PATTERNS, MAX_PATTERN_LENGTH, canonicalPattern } from "./patterns.ts";
 import { validateProjectMarkers, validateProjectPath } from "./projectPaths.ts";
 import { validateServerBlock, validateServers } from "./servers.ts";
 
@@ -15,6 +16,13 @@ export const AGENT_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const FORMATTER_ID_PATTERN = /^[a-z0-9_-]+$/;
 export const CONTRIBUTION_KINDS = ["languages", "servers", "formatters", "themes", "iconThemes", "grammars", "agents"] as const;
 export const RETIRED_LANGUAGE_KEYS = ["syntax", "keywords"] as const;
+
+/**
+ * Keys a VS Code extension spells differently, and the key here that means
+ * what the author meant. Refused by name rather than ignored: Phantom would
+ * read nothing, and the extension would publish claiming files it never gets.
+ */
+export const FOREIGN_LANGUAGE_KEYS: Readonly<Record<string, string>> = { filenamePatterns: "fileNamePatterns" };
 export const WORKING_DIRECTORIES = ["marker", "file", "workspace"] as const;
 export const MAX_MANIFEST_BYTES = 512 * 1024;
 
@@ -51,6 +59,43 @@ function rawEntries(contributes: JsonObject, kind: ContributionKind): JsonValue[
   return Array.isArray(entries) ? entries : [];
 }
 
+/**
+ * Every rule here is Phantom's rule, and a manifest that breaks one is a
+ * manifest whose pattern Phantom silently drops. Each message names the way
+ * to write what the author meant instead.
+ */
+function validateFileNamePatterns(directory: string, languageId: string, language: JsonObject): void {
+  const subject = `language ${quoted(languageId)}`;
+  for (const [foreign, ours] of Object.entries(FOREIGN_LANGUAGE_KEYS)) {
+    if (language[foreign] !== undefined) {
+      fail(directory, `${subject} carries ${quoted(foreign)}, which VS Code reads and Phantom does not; spell it ${quoted(ours)}`);
+    }
+  }
+
+  const patterns = language["fileNamePatterns"];
+  if (patterns === undefined) return;
+  if (!Array.isArray(patterns)) fail(directory, `${subject}: fileNamePatterns must be an array of globs`);
+  if (patterns.length > MAX_PATTERNS) {
+    fail(directory, `${subject} declares ${patterns.length} file name patterns, more than the ${MAX_PATTERNS} Phantom reads`);
+  }
+
+  const seen = new Set<string>();
+  for (const pattern of patterns) {
+    if (typeof pattern !== "string") fail(directory, `${subject} has a file name pattern that is not a string: ${quoted(pattern)}`);
+    const canonical = canonicalPattern(pattern);
+    if (canonical === null) {
+      fail(
+        directory,
+        `${subject} has a file name pattern Phantom drops: ${quoted(pattern)}. ` +
+          `A pattern matches a file's name and never its path, so it holds no '/' or '\\'; it is at most ${MAX_PATTERN_LENGTH} characters; ` +
+          "and the dialect is '*' and '?' only, so write one pattern per alternative instead of '{a,b}' or '[abc]'.",
+      );
+    }
+    if (seen.has(canonical)) fail(directory, `${subject} declares the file name pattern ${quoted(canonical)} twice`);
+    seen.add(canonical);
+  }
+}
+
 function validateLanguage(directory: string, language: JsonValue): string {
   if (!isRecord(language)) fail(directory, "each language must be an object");
   const languageId = requireString(directory, language, "languageId", LANGUAGE_ID_PATTERN);
@@ -69,6 +114,7 @@ function validateLanguage(directory: string, language: JsonValue): string {
       fail(directory, `bad file extension ${quoted(extension)}`);
     }
   }
+  validateFileNamePatterns(directory, languageId, language);
   const category = language["category"];
   if (category !== undefined && !(CATEGORIES as readonly JsonValue[]).includes(category)) {
     fail(directory, `unknown category ${quoted(category)}`);

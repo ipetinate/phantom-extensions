@@ -1,7 +1,7 @@
 ---
 title: Python
-tagline: Python language support for Phantom — highlighting, diagnostics, completion and formatting.
-version: 1.0.6
+tagline: Python language support for Phantom — highlighting, diagnostics, completion, formatting and pip requirements.
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -9,12 +9,12 @@ license: MIT
 created: 2026-09-06
 updated: 2026-09-06
 icon: media/icon.png
-tags: [python, language, lsp, formatter, pyright, ruff]
+tags: [python, pip, language, lsp, formatter, pyright, ruff]
 screenshots:
   - media/editor.png
 ---
 
-Python support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, decorators and every string form Python has — and connects two tools: **Pyright** for diagnostics, hover, completion and navigation, and **Ruff** for formatting. Both are optional: highlighting works the moment the extension is installed.
+Python support for the Phantom editor. The extension teaches Phantom the language — file types, keywords, decorators and every string form Python has — and connects two tools: **Pyright** for diagnostics, hover, completion and navigation, and **Ruff** for formatting. Both are optional: highlighting works the moment the extension is installed. A second language covers **pip requirements** files, which are not Python and get their own grammar and no server.
 
 Pyright has no formatter of its own, by design, so a Python file needs the second tool to be formatted at all. Ruff fills that gap in Black's style.
 
@@ -24,6 +24,9 @@ Pyright has no formatter of its own, by design, so a Python file needs the secon
   <Features>
     <Feature title="Syntax highlighting" icon="brush">
       Keywords, `match` and `case`, triple-quoted strings, f-strings and the `r`, `b` and `u` prefixes, numbers, class names, calls and `@decorators`. Comments with `#`.
+    </Feature>
+    <Feature title="pip requirements files" icon="package">
+      `requirements.txt` and its siblings get the package name, the version comparison, the version itself, extras, markers and `-r` includes. They are not Python, so Pyright never sees them.
     </Feature>
     <Feature title="Language intelligence" icon="search">
       Type checking as you type, hover documentation, completion for the standard library and your own modules, go to definition, find references and rename. Pyright infers types from annotations and from the code around them.
@@ -71,7 +74,7 @@ The formatter, from Astral. Without it the Format command and Format on Save do 
 
 | Area | Contribution |
 |---|---|
-| File types | `.py`, `.pyi` |
+| File types | `.py`, `.pyi` (Python); `requirements.txt`, `requirements.in`, `constraints.txt` and their common variants (pip requirements) |
 | Language server | `pyright-langserver --stdio` |
 | Formatter | `ruff format --stdin-filename <file> -` |
 | Editor | TextMate grammar `source.python` (MagicPython), `#` comment marker |
@@ -166,11 +169,23 @@ Formatting requires `ruff` on the `PATH`. Ruff also skips a file that its own `e
 
 </Details>
 
+<Details summary="Which requirements files are claimed, and why not every .txt">
+
+Phantom matches an exact file name first, then the last suffix. A requirements file is a `.txt`, and `.txt` belongs to no language, so the extension lists the names instead: `requirements.txt`, `requirements.in`, `requirements-dev.txt`, `requirements-test.txt`, `requirements-local.txt`, `dev-requirements.txt`, `test-requirements.txt` and `constraints.txt`.
+
+A name outside that list — `requirements-ci.txt`, say — stays plain text. The manifest cannot express a pattern today, and claiming `txt` outright would colour every plain text file in the repository as a requirements file.
+
+Pyright is never started for these. They are a separate language and carry no server.
+
+</Details>
+
 <Callout kind="note" title="Permissions">
 The tools run as your user, with access to your files and network, the same as if you started them from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
 </Callout>
 
 ## Changelog
+
+**1.0.7** — Adds a pip requirements language for `requirements.txt` and its common variants, with the `source.pip-requirements` grammar and no language server, so a requirements file is coloured as a requirements file rather than as broken Python.
 
 **1.0.6** — Ships the TextMate grammar `source.python` in place of the manifest's token patterns and keyword list. Colouring now needs Phantom 0.17.0.
 

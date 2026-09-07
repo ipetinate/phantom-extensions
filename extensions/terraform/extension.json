@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "id": "phantom.terraform",
   "name": "Terraform",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
-  "description": "Terraform: highlighting and terraform-ls.",
+  "description": "Terraform and HCL: highlighting and terraform-ls.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/terraform",
   "phantom": "0.17.0",
   "contributes": {
@@ -41,6 +41,21 @@
             "documentationURL": "https://github.com/hashicorp/terraform-ls/blob/main/docs/installation.md"
           }
         }
+      },
+      {
+        "languageId": "hcl",
+        "name": "HCL",
+        "extensions": [
+          "hcl",
+          "tftpl"
+        ],
+        "category": "infrastructure",
+        "icon": "icons/terraform.png",
+        "lineComment": "#",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        }
       }
     ],
     "grammars": [
@@ -50,6 +65,13 @@
         "languageId": "terraform",
         "license": "MPL-2.0",
         "grammarSource": "https://github.com/hashicorp/syntax/blob/16375ff2107c4d12551b1637bf17b371cf9ac103/syntaxes/terraform.tmGrammar.json"
+      },
+      {
+        "scopeName": "source.hcl",
+        "path": "syntaxes/hcl.tmLanguage.json",
+        "languageId": "hcl",
+        "license": "MPL-2.0",
+        "grammarSource": "https://github.com/hashicorp/syntax/blob/16375ff2107c4d12551b1637bf17b371cf9ac103/syntaxes/hcl.tmGrammar.json"
       }
     ]
   }

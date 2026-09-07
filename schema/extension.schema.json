@@ -377,6 +377,18 @@
             "minLength": 1
           }
         },
+        "fileNamePatterns": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[^/\\\\\\[\\]{}]+$"
+          },
+          "description": "Globs matched against a file's name and never its path, for a language whose set of names is open: '.env.*'. The dialect is '*' (any run of characters) and '?' (exactly one); every other character is a literal. Write one pattern per alternative — there is no '{a,b}' and no '[abc]'. Phantom ranks a whole file name above a pattern and a pattern above an extension."
+        },
         "category": {
           "$ref": "#/$defs/category"
         },

@@ -100,7 +100,8 @@ async function main(argv: string[]): Promise<number> {
       return 0;
     }
     for (const entry of await build(parsed.out, parsed.repo, { offline: parsed.offline })) {
-      process.stdout.write(`${entry.id} ${entry.version}  ${entry.download.bytes} bytes  ${entry.download.sha256.slice(0, 12)}\n`);
+      const downloads = entry.downloads === undefined ? "" : `  ${entry.downloads.total} downloads`;
+      process.stdout.write(`${entry.id} ${entry.version}  ${entry.download.bytes} bytes  ${entry.download.sha256.slice(0, 12)}${downloads}\n`);
     }
     return 0;
   } catch (error) {
