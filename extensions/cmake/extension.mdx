@@ -1,0 +1,79 @@
+---
+title: CMake
+tagline: CMake support for Phantom — highlighting for CMake scripts and CMakeLists.txt.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [cmake, build, c, cpp, infrastructure]
+---
+
+CMake support for the Phantom editor. The extension declares the language — `.cmake`, the file name `CMakeLists.txt`, the `#` and `#[[ ]]` comment markers — and ships the TextMate grammar the CMake editor plugin has used for years. There is no language server here. Highlighting is the whole contribution.
+
+## Highlights
+
+<Features>
+  <Feature title="Syntax highlighting" icon="brush">
+    The command names, the flow keywords, `${…}` and `$ENV{…}` variable references, quoted arguments and `#` comments.
+  </Feature>
+  <Feature title="CMakeLists.txt whatever its case" icon="search">
+    Phantom lowercases a file name before matching, so `CMakeLists.txt`, `CMAKELISTS.TXT` and `cmakelists.txt` all resolve to CMake.
+  </Feature>
+  <Feature title="No server to install" icon="check">
+    Nothing runs. The grammar is data the editor reads, so the extension needs no binary on your `PATH` and asks for no permission.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to CMake.
+  </Step>
+  <Step title="Open a CMakeLists.txt or a .cmake file">
+    Colour appears at once. Phantom claims no file type of its own, so there is nothing to promote and no conflict to resolve.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.cmake`, and the file name `CMakeLists.txt` |
+| Language server | none |
+| Formatter | none. Run `cmake-format` from a terminal |
+| Editor | TextMate grammar `source.cmake`, `#` and `#[[ ]]` comment markers |
+| Icon | CMake file icon in the sidebar and tabs |
+
+## Measured coverage
+
+<Details summary="How much of a real script this colours">
+
+Measured over the 4 authored CMake files in the owner's checkouts, 14,248 non-whitespace characters: **74.6%** land on a scope Phantom paints.
+
+What stays plain is what a CMake script is mostly made of — path and target arguments. Of the characters the grammar does give a scope to, 94.3% are painted: comments are 36.9% of the text, strings 26.0%, keywords 11.7%. The lowest score is the shortest file, because a fourteen-line script is almost all arguments.
+
+Two further corpora, measured and left out of the figure above because they are third-party script rather than authored here: 37 vendored CMake files in the same checkout score 59.7%, and 11 `configure_file` templates named `*.cmake.in` score 61.7%.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="A .cmake.in template stays plain">
+
+The extension claims `.cmake` and the name `CMakeLists.txt`. Phantom matches the last suffix, so `onig-config.cmake.in` is an `.in` file and gets nothing.
+
+The manifest could claim it — `fileNamePatterns` takes globs, and `*.cmake.in` is one entry. It is left out because every such file in the checkout this extension was measured against sits inside a dependency cache, and none is authored there. The grammar reads them correctly, so ask for the pattern if you write them.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `cmake` language for `.cmake` and `CMakeLists.txt`, its comment markers, and the `source.cmake` grammar from `twxs/vs.language.cmake`.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [twxs/vs.language.cmake](https://github.com/twxs/vs.language.cmake), © twxs (MIT). Upstream ships it as an XML property list; this extension ships the same grammar converted to the JSON form Phantom reads, with no rule changed. CMake is a registered trademark of Kitware, Inc.; this extension is not affiliated with or endorsed by Kitware.

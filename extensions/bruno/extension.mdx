@@ -1,0 +1,81 @@
+---
+title: Bruno
+tagline: Bruno support for Phantom — highlighting for .bru request files, each block coloured in the language it holds.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [bruno, bru, http, api, data]
+---
+
+Bruno support for the Phantom editor. The extension declares the language — `.bru`, the `//` and `/* */` comment markers — and ships the TextMate grammar the Bruno team maintains for its own editor plugin. There is no language server here. Highlighting is the whole contribution.
+
+A `.bru` file is a set of named blocks, and the body of a block is another language. The grammar says which, so a JSON body is coloured as JSON and a `script` block as TypeScript.
+
+## Highlights
+
+<Features>
+  <Feature title="Blocks and headers" icon="brush">
+    `meta`, the seven request methods, `query`, `headers`, `body` in each of its forms, `vars`, `assert`, `script`, `tests` and `docs` — with the header names and values inside them.
+  </Feature>
+  <Feature title="Bodies in their own language" icon="globe">
+    A `body:json` block is coloured by the **JSON** extension, `body:xml` by **XML**, a `script` or `tests` block by **TypeScript**, and a `docs` block by **Markdown**.
+  </Feature>
+  <Feature title="No server to install" icon="check">
+    Nothing runs. The grammar is data the editor reads, so the extension needs no binary on your `PATH` and asks for no permission.
+  </Feature>
+</Features>
+
+## Requirements
+
+The bodies borrow other grammars, so this extension declares JSON, Markdown, TypeScript and XML as dependencies and Phantom installs them with it. Without one of them the matching block keeps its outline and its content stays plain. A `body:graphql` block has no grammar in this registry and always stays plain.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Bruno.
+  </Step>
+  <Step title="Open a .bru file">
+    Colour appears at once. Phantom claims no file type of its own, so there is nothing to promote and no conflict to resolve.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.bru` |
+| Language server | none |
+| Formatter | none |
+| Editor | TextMate grammar `source.bru`, with `source.json`, `text.xml`, `source.js` and `text.html.markdown` embedded; `//` and `/* */` comment markers |
+| Icon | Bruno file icon in the sidebar and tabs |
+
+## Measured coverage
+
+<Details summary="How much of a real collection this colours">
+
+Measured over the 16 `.bru` files in the owner's checkouts, 7,494 non-whitespace characters: **46.2%** land on a scope Phantom paints.
+
+The remainder is two things, and neither is a gap in the grammar. Block names such as `get` and `headers` are scoped `entity.name.tag`, and a `docs` block is Markdown prose, which is foreground text in any editor.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="A body or docs block stays plain">
+
+That block is another language, and its grammar comes from another extension. Check that JSON, XML, TypeScript or Markdown — whichever the block holds — is installed. A `graphql` body has no grammar here and stays plain in any case.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `bru` language for `.bru`, its comment markers, and the `source.bru` grammar from `usebruno/bruno-vscode`, with four languages embedded.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [usebruno/bruno-vscode](https://github.com/usebruno/bruno-vscode), © Bruno Software Inc. (MIT), shipped unmodified. This extension is not affiliated with or endorsed by Bruno Software Inc.

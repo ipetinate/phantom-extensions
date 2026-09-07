@@ -1,0 +1,71 @@
+---
+title: Nix
+tagline: Nix support for Phantom — highlighting for Nix expressions, flakes and derivations.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [nix, flake, build, language, infrastructure]
+---
+
+Nix support for the Phantom editor. The extension declares the language — `.nix`, the `#` and `/* */` comment markers — and ships the TextMate grammar the Nix community maintains for its own editor plugin. There is no language server here. Highlighting is the whole contribution.
+
+An attribute set is most of what a Nix file is, and without colour an attribute name, the value beside it and the path below it all look alike. This separates them.
+
+## Highlights
+
+<Features>
+  <Feature title="Syntax highlighting" icon="brush">
+    `let`, `in`, `with`, `rec`, `inherit`, `if`/`then`/`else` and `assert`; attribute names and attribute paths; single and multi-line strings with their `${…}` interpolations; paths and URLs, which Nix writes bare; `#` line and `/* */` block comments.
+  </Feature>
+  <Feature title="No server to install" icon="check">
+    Nothing runs. The grammar is data the editor reads, so the extension needs no binary on your `PATH` and asks for no permission.
+  </Feature>
+  <Feature title="The grammar the Nix plugin ships" icon="book">
+    The file comes from `nix-community/vscode-nix-ide`, shipped unmodified, so the language it knows is the language Nix evaluates.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Nix.
+  </Step>
+  <Step title="Open a .nix file">
+    Colour appears at once. Phantom claims no file type of its own, so there is nothing to promote and no conflict to resolve.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.nix` |
+| Language server | none |
+| Formatter | none. Run `nixpkgs-fmt` or `alejandra` from a terminal |
+| Editor | TextMate grammar `source.nix`, `#` and `/* */` comment markers |
+| Icon | Nix file icon in the sidebar and tabs |
+
+## Measured coverage
+
+<Details summary="How much of a real file this colours">
+
+Measured over the 32 `.nix` files in the owner's checkouts, 45,826 non-whitespace characters, under the scope map Phantom's editor uses: **99.7%** of those characters land on a scope Phantom paints.
+
+Attribute names alone account for 36.5% of the text, strings 44.0%, comments 6.5%. Nix is as complete as a TextMate grammar gets, because nearly everything in the language is one of those three things.
+
+For scale, the Microsoft TypeScript grammar measures 67% on this repository's own TypeScript sources under the same method.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the `nix` language for `.nix`, its comment markers, and the `source.nix` grammar from `nix-community/vscode-nix-ide`.
+
+## License and credits
+
+The extension is released under the MIT License. The grammar is [nix-community/vscode-nix-ide](https://github.com/nix-community/vscode-nix-ide), © the Nix community (MIT), shipped unmodified. This extension is not affiliated with or endorsed by the Nix project.

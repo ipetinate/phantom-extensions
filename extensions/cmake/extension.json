@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.cmake",
+  "name": "CMake",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "CMake: highlighting for CMake scripts and CMakeLists.txt.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/cmake",
+  "phantom": "0.17.0",
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "cmake",
+        "name": "CMake",
+        "extensions": [
+          "cmake"
+        ],
+        "fileNames": [
+          "CMakeLists.txt"
+        ],
+        "category": "infrastructure",
+        "icon": "icons/cmake.png",
+        "lineComment": "#",
+        "blockComment": {
+          "open": "#[[",
+          "close": "]]"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.cmake",
+        "path": "syntaxes/cmake.tmLanguage.json",
+        "languageId": "cmake",
+        "license": "MIT",
+        "grammarSource": "https://github.com/twxs/vs.language.cmake/blob/19b1b8fe2d68d72cf294d0c3c22f0a3fc54f8f6f/syntaxes/CMake.tmLanguage"
+      }
+    ]
+  }
+}

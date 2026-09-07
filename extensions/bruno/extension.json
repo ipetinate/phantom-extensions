@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.bruno",
+  "name": "Bruno",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Bruno: highlighting for .bru request files, with each block coloured in the language it holds.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/bruno",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.json",
+    "phantom.markdown",
+    "phantom.typescript",
+    "phantom.xml"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "bru",
+        "name": "Bruno",
+        "extensions": [
+          "bru"
+        ],
+        "category": "data",
+        "icon": "icons/bruno.png",
+        "lineComment": "//",
+        "blockComment": {
+          "open": "/*",
+          "close": "*/"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.bru",
+        "path": "syntaxes/bruno.tmLanguage.json",
+        "languageId": "bru",
+        "license": "MIT",
+        "grammarSource": "https://github.com/usebruno/bruno-vscode/blob/3fdd3547a384cfe8056e3aa4c61569a5963aac9e/syntaxes/bruno.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.json": "json",
+          "text.html.markdown": "markdown",
+          "text.xml": "xml",
+          "source.js": "javascript"
+        }
+      }
+    ]
+  }
+}
