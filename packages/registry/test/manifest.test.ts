@@ -53,6 +53,25 @@ describe("loadManifest", () => {
     expect(() => loadManifest(fixture.directory)).toThrow(/asset does not exist/);
   });
 
+  it("carries the file names a language claims", () => {
+    const manifest = languageManifest({
+      contributes: {
+        languages: [
+          {
+            languageId: "sample",
+            name: "Sample",
+            extensions: ["smp"],
+            fileNames: ["COMMIT_EDITMSG", ".gitignore", "git-rebase-todo"],
+            icon: "icons/sample.svg",
+          },
+        ],
+      },
+    });
+    const fixture = new ExtensionFixture(root, "sample", manifest);
+    const languages = loadManifest(fixture.directory).contributes["languages"] as { fileNames: string[] }[];
+    expect(languages[0]?.fileNames).toEqual(["COMMIT_EDITMSG", ".gitignore", "git-rebase-todo"]);
+  });
+
   it("refuses empty contributes", () => {
     const fixture = new ExtensionFixture(root, "empty", languageManifest({ contributes: { agents: [] } }));
     expect(() => loadManifest(fixture.directory)).toThrow(/contributes must hold at least one of/);
