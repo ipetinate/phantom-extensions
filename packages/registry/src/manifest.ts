@@ -277,6 +277,43 @@ export function manifestTools(directory: string, manifest: Manifest): Tool[] {
   return tools;
 }
 
+/// Refuses a package whose name is several subjects joined together.
+///
+/// An extension that claims more than one language is fine when the
+/// languages are one subject: Dockerfile and Compose are both Docker, and
+/// `Dockerfiles` is a name somebody would search for. What is refused is the
+/// package that admits it is a list — `Nix, CMake and Bruno`,
+/// `PlantUML and Jinja2` — because nobody looking for CMake looks for that,
+/// and installing it to read a `CMakeLists.txt` also claims `.nix` and
+/// `.bru`.
+///
+/// The test is the name and the directory, not a judgement about the
+/// languages: a conjunction or a comma in the name of a multi-language
+/// package, or a directory whose segments are its own language ids. A single
+/// subject needs neither.
+const JOINED_NAME = /,|\s(?:and|&||e|y)\s/i;
+
+function validateSubject(directory: string, name: string, languageIds: Set<string>): void {
+  if (languageIds.size < 2) return;
+  if (JOINED_NAME.test(name)) {
+    fail(
+      directory,
+      `name ${quoted(name)} joins several subjects, and the extension claims ${languageIds.size} languages: ` +
+        "publish one extension per subject, or give the package the one name they share, the way Dockerfiles does"
+    );
+  }
+  const segments = path.basename(directory).split("-").filter((segment) => segment.length > 0);
+  if (segments.length < 2) return;
+  const ids = new Set([...languageIds].map((id) => id.toLowerCase()));
+  if (segments.every((segment) => ids.has(segment))) {
+    fail(
+      directory,
+      `directory ${quoted(path.basename(directory))} is its own language ids joined together: ` +
+        "publish one extension per subject, or give the package the one name they share"
+    );
+  }
+}
+
 export function loadManifest(directory: string): Manifest {
   const file = path.join(directory, "extension.json");
   let size: number;
@@ -298,7 +335,7 @@ export function loadManifest(directory: string): Manifest {
   if (!isRecord(parsed)) fail(directory, "extension.json must hold an object");
   if (parsed["schemaVersion"] !== 1) fail(directory, "schemaVersion must be 1");
   const id = requireString(directory, parsed, "id", ID_PATTERN);
-  requireString(directory, parsed, "name");
+  const name = requireString(directory, parsed, "name");
   requireString(directory, parsed, "version", VERSION_PATTERN);
   requireString(directory, parsed, "publisher");
   if (parsed["phantom"] !== undefined) requireString(directory, parsed, "phantom", VERSION_PATTERN);
@@ -318,6 +355,7 @@ export function loadManifest(directory: string): Manifest {
   for (const kind of ["themes", "iconThemes"] as const) {
     for (const entry of rawEntries(contributes, kind)) validatePathed(directory, kind, entry);
   }
+  validateSubject(directory, name, languageIds);
   validateGrammars(directory, rawEntries(contributes, "grammars"), languageIds);
   for (const agent of rawEntries(contributes, "agents")) validateAgent(directory, agent);
   return parsed as unknown as Manifest;

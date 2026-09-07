@@ -35,6 +35,12 @@ The two directories are one registry. The builder reads both, orders every exten
 
 Directory names are for humans. Identity is `id` in the manifest, and the zip is `<id>-<version>.zip`.
 
+### One extension, one subject
+
+An extension may claim several languages, and often should: Dockerfile and Compose are both Docker, C and C++ share a toolchain and a server. What it may not be is a list. A package named `Nix, CMake and Bruno` tells a reader nothing to search for, and installing it to read a `CMakeLists.txt` also claims `.nix` and `.bru`.
+
+The check enforces the symptom rather than the judgement. A package claiming two or more languages is refused when its `name` joins subjects with a comma or a conjunction, or when its directory name is its own language ids strung together. `Dockerfiles` and `C/C++` pass, because each is the one name the languages share.
+
 ## Publishing an extension
 
 1. Add `extensions/<name>/extension.json` and its assets, or `themes/<name>/extension.json` when the extension contributes nothing but `themes`. `id` is `<publisher>.<name>`, lowercase, using `[a-z0-9._-]`.

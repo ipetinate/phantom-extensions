@@ -78,6 +78,49 @@ describe("loadManifest", () => {
   });
 });
 
+describe("a package that is several subjects", () => {
+  const twoLanguages = (name: string) =>
+    languageManifest({
+      name,
+      contributes: {
+        languages: [
+          { languageId: "nix", name: "Nix", extensions: ["nix"], icon: "icons/sample.svg" },
+          { languageId: "cmake", name: "CMake", extensions: ["cmake"], icon: "icons/sample.svg" },
+        ],
+      },
+    });
+
+  it("refuses a name that joins its languages", () => {
+    const fixture = new ExtensionFixture(root, "bundle", twoLanguages("Nix and CMake"));
+    expect(() => loadManifest(fixture.directory)).toThrow(/joins several subjects/);
+  });
+
+  it("refuses a comma too", () => {
+    const fixture = new ExtensionFixture(root, "bundle", twoLanguages("Nix, CMake and Bruno"));
+    expect(() => loadManifest(fixture.directory)).toThrow(/joins several subjects/);
+  });
+
+  it("refuses a directory that is its own language ids", () => {
+    const fixture = new ExtensionFixture(root, "nix-cmake", twoLanguages("Build files"));
+    expect(() => loadManifest(fixture.directory)).toThrow(/joined together/);
+  });
+
+  it("allows the one name several languages share", () => {
+    const fixture = new ExtensionFixture(root, "dockerfiles", twoLanguages("Dockerfiles"));
+    expect(loadManifest(fixture.directory).name).toBe("Dockerfiles");
+  });
+
+  it("allows a family written with a slash", () => {
+    const fixture = new ExtensionFixture(root, "c", twoLanguages("C/C++"));
+    expect(loadManifest(fixture.directory).name).toBe("C/C++");
+  });
+
+  it("leaves a single-language package alone whatever it is called", () => {
+    const fixture = new ExtensionFixture(root, "sample", languageManifest({ name: "Read and write" }));
+    expect(loadManifest(fixture.directory).name).toBe("Read and write");
+  });
+});
+
 describe("fileNamePatterns", () => {
   function withPatterns(patterns: unknown): Record<string, unknown> {
     return languageManifest({

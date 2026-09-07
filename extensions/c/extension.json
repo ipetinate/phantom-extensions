@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "phantom.c",
-  "name": "C and C++",
+  "name": "C/C++",
   "version": "1.0.7",
   "publisher": "Isac Petinate",
-  "description": "C and C++: highlighting and clangd.",
+  "description": "C/C++: highlighting and clangd.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/c",
   "phantom": "0.17.0",
   "contributes": {
@@ -25,7 +25,7 @@
         },
         "server": {
           "command": "clangd",
-          "installHint": "Ships with the Xcode Command Line Tools — run: xcode-select --install",
+          "installHint": "Ships with the Xcode Command Line Tools \u2014 run: xcode-select --install",
           "documentationURL": "https://clangd.llvm.org/",
           "install": {
             "documentationURL": "https://clangd.llvm.org/installation"
@@ -51,7 +51,7 @@
         },
         "server": {
           "command": "clangd",
-          "installHint": "Ships with the Xcode Command Line Tools — run: xcode-select --install",
+          "installHint": "Ships with the Xcode Command Line Tools \u2014 run: xcode-select --install",
           "documentationURL": "https://clangd.llvm.org/",
           "install": {
             "documentationURL": "https://clangd.llvm.org/installation"
