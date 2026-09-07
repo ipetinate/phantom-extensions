@@ -58,6 +58,47 @@ describe("manifestWarnings", () => {
     expect(warningsOf(fixture.directory)).toEqual([]);
   });
 
+  it("warns when a pattern and a literal name both claim one file", () => {
+    const manifest = languageManifest({
+      contributes: { languages: [language({ fileNames: [".env.local"], fileNamePatterns: [".env.*"] })] },
+    });
+    const fixture = new ExtensionFixture(root, "contradiction", manifest);
+    expect(warningsOf(fixture.directory)).toEqual([
+      "language 'sample' claims '.env.local' twice: the pattern '.env.*' matches a name this extension also lists under fileNames. " +
+        "Phantom reads the name and never the pattern for that file.",
+    ]);
+  });
+
+  it("looks across the whole manifest, because precedence does too", () => {
+    const manifest = languageManifest({
+      contributes: {
+        languages: [
+          language({ fileNames: [".env.local"] }),
+          language({ languageId: "other", name: "Other", extensions: ["oth"], fileNamePatterns: [".env.*"] }),
+        ],
+      },
+    });
+    const fixture = new ExtensionFixture(root, "across", manifest);
+    expect(warningsOf(fixture.directory).map((warning) => warning.split(" ")[1])).toEqual(["'other'"]);
+  });
+
+  it("warns about a pattern with no wildcard, which is a name in the wrong field", () => {
+    const manifest = languageManifest({ contributes: { languages: [language({ fileNamePatterns: [".env.local"] })] } });
+    const fixture = new ExtensionFixture(root, "literal", manifest);
+    expect(warningsOf(fixture.directory)).toEqual([
+      "language 'sample' has the file name pattern '.env.local', which holds no '*' or '?'. " +
+        "Phantom ranks a whole file name above a pattern, so list it under fileNames instead.",
+    ]);
+  });
+
+  it("stays quiet about a pattern that claims nothing the manifest already named", () => {
+    const manifest = languageManifest({
+      contributes: { languages: [language({ fileNames: ["dotenv"], fileNamePatterns: [".env.*"] })] },
+    });
+    const fixture = new ExtensionFixture(root, "clean", manifest);
+    expect(warningsOf(fixture.directory)).toEqual([]);
+  });
+
   it("names every language of an extension that is missing one", () => {
     const manifest = languageManifest({
       contributes: {

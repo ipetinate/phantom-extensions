@@ -59,6 +59,62 @@ describe("loadManifest", () => {
   });
 });
 
+describe("fileNamePatterns", () => {
+  function withPatterns(patterns: unknown): Record<string, unknown> {
+    return languageManifest({
+      contributes: { languages: [{ languageId: "dotenv", name: "DotEnv", extensions: ["env"], fileNamePatterns: patterns }] },
+    });
+  }
+
+  function load(name: string, manifest: Record<string, unknown>): () => unknown {
+    const fixture = new ExtensionFixture(root, name, manifest);
+    return () => loadManifest(fixture.directory);
+  }
+
+  it("takes the pattern the field exists for", () => {
+    expect(load("dotenv", withPatterns([".env.*"]))()).toBeTruthy();
+  });
+
+  it("refuses a pattern that reaches out of the file's name", () => {
+    expect(load("path", withPatterns(["../*.env"]))).toThrow(/never its path/);
+  });
+
+  it("refuses a backslash, which is a separator too", () => {
+    expect(load("backslash", withPatterns(["src\\*.env"]))).toThrow(/never its path/);
+  });
+
+  it("refuses alternation, and says to write one pattern per alternative", () => {
+    expect(load("braces", withPatterns(["*.{js,ts}"]))).toThrow(/one pattern per alternative/);
+  });
+
+  it("refuses a character class", () => {
+    expect(load("class", withPatterns(["[abc].env"]))).toThrow(/Phantom drops/);
+  });
+
+  it("refuses a pattern longer than Phantom reads", () => {
+    expect(load("long", withPatterns([`${"a".repeat(64)}*`]))).toThrow(/Phantom drops/);
+  });
+
+  it("refuses more patterns than Phantom reads", () => {
+    expect(load("many", withPatterns(Array.from({ length: 33 }, (_unused, index) => `p${index}.*`)))).toThrow(/more than the 32/);
+  });
+
+  it("refuses the same pattern twice, however it is spelled", () => {
+    expect(load("twice", withPatterns([".env.*", "  .ENV.*  "]))).toThrow(/twice/);
+  });
+
+  it("refuses a pattern that is not a string", () => {
+    expect(load("number", withPatterns([7]))).toThrow(/not a string/);
+  });
+
+  it("refuses the VS Code spelling of the key, which Phantom would read as nothing", () => {
+    const manifest = languageManifest({
+      contributes: { languages: [{ languageId: "dotenv", name: "DotEnv", extensions: ["env"], filenamePatterns: [".env.*"] }] },
+    });
+    expect(load("vscode", manifest)).toThrow(/spell it 'fileNamePatterns'/);
+  });
+});
+
 describe("collect", () => {
   it("refuses two extensions with one id", () => {
     new ExtensionFixture(root, "one", languageManifest());
