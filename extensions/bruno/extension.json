@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.bruno",
   "name": "Bruno",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "Bruno: highlighting for .bru request files, with each block coloured in the language it holds.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/bruno",

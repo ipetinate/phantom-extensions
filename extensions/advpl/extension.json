@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.advpl",
   "name": "AdvPL and TLPP",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "AdvPL and TLPP, the TOTVS Protheus languages: highlighting for .tlpp, .prw and .ch.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/advpl",

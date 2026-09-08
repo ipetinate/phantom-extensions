@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.rego",
   "name": "Rego",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "Rego: highlighting for Open Policy Agent policies.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/rego",

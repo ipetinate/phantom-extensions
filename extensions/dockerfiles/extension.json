@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.dockerfiles",
   "name": "Dockerfiles",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "Dockerfiles: highlighting for Dockerfile, its suffixed variants and Containerfile.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dockerfiles",

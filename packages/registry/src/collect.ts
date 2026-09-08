@@ -1,9 +1,9 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
 import { fail } from "./checks.ts";
-import { ManifestError } from "./errors.ts";
+import { ManifestError, quoted } from "./errors.ts";
 import { loadDocument, type DocumentCard } from "./document.ts";
-import { inlineIcon } from "./icon.ts";
+import { iconBytes, inlineIcon, MAX_INLINE_ICON_BYTES } from "./icon.ts";
 import { isDirectory } from "./files.ts";
 import { checkLayout } from "./layout.ts";
 import { checkMedia, type MediaEntry } from "./media.ts";
@@ -29,8 +29,18 @@ export function iconPath(manifest: Manifest, card: DocumentCard): string | null 
 }
 
 export function checkIcon(directory: string, manifest: Manifest, card: DocumentCard): void {
-  if (card.icon || manifestIcons(manifest).length > 0) return;
-  fail(directory, "needs an icon: 'icon' in the document's front matter, or 'icon' on a language or agent in extension.json");
+  if (!card.icon && manifestIcons(manifest).length === 0) {
+    fail(directory, "needs an icon: 'icon' in the document's front matter, or 'icon' on a language or agent in extension.json");
+  }
+  const declared = iconPath(manifest, card);
+  if (declared === null) return;
+  const bytes = iconBytes(directory, declared);
+  if (bytes === null || bytes <= MAX_INLINE_ICON_BYTES) return;
+  fail(
+    directory,
+    `icon ${quoted(declared)} is ${bytes} bytes, over the ${MAX_INLINE_ICON_BYTES} the index inlines — `
+      + "the store would list this extension with no artwork. 128 pixels square is the largest size Phantom draws it at.",
+  );
 }
 
 function compare(left: string, right: string): number {

@@ -51,12 +51,18 @@ describe("inline icon", () => {
     expect(entries[0]?.card.iconData).toBe(`data:image/png;base64,${MINIMAL_PNG.toString("base64")}`);
   });
 
-  it("leaves out an icon larger than the inline budget", async () => {
+  /**
+   * It used to be left out, silently, and the entry shipped with no artwork —
+   * eleven packages reached the store that way before anybody noticed a blank
+   * square in the list. An icon that cannot be inlined is a broken package,
+   * so the build refuses it and says how big it is.
+   */
+  it("refuses an icon larger than the inline budget", async () => {
     const fixture = new ExtensionFixture(path.join(root, "extensions"), "sample", languageManifest());
     fixture.write("media/icon.svg", `<svg xmlns='http://www.w3.org/2000/svg'>${"x".repeat(MAX_INLINE_ICON_BYTES)}</svg>`);
-    const entries = await run();
-    expect(entries[0]?.card.iconData).toBeNull();
+    await expect(run()).rejects.toThrow(/over the 24576 the index inlines/);
   });
+
 });
 
 describe("categories", () => {

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.cmake",
   "name": "CMake",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "CMake: highlighting for CMake scripts and CMakeLists.txt.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/cmake",

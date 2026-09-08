@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.nix",
   "name": "Nix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "Nix: highlighting for Nix expressions and flakes.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/nix",

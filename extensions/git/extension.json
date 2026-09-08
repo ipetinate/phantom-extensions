@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.git",
   "name": "Git",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "Git's own files: ignore lists, config, attributes, CODEOWNERS, mailmap, commit messages and the rebase todo.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/git",

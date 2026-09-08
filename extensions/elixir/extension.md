@@ -1,7 +1,7 @@
 ---
 title: Elixir
 tagline: Elixir, EEx and HEEx for Phantom — highlighting from a grammar, diagnostics and completion from ElixirLS.
-version: 1.1.1
+version: 1.1.2
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -128,6 +128,8 @@ extension's manifest or the program's path changes. You can review or change
 the answer under Settings → Extensions.
 
 ## Changelog
+
+**1.1.2** — The icon is 128 pixels square — the largest size Phantom draws it at — so it fits the index's inline budget and the store list can show it.
 
 **1.1.0** — A contributed `mix format` formatter, so formatting no longer
 depends on the language server having loaded the project. It runs in the

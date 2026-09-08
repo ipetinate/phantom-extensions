@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.typescript-native",
   "name": "TypeScript Native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "TypeScript and JavaScript served by tsc --lsp, the native TypeScript 7 server.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/typescript-native",

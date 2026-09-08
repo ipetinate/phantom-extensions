@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.plantuml",
   "name": "PlantUML",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "PlantUML: highlighting for diagram sources.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/plantuml",

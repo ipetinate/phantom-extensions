@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.jvm-config",
   "name": "JVM Config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "The two configuration formats a JVM service is written in: Java properties and HOCON.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/jvm-config",
