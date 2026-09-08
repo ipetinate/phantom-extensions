@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.dotfiles",
   "name": "Project Dotfiles",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "Isac Petinate",
   "description": "The small configuration files at the root of a project: INI and key=value dotfiles, version pins and Browserslist.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/dotfiles",
