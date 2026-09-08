@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.prettier",
   "name": "Prettier",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "Isac Petinate",
   "description": "Prettier: opinionated formatting for the files it has a parser for, in projects that declare it.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/prettier",

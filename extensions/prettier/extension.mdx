@@ -1,0 +1,143 @@
+---
+title: Prettier
+tagline: Opinionated formatting for the files Prettier has a parser for, in the projects that declare it.
+version: 1.1.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [formatter, prettier, javascript, typescript, css, markdown]
+---
+
+Prettier formats a file by reprinting it from its own syntax tree, so the result
+does not depend on how the source was written. This extension teaches Phantom
+which files it can do that to, how to find the copy of it your project installed,
+and — the part that matters most — when to leave a file alone.
+
+## Highlights
+
+<Features>
+  <Feature title="Silent where it was never adopted" icon="check">
+    It runs only where it finds a marker: a Prettier configuration file, a `prettier` key in `package.json` or `package.yaml`, or a copy under `node_modules`. No marker, no formatting.
+  </Feature>
+  <Feature title="The copy the project pinned" icon="lock">
+    `node_modules/.bin/prettier` wins over whatever `prettier` your `PATH` resolves to, so a repository pinned to Prettier 2 keeps formatting like Prettier 2.
+  </Feature>
+  <Feature title="102 suffixes, not a guess" icon="package">
+    Taken from Prettier's own `--support-info`: JavaScript and TypeScript in every spelling, JSX and TSX, JSON and JSON5, CSS, Less and SCSS, HTML and Vue, GraphQL, Markdown and MDX, YAML.
+  </Feature>
+  <Feature title="Formats a file you have not saved" icon="bolt">
+    The buffer goes in on standard input with `--stdin-filepath`, so the file is formatted as it stands and Prettier still infers the parser from the name.
+  </Feature>
+</Features>
+
+## It only runs where the project asks for it
+
+A formatter that reformats every file it recognises is a formatter that rewrites
+repositories that never adopted it. Phantom looks for a marker starting beside
+the file and walking up, stopping at the repository root or at your home
+directory.
+
+No marker, no formatting. Open a `.js` in a repository that uses something else
+and Save leaves it exactly as you typed it.
+
+## Requirements
+
+The extension carries no binary. A project that installs its own needs nothing
+here; install one globally only if you want formatting outside such a project.
+
+<Requirement command="prettier" install="npm install --global prettier" url="https://prettier.io">
+Phantom offers this from the extension's page. The project's own copy is still
+preferred wherever one exists, so a global install never overrides a pinned
+version.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Prettier.
+  </Step>
+  <Step title="Open a file in a project that uses Prettier">
+    Nothing else is needed. The marker walk finds the configuration and the binary on its own.
+  </Step>
+  <Step title="Format it">
+    Press ⌘ ⇧ F, or turn on Format on Save under Settings → Editor.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+| --- | --- |
+| Formatter | Prettier, over 102 suffixes |
+| Programs | `prettier`, from the project or from `PATH` |
+| Language support | none — it formats, it does not highlight |
+
+## How the project is found
+
+<Details summary="Which directory it runs in">
+
+The working directory is the one holding the marker, not the one holding the
+file. A `plugins` entry in a configuration resolves relative to that
+configuration, and a package inside a monorepo that formats differently from the
+root gets its own rules rather than the root's.
+
+</Details>
+
+<Details summary="Why the local binary wins">
+
+A repository pinned to Prettier 2 keeps formatting like Prettier 2 even when
+Prettier 3 is installed globally. That is the difference between a clean diff and
+a thousand-line one, and it is why `node_modules/.bin/prettier` is preferred over
+`PATH` rather than the other way round.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Save does not format the file">
+
+There is no marker above it. Check for a Prettier configuration file, a
+`prettier` key in `package.json`, or `node_modules/prettier`, in the file's
+directory or any directory up to the repository root. A file outside a
+repository is formatted only when a global `prettier` exists.
+
+</Details>
+
+<Details summary="A suffix Prettier supports is left alone">
+
+The suffix table is manifest data, taken from `--support-info` at the version
+this extension was packaged against. A parser Prettier added later is not in it
+yet. Open an issue naming the suffix.
+
+</Details>
+
+<Details summary="ESLint and Prettier disagree about a file">
+
+They should not, and if they do it is a configuration question rather than a
+Phantom one. The [ESLint extension](https://github.com/ipetinate/phantom-extensions/tree/main/extensions/eslint)
+ships with ESLint's own formatting switched off, so it never writes a file this
+one owns; `eslint-config-prettier` in your project stops ESLint *reporting* what
+Prettier is about to change. You want both.
+
+</Details>
+
+## Changelog
+
+**1.1.0** — Documents itself in MDX, with the marker walk and the local-binary rule each behind a disclosure, and points at the ESLint extension for the division of work between them.
+
+**1.0.1** — Published under Isac Petinate.
+
+**1.0.0** — Initial release: the suffix table, the project markers, the local
+binary and the working directory, all as manifest data.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+[Prettier](https://prettier.io) is © James Long and contributors, released under
+the MIT License. This extension packages nothing of Prettier's; it tells Phantom
+how to call the copy you install, and claims no authorship of the formatter.

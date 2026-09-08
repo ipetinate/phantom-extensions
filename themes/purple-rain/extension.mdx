@@ -1,0 +1,143 @@
+---
+title: Purple Rain
+tagline: The Purple Rain terminal palette, packaged on its own so it can be installed without the rest.
+version: 1.0.6
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [theme, dark, colours, terminal, purple, rain]
+---
+
+Purple Rain is a dark palette: the terminal sits on `#21084a` and writes in `#fffbf6`, a contrast ratio of 17.0:1. 15 of the 16 ANSI entries are distinct, because 1 of the 8 bright colours repeat their normal counterpart. A selection is drawn on `#287691`.
+
+The extension holds one file of colour settings and nothing else. It installs no
+program, starts no process and asks for no approval. Install it, pick it in
+Settings, and that is all it does.
+
+## The theme
+
+<ThemePreview title="Purple Rain" background="#21084a" foreground="#fffbf6" cursor="#ff271d" selection="#287691" ansi="#000000, #ff260e, #9be205, #ffc400, #00a2fa, #815bb5, #00deef, #ffffff, #565656, #ff4250, #b8e36e, #ffd852, #00a6ff, #ac7bf0, #74fdf3, #ffffff" cursorText="#ff9a90" selectionText="#ffffff" />
+
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Purple Rain.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Purple Rain">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Keep it, or go back">
+    The Dark group still holds every theme that ships with Phantom, so returning is one more card press. Nothing here is written over.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Purple Rain, dark |
+| Terminal | 16 ANSI colours, background and foreground |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The theme file">
+
+The whole extension is `themes/purple-rain.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only. This one sets 22 values.
+
+```ini
+palette = 0=#000000
+palette = 1=#ff260e
+palette = 2=#9be205
+palette = 3=#ffc400
+palette = 4=#00a2fa
+palette = 5=#815bb5
+palette = 6=#00deef
+palette = 7=#ffffff
+palette = 8=#565656
+palette = 9=#ff4250
+palette = 10=#b8e36e
+palette = 11=#ffd852
+palette = 12=#00a6ff
+palette = 13=#ac7bf0
+palette = 14=#74fdf3
+palette = 15=#ffffff
+background = #21084a
+foreground = #fffbf6
+cursor-color = #ff271d
+cursor-text = #ff9a90
+selection-background = #287691
+selection-foreground = #ffffff
+```
+
+It sets the terminal's own colours and nothing else: the divider between splits, the search bar, the window title bar and the macOS app icon keep the colours the app gives them.
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/purple-rain.conf`, change what you want, and drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one, and uninstalling the extension does not take your copy with it.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar and the app icon did not change">
+
+Purple Rain is a terminal palette. It sets the sixteen ANSI colours, the background and the foreground, and it stops there, so the window chrome and the macOS icon keep the colours the app gives them and follow the window's own appearance.
+
+</Details>
+
+<Details summary="A bright colour looks the same as its normal one">
+
+1 of the eight bright entries repeat their normal counterpart, which is what the palette specifies. A program that prints in bright red to stand out against red is drawing the same colour twice here, and the theme does not correct it, because a correction would stop this theme matching the palette it packages.
+
+</Details>
+
+<Details summary="Text printed in ANSI black is hard to read">
+
+ANSI Black is `#000000`, which sits 1.20:1 against the background. That is the palette's own value. A program that prints in ANSI 0 on the default background is close to invisible here, and the theme keeps the value rather than inventing a different one.
+
+</Details>
+
+## Changelog
+
+**1.0.6** — Wears a package icon drawn from its own palette, and documents itself in MDX: the install walked through in steps, and the theme file, a custom copy and the palette's own quirks each behind a disclosure.
+
+**1.0.5** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
+
+**1.0.3** — Published under Isac Petinate.
+
+**1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette comes from the [Ghostty theme collection](https://github.com/ghostty-org/ghostty),
+which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes),
+released under the MIT License. `themes/purple-rain.conf` is a byte-for-byte copy of the
+`Purple Rain` file in that collection. This extension packages it and claims no authorship
+of the palette.

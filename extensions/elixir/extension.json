@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ipetinate.elixir",
   "name": "Elixir",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "publisher": "Isac Petinate",
   "description": "Elixir, EEx and HEEx: highlighting and ElixirLS.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/elixir",

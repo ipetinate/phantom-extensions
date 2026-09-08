@@ -1,0 +1,143 @@
+---
+title: Miami Heat
+tagline: The Miami Heat terminal palette, packaged on its own so it can be installed without the rest.
+version: 1.0.6
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [theme, dark, colours, terminal, miami, heat]
+---
+
+Miami Heat is a dark palette: the terminal sits on `#120b2e` and writes in `#fce7ff`, a contrast ratio of 16.2:1. 12 of the 16 ANSI entries are distinct, because 4 of the 8 bright colours repeat their normal counterpart. A selection is drawn on `#34215c`.
+
+The extension holds one file of colour settings and nothing else. It installs no
+program, starts no process and asks for no approval. Install it, pick it in
+Settings, and that is all it does.
+
+## The theme
+
+<ThemePreview title="Miami Heat" background="#120b2e" foreground="#fce7ff" cursor="#ff2e97" selection="#34215c" ansi="#2a1a4a, #ff3d7f, #2ee6b6, #ffcb52, #29b6ff, #b86bff, #18e0ff, #e6d4ff, #5e5388, #ff2e97, #2ee6b6, #ff7847, #29b6ff, #b86bff, #18e0ff, #fce7ff" cursorText="#120b2e" selectionText="#5e577a" />
+
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Miami Heat.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Miami Heat">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Keep it, or go back">
+    The Dark group still holds every theme that ships with Phantom, so returning is one more card press. Nothing here is written over.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Miami Heat, dark |
+| Terminal | 16 ANSI colours, background and foreground |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The theme file">
+
+The whole extension is `themes/miami-heat.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only. This one sets 22 values.
+
+```ini
+palette = 0=#2a1a4a
+palette = 1=#ff3d7f
+palette = 2=#2ee6b6
+palette = 3=#ffcb52
+palette = 4=#29b6ff
+palette = 5=#b86bff
+palette = 6=#18e0ff
+palette = 7=#e6d4ff
+palette = 8=#5e5388
+palette = 9=#ff2e97
+palette = 10=#2ee6b6
+palette = 11=#ff7847
+palette = 12=#29b6ff
+palette = 13=#b86bff
+palette = 14=#18e0ff
+palette = 15=#fce7ff
+background = #120b2e
+foreground = #fce7ff
+cursor-color = #ff2e97
+cursor-text = #120b2e
+selection-background = #34215c
+selection-foreground = #5e577a
+```
+
+It sets the terminal's own colours and nothing else: the divider between splits, the search bar, the window title bar and the macOS app icon keep the colours the app gives them.
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/miami-heat.conf`, change what you want, and drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one, and uninstalling the extension does not take your copy with it.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar and the app icon did not change">
+
+Miami Heat is a terminal palette. It sets the sixteen ANSI colours, the background and the foreground, and it stops there, so the window chrome and the macOS icon keep the colours the app gives them and follow the window's own appearance.
+
+</Details>
+
+<Details summary="A bright colour looks the same as its normal one">
+
+4 of the eight bright entries repeat their normal counterpart, which is what the palette specifies. A program that prints in bright red to stand out against red is drawing the same colour twice here, and the theme does not correct it, because a correction would stop this theme matching the palette it packages.
+
+</Details>
+
+<Details summary="Text printed in ANSI black is hard to read">
+
+ANSI Black is `#2a1a4a`, which sits 1.21:1 against the background. That is the palette's own value. A program that prints in ANSI 0 on the default background is close to invisible here, and the theme keeps the value rather than inventing a different one.
+
+</Details>
+
+## Changelog
+
+**1.0.6** — Wears a package icon drawn from its own palette, and documents itself in MDX: the install walked through in steps, and the theme file, a custom copy and the palette's own quirks each behind a disclosure.
+
+**1.0.5** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
+
+**1.0.3** — Published under Isac Petinate.
+
+**1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette comes from the [Ghostty theme collection](https://github.com/ghostty-org/ghostty),
+which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes),
+released under the MIT License. `themes/miami-heat.conf` is a byte-for-byte copy of the
+`Miami Heat` file in that collection. This extension packages it and claims no authorship
+of the palette.

@@ -1,0 +1,137 @@
+---
+title: Synthwave Everything
+tagline: The Synthwave Everything terminal palette, packaged on its own so it can be installed without the rest.
+version: 1.0.6
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [theme, dark, colours, terminal, synthwave, everything]
+---
+
+Synthwave Everything is a dark palette: the terminal sits on `#2a2139` and writes in `#f0eff1`, a contrast ratio of 13.3:1. 12 of the 16 ANSI entries are distinct, because 3 of the 8 bright colours repeat their normal counterpart. A selection is drawn on `#181521`.
+
+The extension holds one file of colour settings and nothing else. It installs no
+program, starts no process and asks for no approval. Install it, pick it in
+Settings, and that is all it does.
+
+## The theme
+
+<ThemePreview title="Synthwave Everything" background="#2a2139" foreground="#f0eff1" cursor="#72f1b8" selection="#181521" ansi="#fefefe, #f97e72, #72f1b8, #fede5d, #6d77b3, #c792ea, #f772e0, #fefefe, #fefefe, #f88414, #72f1b8, #fff951, #36f9f6, #e1acff, #f92aad, #fefefe" cursorText="#1a1a1a" selectionText="#f0eff1" />
+
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Synthwave Everything.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Synthwave Everything">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Keep it, or go back">
+    The Dark group still holds every theme that ships with Phantom, so returning is one more card press. Nothing here is written over.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Synthwave Everything, dark |
+| Terminal | 16 ANSI colours, background and foreground |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The theme file">
+
+The whole extension is `themes/synthwave-everything.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only. This one sets 22 values.
+
+```ini
+palette = 0=#fefefe
+palette = 1=#f97e72
+palette = 2=#72f1b8
+palette = 3=#fede5d
+palette = 4=#6d77b3
+palette = 5=#c792ea
+palette = 6=#f772e0
+palette = 7=#fefefe
+palette = 8=#fefefe
+palette = 9=#f88414
+palette = 10=#72f1b8
+palette = 11=#fff951
+palette = 12=#36f9f6
+palette = 13=#e1acff
+palette = 14=#f92aad
+palette = 15=#fefefe
+background = #2a2139
+foreground = #f0eff1
+cursor-color = #72f1b8
+cursor-text = #1a1a1a
+selection-background = #181521
+selection-foreground = #f0eff1
+```
+
+It sets the terminal's own colours and nothing else: the divider between splits, the search bar, the window title bar and the macOS app icon keep the colours the app gives them.
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/synthwave-everything.conf`, change what you want, and drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one, and uninstalling the extension does not take your copy with it.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar and the app icon did not change">
+
+Synthwave Everything is a terminal palette. It sets the sixteen ANSI colours, the background and the foreground, and it stops there, so the window chrome and the macOS icon keep the colours the app gives them and follow the window's own appearance.
+
+</Details>
+
+<Details summary="A bright colour looks the same as its normal one">
+
+3 of the eight bright entries repeat their normal counterpart, which is what the palette specifies. A program that prints in bright red to stand out against red is drawing the same colour twice here, and the theme does not correct it, because a correction would stop this theme matching the palette it packages.
+
+</Details>
+
+## Changelog
+
+**1.0.6** — Wears a package icon drawn from its own palette, and documents itself in MDX: the install walked through in steps, and the theme file, a custom copy and the palette's own quirks each behind a disclosure.
+
+**1.0.5** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
+
+**1.0.3** — Published under Isac Petinate.
+
+**1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette comes from the [Ghostty theme collection](https://github.com/ghostty-org/ghostty),
+which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes),
+released under the MIT License. `themes/synthwave-everything.conf` is a byte-for-byte copy of the
+`Synthwave Everything` file in that collection. This extension packages it and claims no authorship
+of the palette.

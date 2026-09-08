@@ -1,0 +1,131 @@
+---
+title: Everforest Light Hard
+tagline: The Everforest Light Hard terminal palette, packaged on its own so it can be installed without the rest.
+version: 1.0.5
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [theme, light, colours, terminal, everforest, hard]
+---
+
+Everforest Light Hard is a light palette: the terminal sits on `#f2efdf` and writes in `#5c6a72`, a contrast ratio of 4.8:1. All 16 ANSI entries are different colours. A selection is drawn on `#f0f2d4`.
+
+The extension holds one file of colour settings and nothing else. It installs no
+program, starts no process and asks for no approval. Install it, pick it in
+Settings, and that is all it does.
+
+## The theme
+
+<ThemePreview title="Everforest Light Hard" background="#f2efdf" foreground="#5c6a72" cursor="#f57d26" selection="#f0f2d4" ansi="#7a8478, #e67e80, #9ab373, #ceaf72, #7fbbb3, #d699b6, #83c092, #b2af9f, #a6b0a0, #f85552, #8da101, #dfa000, #3a94c5, #df69ba, #35a77c, #fffbef" cursorText="#f0f2d4" selectionText="#5c6a72" />
+
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Everforest Light Hard.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Everforest Light Hard">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Keep it, or go back">
+    The Light group still holds every theme that ships with Phantom, so returning is one more card press. Nothing here is written over.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Everforest Light Hard, light |
+| Terminal | 16 ANSI colours, background and foreground |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The theme file">
+
+The whole extension is `themes/everforest-light-hard.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only. This one sets 22 values.
+
+```ini
+palette = 0=#7a8478
+palette = 1=#e67e80
+palette = 2=#9ab373
+palette = 3=#ceaf72
+palette = 4=#7fbbb3
+palette = 5=#d699b6
+palette = 6=#83c092
+palette = 7=#b2af9f
+palette = 8=#a6b0a0
+palette = 9=#f85552
+palette = 10=#8da101
+palette = 11=#dfa000
+palette = 12=#3a94c5
+palette = 13=#df69ba
+palette = 14=#35a77c
+palette = 15=#fffbef
+background = #f2efdf
+foreground = #5c6a72
+cursor-color = #f57d26
+cursor-text = #f0f2d4
+selection-background = #f0f2d4
+selection-foreground = #5c6a72
+```
+
+It sets the terminal's own colours and nothing else: the divider between splits, the search bar, the window title bar and the macOS app icon keep the colours the app gives them.
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/everforest-light-hard.conf`, change what you want, and drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one, and uninstalling the extension does not take your copy with it.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar and the app icon did not change">
+
+Everforest Light Hard is a terminal palette. It sets the sixteen ANSI colours, the background and the foreground, and it stops there, so the window chrome and the macOS icon keep the colours the app gives them and follow the window's own appearance.
+
+</Details>
+
+## Changelog
+
+**1.0.5** — Wears a package icon drawn from its own palette, and documents itself in MDX: the install walked through in steps, and the theme file, a custom copy and the palette's own quirks each behind a disclosure.
+
+**1.0.4** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
+
+**1.0.3** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
+
+**1.0.2** — Published under Isac Petinate.
+
+**1.0.1** — Credits Isac Petinate, who packaged it, rather than the app.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette comes from the [Ghostty theme collection](https://github.com/ghostty-org/ghostty),
+which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes),
+released under the MIT License. `themes/everforest-light-hard.conf` is a byte-for-byte copy of the
+`Everforest Light Hard` file in that collection. This extension packages it and claims no authorship
+of the palette.

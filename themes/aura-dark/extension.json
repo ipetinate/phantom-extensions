@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-aura-dark",
   "name": "Aura Dark",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "The Aura Dark terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/aura-dark",

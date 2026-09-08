@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-nord",
   "name": "Nord",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "publisher": "Isac Petinate",
   "description": "The Nord terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/nord",

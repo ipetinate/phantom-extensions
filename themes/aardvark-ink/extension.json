@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-aardvark-ink",
   "name": "Aardvark Ink",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "The Aardvark Ink terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/aardvark-ink",

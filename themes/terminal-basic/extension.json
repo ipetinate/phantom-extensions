@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-terminal-basic",
   "name": "Terminal Basic",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "The Terminal Basic terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/terminal-basic",

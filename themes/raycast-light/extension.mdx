@@ -1,0 +1,137 @@
+---
+title: Raycast Light
+tagline: The Raycast Light terminal palette, packaged on its own so it can be installed without the rest.
+version: 1.0.6
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-06
+icon: media/icon.png
+tags: [theme, light, colours, terminal, raycast]
+---
+
+Raycast Light is a light palette: the terminal sits on `#ffffff` and writes in `#000000`, a contrast ratio of 21.0:1. 9 of the 16 ANSI entries are distinct, because 7 of the 8 bright colours repeat their normal counterpart. A selection is drawn on `#e5e5e5`.
+
+The extension holds one file of colour settings and nothing else. It installs no
+program, starts no process and asks for no approval. Install it, pick it in
+Settings, and that is all it does.
+
+## The theme
+
+<ThemePreview title="Raycast Light" background="#ffffff" foreground="#000000" cursor="#000000" selection="#e5e5e5" ansi="#000000, #b12424, #006b4f, #f8a300, #138af2, #9a1b6e, #3eb8bf, #bfbfbf, #000000, #b12424, #006b4f, #f8a300, #138af2, #9a1b6e, #3eb8bf, #ffffff" cursorText="#404040" selectionText="#000000" />
+
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Raycast Light.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Raycast Light">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Keep it, or go back">
+    The Light group still holds every theme that ships with Phantom, so returning is one more card press. Nothing here is written over.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Raycast Light, light |
+| Terminal | 16 ANSI colours, background and foreground |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The theme file">
+
+The whole extension is `themes/raycast-light.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only. This one sets 22 values.
+
+```ini
+palette = 0=#000000
+palette = 1=#b12424
+palette = 2=#006b4f
+palette = 3=#f8a300
+palette = 4=#138af2
+palette = 5=#9a1b6e
+palette = 6=#3eb8bf
+palette = 7=#bfbfbf
+palette = 8=#000000
+palette = 9=#b12424
+palette = 10=#006b4f
+palette = 11=#f8a300
+palette = 12=#138af2
+palette = 13=#9a1b6e
+palette = 14=#3eb8bf
+palette = 15=#ffffff
+background = #ffffff
+foreground = #000000
+cursor-color = #000000
+cursor-text = #404040
+selection-background = #e5e5e5
+selection-foreground = #000000
+```
+
+It sets the terminal's own colours and nothing else: the divider between splits, the search bar, the window title bar and the macOS app icon keep the colours the app gives them.
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/raycast-light.conf`, change what you want, and drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one, and uninstalling the extension does not take your copy with it.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar and the app icon did not change">
+
+Raycast Light is a terminal palette. It sets the sixteen ANSI colours, the background and the foreground, and it stops there, so the window chrome and the macOS icon keep the colours the app gives them and follow the window's own appearance.
+
+</Details>
+
+<Details summary="A bright colour looks the same as its normal one">
+
+7 of the eight bright entries repeat their normal counterpart, which is what the palette specifies. A program that prints in bright red to stand out against red is drawing the same colour twice here, and the theme does not correct it, because a correction would stop this theme matching the palette it packages.
+
+</Details>
+
+## Changelog
+
+**1.0.6** — Wears a package icon drawn from its own palette, and documents itself in MDX: the install walked through in steps, and the theme file, a custom copy and the palette's own quirks each behind a disclosure.
+
+**1.0.5** — Moved into the registry's `themes/` folder, so the link back to the source points at the new path.
+
+**1.0.4** — Shows the palette as swatches and the window as a preview, in place of the colour tables.
+
+**1.0.3** — Published under Isac Petinate.
+
+**1.0.2** — Credits Isac Petinate, who packaged it, rather than the app.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette comes from the [Ghostty theme collection](https://github.com/ghostty-org/ghostty),
+which aggregates [iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes),
+released under the MIT License. `themes/raycast-light.conf` is a byte-for-byte copy of the
+`Raycast Light` file in that collection. This extension packages it and claims no authorship
+of the palette.

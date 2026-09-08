@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.theme-iterm2-solarized-light",
   "name": "iTerm2 Solarized Light",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Isac Petinate",
   "description": "The iTerm2 Solarized Light terminal palette, from the Ghostty theme collection, as an installable Phantom theme.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/iterm2-solarized-light",
