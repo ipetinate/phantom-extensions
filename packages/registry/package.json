@@ -1,6 +1,6 @@
 {
   "name": "phantom-registry",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The registry builder for Phantom extensions: manifest and document validation, deterministic zips, index.json.",
   "type": "module",
   "license": "MIT",

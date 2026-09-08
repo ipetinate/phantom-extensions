@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildPreviewZip, buildZip } from "../src/zip.ts";
-import { ExtensionFixture, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
+import { ExtensionFixture, SVG, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
 
 interface CentralEntry {
   name: string;
@@ -120,6 +120,32 @@ describe("buildPreviewZip", () => {
   it("writes the same bytes for the same directory", () => {
     const digest = createHash("sha256").update(buildPreviewZip(fixture.directory, "extension.mdx", null)).digest("hex");
     expect(createHash("sha256").update(buildPreviewZip(fixture.directory, "extension.mdx", null)).digest("hex")).toBe(digest);
+  });
+
+  it("carries the icon theme directories the page lists", () => {
+    fixture.write("material-icons/icon-theme.json", "{}");
+    fixture.write("material-icons/icons/ts.svg", SVG);
+    fixture.write("symbols/icon-theme.json", "{}");
+    const names = centralDirectory(buildPreviewZip(fixture.directory, "extension.mdx", null, ["material-icons"])).map(
+      (entry) => entry.name,
+    );
+    expect(names).toContain("material-icons/icon-theme.json");
+    expect(names).toContain("material-icons/icons/ts.svg");
+    expect(names).not.toContain("symbols/icon-theme.json");
+  });
+
+  it("carries no theme directory when the extension contributes none", () => {
+    fixture.write("material-icons/icon-theme.json", "{}");
+    const names = centralDirectory(buildPreviewZip(fixture.directory, "extension.mdx", null)).map((entry) => entry.name);
+    expect(names).not.toContain("material-icons/icon-theme.json");
+  });
+
+  it("never carries a directory whose name only starts the same way", () => {
+    fixture.write("symbols/icon-theme.json", "{}");
+    fixture.write("symbols-extra/icon-theme.json", "{}");
+    const names = centralDirectory(buildPreviewZip(fixture.directory, "extension.mdx", null, ["symbols"])).map((entry) => entry.name);
+    expect(names).toContain("symbols/icon-theme.json");
+    expect(names).not.toContain("symbols-extra/icon-theme.json");
   });
 
   it("stamps its entries the same way", () => {

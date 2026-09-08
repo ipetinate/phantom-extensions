@@ -18,7 +18,7 @@ export function buildZip(directory: string): Uint8Array {
 }
 
 /**
- * The document, its media and the icon it shows — and nothing else.
+ * The document, its media, the icon it shows and the icon themes it lists.
  *
  * Published beside the installable zip so that opening an extension's page
  * in the store does not download the extension. GitHub counts every asset
@@ -29,16 +29,23 @@ export function buildZip(directory: string): Uint8Array {
  * the document's image paths are relative to it. A bundle keeps those paths
  * working with no change to the renderer.
  *
+ * `themes` names the icon theme directories the document's `<IconBrowser>`
+ * reads, so an icon pack's page can show its icons before an install.
+ *
  * Its entries are a strict subset of `buildZip`'s, which is why the caller
  * needs no size limit of its own: an extension whose installable zip is
  * within the limit has a preview bundle within it too.
  */
-export function buildPreviewZip(directory: string, document: string, icon: string | null): Uint8Array {
+export function buildPreviewZip(directory: string, document: string, icon: string | null, themes: readonly string[] = []): Uint8Array {
   const wanted = new Set<string>([document]);
   if (icon !== null) wanted.add(icon);
+  const carried = themes.map((theme) => `${theme}/`);
   const paths = extensionFiles(directory)
     .map((file) => relativePath(directory, file))
-    .filter((relative) => wanted.has(relative) || relative.startsWith(`${MEDIA_DIRECTORY}/`));
+    .filter(
+      (relative) =>
+        wanted.has(relative) || relative.startsWith(`${MEDIA_DIRECTORY}/`) || carried.some((prefix) => relative.startsWith(prefix)),
+    );
   return zip(directory, paths);
 }
 

@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { requireAsset } from "../src/checks.ts";
 import { collect } from "../src/collect.ts";
 import { checkLayout } from "../src/layout.ts";
-import { WORKING_DIRECTORIES, loadManifest } from "../src/manifest.ts";
+import { WORKING_DIRECTORIES, loadManifest, manifestIconThemes } from "../src/manifest.ts";
 import { MAX_PROJECT_MARKERS } from "../src/projectPaths.ts";
 import { ExtensionFixture, FRONT_MATTER, agentsManifest, languageManifest, makeRoot, removeRoot } from "./fixture.ts";
 
@@ -417,5 +417,28 @@ describe("a formatter's project keys", () => {
   it("refuses a file extension the editor could never match", () => {
     const fixture = new ExtensionFixture(root, "tool", formatterManifest({ extensions: ["js.flow"] }));
     expect(() => loadManifest(fixture.directory)).toThrow(/bad file extension/);
+  });
+});
+
+describe("manifestIconThemes", () => {
+  it("names the directory of every icon theme, in the order the manifest declares them", () => {
+    const fixture = new ExtensionFixture(
+      root,
+      "icons",
+      languageManifest({
+        contributes: {
+          iconThemes: [
+            { name: "Symbols", path: "symbols" },
+            { name: "Symbols Starter", path: "icon-theme" },
+          ],
+        },
+      }),
+    );
+    expect(manifestIconThemes(loadManifest(fixture.directory))).toEqual(["symbols", "icon-theme"]);
+  });
+
+  it("names nothing for an extension that contributes no icon theme", () => {
+    const fixture = new ExtensionFixture(root, "language", languageManifest());
+    expect(manifestIconThemes(loadManifest(fixture.directory))).toEqual([]);
   });
 });

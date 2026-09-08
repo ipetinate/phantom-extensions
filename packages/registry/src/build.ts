@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fail } from "./checks.ts";
 import { collect, iconPath, type Card } from "./collect.ts";
-import { CONTRIBUTION_KINDS, entriesOf, type ContributionKind } from "./manifest.ts";
+import { CONTRIBUTION_KINDS, entriesOf, manifestIconThemes, type ContributionKind } from "./manifest.ts";
 import { fetchPublishedIndex, mergeVersions, publishedVersions, type Download, type VersionEntry } from "./versions.ts";
 import { buildPreviewZip, buildZip } from "./zip.ts";
 
@@ -69,7 +69,7 @@ export async function build(out: string, repo: string, options: BuildOptions = {
 
     const previewName = `${name}${PREVIEW_SUFFIX}.zip`;
     const previewArchive = path.join(out, previewName);
-    const previewData = buildPreviewZip(directory, card.document, iconPath(manifest, card));
+    const previewData = buildPreviewZip(directory, card.document, iconPath(manifest, card), manifestIconThemes(manifest));
     writeFileSync(previewArchive, previewData);
     const preview = asset(repo, tag, previewName, previewData);
     entries.push({
