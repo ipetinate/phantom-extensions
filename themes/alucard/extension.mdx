@@ -1,0 +1,176 @@
+---
+title: Alucard by Phantom
+tagline: The Alucard palette, Dracula's official light theme, applied to Phantom's splits, search bar, title bar and app icon.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-08
+icon: media/icon.png
+tags: [theme, alucard, dracula, light, colours, appearance]
+---
+
+Alucard by Phantom is a light palette: the terminal sits on `#fffbeb` and writes in `#1f1f1f`, a contrast ratio of 15.9:1. All 16 ANSI entries are different colours, and one of them, bright white, is the background itself, on purpose. The four neutral slots are the one place this palette departs from the specification. A selection is drawn on `#cfcfde`.
+
+The extension holds one file of colour settings and nothing else. It installs no
+program, starts no process and asks for no approval. Install it, pick it in
+Settings, and that is all it does.
+
+Alucard is Dracula's own light theme, from the same specification, so this is the light
+counterpart of **Dracula by Phantom** and not a lightened copy of it. Every value below is the
+Alucard Classic column of the specification, read key by key; none of it was matched by eye
+against Dracula's dark values. Like its counterpart it goes past the terminal: the divider between
+splits, the unfocused half of a split, the search bar, the window title bar, and the ghost and
+screen of the macOS app icon.
+
+## The theme
+
+<ThemePreview title="Alucard by Phantom" background="#fffbeb" foreground="#1f1f1f" cursor="#1f1f1f" selection="#cfcfde" ansi="#1f1f1f, #cb3a2a, #14710a, #846e15, #644ac9, #a3144d, #036a96, #ceccc0, #6c664b, #d74c3d, #198d0c, #9e841a, #7862d0, #bf185a, #047fb4, #fffbeb" cursorText="#fffbeb" selectionText="#1f1f1f" />
+
+The panel is painted from the file this extension installs: the blocks on the left name every
+colour and the job it does in the app, and the window on the right is that same palette in place.
+
+The panel draws the 22 terminal values. The eleven that reach Phantom's own surfaces have no place
+in it, so they are listed under **The window colours** below.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Alucard by Phantom.
+  </Step>
+  <Step title="Open Settings → Appearance">
+    Themes from extensions are listed under **Extension Themes**, above the Dark and Light groups. The theme in use gets its own card at the top of the page.
+  </Step>
+  <Step title="Pick Alucard by Phantom">
+    Press its card. The change applies to every window at once, with no restart.
+  </Step>
+  <Step title="Pair it with the dark one">
+    **Dracula by Phantom** is the same package in the dark direction, and the two set the same keys. Installing both gives you one theme to switch to per time of day.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Theme | Alucard by Phantom, light |
+| Terminal | 16 ANSI colours, background, foreground, bold, cursor and cursor text |
+| Selection | Selection background and foreground |
+| Splits | Divider colour, and the fill behind an unfocused split |
+| Search | Background and foreground of a match, and of the selected match |
+| Window | Title bar background and foreground |
+| App icon | Ghost colour and screen colour of the macOS icon |
+| Programs | none |
+
+## Configuration
+
+<Details summary="The window colours">
+
+The panel above covers the terminal. These eleven keys carry the palette into the rest of the app,
+and every value is a colour the specification already names.
+
+| Key | Colour | Alucard name |
+|---|---|---|
+| `bold-color` | `#2c2b31` | ANSI Bright White |
+| `split-divider-color` | `#cfcfde` | Selection |
+| `unfocused-split-fill` | `#ceccc0` | Background Dark |
+| `search-background` | `#846e15` | Yellow |
+| `search-foreground` | `#fffbeb` | Background |
+| `search-selected-background` | `#a34d14` | Orange |
+| `search-selected-foreground` | `#fffbeb` | Background |
+| `window-titlebar-background` | `#ceccc0` | Background Dark |
+| `window-titlebar-foreground` | `#1f1f1f` | Foreground |
+| `macos-icon-ghost-color` | `#644ac9` | Purple |
+| `macos-icon-screen-color` | `#fffbeb` | Background |
+
+Each key holds the role its Dracula counterpart holds, with the value read from the Alucard
+column. Two roles change colour rather than value: a search highlight is dark with light text
+here, where Dracula's is light with dark text, at 4.8:1 and 5.6:1. The title bar and the unfocused
+split take **Background Dark** from the specification's UI palette, because Alucard's ANSI Black is
+the background itself.
+
+</Details>
+
+<Details summary="The theme file">
+
+The whole extension is `themes/alucard.conf`. It is a Ghostty theme file: one `key = value` per line, `#` for comments, and colour keys only.
+
+```ini
+background = #fffbeb
+foreground = #1f1f1f
+palette = 4=#644ac9
+
+selection-background = #cfcfde
+split-divider-color = #cfcfde
+search-background = #846e15
+search-selected-background = #a34d14
+window-titlebar-background = #ceccc0
+macos-icon-ghost-color = #644ac9
+```
+
+Phantom accepts `background`, `foreground`, `palette`, `cursor-color`, `cursor-text`, `selection-background`, `selection-foreground`, `bold-color`, `split-divider-color`, `unfocused-split-fill`, the four `search-*` keys, the two `window-titlebar-*` keys and the two `macos-icon-*` keys. A file that sets anything else is dropped whole rather than partly applied, and it may not exceed 64 KB.
+
+</Details>
+
+<Details summary="Making your own copy">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `themes/alucard.conf`, change what you want, and either point a new entry in `extension.json` at it or drop the file into your own themes folder, where Settings → Appearance lists it under **Custom Themes**.
+
+An extension theme is selected by its file path rather than by its name, so a custom copy never collides with this one.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The four neutral slots differ from the specification">
+
+Alucard's specification puts the background colour itself in ANSI Black. In a light theme black and
+white trade places there, so ANSI 0 is the ground and ANSI 7 is the ink — and a program printing in
+ANSI 0, which is most programs printing ordinary dark text, writes nothing you can see: `#fffbeb`
+on `#fffbeb` is 1.00:1.
+
+This theme reassigns the four neutrals so the ramp runs dark to light, and takes every value from
+Alucard's own specification rather than inventing one:
+
+| Slot | Here | Specification | On the background |
+|---|---|---|---|
+| 0, black | `#1f1f1f` — Foreground | `#fffbeb` | 15.9:1, was 1.00:1 |
+| 8, bright black | `#6c664b` — Comment | `#6c664b` | 5.6:1, unchanged |
+| 7, white | `#ceccc0` — Background Dark | `#1f1f1f` | 1.6:1 |
+| 15, bright white | `#fffbeb` — Background | `#2c2b31` | 1.00:1 |
+
+Bright white on a light background is still invisible, and that one is correct: a program asking
+for white on paper is asking for nothing, in every light theme. What is fixed is black meaning
+dark.
+
+This is the reason for the name. Reassigning slots makes it no longer the specification's palette,
+so it is **Alucard by Phantom** and not Alucard, the same way the dark theme is Dracula by Phantom.
+The dark theme has the weaker form of the same collision — ANSI Black at 1.11:1 — and keeps it.
+
+</Details>
+
+<Details summary="The theme is not in the list">
+
+Phantom drops a contributed theme whose file sets a key that is not a colour, whose file is larger than 64 KB, or whose name is already taken by a bundled or custom theme. Settings → Extensions lists what the manifest contributed, which is where a dropped theme shows up as missing.
+
+</Details>
+
+<Details summary="The title bar or the app icon did not change">
+
+Those two keys reach the window chrome and the macOS icon, which some system settings override. The terminal colours apply immediately in every case; the chrome follows the window's own appearance.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the Alucard palette as a Phantom theme, including the split, search, title bar and app icon colours.
+
+## License and credits
+
+The extension is released under the MIT License.
+
+The palette is [Alucard](https://draculatheme.com), the light theme of the Dracula project, created by Zeno Rocha and the Dracula contributors and released under the MIT License, © 2023 Dracula Theme. The colour values here are taken from the Alucard Classic tables of the [Dracula specification](https://spec.draculatheme.com). This extension is an independent theme file built on that palette and is not affiliated with or endorsed by the Dracula project.
+
+Its dark counterpart is Dracula by Phantom, from the same specification.
