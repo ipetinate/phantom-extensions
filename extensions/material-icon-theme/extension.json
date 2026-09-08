@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.material-icon-theme",
+  "name": "Material Icon Theme",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Material Icon Theme for Phantom's explorer: 1,251 icons, 1,377 suffixes, 2,135 file names and 4,654 folder names, vendored from the VS Code theme.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/material-icon-theme",
+  "phantom": "0.16.0",
+  "contributes": {
+    "iconThemes": [
+      {
+        "name": "Material Icon Theme",
+        "path": "material-icons"
+      }
+    ]
+  }
+}

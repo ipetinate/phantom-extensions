@@ -1,0 +1,170 @@
+---
+title: Material Icon Theme
+tagline: Material Icon Theme in Phantom's explorer — 1,251 icons over 1,377 suffixes, 2,135 file names and 4,654 folder names, from the VS Code theme.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-08
+icon: media/icon.png
+tags: [icons, icon-theme, sidebar, explorer, material, appearance]
+---
+
+The Material Icon Theme, packaged for Phantom's explorer. It is [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) 5.38.1 by Material Extensions, MIT licensed, vendored as the project publishes it: the generated theme map and all 1,251 SVGs, unmodified apart from the path each icon definition points at. Nothing installs a program, starts a process or asks for approval.
+
+It is the widest icon set Phantom can draw. Where **Symbols** names 354 icons, this names 1,251, and it is the folder half that grows most: 4,654 folder names, each with its own open form.
+
+## Highlights
+
+<Features>
+  <Feature title="1,251 icons" icon="package">
+    1,377 file suffixes, 2,135 whole file names, 200 language ids and 4,654 folder names. Defaults for all four kinds of row, so nothing in the tree is left blank.
+  </Feature>
+  <Feature title="Folders that open" icon="book">
+    Every one of the 4,654 folder names carries a second icon for its expanded state, and all 4,654 pairs differ. A folder you open changes its artwork, not only its arrow.
+  </Feature>
+  <Feature title="Long suffixes win" icon="check">
+    208 of the suffix keys hold a dot, so `component.ts` is an Angular component before it is TypeScript, and `d.ts` is a declaration file rather than either.
+  </Feature>
+  <Feature title="Nothing runs" icon="lock">
+    A theme is a JSON file and the SVGs it names. There is no binary, no `PATH` to search and no permission to grant.
+  </Feature>
+</Features>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Material Icon Theme.
+  </Step>
+  <Step title="Open Settings → Sidebar">
+    The **File Explorer** section holds the **Icon Theme** picker. The explorer's own gear menu has the same control.
+  </Step>
+  <Step title="Pick the theme">
+    Contributed themes are listed as the theme name followed by the extension that supplied it. Upstream calls both the same thing, so the row reads **Material Icon Theme — Material Icon Theme**. Every open explorer repaints as you pick.
+  </Step>
+  <Step title="Go back whenever you want">
+    The same picker holds **No Theme (SF Symbols)** for Phantom's built-in table, and every other installed theme beside it.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Theme | Directory | Icons | Defaults |
+|---|---|---|---|
+| Material Icon Theme | `material-icons` | 1,251 | file `file`, folder `folder`, open folder `folder-open`, root folder `folder-root` |
+
+| Map | Entries |
+|---|---|
+| `fileExtensions` | 1,377 |
+| `fileNames` | 2,135 |
+| `languageIds` | 200 |
+| `folderNames` | 4,654 |
+| `folderNamesExpanded` | 4,654 |
+| `rootFolderNames` | 0 — every root draws `folder-root` |
+
+Keys are matched without regard to case, so the 21 file names and 35 folder names upstream capitalises — `Cargo.toml`, `Dockerfile`, `.github` — match whatever the disk spells.
+
+## What Phantom draws, and what it does not
+
+<Details summary="1,136 of the 1,251 icons can be reached today">
+
+An icon draws when a map Phantom reads names it. 1,136 of the 1,251 definitions are named that way. The remaining 115 ship as bytes and are named nowhere Phantom looks:
+
+| Icons | Named only by | Why they stay unused |
+|---|---|---|
+| 54 | `light` | The light overrides, one per icon that has a pale twin: `toml_light`, `next_light`, `adobe-photoshop_light` |
+| 1 | `rootFolderExpanded` | `folder-root-open`, the open form of the workspace root |
+| 60 | nothing in the file | Icon-pack and alternate variants — the Angular, Nest, Ngrx, Redux and Vuex folder sets, `nodejs_alt`, `php_elephant`, `go_gopher` |
+
+The last group is a property of the published map, not of Phantom. Upstream switches those on through VS Code settings that regenerate the map inside the editor, and the map it publishes is the one its defaults produce. The artwork travels with the package either way, so a future Phantom that reads more of this file finds the files already there.
+
+</Details>
+
+<Details summary="The five keys Phantom skips">
+
+The map holds five keys Phantom's reader has no field for. Each is skipped whole, and the theme is usable without any of them.
+
+| Key | What 5.38.1 puts there | What happens instead |
+|---|---|---|
+| `light` | 263 overrides for a light background: 31 suffixes, 179 file names, 3 language ids, 25 folder names and their 25 open forms | The one dark-background icon draws on both. Material's icons are flat colour with no outline, so most hold up either way; the 54 pale twins are the ones upstream thought did not |
+| `highContrast` | `fileExtensions` and `fileNames`, both empty | Nothing to lose in this version |
+| `rootFolderExpanded` | `folder-root-open` | An expanded root keeps `folder-root`. Phantom resolves a root folder before it considers the expanded state, so this one is skipped twice over |
+| `rootFolderNamesExpanded` | empty | Nothing to lose in this version. `rootFolderNames` is empty too, and that one Phantom does read |
+| `hidesExplorerArrows` | `false` | Phantom draws its own disclosure arrows and a theme does not vote on them. `false` is what it does anyway |
+
+`folderNamesExpanded` is **not** in this list: Phantom reads it, and it is the key that matters most here.
+
+</Details>
+
+## Configuration
+
+<Details summary="The theme file">
+
+Phantom reads the SVG half of the VS Code file icon theme format. A whole theme is one `icon-theme.json` and the SVGs it points at.
+
+```json
+{
+  "iconDefinitions": {
+    "typescript": { "iconPath": "./icons/typescript.svg" }
+  },
+  "fileExtensions": { "ts": "typescript" },
+  "fileNames": { "tsconfig.json": "tsconfig" },
+  "languageIds": { "typescript": "typescript" },
+  "folder": "folder",
+  "folderExpanded": "folder-open"
+}
+```
+
+Upstream keeps its map in `dist/` and its SVGs one level above, so every `iconPath` it publishes reads `./../icons/<name>.svg`. Here the map and the `icons/` directory sit side by side, so all 1,251 paths read `./icons/<name>.svg`. That is the only edit: the string `"./../icons/` became `"./icons/` 1,251 times, and no other byte of the file moved.
+
+Phantom resolves an icon in VS Code's own order: an exact file name first, then the longest matching suffix, then the language id, then the default. A folder resolves by name, by name in its expanded form, and then by the default.
+
+</Details>
+
+<Details summary="Making your own">
+
+Settings → Extensions has a **Reveal in Finder** button. Copy `material-icons` somewhere of your own, change the SVGs and the mapping, and drop it into Phantom's icon themes folder. Settings → Sidebar names that folder under the Icon Theme picker, and a theme copied there is listed with no install step.
+
+A theme is listed under its directory's name unless an extension supplies one. Give a copy a new directory name: a theme whose name is already taken is dropped rather than shown twice.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The theme is not in the picker">
+
+Phantom drops a contributed icon theme whose name is already used by a bundled theme or by one copied into your icon themes folder. It also needs `icon-theme.json`, or a file whose name ends in `icon-theme.json`, directly inside the directory the manifest names.
+
+</Details>
+
+<Details summary="A file has the wrong icon">
+
+Resolution order decides this. A whole file name beats a suffix, and a longer suffix beats a shorter one. `component.ts` matches Angular before TypeScript, and `package.json` matches Node by name before `.json` is considered at all.
+
+</Details>
+
+<Details summary="An icon looks too dark on a light sidebar">
+
+The theme carries a light variant for 54 of its icons and Phantom does not read that half of the map yet — see "The five keys Phantom skips". The dark variant draws on both backgrounds until it does.
+
+</Details>
+
+<Details summary="An open workspace root keeps its closed icon">
+
+It does, and it will until Phantom reads `rootFolderExpanded`. Folders inside the root do change artwork when you open them, through `folderNamesExpanded`, which Phantom does read.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: Material Icon Theme 5.38.1, all 1,251 icons, with the icon paths rewritten for a flat theme directory.
+
+## License and credits
+
+The extension is released under the MIT License, and the theme it carries is MIT licensed.
+
+The theme (`material-icons/`) is vendored from [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) 5.38.1, Copyright © 2025 Material Extensions, created by [Philipp Kief](https://github.com/PKief). Its licence travels with it, in `material-icons/LICENSE`. The published theme map and the 1,251 SVGs were copied as they ship; the package icon is upstream's own logo, resized to 128 pixels square. Nothing was regenerated from source and no mapping was edited.
+
+The file icon theme format is Visual Studio Code's; Phantom reads its SVG half. This extension is not affiliated with or endorsed by Material Extensions.
