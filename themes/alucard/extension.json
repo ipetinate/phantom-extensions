@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.alucard",
+  "name": "Alucard by Phantom",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "The Alucard palette, Dracula's official light counterpart, applied to Phantom's window as well as its terminal.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/alucard",
+  "phantom": "0.16.0",
+  "contributes": {
+    "themes": [
+      {
+        "name": "Alucard by Phantom",
+        "path": "themes/alucard.conf",
+        "appearance": "light"
+      }
+    ]
+  }
+}
