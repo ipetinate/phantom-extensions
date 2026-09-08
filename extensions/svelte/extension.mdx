@@ -1,0 +1,169 @@
+---
+title: Svelte
+tagline: Svelte support for Phantom — the grammar for .svelte and the Svelte Language Server.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-08
+icon: media/icon.png
+tags: [svelte, sveltekit, component, language, lsp]
+---
+
+Svelte support for the Phantom editor. The extension declares the language — `.svelte`, the `<!-- -->` comment markers — ships the TextMate grammar [sveltejs/language-tools](https://github.com/sveltejs/language-tools) maintains for its own editor plugin, and connects **the Svelte Language Server** from the same repository.
+
+One process serves the whole file. A Vue single-file component needs two, because its `<script>` block is handed to `tsserver` through a plugin; a `.svelte` file needs one, because the Svelte server compiles the component to TypeScript itself and answers for the markup, the script and the style out of the same process. There is nothing here to install in pairs and no version to keep in step.
+
+## Highlights
+
+<Features>
+  <Feature title="One server, the whole file" icon="package">
+    Diagnostics, hover, completion, go to definition, rename and code actions across all three blocks. The server carries TypeScript, `vscode-html-languageservice` and `vscode-css-languageservice` inside it, so the markup and the style block are answered by the same process as the script.
+  </Feature>
+  <Feature title="Svelte 5 and Svelte 4" icon="sparkles">
+    The template keywords of both: `{#if}`, `{#each}`, `{#key}`, `{#await}`, `{#snippet}`, `{@render}`, `{@attach}`, `{@const}`, `{@html}` and `{@debug}`. An expression inside `{…}` is coloured as TypeScript, and so is the `generics` attribute on a `<script lang="ts">`.
+  </Feature>
+  <Feature title="Each block in its own language" icon="brush">
+    `<script>` is JavaScript and `<script lang="ts">` TypeScript; `<style>` is CSS, and `lang="scss"`, `lang="less"` and `lang="postcss"` are each coloured by the grammar for that dialect.
+  </Feature>
+  <Feature title="A component's doc comment is Markdown" icon="book">
+    `<!-- @component … -->` is the comment Svelte shows when you hover the component elsewhere. Its body is handed to the Markdown grammar, so it reads as the prose it is.
+  </Feature>
+  <Feature title="Formatting comes from the server" icon="code">
+    The server formats a `.svelte` file itself, through `prettier-plugin-svelte`, which it bundles. It reads the project's `.prettierrc` when there is one, so a repository's own formatting wins.
+  </Feature>
+</Features>
+
+## Requirements
+
+Phantom does not bundle the server. Install it and the extension detects it on your `PATH`.
+
+<Requirement command="svelteserver" install="npm install -g svelte-language-server" url="https://github.com/sveltejs/language-tools/tree/master/packages/language-server">
+The Svelte Language Server. One package, one binary, no companion plugin. Phantom starts it as `svelteserver --stdio`.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    In Phantom, open the Extensions pane in the sidebar (or Settings → Extensions) and press **Install** next to Svelte. The CSS, Markdown and TypeScript extensions come with it: the grammar hands them the blocks a component embeds.
+  </Step>
+  <Step title="Install the server">
+    Run `npm install -g svelte-language-server`, or press **Install** on the server row under Settings → Language Servers. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a .svelte file">
+    Colour appears at once. The first time a project needs a server, Phantom asks before starting it and remembers your answer for that extension.
+  </Step>
+  <Step title="Format">
+    Press <Kbd>⌘</Kbd> <Kbd>⇧</Kbd> <Kbd>F</Kbd> to format the current file, or turn on Format on Save under Settings → Editor. The request goes to the server, which runs Prettier with the Svelte plugin.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| File types | `.svelte` |
+| Language id | `svelte` |
+| Language server | `svelteserver --stdio` |
+| Formatter | none of its own. The server formats through the `prettier-plugin-svelte` it bundles |
+| Editor | TextMate grammar `source.svelte`, with the `source.css.postcss` grammar it includes; `<!-- -->` comment markers |
+| Icon | Svelte file icon in the sidebar and tabs |
+
+The markup is coloured by the Svelte grammar's own tag rules rather than handed to the HTML grammar, which is why a Svelte component and an HTML file do not look identical. What is handed out is the rest: the `<script>` block, the `<style>` block and every `{…}` expression, each to the extension that owns that language.
+
+## Configuration
+
+<Details summary="Preprocessors: svelte.config.js">
+
+The server reads the project's `svelte.config.js`. A preprocessor listed there is applied before the component is checked, so `lang="ts"` and `lang="scss"` are understood as the project has set them up. A preprocessor that produces no source map leaves the server unable to map a diagnostic back to your line.
+
+```js
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+export default {
+  preprocess: vitePreprocess(),
+  compilerOptions: { runes: true }
+};
+```
+
+</Details>
+
+<Details summary="Types: tsconfig.json or jsconfig.json">
+
+The script block is checked against the project's `tsconfig.json`, path aliases included. A SvelteKit project extends the generated `.svelte-kit/tsconfig.json`, which is what teaches the server about `$lib` and `$app/…`; that file is written by `svelte-kit sync`, so a checkout that has never been built has no aliases to resolve yet.
+
+```json
+{
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "bundler"
+  }
+}
+```
+
+</Details>
+
+<Details summary="Formatting: .prettierrc">
+
+Prettier reads the nearest `.prettierrc`, `.prettierrc.json`, `prettier.config.js` or a `prettier` key in `package.json`, walking up from the file. The Svelte plugin adds the options below to Prettier's own.
+
+```json
+{
+  "printWidth": 100,
+  "singleQuote": true,
+  "svelteSortOrder": "options-scripts-markup-styles",
+  "svelteStrictMode": false,
+  "svelteAllowShorthand": true,
+  "svelteIndentScriptAndStyle": true
+}
+```
+
+| Option | Default | What it does |
+|---|---|---|
+| `svelteSortOrder` | `options-scripts-markup-styles` | The order the four parts of a component are written in |
+| `svelteStrictMode` | `false` | Stricter HTML syntax in the markup |
+| `svelteAllowShorthand` | `true` | Writes `{value}` where the attribute and the expression share a name |
+| `svelteIndentScriptAndStyle` | `true` | Indents the contents of `<script>` and `<style>` |
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Colour appears and nothing else does">
+
+The grammar is data the editor reads, and the server is a program it starts, so one arriving without the other means the binary is missing. Check `svelteserver` on your `PATH`, and the server row under Settings → Language Servers.
+
+</Details>
+
+<Details summary="$lib and $app imports are reported as missing">
+
+That is a SvelteKit project whose generated types have not been written yet. Run the project's `prepare` script, or `npx svelte-kit sync`, and the aliases in `.svelte-kit/tsconfig.json` resolve.
+
+</Details>
+
+<Details summary="A .ts file does not understand an import of a .svelte file">
+
+That direction is a separate tool: `typescript-svelte-plugin`, which loads inside `tsserver` and is off by default even in the Svelte team's own editor plugin. This extension does not contribute it, because attaching a second `typescript-language-server` to `.ts` files that the TypeScript extension already serves would start the same process twice for one file.
+
+</Details>
+
+<Details summary="A Stylus style block or a pug template stays plain">
+
+Those two grammars are not in this registry. The Svelte grammar reaches for `text.pug`, `source.sass`, `source.stylus` and `source.coffee` when a block declares one, and a region whose grammar is absent keeps its outline and loses its colour. The four dialects that are covered are CSS, SCSS, Less and PostCSS.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: the `svelte` language for `.svelte`, its comment markers, the `source.svelte` grammar from `sveltejs/language-tools` with the PostCSS grammar it includes, and the Svelte Language Server, which Phantom installs and removes as one package.
+
+## License and credits
+
+The extension is released under the MIT License. The grammars are the ones [sveltejs/language-tools](https://github.com/sveltejs/language-tools) carries, © the Svelte contributors (MIT), taken from commit `2cfcc15`: `source.svelte` and `source.css.postcss` are each the JSON that repository's own `build:grammar` step produces from `syntaxes/svelte.tmLanguage.src.yaml` and `syntaxes/postcss.src.yaml`, with nothing else changed. The PostCSS grammar is in turn based on [hudochenkov/Syntax-highlighting-for-PostCSS](https://github.com/hudochenkov/Syntax-highlighting-for-PostCSS) (MIT). [svelte-language-server](https://github.com/sveltejs/language-tools/tree/master/packages/language-server) and [prettier-plugin-svelte](https://github.com/sveltejs/prettier-plugin-svelte) are © the Svelte contributors (MIT). The icon is the Svelte logo from [sveltejs/branding](https://github.com/sveltejs/branding), which carries branding guidelines rather than a licence: it is used here to say what the extension is for, and this extension is not affiliated with or endorsed by the Svelte project.
