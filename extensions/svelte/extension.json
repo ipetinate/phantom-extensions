@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.svelte",
+  "name": "Svelte",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Svelte components: highlighting for .svelte and the Svelte Language Server.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/svelte",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.css",
+    "phantom.markdown",
+    "phantom.typescript"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "languageId": "svelte",
+        "name": "Svelte",
+        "extensions": [
+          "svelte"
+        ],
+        "category": "frontendFramework",
+        "icon": "icons/svelte.png",
+        "blockComment": {
+          "open": "<!--",
+          "close": "-->"
+        },
+        "server": {
+          "command": "svelteserver",
+          "args": [
+            "--stdio"
+          ],
+          "installHint": "npm install -g svelte-language-server",
+          "documentationURL": "https://github.com/sveltejs/language-tools/tree/master/packages/language-server",
+          "install": {
+            "commands": [
+              {
+                "manager": "npm",
+                "command": "npm install -g svelte-language-server",
+                "uninstall": "npm uninstall -g svelte-language-server"
+              },
+              {
+                "manager": "pnpm",
+                "command": "pnpm add -g svelte-language-server",
+                "uninstall": "pnpm remove -g svelte-language-server"
+              }
+            ],
+            "documentationURL": "https://github.com/sveltejs/language-tools/tree/master/packages/language-server"
+          }
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "source.svelte",
+        "path": "syntaxes/svelte.tmLanguage.json",
+        "languageId": "svelte",
+        "license": "MIT",
+        "grammarSource": "https://github.com/sveltejs/language-tools/blob/2cfcc15b4c44dfc1128432e20ca663fe20bdd12e/packages/svelte-vscode/syntaxes/svelte.tmLanguage.src.yaml",
+        "embeddedLanguages": {
+          "text.html.basic": "html",
+          "text.html.markdown": "markdown",
+          "text.pug": "jade",
+          "source.css": "css",
+          "source.css.less": "less",
+          "source.css.scss": "scss",
+          "source.css.postcss": "postcss",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.js": "javascript",
+          "source.ts": "typescript",
+          "source.coffee": "coffeescript"
+        }
+      },
+      {
+        "scopeName": "source.css.postcss",
+        "path": "syntaxes/postcss.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/sveltejs/language-tools/blob/2cfcc15b4c44dfc1128432e20ca663fe20bdd12e/packages/svelte-vscode/syntaxes/postcss.src.yaml"
+      }
+    ]
+  }
+}
