@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "id": "phantom.angular",
+  "name": "Angular",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "Angular templates: the template grammars and the Angular language server, in the projects that installed Angular.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/angular",
+  "phantom": "0.17.0",
+  "dependencies": [
+    "phantom.css",
+    "phantom.html",
+    "phantom.typescript"
+  ],
+  "contributes": {
+    "servers": [
+      {
+        "id": "angular",
+        "name": "Angular Language Service",
+        "command": "ngserver",
+        "args": [
+          "--ngProbeLocations",
+          "node_modules",
+          "--tsProbeLocations",
+          "node_modules",
+          "--stdio"
+        ],
+        "languageIds": [
+          "html",
+          "typescript"
+        ],
+        "projectMarkers": [
+          "node_modules/@angular/language-service"
+        ],
+        "category": "frontendFramework",
+        "installHint": "npm i -g @angular/language-server, then npm i -D @angular/language-service in the project",
+        "documentationURL": "https://github.com/angular/vscode-ng-language-service",
+        "install": {
+          "commands": [
+            {
+              "manager": "npm",
+              "command": "npm install -g @angular/language-server",
+              "uninstall": "npm uninstall -g @angular/language-server"
+            },
+            {
+              "manager": "pnpm",
+              "command": "pnpm add -g @angular/language-server",
+              "uninstall": "pnpm remove -g @angular/language-server"
+            }
+          ],
+          "documentationURL": "https://github.com/angular/vscode-ng-language-service"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "expression.ng",
+        "path": "syntaxes/angular-expression.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/expression.json"
+      },
+      {
+        "scopeName": "template.ng",
+        "path": "syntaxes/angular-template.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/template.json",
+        "injectTo": [
+          "text.html.derivative",
+          "source.ts"
+        ],
+        "embeddedLanguages": {
+          "text.html": "html",
+          "source.css": "css",
+          "expression.ng": "javascript"
+        }
+      },
+      {
+        "scopeName": "template.blocks.ng",
+        "path": "syntaxes/angular-template-blocks.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/template-blocks.json",
+        "injectTo": [
+          "text.html.derivative",
+          "source.ts"
+        ],
+        "embeddedLanguages": {
+          "text.html": "html",
+          "control.block.expression.ng": "javascript",
+          "control.block.body.ng": "html"
+        }
+      },
+      {
+        "scopeName": "template.let.ng",
+        "path": "syntaxes/angular-let-declaration.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/let-declaration.json",
+        "injectTo": [
+          "text.html.derivative",
+          "source.ts"
+        ]
+      },
+      {
+        "scopeName": "template.tag.ng",
+        "path": "syntaxes/angular-template-tag.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/template-tag.json",
+        "injectTo": [
+          "text.html.derivative",
+          "source.ts"
+        ]
+      },
+      {
+        "scopeName": "inline-template.ng",
+        "path": "syntaxes/angular-inline-template.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/inline-template.json",
+        "injectTo": [
+          "source.ts"
+        ],
+        "embeddedLanguages": {
+          "text.html.derivative": "html",
+          "source.css": "css",
+          "source.js": "javascript"
+        }
+      },
+      {
+        "scopeName": "inline-styles.ng",
+        "path": "syntaxes/angular-inline-styles.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/inline-styles.json",
+        "injectTo": [
+          "source.ts"
+        ],
+        "embeddedLanguages": {
+          "source.css.scss": "scss"
+        }
+      },
+      {
+        "scopeName": "host-object-literal.ng",
+        "path": "syntaxes/angular-host-object-literal.tmLanguage.json",
+        "license": "MIT",
+        "grammarSource": "https://github.com/angular/vscode-ng-language-service/blob/64b23febe62342ed155b170dc1f7ae5b31a2a141/syntaxes/host-object-literal.json",
+        "injectTo": [
+          "source.ts"
+        ],
+        "embeddedLanguages": {
+          "text.html.derivative": "html",
+          "expression.ng": "javascript",
+          "source.ts": "typescript"
+        }
+      }
+    ]
+  }
+}

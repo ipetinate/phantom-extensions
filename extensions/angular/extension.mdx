@@ -1,0 +1,163 @@
+---
+title: Angular
+tagline: Angular templates for Phantom — the template grammars and the Angular language server, in the projects that installed Angular.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-08
+icon: media/icon.png
+tags: [angular, template, lsp, frontend, typescript]
+---
+
+Angular support for the Phantom editor. The extension ships the eight TextMate grammars Angular maintains for its own editor plugin — seven injections and the expression grammar they share — and connects **the Angular Language Service** — `ngserver`, out of [angular/vscode-ng-language-service](https://github.com/angular/vscode-ng-language-service) — to the HTML and TypeScript files an Angular project keeps its templates in.
+
+An Angular template is an HTML document with a second language written across it: `{{ … }}` interpolations, `[prop]`, `(event)` and `[(model)]` bindings, `@if` and `@for` blocks. HTML's own grammar sees none of that. These grammars inject the missing half, and the server type-checks it against the component class.
+
+## What this extension does not claim
+
+Angular has no file type of its own. A `.component.html` file is an HTML document, and `.html` belongs to the [HTML extension](https://github.com/ipetinate/phantom-extensions/tree/main/extensions/html) — so this extension declares no language, claims no suffix and takes no file away from anything.
+
+That is not a compromise; it is what makes the two work together. A `.component.html` file keeps the language id `html`, so it keeps HTML's grammar, `vscode-html-language-server`, and any other companion offered for `html` — Tailwind included. Angular's grammars are injected into that document and Angular's server attaches beside that one.
+
+## Highlights
+
+<Features>
+  <Feature title="The template language, coloured" icon="brush">
+    Interpolations, property, event and two-way bindings, structural directives in their `*` form, `@let` declarations, and the twelve control-flow block keywords — `if`, `else if`, `else`, `for`, `empty`, `switch`, `case`, `default`, `defer`, `placeholder`, `loading`, `error` — with the `of`, `let` and `track` clauses inside a block's parentheses.
+  </Feature>
+  <Feature title="Templates written in TypeScript too" icon="code">
+    A `template:` string in a `@Component` decorator is coloured as HTML with the Angular injections on top, a `styles:` string as SCSS, and the `host:` object's `[binding]` keys as expressions. The server type-checks those inline templates as well, reporting on the `.ts` file.
+  </Feature>
+  <Feature title="Typed against the component" icon="search">
+    The server resolves the template's component class, so a property that does not exist is a diagnostic and completion inside an interpolation offers the class's own members. It is the same language service the Angular team ships to VS Code.
+  </Feature>
+  <Feature title="Only where Angular lives" icon="check">
+    The server starts when the walk up from the file finds `node_modules/@angular/language-service`. In a repository that never installed it, no process is started and nothing is offered.
+  </Feature>
+  <Feature title="Beside, not instead" icon="plug">
+    The file keeps the server it already had. Two servers answer for one document, and Phantom merges their completions, hovers and diagnostics.
+  </Feature>
+</Features>
+
+## Requirements
+
+This server needs two things, in two places, and it exits rather than degrades when either is missing.
+
+<Requirement command="ngserver" install="npm i -g @angular/language-server" url="https://github.com/angular/vscode-ng-language-service">
+The server binary, on your `PATH`. `@angular/language-server` publishes it as `ngserver`. Phantom resolves the command on the login `PATH`, so a copy under a project's `node_modules/.bin` is not reachable — install it globally.
+</Requirement>
+
+<Requirement command="@angular/language-service" install="npm i -D @angular/language-service" url="https://www.npmjs.com/package/@angular/language-service">
+The language service itself, **in the project**. The server does not carry the one beside its own install: it resolves the package from the probe locations it is given, and those point at the project. The Angular CLI does not add this package, so a stock project needs it installed once. TypeScript, which the project already has, is resolved the same way.
+</Requirement>
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    Open the Extensions pane in the sidebar, or Settings → Extensions, and press **Install** next to Angular.
+  </Step>
+  <Step title="Install the server">
+    Run `npm i -g @angular/language-server`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Add the language service to the project">
+    Run `npm i -D @angular/language-service` in the Angular project. Match its major version to the project's Angular.
+  </Step>
+  <Step title="Open a template">
+    The first time a project needs a server, Phantom asks before starting it and remembers the answer for that extension. Type inside an interpolation and the component's own members are offered.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Server | `ngserver --ngProbeLocations node_modules --tsProbeLocations node_modules --stdio` |
+| Attaches to | `html`, `typescript` |
+| Starts when | `node_modules/@angular/language-service` is found on the walk up to the workspace root |
+| Languages | none — the file keeps the language, and the server, it already had |
+| Grammars | seven injections — `template.ng`, `template.blocks.ng`, `template.let.ng`, `template.tag.ng`, `inline-template.ng`, `inline-styles.ng`, `host-object-literal.ng` — plus `expression.ng`, which the others include and nothing injects |
+| Dependencies | the HTML, TypeScript and CSS extensions, for the scopes the injections reach into |
+
+## How the probe locations work
+
+<Details summary="Why the arguments are relative">
+
+`ngserver` is not told where Angular is; it is told where to start looking. `--ngProbeLocations` and `--tsProbeLocations` are directories it hands to Node's module resolution, which walks up from each one through the `node_modules` chain.
+
+Phantom starts every server with the workspace root as its working directory, so a relative argument is resolved against that root. `node_modules` therefore means "this workspace's `node_modules`, and every `node_modules` above it" — without the manifest having to name a path it cannot know.
+
+An absolute path would need a token Phantom does not expand. `${HOME}` is the only one, and a project is not in a fixed place under it.
+
+</Details>
+
+<Details summary="A monorepo whose packages install their own Angular">
+
+Resolution starts at the workspace root, so a hoisted install is served by the root's copy. A package that installs its own Angular under `packages/app/node_modules` and leaves the root without one is not found, because the walk goes up from the root and never down into a package.
+
+Open that package as the workspace when that happens. The root of the window is what the probe resolves against.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="The server does not start in an Angular project">
+
+Check that `node_modules/@angular/language-service` exists between the file and the workspace root. A project that installed Angular but not the language service has no marker, so no process is started — that is the rule working, not failing.
+
+</Details>
+
+<Details summary="The server starts and stops immediately">
+
+It could not resolve the language service or TypeScript from the workspace root. The message it exits with names the package:
+
+```
+Error: Failed to resolve '@angular/language-service' with minimum version '15.0' from [
+  "node_modules"
+]
+```
+
+Install the missing package in the project, at the project root rather than in a subdirectory.
+
+</Details>
+
+<Details summary="Colour but no diagnostics">
+
+The grammars and the server are independent. Highlighting is data the editor reads and needs nothing installed; diagnostics need `ngserver` on the `PATH` and the marker in the project. Seeing one without the other is the expected shape of a half-finished install.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Measured
+
+<Details summary="What was run, and what it answered">
+
+Against `@angular/language-server` 20.3.0, which carries `@angular/language-service` 20.3.5, on a project holding `@angular/core` 20.3.30 and TypeScript 5.8, driven over stdio with the arguments this manifest declares and the workspace root as the working directory:
+
+| Document | Answer |
+|---|---|
+| A `.component.html` with `{{ titl }}` against a class declaring `title` | `Property 'titl' does not exist on type 'HelloComponent'. Did you mean 'title'?` |
+| Completion at the interpolation's cursor | 5 items, `title` first |
+| A `.ts` whose decorator holds `template: "…{{ nam }}…"` against a class declaring `name` | `Property 'nam' does not exist on type 'InlineComponent'. Did you mean 'name'?` |
+| The same project with `@angular/language-service` removed | the server exits before `initialize`, naming the package it could not resolve |
+
+The last row is why `projectMarkers` names that package rather than `@angular/core`.
+
+No highlighting coverage figure is printed here, because measuring one needs Phantom's own scope map over a corpus of Angular templates, and this release was not measured that way.
+
+</Details>
+
+## Changelog
+
+**1.0.0** — Initial release: the eight Angular template grammars from `angular/vscode-ng-language-service`, seven of them injected into HTML and TypeScript documents, and `ngserver` as a companion server for `html` and `typescript`, gated on `node_modules/@angular/language-service`.
+
+## License and credits
+
+The extension is released under the MIT License. The grammars are the eight files [angular/vscode-ng-language-service](https://github.com/angular/vscode-ng-language-service) carries under `syntaxes/`, © Google Inc. (MIT), taken from commit `64b23febe62342ed155b170dc1f7ae5b31a2a141` and shipped unmodified — 44,181 bytes, byte-identical to upstream. [@angular/language-server](https://www.npmjs.com/package/@angular/language-server) and `@angular/language-service` are © Google Inc. (MIT).
+
+The icon is the Angular mark, taken from `angular.png` in that same repository. Angular's [press kit](https://angular.dev/press-kit) publishes the logo graphics under CC BY 4.0 and invites the community to adapt them; ANGULAR is a registered trademark of Google LLC. The mark is used here only to identify the project this extension serves. This extension is not affiliated with or endorsed by Angular or Google.
