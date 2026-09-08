@@ -1,6 +1,6 @@
 ---
 title: Material Icon Theme
-tagline: Material Icon Theme in Phantom's explorer — 1,251 icons over 1,377 suffixes, 2,135 file names and 4,654 folder names, from the VS Code theme.
+tagline: Material Icon Theme in Phantom's explorer — 1,252 icons over 1,377 suffixes, 2,135 file names and 4,654 folder names, from the VS Code theme.
 version: 1.0.1
 author:
   name: Isac Petinate
@@ -13,7 +13,7 @@ tags: [icons, icon-theme, sidebar, explorer, material, appearance]
 
 The Material Icon Theme, packaged for Phantom's explorer. It is [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme) 5.38.1 by Material Extensions, MIT licensed, vendored as the project publishes it: the generated theme map and all 1,251 SVGs, unmodified apart from the path each icon definition points at. Nothing installs a program, starts a process or asks for approval.
 
-It is the widest icon set Phantom can draw. Where **Symbols** names 354 icons, this names 1,251, and it is the folder half that grows most: 4,654 folder names, each with its own open form.
+It is the widest icon set Phantom can draw. Where **Symbols** names 354 icons, this names 1,252, and it is the folder half that grows most: 4,654 folder names, each with its own open form.
 
 ## The icons
 
@@ -24,7 +24,7 @@ Search matches the icon's name and every key that points at it, so `tsx`, `Docke
 ## Highlights
 
 <Features>
-  <Feature title="1,251 icons" icon="package">
+  <Feature title="1,252 icons" icon="package">
     1,377 file suffixes, 2,135 whole file names, 200 language ids and 4,654 folder names. Defaults for all four kinds of row, so nothing in the tree is left blank.
   </Feature>
   <Feature title="Folders that open" icon="book">
@@ -59,7 +59,7 @@ Search matches the icon's name and every key that points at it, so `tsx`, `Docke
 
 | Theme | Directory | Icons | Defaults |
 |---|---|---|---|
-| Material Icon Theme | `material-icons` | 1,251 | file `file`, folder `folder`, open folder `folder-open`, root folder `folder-root` |
+| Material Icon Theme | `material-icons` | 1,252 | file `file`, folder `folder`, open folder `folder-open`, root folder `folder-root` |
 
 | Map | Entries |
 |---|---|
@@ -74,33 +74,43 @@ Keys are matched without regard to case, so the 21 file names and 35 folder name
 
 ## What Phantom draws, and what it does not
 
-<Details summary="1,136 of the 1,251 icons can be reached today">
+<Details summary="1,191 of the 1,252 icons can be reached today">
 
-An icon draws when a map Phantom reads names it. 1,136 of the 1,251 definitions are named that way. The remaining 115 ship as bytes and are named nowhere Phantom looks:
+An icon draws when a map Phantom reads names it. 1,191 of the 1,252 definitions are named that way, and 54 of those arrived with Phantom 0.18.0, which reads the map's `light` section and its `rootFolderNamesExpanded` table. The remaining 61 ship as bytes and are named nowhere Phantom looks:
 
 | Icons | Named only by | Why they stay unused |
 |---|---|---|
-| 54 | `light` | The light overrides, one per icon that has a pale twin: `toml_light`, `next_light`, `adobe-photoshop_light` |
-| 1 | `rootFolderExpanded` | `folder-root-open`, the open form of the workspace root |
+| 1 | `rootFolderExpanded` | `folder-root-open`, the open form of the workspace root. Phantom resolves a root folder before it considers the expanded state |
 | 60 | nothing in the file | Icon-pack and alternate variants — the Angular, Nest, Ngrx, Redux and Vuex folder sets, `nodejs_alt`, `php_elephant`, `go_gopher` |
 
 The last group is a property of the published map, not of Phantom. Upstream switches those on through VS Code settings that regenerate the map inside the editor, and the map it publishes is the one its defaults produce. The artwork travels with the package either way, so a future Phantom that reads more of this file finds the files already there.
 
+The 1,252nd definition is not upstream's. It is `solid`, the Solid logo the owner drew, and it is reached by a different road: Phantom asks the project's `package.json` whether it depends on `solid-js` and, in a project that does, draws it on a `.tsx` file that the map alone would have called React. See **A .tsx file does not say who compiles it** below.
+
 </Details>
 
-<Details summary="The five keys Phantom skips">
+<Details summary="The light section, and the two keys Phantom still skips">
 
-The map holds five keys Phantom's reader has no field for. Each is skipped whole, and the theme is usable without any of them.
+Phantom 0.18.0 reads the map's `light` section. The sidebar asks the terminal's own background rather than the system appearance, so a light theme inside a dark system is a light sidebar and gets the light artwork.
 
-| Key | What 5.38.1 puts there | What happens instead |
+| Key | What 5.38.1 puts there | What Phantom does |
 |---|---|---|
-| `light` | 263 overrides for a light background: 31 suffixes, 179 file names, 3 language ids, 25 folder names and their 25 open forms | The one dark-background icon draws on both. Material's icons are flat colour with no outline, so most hold up either way; the 54 pale twins are the ones upstream thought did not |
-| `highContrast` | `fileExtensions` and `fileNames`, both empty | Nothing to lose in this version |
-| `rootFolderExpanded` | `folder-root-open` | An expanded root keeps `folder-root`. Phantom resolves a root folder before it considers the expanded state, so this one is skipped twice over |
-| `rootFolderNamesExpanded` | empty | Nothing to lose in this version. `rootFolderNames` is empty too, and that one Phantom does read |
-| `hidesExplorerArrows` | `false` | Phantom draws its own disclosure arrows and a theme does not vote on them. `false` is what it does anyway |
+| `light` | 263 overrides for a light background: 31 suffixes, 179 file names, 3 language ids, 25 folder names and their 25 open forms | Read. On a light background the 54 pale twins draw instead of their dark originals |
+| `rootFolderNamesExpanded` | empty | Read. Nothing to gain in this version, because `rootFolderNames` is empty too |
+| `folderNamesExpanded` | 4,654 | Read, and it is the key that matters most here |
+| `highContrast` | `fileExtensions` and `fileNames`, both empty | Skipped. Nothing to lose in this version |
+| `rootFolderExpanded` | `folder-root-open` | Skipped. An expanded root keeps `folder-root`, because Phantom resolves a root folder before it considers the expanded state |
+| `hidesExplorerArrows` | `false` | Skipped. Phantom draws its own disclosure arrows and a theme does not vote on them. `false` is what it does anyway |
 
-`folderNamesExpanded` is **not** in this list: Phantom reads it, and it is the key that matters most here.
+</Details>
+
+<Details summary="A .tsx file does not say who compiles it">
+
+React, Solid, Preact and Qwik all write `.tsx`. One suffix, one grammar, one language server — and a map keyed by suffix has no way to tell them apart, so upstream's `.tsx` entry names React for all of them.
+
+The project does say, in its dependencies. Phantom 0.18.0 reads the nearest `package.json` walking up from the file and, in a project that depends on `solid-js`, draws `solid` on a `.tsx` instead. That icon is the one definition in this package that is not upstream's: the Solid logo the owner drew, added here so the substitution has artwork to reach for.
+
+The same question runs the other way. Both icon packs map eighteen suffixes each — `service.ts`, `component.ts`, `pipe.ts`, `directive.ts`, `guard.ts`, `interceptor.ts`, `module.ts`, `resolver.ts` and their `.js` and `.dart` twins — onto ids like `angular-service`. A NestJS `user.service.ts` wore Angular's shield for exactly that reason. Now a project that does not depend on `@angular/core` does not get Angular's artwork, and the file falls back to what it is: TypeScript.
 
 </Details>
 
@@ -123,7 +133,9 @@ Phantom reads the SVG half of the VS Code file icon theme format. A whole theme 
 }
 ```
 
-Upstream keeps its map in `dist/` and its SVGs one level above, so every `iconPath` it publishes reads `./../icons/<name>.svg`. Here the map and the `icons/` directory sit side by side, so all 1,251 paths read `./icons/<name>.svg`. That is the only edit: the string `"./../icons/` became `"./icons/` 1,251 times, and no other byte of the file moved.
+Upstream keeps its map in `dist/` and its SVGs one level above, so every `iconPath` it publishes reads `./../icons/<name>.svg`. Here the map and the `icons/` directory sit side by side, so all 1,251 paths read `./icons/<name>.svg`: the string `"./../icons/` became `"./icons/` 1,251 times.
+
+One definition was added after that, `solid`, pointing at `./icons/solid.png`. Those are the only two edits to the published map, and no other byte of it moved.
 
 Phantom resolves an icon in VS Code's own order: an exact file name first, then the longest matching suffix, then the language id, then the default. A folder resolves by name, by name in its expanded form, and then by the default.
 
@@ -166,6 +178,8 @@ It does, and it will until Phantom reads `rootFolderExpanded`. Folders inside th
 ## Changelog
 
 **1.0.1** — The page lists the icons: a searchable box, filtered by category, drawn from `material-icons/icon-theme.json` rather than written out here.
+
+Carries a Solid icon, drawn by the owner, as the one definition here that is not upstream's — a `.tsx` file cannot say who compiles it, so Phantom asks the project's dependencies instead. Counts the reachable icons again now that Phantom reads the map's `light` section: 1,191 of 1,252, 54 more than before.
 
 **1.0.0** — Initial release: Material Icon Theme 5.38.1, all 1,251 icons, with the icon paths rewritten for a flat theme directory.
 
