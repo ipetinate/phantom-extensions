@@ -3,7 +3,7 @@ import { CATEGORIES } from "../src/categories.ts";
 import { collect } from "../src/collect.ts";
 import { loadManifest } from "../src/manifest.ts";
 import { MAX_PROJECT_MARKERS } from "../src/projectPaths.ts";
-import { FORMATTER_ONLY_KEYS, MAX_SERVERS, MAX_SERVER_LANGUAGE_IDS } from "../src/servers.ts";
+import { FORMATTER_ONLY_KEYS, MAX_SERVERS, MAX_SERVER_LANGUAGE_IDS, MAX_SETTINGS_SECTIONS } from "../src/servers.ts";
 import { ExtensionFixture, companionServer, languageManifest, makeRoot, removeRoot, serversManifest } from "./fixture.ts";
 
 let root: string;
@@ -247,6 +247,31 @@ describe("the rest of a server block", () => {
   it("refuses initializationOptions that are not an object", () => {
     expect(loadCompanion({ initializationOptions: "provideFormatter" })).toThrow(/'initializationOptions' must be an object/);
     expect(loadLanguageServer({ initializationOptions: [true] })).toThrow(/'initializationOptions' must be an object/);
+  });
+
+  it("takes the settings a server pulls, whole and with the values it holds", () => {
+    const settings = { validate: "on", format: false, nodePath: null, codeAction: { showDocumentation: { enable: true } } };
+    const fixture = new ExtensionFixture(root, "companion", serversManifest({ settings }));
+    expect(serverOf(fixture.directory)["settings"]).toEqual(settings);
+    expect(loadLanguageServer({ settings })).not.toThrow();
+  });
+
+  it("refuses settings that are not an object, the way initializationOptions are refused", () => {
+    expect(loadCompanion({ settings: "validate" })).toThrow(/'settings' must be an object/);
+    expect(loadLanguageServer({ settings: [{ validate: "on" }] })).toThrow(/'settings' must be an object/);
+  });
+
+  it("refuses a key holding a dot, which a request for that section never reaches", () => {
+    expect(loadCompanion({ settings: { "eslint.codeAction": {} } })).toThrow(/a settings key is one step of a section/);
+  });
+
+  it.each(["", "code Action", "code/action", "codeAction!"])("refuses the settings key %s", (key) => {
+    expect(loadCompanion({ settings: { [key]: {} } })).toThrow(/bad settings key/);
+  });
+
+  it("refuses more sections than a server should pull", () => {
+    const settings = Object.fromEntries(Array.from({ length: MAX_SETTINGS_SECTIONS + 1 }, (_, index) => [`section${index}`, {}]));
+    expect(loadCompanion({ settings })).toThrow(/'settings' names more than 32 sections/);
   });
 
   it("requires an https documentation url", () => {
