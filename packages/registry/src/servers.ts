@@ -10,10 +10,12 @@ export const PLUGIN_HOST_KEYS = ["plugin", "languages"] as const;
 export const FORMATTER_ONLY_KEYS = ["localBinary", "workingDirectory"] as const;
 export const MAX_SERVERS = 16;
 export const MAX_SERVER_LANGUAGE_IDS = 32;
+export const MAX_SETTINGS_SECTIONS = 32;
 export const MIN_JAVA_FEATURE_VERSION = 8;
 export const MAX_JAVA_FEATURE_VERSION = 99;
 
 const LANGUAGE_ID_PATTERN = /^[a-z0-9_+-]+$/;
+const SETTINGS_SECTION_PATTERN = /^[A-Za-z0-9_-]+$/;
 const UNKNOWN_EXPANSION = /\$\{(?!HOME\})/;
 
 export type ResolverKind = (typeof RESOLVER_KINDS)[number];
@@ -26,6 +28,21 @@ function validateArguments(directory: string, what: string, value: JsonValue | u
     if (UNKNOWN_EXPANSION.test(argument)) {
       fail(directory, `${what}: '\${HOME}' is the only token expanded in an argument: ${quoted(argument)}`);
     }
+  }
+}
+
+function validateSettings(directory: string, what: string, value: JsonValue | undefined): void {
+  if (value === undefined || value === null) return;
+  if (!isRecord(value)) fail(directory, `${what}: 'settings' must be an object`);
+  const sections = Object.keys(value);
+  if (sections.length > MAX_SETTINGS_SECTIONS) {
+    fail(directory, `${what}: 'settings' names more than ${MAX_SETTINGS_SECTIONS} sections`);
+  }
+  for (const section of sections) {
+    if (section.includes(".")) {
+      fail(directory, `${what}: a settings key is one step of a section, so it holds no '.': ${quoted(section)}`);
+    }
+    if (!SETTINGS_SECTION_PATTERN.test(section)) fail(directory, `${what}: bad settings key ${quoted(section)}`);
   }
 }
 
@@ -77,6 +94,7 @@ export function validateServerBlock(directory: string, what: string, server: Jso
   if (options !== undefined && options !== null && !isRecord(options)) {
     fail(directory, `${what}: 'initializationOptions' must be an object`);
   }
+  validateSettings(directory, what, server["settings"]);
   validateJavaCeiling(directory, what, server["maximumJavaFeatureVersion"]);
   validateResolver(directory, what, server["resolver"]);
   const documentation = server["documentationURL"];

@@ -258,6 +258,14 @@
         "initializationOptions": {
           "type": "object"
         },
+        "settings": {
+          "type": "object",
+          "maxProperties": 32,
+          "propertyNames": {
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "description": "What this server pulls with workspace/configuration. Phantom resolves a requested section as a path through this object, step by dotted step, and answers null for a path it does not reach; a request that names no section, or names the empty one, is answered with the whole object. A key is one step of a path, so it holds no '.'."
+        },
         "maximumJavaFeatureVersion": {
           "type": "integer",
           "minimum": 8,

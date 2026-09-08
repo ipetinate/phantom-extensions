@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "ipetinate.eslint",
+  "name": "ESLint",
+  "version": "1.0.0",
+  "publisher": "Isac Petinate",
+  "description": "ESLint: diagnostics and fixes from the project's own ESLint, in the projects that configured it.",
+  "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/extensions/eslint",
+  "phantom": "0.18.0",
+  "contributes": {
+    "servers": [
+      {
+        "id": "eslint",
+        "name": "ESLint",
+        "command": "vscode-eslint-language-server",
+        "args": [
+          "--stdio"
+        ],
+        "languageIds": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "vue",
+          "svelte",
+          "markdown"
+        ],
+        "projectMarkers": [
+          "eslint.config.js",
+          "eslint.config.mjs",
+          "eslint.config.cjs",
+          "eslint.config.ts",
+          "eslint.config.mts",
+          "eslint.config.cts",
+          ".eslintrc",
+          ".eslintrc.js",
+          ".eslintrc.cjs",
+          ".eslintrc.json",
+          ".eslintrc.yaml",
+          ".eslintrc.yml",
+          {
+            "file": "package.json",
+            "containsKey": "eslintConfig"
+          }
+        ],
+        "category": "script",
+        "settings": {
+          "validate": "on",
+          "run": "onSave",
+          "format": false,
+          "nodePath": null,
+          "onIgnoredFiles": "off",
+          "problems": {
+            "shortenToSingleLine": false
+          },
+          "codeAction": {
+            "disableRuleComment": {
+              "enable": true,
+              "location": "separateLine",
+              "commentStyle": "line"
+            },
+            "showDocumentation": {
+              "enable": true
+            }
+          },
+          "codeActionOnSave": {
+            "mode": "all"
+          },
+          "experimental": {},
+          "rulesCustomizations": []
+        },
+        "installHint": "npm i -g vscode-langservers-extracted",
+        "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted",
+        "install": {
+          "commands": [
+            {
+              "manager": "npm",
+              "command": "npm install -g vscode-langservers-extracted",
+              "uninstall": "npm rm -g vscode-langservers-extracted"
+            },
+            {
+              "manager": "pnpm",
+              "command": "pnpm add -g vscode-langservers-extracted",
+              "uninstall": "pnpm remove -g vscode-langservers-extracted"
+            },
+            {
+              "manager": "yarn",
+              "command": "yarn global add vscode-langservers-extracted",
+              "uninstall": "yarn global remove vscode-langservers-extracted"
+            }
+          ],
+          "documentationURL": "https://github.com/hrsh7th/vscode-langservers-extracted"
+        }
+      }
+    ]
+  }
+}

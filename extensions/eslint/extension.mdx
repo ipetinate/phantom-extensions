@@ -1,0 +1,192 @@
+---
+title: ESLint
+tagline: The project's own ESLint, reporting and fixing — beside Prettier, never fighting it over a file.
+version: 1.0.0
+author:
+  name: Isac Petinate
+  url: https://github.com/ipetinate
+license: MIT
+created: 2026-09-08
+icon: media/icon.png
+tags: [eslint, javascript, typescript, lsp, linting]
+---
+
+ESLint support for the Phantom editor. The extension connects **vscode-eslint-language-server** — the server behind the ESLint extension for VS Code — to the script files of a project that configured ESLint, and to no other project.
+
+ESLint is not a language, so this extension contributes none. It contributes a server that attaches **beside** the one already serving the file. A `.ts` file keeps `tsserver`, a `.vue` file keeps the Vue server, and both also get the rules the project wrote.
+
+The server runs the ESLint the project installed, not one shipped here. Whatever your `eslint.config.js` resolves to is what reports the problems.
+
+## Highlights
+
+<Features>
+  <Feature title="Your rules, not a default set" icon="check">
+    The server loads the project's own ESLint and its own configuration. A custom rule, a shared config, a plugin — each behaves exactly as it does on the command line.
+  </Feature>
+  <Feature title="Only where ESLint lives" icon="lock">
+    The server starts when the walk up from the file finds an ESLint configuration. A repository that never configured ESLint starts no process and is offered nothing.
+  </Feature>
+  <Feature title="Fixes as code actions" icon="bolt">
+    A problem with a fix offers it as a quick fix on the problem. So does "disable this rule for this line", with the comment written in the right place.
+  </Feature>
+  <Feature title="It does not format" icon="brush">
+    ESLint's own formatting is switched off in this extension's settings, so ESLint never rewrites a file Prettier owns. See below.
+  </Feature>
+</Features>
+
+## Requirements
+
+Phantom does not bundle the server. Install it once; the extension finds it on your `PATH`.
+
+<Requirement command="vscode-eslint-language-server" install="npm i -g vscode-langservers-extracted" url="https://github.com/hrsh7th/vscode-langservers-extracted">
+The same package the HTML, CSS and JSON extensions ask for, so one install serves all four. It carries the servers extracted from VS Code, `vscode-eslint-language-server` among them.
+</Requirement>
+
+ESLint itself is **not** installed globally and should not be. The server resolves `eslint` from the file's own directory upwards, which is how a monorepo whose packages pin different versions gets the right one in each.
+
+## Getting started
+
+<Steps>
+  <Step title="Install the extension">
+    Open the Extensions pane in the sidebar, or Settings → Extensions, and press **Install** next to ESLint.
+  </Step>
+  <Step title="Install the server">
+    Run `npm i -g vscode-langservers-extracted`. Phantom picks it up without a restart.
+  </Step>
+  <Step title="Open a file in a project that configured ESLint">
+    The first time a project needs a server, Phantom asks before starting it and remembers the answer for that extension.
+  </Step>
+</Steps>
+
+## What the extension adds
+
+| Area | Contribution |
+|---|---|
+| Server | `vscode-eslint-language-server --stdio` |
+| Attaches to | `javascript`, `javascriptreact`, `typescript`, `typescriptreact`, `vue`, `svelte`, `markdown` |
+| Starts when | an `eslint.config.*`, an `.eslintrc*` or an `eslintConfig` key in `package.json` is found on the walk up to the workspace root |
+| Languages | none — the file keeps the language, and the server, it already had |
+| Formatting | none, deliberately |
+
+## Prettier, and who owns a file
+
+Phantom already formats with [Prettier](https://github.com/ipetinate/phantom-extensions/tree/main/extensions/prettier). Two tools that both rewrite a file will disagree about it, and the file will flip between them on every save. Two things stop that, and they are not the same thing.
+
+**This extension switches ESLint's formatting off.** The server can register itself as a formatter for a document, and then Phantom would have two answers for one ⇧⌘F. The manifest sets `format` to `false` in the settings the server pulls, so it never registers. That is one line, it is this package's job, and you do not have to do anything about it.
+
+**`eslint-config-prettier` is your project's job.** It switches off the ESLint *rules* that have opinions about layout — `quotes`, `semi`, `indent` and the rest — so ESLint stops *reporting* what Prettier is about to change anyway. Without it you still get no fight over the file, because ESLint does not write it; you get a squiggle under a quote that Prettier will rewrite the moment you save, which is noise. Add it as the last entry of your config:
+
+```js
+import prettier from "eslint-config-prettier";
+
+export default [
+  // your rules
+  prettier,
+];
+```
+
+So: this package stops ESLint from *writing*, `eslint-config-prettier` stops it from *complaining*. You want both.
+
+## What happens on a save
+
+<Callout kind="warning" title="An ESLint fix is not part of a save">
+Format on Save runs the formatter — Prettier, for a file Prettier claims — and nothing else. It does not run code actions, so there is no "fix all ESLint problems on save" in Phantom today, and turning Format on Save on will not produce one. An ESLint fix is something you choose, one problem at a time, from the code actions on that problem.
+</Callout>
+
+The order on ⌘S with Format on Save turned on: Phantom runs the external formatter for the file, falls back to the language server's own formatting if no formatter claims the file, and writes the file whatever either of them did. ESLint is in neither step — by this package's own choice for the second one, and because a code action is not a formatter for the first.
+
+What you get from a problem, then, is the quick fix on it: "Fix this `no-var` problem", and "Disable `no-var` for this line". What you do not get is the server's own **fix-all** action. `source.fixAll.eslint` exists on the server, and Phantom's code action request does not name a kind, so the server answers with the per-problem fixes rather than that one. Applying twenty fixes is twenty choices.
+
+## Configuration
+
+<Details summary="Flat config, and the older .eslintrc">
+
+The server supports both, and this extension takes no position on which you use. It sends no `useFlatConfig` opt-in, so the ESLint your project installed decides by its own rules: ESLint 9 and later read `eslint.config.js` and its `.mjs`, `.cjs` and `.ts` variants; ESLint 8 reads a flat config when one is present and falls back to `.eslintrc*` when it is not; ESLint 10 reads flat config only.
+
+Both are project markers, so a repository on either shape starts the server:
+
+```
+eslint.config.js   eslint.config.mjs   eslint.config.cjs
+eslint.config.ts   eslint.config.mts   eslint.config.cts
+.eslintrc          .eslintrc.js        .eslintrc.cjs
+.eslintrc.json     .eslintrc.yaml      .eslintrc.yml
+package.json with an "eslintConfig" key
+```
+
+`.eslintrc.mjs` is not among them because ESLint never read one.
+
+</Details>
+
+<Details summary="What the extension tells the server">
+
+This server reads nothing from `initialize`. Every setting it has arrives when it asks the editor for one, per document, so the manifest declares them under `settings` and Phantom answers the ask with them:
+
+```json
+"settings": {
+  "validate": "on",
+  "run": "onSave",
+  "format": false,
+  "nodePath": null,
+  "onIgnoredFiles": "off",
+  "problems": { "shortenToSingleLine": false },
+  "codeAction": {
+    "disableRuleComment": { "enable": true, "location": "separateLine", "commentStyle": "line" },
+    "showDocumentation": { "enable": true }
+  },
+  "codeActionOnSave": { "mode": "all" },
+  "experimental": {},
+  "rulesCustomizations": []
+}
+```
+
+`validate` on is what makes it lint at all. `format` off is the Prettier line above. `onIgnoredFiles` off is why opening a file your config ignores says nothing instead of "File ignored because of a matching ignore pattern". `nodePath` null means "resolve ESLint yourself", and the empty `experimental` means "no opt-in" — both have to be written, because the server reads them without checking whether they are there.
+
+</Details>
+
+<Details summary="A monorepo with more than one ESLint">
+
+The server resolves `eslint` starting from the edited file's own directory and walking up, so a package that installs its own copy is linted by that copy. A package with no ESLint of its own falls back to the one above it, which is what a hoisted install produces. The configuration is found the same way, by ESLint itself.
+
+</Details>
+
+## Troubleshooting
+
+<Details summary="Nothing is reported in a project that uses ESLint">
+
+Check that a configuration file exists between the file and the workspace root. A repository that keeps its ESLint configuration in a subdirectory you are not inside has no marker on the walk, so the server is not started — that is the rule working.
+
+Then check that `node_modules` is installed. The server needs to load the project's ESLint, and a project whose dependencies were never installed has none to load.
+
+</Details>
+
+<Details summary="A rule complains about spacing that Prettier then changes">
+
+That is the `eslint-config-prettier` half, not this extension's. Add it as the last entry of your ESLint configuration and the layout rules stop reporting.
+
+</Details>
+
+<Details summary="⇧⌘F does not run ESLint">
+
+It is not meant to. ESLint's formatting is off here on purpose, so ⇧⌘F is Prettier's, or your language server's. Use the code actions on a problem to apply an ESLint fix.
+
+</Details>
+
+<Details summary="A rule was changed and the old problems are still there">
+
+The server caches what it resolved for a document. Save the file; if the old result survives, restart the server from Settings → Language Servers.
+
+</Details>
+
+<Callout kind="note" title="Permissions">
+The server runs as your user, with access to your files and network, the same as if you started it from the terminal. It also loads and runs your project's ESLint configuration, which is JavaScript. Phantom asks before it runs a program from an extension for the first time, and asks again if the extension's manifest or the program's path changes. You can review or change the answer under Settings → Extensions.
+</Callout>
+
+## Changelog
+
+**1.0.0** — Initial release: `vscode-eslint-language-server` as a companion server for JavaScript, TypeScript, JSX, TSX, Vue, Svelte and Markdown, gated on an ESLint configuration, with the settings it pulls declared in the manifest and its own formatting switched off.
+
+## License and credits
+
+The extension is released under the MIT License. [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) is © its contributors (MIT); the server inside it is extracted from [microsoft/vscode-eslint](https://github.com/microsoft/vscode-eslint), © Microsoft Corporation (MIT). ESLint is © OpenJS Foundation and other contributors (MIT); this extension is not affiliated with the ESLint project, and the name is used to identify it.
+
+The package icon is the ESLint file icon from [material-extensions/vscode-material-icon-theme](https://github.com/material-extensions/vscode-material-icon-theme), © Material Extensions, MIT licensed, rendered to 128 pixels square. It is that project's own drawing and not an ESLint mark.

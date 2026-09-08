@@ -68,6 +68,7 @@ An index entry carries `download` for the version in this repository, and `versi
 | `contributes.grammars[]` and `dependencies` | 0.17.0 |
 | `contributes.servers[]`, and `resolver`, `maximumJavaFeatureVersion` and `${HOME}` on any server | 0.17.0 |
 | `fileNamePatterns` on a language | 0.17.0 |
+| `settings` on any server | 0.18.0 |
 
 `category` is one of `script`, `compiled`, `markup`, `frontendFramework`, `styles`, `data`, `infrastructure`.
 
@@ -148,7 +149,20 @@ An entry is flat: the keys of a server block sit beside the keys that make it a 
 
 `localBinary` and `workingDirectory` are formatter keys and are refused here. A server resolves its command on the login `PATH` and runs at the workspace root, so neither would decide anything.
 
-Both homes read the same server block — `command`, `args`, `initializationOptions`, `installHint`, `documentationURL`, `install`, and the three below. `initializationOptions` is sent verbatim at `initialize`.
+Both homes read the same server block — `command`, `args`, `initializationOptions`, `settings`, `installHint`, `documentationURL`, `install`, and the three below. `initializationOptions` is sent verbatim at `initialize`.
+
+`settings` is for the server that never reads `initializationOptions` and pulls its configuration instead. Phantom resolves the section a `workspace/configuration` item names as a path through this object, one dotted step at a time: `eslint` answers with `settings.eslint`, `eslint.codeAction` with `settings.eslint.codeAction`, and a path the object does not reach is answered `null` — which is what every section is answered without the key. An item that names no section, or names the empty one, is answered with the whole object.
+
+```json
+"settings": {
+  "validate": "on",
+  "format": false,
+  "nodePath": null,
+  "codeAction": { "showDocumentation": { "enable": true } }
+}
+```
+
+That is the shape `vscode-eslint-language-server` needs, and it is the reason the key exists. The server asks once per document, with `section` set to the empty string, and expects its own namespace back with no prefix — so it cannot be configured through `initializationOptions`, and answering the pull with `null` made it fail the request rather than lint quietly. A key is one step of a path and holds no `.`, since a request for `a.b` is resolved as `a` then `b` and would never reach a key spelled `a.b`. At most 32 keys. The object itself must be an object, the rule `initializationOptions` already follows; the values below it are whatever the server reads.
 
 `maximumJavaFeatureVersion` is the newest Java feature version the server runs on, from 8 to 99. It is a ceiling, not a requirement: a server that bundles an old compiler dies on a newer JDK, so Phantom hands it an older JVM when the one on the machine is above the ceiling.
 
