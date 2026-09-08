@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "phantom.dracula",
   "name": "Dracula by Phantom",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "Isac Petinate",
   "description": "The Dracula palette, applied to Phantom's window as well as its terminal.",
   "homepage": "https://github.com/ipetinate/phantom-extensions/tree/main/themes/dracula",
