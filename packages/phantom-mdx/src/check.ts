@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { parseDocument, toParseError } from "./parse.ts";
-import { collectMedia, validateTree, type Violation } from "./validate.ts";
+import { collectDirectories, collectMedia, validateTree, type Violation } from "./validate.ts";
 
 export const DOCUMENT_NAMES = ["extension.mdx", "extension.md"] as const;
 
@@ -28,6 +28,16 @@ export function checkFile(file: string): Violation[] {
   for (const reference of collectMedia(tree)) {
     if (!existsSync(path.join(directory, reference.path))) {
       violations.push({ code: "media-missing", message: `${reference.path} does not exist`, line: reference.line, column: reference.column });
+    }
+  }
+  for (const reference of collectDirectories(tree)) {
+    if (!existsSync(path.join(directory, reference.file))) {
+      violations.push({
+        code: "theme-missing",
+        message: `${reference.file} does not exist`,
+        line: reference.line,
+        column: reference.column,
+      });
     }
   }
   return violations.sort((a, b) => a.line - b.line || a.column - b.column);

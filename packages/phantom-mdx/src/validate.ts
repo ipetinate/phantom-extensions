@@ -3,9 +3,10 @@ import type { MdxJsxAttribute, MdxJsxExpressionAttribute, MdxJsxFlowElement, Mdx
 import type { Node, Parent } from "unist";
 import { visit } from "unist-util-visit";
 import { isHexColor, isPalette, PALETTE_LENGTH, paletteEntries } from "./colors.ts";
+import { isThemeDirectory } from "./components/iconTheme.ts";
 import { isAllowedLink, isMediaPath } from "./media.ts";
 import { parseDocument, toParseError } from "./parse.ts";
-import { componentNames, components, IMAGE_SUFFIXES, VIDEO_SUFFIXES, type ComponentSpec, type PropSpec } from "./schema.ts";
+import { componentNames, components, IMAGE_SUFFIXES, THEME_FILE_NAME, VIDEO_SUFFIXES, type ComponentSpec, type PropSpec } from "./schema.ts";
 
 export interface Violation {
   code: string;
@@ -17,6 +18,13 @@ export interface Violation {
 export interface MediaReference {
   path: string;
   kind: "image" | "video";
+  line: number;
+  column: number;
+}
+
+export interface DirectoryReference {
+  directory: string;
+  file: string;
   line: number;
   column: number;
 }
@@ -52,6 +60,9 @@ function checkPropValue(element: JsxElement, attribute: MdxJsxAttribute, spec: P
   }
   if (spec.kind === "video" && !isMediaPath(value, VIDEO_SUFFIXES)) {
     report(attribute, "media-path", `${label} must be a file under media/ ending in ${list(VIDEO_SUFFIXES)}; got "${value}"`);
+  }
+  if (spec.kind === "directory" && !isThemeDirectory(value)) {
+    report(attribute, "directory", `${label} must name a directory inside the extension, such as material-icons; got "${value}"`);
   }
   if (spec.kind === "url" && !/^https:\/\/[^/\s]+/i.test(value)) {
     report(attribute, "link", `${label} must be an https URL; got "${value}"`);
@@ -235,6 +246,22 @@ export function validate(source: string): Violation[] {
     return [{ code: "syntax", message: parseError.message, line: parseError.line, column: parseError.column }];
   }
   return validateTree(tree);
+}
+
+export function collectDirectories(tree: Root): DirectoryReference[] {
+  const references: DirectoryReference[] = [];
+  visit(tree, (node) => {
+    if (!isJsxElement(node) || node.name === null) return;
+    const spec = components[node.name];
+    if (!spec) return;
+    for (const attribute of node.attributes) {
+      if (attribute.type !== "mdxJsxAttribute" || typeof attribute.value !== "string") continue;
+      const propSpec = spec.props.find((prop) => prop.name === attribute.name);
+      if (!propSpec || propSpec.kind !== "directory" || !isThemeDirectory(attribute.value)) continue;
+      references.push({ directory: attribute.value, file: `${attribute.value}/${THEME_FILE_NAME}`, ...startOf(attribute) });
+    }
+  });
+  return references;
 }
 
 export function collectMedia(tree: Root): MediaReference[] {

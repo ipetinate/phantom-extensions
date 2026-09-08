@@ -1,4 +1,4 @@
-export type PropKind = "text" | "image" | "video" | "url" | "color" | "palette";
+export type PropKind = "text" | "image" | "video" | "url" | "color" | "palette" | "directory";
 
 export interface PropSpec {
   readonly name: string;
@@ -54,6 +54,9 @@ export const SCREENSHOT_WIDTHS = ["full", "wide", "narrow"] as const;
 export const BADGE_TONES = ["neutral", "accent", "success", "warning"] as const;
 export const SHOWCASE_MEDIA = ["start", "end"] as const;
 export const SWATCH_COLUMNS = ["2", "3", "4", "5", "6", "7", "8"] as const;
+export const WINDOW_HEIGHTS = ["short", "medium", "tall"] as const;
+export const FILTER_MODES = ["one", "any"] as const;
+export const THEME_FILE_NAME = "icon-theme.json";
 
 const markdown: ChildrenRule = { kind: "markdown" };
 const none: ChildrenRule = { kind: "none" };
@@ -166,6 +169,55 @@ export const components: Readonly<Record<string, ComponentSpec>> = {
     ],
     children: none,
     parent: "Swatches",
+  },
+  Window: {
+    name: "Window",
+    props: [
+      { name: "title", kind: "text" },
+      { name: "height", kind: "text", values: WINDOW_HEIGHTS, defaultValue: "medium" },
+    ],
+    children: markdown,
+  },
+  WindowToolbar: {
+    name: "WindowToolbar",
+    props: [],
+    children: markdown,
+    parent: "Window",
+  },
+  SearchField: {
+    name: "SearchField",
+    props: [
+      { name: "label", kind: "text" },
+      { name: "placeholder", kind: "text" },
+    ],
+    children: none,
+  },
+  Filters: {
+    name: "Filters",
+    props: [
+      { name: "mode", kind: "text", values: FILTER_MODES, defaultValue: "one" },
+      { name: "label", kind: "text" },
+    ],
+    children: { kind: "only", names: ["Filter"] },
+  },
+  Filter: {
+    name: "Filter",
+    props: [
+      { name: "label", kind: "text", required: true },
+      { name: "count", kind: "text" },
+      { name: "selected", kind: "text", values: ["true"] },
+    ],
+    children: none,
+    parent: "Filters",
+  },
+  IconBrowser: {
+    name: "IconBrowser",
+    props: [
+      { name: "theme", kind: "directory", required: true },
+      { name: "title", kind: "text" },
+      { name: "height", kind: "text", values: WINDOW_HEIGHTS, defaultValue: "tall" },
+    ],
+    children: none,
   },
 };
 
