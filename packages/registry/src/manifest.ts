@@ -8,13 +8,14 @@ import { validateInstall, type Install } from "./install.ts";
 import { MAX_BRANCHES, MAX_PATTERNS_PER_LANGUAGE, MAX_SOURCE_LENGTH, fileNamePattern } from "./patterns.ts";
 import { validateProjectMarkers, validateProjectPath } from "./projectPaths.ts";
 import { validateServerBlock, validateServers } from "./servers.ts";
+import { validateViews, viewPaths } from "./views.ts";
 
 export const ID_PATTERN = /^[a-z0-9][a-z0-9._-]*$/;
 export const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
 export const LANGUAGE_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const AGENT_ID_PATTERN = /^[a-z0-9_+-]+$/;
 export const FORMATTER_ID_PATTERN = /^[a-z0-9_-]+$/;
-export const CONTRIBUTION_KINDS = ["languages", "servers", "formatters", "themes", "iconThemes", "grammars", "agents"] as const;
+export const CONTRIBUTION_KINDS = ["languages", "servers", "formatters", "themes", "iconThemes", "grammars", "agents", "views"] as const;
 export const RETIRED_LANGUAGE_KEYS = ["syntax", "keywords"] as const;
 
 /**
@@ -227,6 +228,7 @@ export function referencedPaths(manifest: Manifest): Set<string> {
     const hooks = agent["hooks"];
     if (isRecord(hooks) && typeof hooks["template"] === "string") paths.add(hooks["template"]);
   }
+  for (const viewPath of viewPaths(entriesOf(manifest, "views"))) paths.add(viewPath);
   return new Set([...paths].map((entry) => entry.split(path.sep).join("/")));
 }
 
@@ -365,5 +367,6 @@ export function loadManifest(directory: string): Manifest {
   validateSubject(directory, name, languageIds);
   validateGrammars(directory, rawEntries(contributes, "grammars"), languageIds);
   for (const agent of rawEntries(contributes, "agents")) validateAgent(directory, agent);
+  validateViews(directory, rawEntries(contributes, "views"));
   return parsed as unknown as Manifest;
 }

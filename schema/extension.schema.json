@@ -101,6 +101,14 @@
           "items": {
             "$ref": "#/$defs/agent"
           }
+        },
+        "views": {
+          "type": "array",
+          "maxItems": 8,
+          "description": "Interactive pages the extension draws inside Phantom. Each is opened as a tab of the editor from a button in the sidebar's panel switcher.",
+          "items": {
+            "$ref": "#/$defs/view"
+          }
         }
       }
     }
@@ -654,7 +662,7 @@
       }
     },
     "configDirectory": {
-      "description": "ConfigPath candidates: a $VAR candidate wins when the variable is set, a middle one only if it exists on disk, the last is the default. Only ~, ~/… and $VAR… forms; no absolute paths, no ..",
+      "description": "ConfigPath candidates: a $VAR candidate wins when the variable is set, a middle one only if it exists on disk, the last is the default. Only ~, ~/\u2026 and $VAR\u2026 forms; no absolute paths, no ..",
       "oneOf": [
         {
           "type": "string",
@@ -977,6 +985,118 @@
         },
         "mcp": {
           "$ref": "#/$defs/agentMCP"
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "required": [
+        "viewId",
+        "title",
+        "icon",
+        "entry"
+      ],
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "pattern": "^[a-z0-9_+-]+$",
+          "description": "Unique within this manifest. Phantom keys the view on <extension id>/<viewId>."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "The name on the view's tab, on its button in the switcher, and in its tooltip."
+        },
+        "icon": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/relativePath"
+            }
+          ],
+          "pattern": "\\.(png|svg)$",
+          "description": "A PNG or SVG the package ships, never an SF Symbol name: a symbol the reader's macOS does not resolve makes the row vanish with nothing logged."
+        },
+        "entry": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/relativePath"
+            }
+          ],
+          "pattern": "\\.(js|mjs)$",
+          "description": "The bundled ES module Phantom loads. One file: the page is served under default-src 'none', so a second chunk, a CDN import or a webfont does not load."
+        },
+        "style": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/relativePath"
+            }
+          ],
+          "pattern": "\\.css$",
+          "description": "One bundled stylesheet. Optional."
+        },
+        "filenamePatterns": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "pattern": "[/\\\\\\[\\]]"
+            }
+          },
+          "description": "The file names this editor view claims, as globs over the NAME only \u2014 no path separator. A claimed file opened from anywhere draws in this view, and the tab is the file's own tab. Needs \"surface\": \"editor\"; the dialect is the one contributes.languages[].fileNamePatterns uses."
+        },
+        "priority": {
+          "enum": [
+            "option",
+            "default"
+          ],
+          "description": "What the claim is worth. \"option\" (the default) leaves the reader's text editor opening the file and offers this view beside it, on the tab's own menu. \"default\" gives this view the file. Meaningless without filenamePatterns."
+        },
+        "surface": {
+          "enum": [
+            "sidebar",
+            "editor"
+          ],
+          "description": "Where this view's page is drawn. \"sidebar\" is a panel of the sidebar, selected by this view's own button, the way Files and Git are. \"editor\" is a tab, opened by another view of the same extension through views.open. The sidebar when absent. An interactive extension usually contributes both."
+        },
+        "placements": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "sidebar",
+              "topBar"
+            ]
+          },
+          "description": "Which of the sidebar's two switcher bars carries this panel's button: the icon column at its side, the tab row at its top, or both. Both when absent. A \"sidebar\" view only \u2014 an \"editor\" view is reached by opening a file it claims, never by a button, and giving it one puts a second mark in the rail for the same extension."
+        },
+        "permissions": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "workspace.root",
+              "workspace.list",
+              "workspace.read",
+              "workspace.create",
+              "workspace.replace",
+              "workspace.choose",
+              "views.open",
+              "state.read",
+              "state.write",
+              "editor.dirty",
+              "theme.read",
+              "http.request"
+            ]
+          },
+          "description": "The methods the page may ask Phantom to perform. Phantom refuses every method not listed. The filesystem methods are bounded to the workspace folder and the extension's own directory. workspace.create adds a file and refuses a path that exists; workspace.replace writes over a file that exists and refuses one that does not, and never reaches the extension's own directory. Neither creates a folder, neither writes a path with a dot-prefixed part, and there is no method that deletes. workspace.choose asks the reader for a folder in a system dialog and that folder becomes the view's workspace; views.open opens an editor view of the SAME extension \u2014 on a file this view could already read, or on nothing at all \u2014 and can never name another extension's view. http.request sends no cookie or credential, follows no redirect, and reaches this machine only if the reader switched that on. state.read and state.write keep one JSON object per extension per workspace in Phantom's own storage, at most 8 KiB, so a view can remember an answer instead of asking again; editor.dirty puts the editor's own unsaved mark on the tab."
         }
       }
     }

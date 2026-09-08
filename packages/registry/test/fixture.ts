@@ -133,6 +133,24 @@ export function agentsManifest(overrides: Record<string, unknown> = {}): Record<
   };
 }
 
+export function viewEntry(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return { viewId: "http", title: "HTTP", icon: "views/http.svg", entry: "views/http.js", ...overrides };
+}
+
+export function viewsManifest(view: Record<string, unknown> = {}, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    schemaVersion: 1,
+    id: "tests.views",
+    name: "Views",
+    version: "1.0.0",
+    publisher: "tests",
+    contributes: {
+      views: [viewEntry(view)],
+    },
+    ...overrides,
+  };
+}
+
 export function makeRoot(): string {
   return mkdtempSync(path.join(tmpdir(), "phantom-registry-"));
 }
