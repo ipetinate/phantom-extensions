@@ -1,0 +1,50 @@
+{
+  "name": "phantom-view-kit",
+  "version": "0.1.0",
+  "description": "The control kit for Phantom extension views: custom elements that wear the app's own colours, fonts and metrics.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Isac Petinate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipetinate/phantom-extensions.git",
+    "directory": "packages/phantom-view-kit"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./kit.css": "./dist/kit.css",
+    "./react": {
+      "types": "./dist/react.d.ts"
+    },
+    "./src": "./src/index.ts",
+    "./src/kit.css": "./src/kit.css"
+  },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "build": "vite build && tsc -p tsconfig.build.json && node scripts/rewrite-declaration-imports.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "jsdom": "^30.0.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0",
+    "vue": "^3.5.24"
+  }
+}

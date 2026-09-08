@@ -22,7 +22,8 @@ A file for [guiding coding agents](https://agents.md/) working in this registry.
 ## Commands
 
 - **Build the registry:** `npm run build` in `packages/registry`
-- **Test:** `npm test` in `packages/registry` and in `packages/phantom-mdx`
+- **Test:** `npm test` in `packages/registry`, in `packages/phantom-mdx` and in
+  `packages/phantom-view-kit`
 - **Validate every extension:** `node packages/registry/dist/cli.js check`
 - **Build the index locally:** `node packages/registry/dist/cli.js --out dist --repo ipetinate/phantom-extensions`
 - **Format:** `prettier -w .`
@@ -41,6 +42,7 @@ publish.
 - `themes/<id>/` — theme packages, same shape
 - `packages/registry/` — the index builder and validator
 - `packages/phantom-mdx/` — the MDX viewer the app vendors into its bundle
+- `packages/phantom-view-kit/` — the control kit an extension view bundles
 - `schema/extension.schema.json` — the manifest contract
 - `scripts/` — generators, in ES modules run by `node`
 

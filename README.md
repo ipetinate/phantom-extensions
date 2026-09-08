@@ -27,6 +27,7 @@ schema/
 packages/
   registry/             validates every manifest and document, zips every extension, writes index.json
   phantom-mdx/          the document kit: the checker, the renderer and the viewer Phantom embeds
+  phantom-view-kit/     the control kit a view bundles: the app's buttons, rows and fields as custom elements
 ```
 
 A directory holds `extension.json`, the document, `LICENSE*`, `README*`, the paths the manifest references and `media/`. Any other file fails the build.
