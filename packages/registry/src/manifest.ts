@@ -205,6 +205,13 @@ export function manifestIcons(manifest: Manifest): string[] {
     .filter((icon): icon is string => typeof icon === "string");
 }
 
+export function manifestIconThemes(manifest: Manifest): string[] {
+  return entriesOf(manifest, "iconThemes")
+    .map((entry) => entry["path"])
+    .filter((themePath): themePath is string => typeof themePath === "string")
+    .map((themePath) => themePath.split(path.sep).join("/").replace(/\/+$/, ""));
+}
+
 export function referencedPaths(manifest: Manifest): Set<string> {
   const paths = new Set<string>();
   for (const language of entriesOf(manifest, "languages")) {

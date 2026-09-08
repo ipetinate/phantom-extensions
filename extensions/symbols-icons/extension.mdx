@@ -1,7 +1,7 @@
 ---
 title: Symbols Icons
 tagline: Symbols, the file icon theme Phantom draws its explorer with, and a starter theme short enough to read in one sitting.
-version: 1.0.6
+version: 1.0.7
 author:
   name: Isac Petinate
   url: https://github.com/ipetinate
@@ -16,6 +16,12 @@ screenshots:
 Two file icon themes for Phantom's explorer. **Symbols** is the full set: 354 icons covering almost every file type and folder you will meet, and the theme Phantom's explorer is designed against. **Symbols Starter** is eight icons and a sixty-line manifest, kept here as a template to copy. Neither installs a program, starts a process or asks for approval.
 
 Anything a theme does not match falls through to Phantom's SF Symbols table, so a small theme is usable rather than half broken.
+
+## The icons
+
+<IconBrowser theme="symbols" title="Symbols" height="tall" />
+
+Search matches the icon's name and every key that points at it, so `tsx`, `yarn.lock` and `node_modules` each find the icon that draws them. The categories come from the theme file itself: an icon a folder map names is a folder icon, one a file name or a suffix names is a file icon, one only a language id reaches is a language icon, and one nothing Phantom reads names is unused.
 
 ## Highlights
 
@@ -61,6 +67,8 @@ Anything a theme does not match falls through to Phantom's SF Symbols table, so 
 Symbols sets `file`, `folder` and `rootFolder`, so every row carries artwork. Symbols Starter sets none of the three, so anything outside its eight keeps the SF Symbol.
 
 <Details summary="What Symbols Starter matches">
+
+<IconBrowser theme="icon-theme" title="Symbols Starter" height="short" />
 
 | Icon | Matches |
 |---|---|
@@ -156,6 +164,8 @@ They are flat colour with no outline, chosen to hold up on a light and a dark si
 </Details>
 
 ## Changelog
+
+**1.0.7** — The page lists the icons: a searchable box for each theme, filtered by category, drawn from the theme files rather than written out here.
 
 **1.0.6** — A Solid icon, drawn by the owner. A `.tsx` file cannot say who compiles it, so Phantom asks the project: with `solid-js` among its dependencies, a `.tsx` wears this instead of React's.
 
